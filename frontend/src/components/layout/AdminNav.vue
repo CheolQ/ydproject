@@ -4,12 +4,12 @@
 
         <!-- Sidebar - Brand -->
         <router-link to="/admin">
-        <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
-            <div class="sidebar-brand-icon rotate-n-15">
-                <i class="fas fa-laugh-wink"></i>
-            </div>
-            <div class="sidebar-brand-text mx-3">관리자페이지</div>
-        </a>
+            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
+                <div class="sidebar-brand-icon rotate-n-15">
+                    <i class="fas fa-laugh-wink"></i>
+                </div>
+                <div class="sidebar-brand-text mx-3">관리자페이지</div>
+            </a>
         </router-link>
         <!-- Divider -->
         <hr class="sidebar-divider my-0">
@@ -46,8 +46,8 @@
 
         <!-- Divider -->
         <hr class="sidebar-divider">
-        
-         <!-- Nav Item - Utilities Collapse Menu -->
+
+        <!-- Nav Item - Utilities Collapse Menu -->
         <li class="nav-item">
             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
                 aria-expanded="true" aria-controls="collapseUtilities">
@@ -55,13 +55,13 @@
             </a>
             <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
                 data-parent="#accordionSidebar">
-                <div class="bg-white py-2 collapse-inner rounded"> 
+                <div class="bg-white py-2 collapse-inner rounded">
                     <router-link to="/admin/prodList">
                         <a class="collapse-item" href="#">상품 조회</a>
-                    </router-link>                
+                    </router-link>
                     <router-link to="/admin/prodForm">
                         <a class="collapse-item" href="#">상품 등록</a>
-                    </router-link>   
+                    </router-link>
                 </div>
             </div>
         </li>
