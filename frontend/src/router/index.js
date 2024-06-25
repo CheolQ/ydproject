@@ -1,26 +1,28 @@
 import { createRouter, createWebHistory } from 'vue-router';
 
-
-//유저
+//유저 홈
 import DefaultLayout from '@/layouts/DefaultLayout.vue';
 import MainPage from '@/views/main/MainView.vue';
-import MyPage from '@/views/mypage/MyPage.vue'
 
+// 마이페이지
+import MyPage from '@/views/mypage/MyPage.vue';
+import MyPageHome from '@/components/mypage/MypageHome.vue';
+import OrderHistory from '@/components/mypage/OrderHistory.vue';
 
 //관리자
-import AdminLayout from '../layouts/AdminLayout.vue'
+import AdminLayout from '../layouts/AdminLayout.vue';
 import AdminHome from '../views/AdminHome.vue';
-import Notice from '../views/admin/AdminNotice.vue'
-import Qna from '../views/admin/AdminQna.vue'
-import ProdList from '../views/admin/AdminProdList.vue'
-import ProdForm from '../views/admin/AdminProdForm.vue'
-import Orders from '../views/admin/AdminOrder.vue'
-import Members from '../views/admin/AdminMember.vue'
+import Notice from '../views/admin/AdminNotice.vue';
+import Qna from '../views/admin/AdminQna.vue';
+import ProdList from '../views/admin/AdminProdList.vue';
+import ProdForm from '../views/admin/AdminProdForm.vue';
+import Orders from '../views/admin/AdminOrder.vue';
+import Members from '../views/admin/AdminMember.vue';
 
 const routes = [
     {
         path: '/',
-        redirect: '/user/home'
+        redirect: '/user/home',
     },
     {
         path: '/user',
@@ -32,13 +34,23 @@ const routes = [
         children: [
             {
                 path: 'home',
-                component: MainPage
+                component: MainPage,
             },
             {
                 path: 'mypage',
-                component: MyPage
+                component: MyPage,
+                children: [
+                    {
+                        path: '',
+                        component: MyPageHome,
+                    },
+                    {
+                        path: 'orderhistory',
+                        component: OrderHistory,
+                    },
+                ],
             },
-        ]
+        ],
     },
     {
         path: '/admin',
@@ -50,33 +62,33 @@ const routes = [
         children: [
             {
                 path: '',
-                component: AdminHome
+                component: AdminHome,
             },
             {
                 path: 'notice',
-                component: Notice
+                component: Notice,
             },
             {
                 path: 'qna',
-                component: Qna
+                component: Qna,
             },
             {
                 path: 'prodList',
-                component: ProdList
+                component: ProdList,
             },
             {
                 path: 'prodForm',
-                component: ProdForm
+                component: ProdForm,
             },
             {
                 path: 'orders',
-                component: Orders
+                component: Orders,
             },
             {
                 path: 'member',
-                component: Members
-            }
-        ]
+                component: Members,
+            },
+        ],
     },
 ];
 
