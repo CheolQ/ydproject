@@ -1,8 +1,18 @@
 <template>
-    <Adminheader />
-    <AdminNav />
-    <div></div>
-    <AdminFooter />
+    <body id="page-top" class="sidebar-toggled">
+        <div id="wrapper">
+            <AdminNav />
+            <div id="content-wrapper" class="d-flex flex-column">
+                <div id="content">
+                    <AdminHeader />
+                    <div class="container-fluid">
+                        <router-view />
+                    </div>
+                </div>
+                <AdminFooter />
+            </div>
+        </div>
+    </body>
 </template>
 
 <script>
@@ -29,5 +39,5 @@ export default {
     }
 }
 </script>
-
-<style></style>
+<style scoped src="../assets/admin/css/sb-admin-2.css"></style>
+<style scoped src="../assets/admin/css/sb-admin-2.min.css"></style>
