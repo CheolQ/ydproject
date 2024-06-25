@@ -1,7 +1,10 @@
 <template>
     <MainHeader />
-    <div></div>
-    <MainFooter />
+    <div class="contentmargin">
+        <router-view />
+    </div>
+    <MainFooter></MainFooter>
+
 </template>
 
 <script>
@@ -27,4 +30,8 @@ export default {
 }
 </script>
 
-<style></style>
+<style scoped>
+.contentmargin {
+    margin-top: 152px;
+}
+</style>
