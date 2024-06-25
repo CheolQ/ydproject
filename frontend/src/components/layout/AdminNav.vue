@@ -4,7 +4,7 @@
 
         <!-- Sidebar - Brand -->
         <router-link to="/admin">
-            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
+            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="#">
                 <div class="sidebar-brand-icon rotate-n-15">
                     <i class="fas fa-laugh-wink"></i>
                 </div>
@@ -13,18 +13,6 @@
         </router-link>
         <!-- Divider -->
         <hr class="sidebar-divider my-0">
-
-        <!-- Nav Item - Dashboard -->
-        <li class="nav-item active">
-            <router-link to="/admin">
-                <a class="nav-link" href="#">
-                    <span>메인 페이지</span>
-                </a>
-            </router-link>
-        </li>
-
-        <!-- Divider -->
-        <hr class="sidebar-divider">
 
         <!-- Nav Item - Pages Collapse Menu -->
         <li class="nav-item">
@@ -80,6 +68,12 @@
                 <div class="bg-white py-2 collapse-inner rounded">
                     <router-link to="/admin/orders">
                         <a class="collapse-item" href="#">주문조회</a>
+                    </router-link>
+                    <router-link to="#">
+                        <a class="collapse-item" href="#">배송조회</a>
+                    </router-link>
+                    <router-link to="#">
+                        <a class="collapse-item" href="#">주문취소</a>
                     </router-link>
                 </div>
             </div>
