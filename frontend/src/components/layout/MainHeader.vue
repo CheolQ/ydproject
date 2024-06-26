@@ -35,7 +35,7 @@
                     <div class="collapse navbar-collapse bg-white" id="navbarCollapse">
                         <div class="navbar-nav mx-auto">
                             <router-link to="/" class="nav-item nav-link active">Home</router-link>
-                            <a href="shop.html" class="nav-item nav-link">Shop</a>
+                            <a href="shop" class="nav-item nav-link">Shop</a>
                             <a href="shop-detail.html" class="nav-item nav-link">Shop Detail</a>
                             <div class="nav-item dropdown">
                                 <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Pages</a>

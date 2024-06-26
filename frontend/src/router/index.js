@@ -19,6 +19,14 @@ import ProdForm from '../views/admin/AdminProdForm.vue';
 import Orders from '../views/admin/AdminOrder.vue';
 import Members from '../views/admin/AdminMember.vue';
 
+//상품
+import ProdListView from '@/views/product/ProdListView.vue'
+import ProdInfoView from '@/views/product/ProdInfoView.vue'
+
+//공지
+import NoticeListView from '@/views/notice/NoticeListView.vue'
+import NoticeInfoView from  '@/views/notice/NoticeInfoView.vue'
+
 const routes = [
     {
         path: '/',
@@ -36,6 +44,26 @@ const routes = [
                 path: 'home',
                 component: MainPage,
             },
+            {
+                path: 'shop',
+                name: 'shop',
+                component: ProdListView
+              },
+              {
+                path: '/shopinfo',
+                name: 'shopinfo',
+                component: ProdInfoView
+              },
+              {
+                path: 'notice',
+                name: 'notice',
+                component: NoticeListView
+              },
+              {
+                path: '/noticeinfo',
+                name: 'noticeinfo',
+                component: NoticeInfoView
+              },
             {
                 path: 'mypage',
                 component: MyPage,
@@ -90,6 +118,7 @@ const routes = [
             },
         ],
     },
+    
 ];
 
 const router = createRouter({
