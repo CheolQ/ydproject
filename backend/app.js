@@ -10,6 +10,10 @@ var usersRouter = require('./routes/users');
 
 //관리자
 
+const prodRouter = require('./routes/prod.js');
+const noticeRouter = require('./routes/notice.js');
+const reviewRouter = require('./routes/review.js');
+
 var app = express();
 
 // view engine setup
@@ -28,6 +32,9 @@ app.use('/users', usersRouter);
 
 //관리자
 
+app.use("/shop", prodRouter);
+app.use("/notice", noticeRouter);
+app.use("/review", reviewRouter);
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));
