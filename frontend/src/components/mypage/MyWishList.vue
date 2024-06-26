@@ -38,7 +38,7 @@
                                     <p class="mb-0 mt-4">{{ w.prod_name }}</p>
                                 </td>
                                 <td>
-                                    <p class="mb-0 mt-4">{{ w.prod_price }}원</p>
+                                    <p class="mb-0 mt-4">{{ formatPrice(w.prod_price) }}원</p>
                                 </td>
                                 <td>
                                     <button class="btn btn-md rounded-circle bg-light border mt-4"  @click="delSel(w.cart_no)" >
@@ -77,7 +77,10 @@
         methods : {
             gotoCart(){
                 
-            }
+            },
+            formatPrice(price){
+                    return price.numberFormat();
+            },
         }
     }
 </script>

@@ -39,20 +39,20 @@
                                 <td>
                                     <div class="input-group quantity mt-4" style="width: 100px;">
                                         <div class="input-group-btn">
-                                            <button class="btn btn-sm btn-minus rounded-circle bg-light border" >
+                                            <button @click="minusBtn" class="btn btn-sm btn-minus rounded-circle bg-light border" >
                                             <i class="fa fa-minus"></i>
                                             </button>
                                         </div>
-                                        <input type="text" v-model="c.cnt" class="form-control form-control-sm text-center border-0" value="1">
+                                        <input type="text" v-model="c.cnt" readonly class="form-control form-control-sm text-center border-0" value="1">
                                         <div class="input-group-btn">
-                                            <button class="btn btn-sm btn-plus rounded-circle bg-light border">
+                                            <button @click="plusBtn"  class="btn btn-sm btn-plus rounded-circle bg-light border">
                                                 <i class="fa fa-plus"></i>
                                             </button>
                                         </div>
                                     </div>
                                 </td>
                                 <td>
-                                    <p class="mb-0 mt-4">{{ c.price }}원</p>
+                                    <p class="mb-0 mt-4">{{ formatPrice(c.price) }}원</p>
                                 </td>
                                 <td>
                                     <button class="btn btn-md rounded-circle bg-light border mt-4"  @click="delSel(c.cart_no)" >
@@ -122,6 +122,15 @@
                 },
                 checkedAll(checked) {
                     this.cart.forEach(a => a.selected = checked);
+                },
+                formatPrice(price){
+                    return price.numberFormat();
+                },
+                plusBtn(){
+                    
+                },
+                minusBtn(){
+
                 },
             }
         }
