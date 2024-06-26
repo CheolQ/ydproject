@@ -4,7 +4,8 @@ module.exports = {
                     user_id, 
                     email, 
                     addr, 
-                    detail_addr, 
+                    detail_addr,
+                    tel, 
                     point, 
                     (
                         select sum(pay_price) 
