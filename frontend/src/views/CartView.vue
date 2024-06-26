@@ -1,12 +1,13 @@
 <template>
-    <div>장바구니</div>
+    <h2 class="aside-tit">CART</h2>
+    <CartList />
 </template>
 <script>
-    //import CartForm from '../../components/layout/CartForm.vue';
+    import CartList from '../components/layout/CartList.vue';
 
     export default {
         components: {
-            CartForm
+            CartList
         },
         data(){
             return{};
@@ -16,4 +17,12 @@
     }
 </script>
 <style>
+.aside-tit {
+    padding: 65px 0 30px;
+    font-size: 24px;
+    color: #000;
+    font-weight: bold;
+    text-align: center;
+    line-height: 24px
+}
 </style>

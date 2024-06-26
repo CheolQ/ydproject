@@ -7,7 +7,7 @@ var logger = require('morgan');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 //유저
-
+var cartRouter = require('./routes/cart');
 //관리자
 
 var app = express();
@@ -25,7 +25,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 //유저
-
+app.use('/cart', cartRouter);
 //관리자
 
 // catch 404 and forward to error handler

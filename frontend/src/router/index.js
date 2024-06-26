@@ -7,12 +7,14 @@ import MainPage from '@/views/main/MainView.vue';
 //장바구니
 import Cart from '@/views/CartView.vue';
 
-
+//주문
+import Order from '@/views/OrderForm.vue';
 
 // 마이페이지
 import MyPage from '@/views/mypage/MyPage.vue';
 import MyPageHome from '@/components/mypage/MypageHome.vue';
 import OrderHistory from '@/components/mypage/OrderHistory.vue';
+import MyWishList from '@/components/mypage/MyWishList.vue';
 
 //관리자
 import AdminLayout from '../layouts/AdminLayout.vue';
@@ -53,12 +55,20 @@ const routes = [
                         path: 'orderhistory',
                         component: OrderHistory,
                     },
+                    {
+                        path: 'mywishlist',
+                        component: MyWishList,
+                    },
                 ],
             },
             {
                 path: 'cart',
                 component: Cart
             },
+            {
+                path: 'orderForm',
+                component: Order
+              },
         ],
     },
     {
