@@ -19,6 +19,7 @@ import ProdForm from '../views/admin/AdminProdForm.vue';
 import Orders from '../views/admin/AdminOrder.vue';
 import Members from '../views/admin/AdminMember.vue';
 
+
 //상품
 import ProdListView from '@/views/product/ProdListView.vue'
 import ProdInfoView from '@/views/product/ProdInfoView.vue'
@@ -28,9 +29,15 @@ import NoticeListView from '@/views/notice/NoticeListView.vue'
 import NoticeInfoView from  '@/views/notice/NoticeInfoView.vue'
 
 
+
 // 회원가입
 // import userjoin from '../views/user/userjoin.vue';
 
+
+
+// 회원가입
+// import userjoin from '../views/user/userjoin.vue';
+// import login from '../views/user/login.vue';
 
 const routes = [
     {
