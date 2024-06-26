@@ -1,5 +1,5 @@
 //유저
-const prodsql = require('./prodsql')
+const prodSql = require('./prodSql')
 const noticeSql = require('./noticeSql')
 const mypageSql = require('./mypageSql')
 
@@ -13,7 +13,7 @@ module.exports = {
     ...adminOrder,
     ...adminMember,
 
-    ...prodsql,
+    ...prodSql,
     ...noticeSql,
     ...mypageSql
 

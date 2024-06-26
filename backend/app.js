@@ -12,7 +12,7 @@ var usersRouter = require('./routes/users');
 
 const prodRouter = require('./routes/prod.js');
 const noticeRouter = require('./routes/notice.js');
-const reviewRouter = require('./routes/review.js');
+
 const mypageRouter = require('./routes/mypage.js');
 
 var app = express();
