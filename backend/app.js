@@ -10,6 +10,11 @@ var usersRouter = require('./routes/users');
 var cartRouter = require('./routes/cart');
 //관리자
 
+const prodRouter = require('./routes/prod.js');
+const noticeRouter = require('./routes/notice.js');
+
+const mypageRouter = require('./routes/mypage.js');
+
 var app = express();
 
 // view engine setup
@@ -24,8 +29,16 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+
 //유저
+
 app.use('/cart', cartRouter);
+
+app.use("/shop", prodRouter);
+app.use("/notice", noticeRouter);
+
+app.use("/mypage", mypageRouter);
+
 //관리자
 
 // catch 404 and forward to error handler

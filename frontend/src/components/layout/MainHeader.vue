@@ -26,7 +26,7 @@
             <div class="container px-0">
                 <nav class="navbar navbar-light bg-white navbar-expand-xl">
                     <router-link to="/" class="navbar-brand">
-                        <h1 class="text-primary display-6">Fruitables</h1>
+                        <h1 class="text-primary display-6">까까무라</h1>
                     </router-link>
                     <button class="navbar-toggler py-2 px-3" type="button" data-bs-toggle="collapse"
                         data-bs-target="#navbarCollapse">
@@ -35,7 +35,7 @@
                     <div class="collapse navbar-collapse bg-white" id="navbarCollapse">
                         <div class="navbar-nav mx-auto">
                             <router-link to="/" class="nav-item nav-link active">Home</router-link>
-                            <a href="shop.html" class="nav-item nav-link">Shop</a>
+                            <a href="shop" class="nav-item nav-link">Shop</a>
                             <a href="shop-detail.html" class="nav-item nav-link">Shop Detail</a>
                             <div class="nav-item dropdown">
                                 <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Pages</a>
@@ -77,7 +77,8 @@
                 <div class="modal-content rounded-0">
                     <div class="modal-header">
                         <h5 class="modal-title" id="exampleModalLabel">Search by keyword</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <button type="button" @click="modalOpen" class="btn-close" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
                     </div>
                     <div class="modal-body d-flex align-items-center">
                         <div class="input-group w-75 mx-auto d-flex">
@@ -120,6 +121,7 @@ export default {
     width: 100%;
     height: 100%;
     background: rgba(0, 0, 0, 0.4);
+    z-index: 2000;
 }
 
 /* modal or popup */
