@@ -13,11 +13,13 @@ const store = createStore({
     //     },
     //   },
     mutations: {
-        user(state, data) {
-            state.user = data;
-        },
+        // user(state, data) {
+        //     state.user = data;
+        // },
     },
-    plugins: [persistedstate({ paths: ['user'] })],
+    plugins: [
+        // persistedstate({ paths: ['user'] })
+    ],
 });
 
 export default store;
