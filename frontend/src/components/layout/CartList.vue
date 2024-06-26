@@ -1,0 +1,131 @@
+<template>
+    <!-- Cart Page Start -->
+    <div class="container-fluid py-5">
+            <div class="container py-5">
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                          <tr>
+                            <th scope="col">번호</th>
+                            <th scope="col"><input type="checkbox" v-model="allChecked" @click="checkedAll($event.target.checked)"></th>
+                            <th scope="col">상품번호</th>
+                            <th scope="col">이미지</th>
+                            <th scope="col">상품명</th>
+                            <th scope="col">개수</th>
+                            <th scope="col">금액</th>
+                            <th scope="col">삭제</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="c in cart">
+                                <td>
+                                    <p class="mb-0 mt-4">{{ c.cart_no }}</p>
+                                </td>
+                                <td>
+                                    <p class="mb-0 mt-4"><input type="checkbox" v-model="c.selected" @change="AllChecked"></p>
+                                </td>
+                                <td>
+                                    <p class="mb-0 mt-4">{{ c.prod_no }}</p>
+                                </td>
+                                <td scope="row">
+                                    <div class="d-flex align-items-center">
+                                        <img src="#" class="img-fluid me-5 rounded-circle" style="width: 80px; height: 80px;" alt="">
+                                    </div>
+                                </td>
+                                <td>
+                                    <p class="mb-0 mt-4">{{ c.prod_name }}</p>
+                                </td>
+                                <td>
+                                    <div class="input-group quantity mt-4" style="width: 100px;">
+                                        <div class="input-group-btn">
+                                            <button class="btn btn-sm btn-minus rounded-circle bg-light border" >
+                                            <i class="fa fa-minus"></i>
+                                            </button>
+                                        </div>
+                                        <input type="text" v-model="c.cnt" class="form-control form-control-sm text-center border-0" value="1">
+                                        <div class="input-group-btn">
+                                            <button class="btn btn-sm btn-plus rounded-circle bg-light border">
+                                                <i class="fa fa-plus"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <p class="mb-0 mt-4">{{ c.price }}원</p>
+                                </td>
+                                <td>
+                                    <button class="btn btn-md rounded-circle bg-light border mt-4"  @click="delSel(c.cart_no)" >
+                                        <i class="fa fa-times text-danger"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div>
+                        <button @click="delAll" class="btn btn-warning">전체삭제</button>
+                    </div>
+                    <div>
+                        <button @click="orderSel" class="btn btn-primary">선택주문</button>
+                        <button @click="orderAll" class="btn btn-primary">전체주문</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Cart Page End -->
+</template>
+<script>
+    import axios from 'axios';
+    
+
+    export default {
+            data(){ 
+                return{
+                    cart : [], c : {}, allChecked : false
+                };   
+            },
+            created(){
+                this.getCart();
+            },
+            methods : {
+                getCart(){
+                    axios.get('/api/cart/')
+                    .then(result => {
+                        console.log(result)
+                        this.cart = result.data
+                        //console.log(this.cart)
+                    })
+                    .catch(err => console.log(err))
+                },
+                async delSel(no){
+                    await axios.delete(`/api/cart/${no}`)
+                    .then(this.getCart()); //db에서 삭제처리된 리스트를 불러옴
+                    //this.$router.push({path : '/cart'});
+                },
+                async delAll(){
+                    await axios.delete('/api/cart/')
+                    .then(() => this.getCart()); //괄호
+                    //this.$router.push('/cart')
+                },
+                orderSel(){
+                    let selectedCart = [];
+                    this.cart.forEach( a => {
+                        if(a.selected){
+                            selectedCart.push(a);
+                        }
+                    })
+                    this.$router.push({
+                        path: 'orderForm',
+                        query: { Cart: JSON.stringify(selectedCart) }
+                    });
+                },
+                orderAll(){
+
+                },
+                checkedAll(checked){
+                    this.cart.forEach(a => a.selected = checked);
+                },
+            }
+        }
+</script>
+<style>
+</style>

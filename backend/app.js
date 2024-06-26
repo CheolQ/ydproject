@@ -7,7 +7,7 @@ var logger = require('morgan');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 //유저
-
+var cartRouter = require('./routes/cart');
 //관리자
 
 const prodRouter = require('./routes/prod.js');
@@ -31,6 +31,9 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 
 //유저
+
+app.use('/cart', cartRouter);
+
 app.use("/shop", prodRouter);
 app.use("/notice", noticeRouter);
 
