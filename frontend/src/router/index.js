@@ -4,6 +4,11 @@ import { createRouter, createWebHistory } from 'vue-router';
 import DefaultLayout from '@/layouts/DefaultLayout.vue';
 import MainPage from '@/views/main/MainView.vue';
 
+//장바구니
+import Cart from '@/views/CartView.vue';
+
+
+
 // 마이페이지
 import MyPage from '@/views/mypage/MyPage.vue';
 import MyPageHome from '@/components/mypage/MypageHome.vue';
@@ -49,6 +54,10 @@ const routes = [
                         component: OrderHistory,
                     },
                 ],
+            },
+            {
+                path: 'cart',
+                component: Cart
             },
         ],
     },
