@@ -1,6 +1,9 @@
 <template>
   <router-view/>
+  <login></login>
 </template>
+
+
 
 <style>
 #app {
