@@ -7,12 +7,13 @@ var logger = require('morgan');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 //유저
-
+var cartRouter = require('./routes/cart');
 //관리자
 
 const prodRouter = require('./routes/prod.js');
 const noticeRouter = require('./routes/notice.js');
-const reviewRouter = require('./routes/review.js');
+
+const mypageRouter = require('./routes/mypage.js');
 
 var app = express();
 
@@ -28,13 +29,18 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+
 //유저
 
-//관리자
+app.use('/cart', cartRouter);
 
 app.use("/shop", prodRouter);
 app.use("/notice", noticeRouter);
-app.use("/review", reviewRouter);
+
+app.use("/mypage", mypageRouter);
+
+//관리자
+
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));

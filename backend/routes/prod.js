@@ -13,5 +13,9 @@ router.get("/:no",	async (req , res )	=> {
 	console.log(result);
  	res.send(result);
 });
-
+router.get("/review/:no",	async(req ,	res )	=> {
+	let result =	await query("reviewList", req.params.no);
+	// console.log('aaaa'+ result[0].review_no);
+	res.send(result);
+});
 module.exports = router ;

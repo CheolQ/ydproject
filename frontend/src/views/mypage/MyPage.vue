@@ -1,6 +1,8 @@
 <template>
     <div id="contentWrap">
+        <!-- <MypageNav :userId="userId" /> -->
         <MypageNav />
+        <hr>
         <router-view></router-view>
     </div>
 </template>
@@ -13,7 +15,7 @@ export default {
     },
     data() {
         return {
-
+            // userId: 'test'
         }
     },
     created() {

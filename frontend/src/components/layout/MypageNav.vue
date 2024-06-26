@@ -1,6 +1,5 @@
 <template>
     <div>
-
         <div id="aside">
             <h2 class="aside-tit">MY PAGE</h2>
             <div class="lnb-wrap">
@@ -9,10 +8,11 @@
                     <div class="lnb">
                         <ul>
                             <li class="first">
-                                <router-link to="/user/mypage/orderhistory">주문내역</router-link>
-                                <!-- <a href="https://www.helinoxstore.co.kr/shop/mypage.html?mypage_type=myorder">주문내역</a> -->
+                                <router-link to="/user/mypage/orderhistory/">주문내역</router-link>
                             </li>
-                            <li><a href="/shop/mypage.html?mypage_type=mywishlist">관심상품</a></li>
+                            <li class="first">
+                                <router-link to="/user/mypage/mywishlist">관심상품</router-link>
+                            </li>
                         </ul>
                     </div>
                 </div>
@@ -41,6 +41,11 @@
 
 <script>
 export default {
+    props: {
+        userId: {
+            type: String
+        }
+    },
     data() {
         return {
 

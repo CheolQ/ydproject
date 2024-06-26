@@ -26,7 +26,7 @@
             <div class="container px-0">
                 <nav class="navbar navbar-light bg-white navbar-expand-xl">
                     <router-link to="/" class="navbar-brand">
-                        <h1 class="text-primary display-6">Fruitables</h1>
+                        <h1 class="text-primary display-6">까까무라</h1>
                     </router-link>
                     <button class="navbar-toggler py-2 px-3" type="button" data-bs-toggle="collapse"
                         data-bs-target="#navbarCollapse">
@@ -52,12 +52,14 @@
                             <button
                                 class="btn-search btn border border-secondary btn-md-square rounded-circle bg-white me-4"
                                 @click="modalOpen"><i class="fas fa-search text-primary"></i></button>
-                            <a href="#" class="position-relative me-4 my-auto">
-                                <i class="fa fa-shopping-bag fa-2x"></i>
-                                <span
-                                    class="position-absolute bg-secondary rounded-circle d-flex align-items-center justify-content-center text-dark px-1"
-                                    style="top: -5px; left: 15px; height: 20px; min-width: 20px;">3</span>
-                            </a>
+                            <router-link to="/user/cart">
+                                <a href="cart.html" class="position-relative me-4 my-auto">
+                                    <i class="fa fa-shopping-bag fa-2x"></i>
+                                    <span
+                                        class="position-absolute bg-secondary rounded-circle d-flex align-items-center justify-content-center text-dark px-1"
+                                        style="top: -5px; left: 15px; height: 20px; min-width: 20px;">3</span>
+                                </a>
+                            </router-link>
                             <router-link to="/user/mypage" class="my-auto">
                                 <i class="fas fa-user fa-2x"></i>
                             </router-link>
@@ -75,7 +77,8 @@
                 <div class="modal-content rounded-0">
                     <div class="modal-header">
                         <h5 class="modal-title" id="exampleModalLabel">Search by keyword</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <button type="button" @click="modalOpen" class="btn-close" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
                     </div>
                     <div class="modal-body d-flex align-items-center">
                         <div class="input-group w-75 mx-auto d-flex">
@@ -118,6 +121,7 @@ export default {
     width: 100%;
     height: 100%;
     background: rgba(0, 0, 0, 0.4);
+    z-index: 2000;
 }
 
 /* modal or popup */

@@ -1,6 +1,12 @@
 //유저
-const prodsql = require('./prodsql')
+
+const cartsql = require('./cartSql');
+const wishsql = require('./wishSql');
+
+const prodSql = require('./prodSql')
 const noticeSql = require('./noticeSql')
+const mypageSql = require('./mypageSql')
+
 
 //관리자
 
@@ -8,11 +14,17 @@ const adminOrder = require('./admin/orderSql')
 const adminMember = require('./admin/memberSql')
 module.exports = {
 
+    ...cartsql,
+    ...wishsql,
+
+
     
     ...adminOrder,
     ...adminMember,
 
-    ...prodsql,
+    ...prodSql,
     ...noticeSql,
+    ...mypageSql
+
 
 }
