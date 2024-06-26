@@ -15,8 +15,7 @@
     "jade": "~1.11.0",
     "morgan": "~1.9.1",
     "mysql2": "^3.10.1",
-<<<<<<< HEAD
-=======
+
     "session-file-store": "^1.5.0"
   },
   "main": "app.js",
@@ -24,7 +23,7 @@
   "license": "ISC",
   "description": "",
   "devDependencies": {
->>>>>>> cheol
+
     "nodemon": "^3.1.4"
   }
 }
