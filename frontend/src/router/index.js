@@ -26,21 +26,17 @@ import ProdForm from '../views/admin/AdminProdForm.vue';
 import Orders from '../views/admin/AdminOrder.vue';
 import Members from '../views/admin/AdminMember.vue';
 
-
 //상품
-import ProdListView from '@/views/product/ProdListView.vue'
-import ProdInfoView from '@/views/product/ProdInfoView.vue'
+import ProdListView from '@/views/product/ProdListView.vue';
+import ProdInfoView from '@/views/product/ProdInfoView.vue';
 
 //공지
-import NoticeListView from '@/views/notice/NoticeListView.vue'
-import NoticeInfoView from  '@/views/notice/NoticeInfoView.vue'
 
-
+import NoticeListView from '@/views/notice/NoticeListView.vue';
+import NoticeInfoView from '@/views/notice/NoticeInfoView.vue';
 
 // 회원가입
 // import userjoin from '../views/user/userjoin.vue';
-
-
 
 // 회원가입
 // import userjoin from '../views/user/userjoin.vue';
@@ -66,23 +62,23 @@ const routes = [
             {
                 path: 'shop',
                 name: 'shop',
-                component: ProdListView
-              },
-              {
+                component: ProdListView,
+            },
+            {
                 path: '/shopinfo',
                 name: 'shopinfo',
-                component: ProdInfoView
-              },
-              {
+                component: ProdInfoView,
+            },
+            {
                 path: 'notice',
                 name: 'notice',
-                component: NoticeListView
-              },
-              {
+                component: NoticeListView,
+            },
+            {
                 path: '/noticeinfo',
                 name: 'noticeinfo',
-                component: NoticeInfoView
-              },
+                component: NoticeInfoView,
+            },
             {
                 path: 'mypage',
                 component: MyPage,
@@ -103,12 +99,12 @@ const routes = [
             },
             {
                 path: 'cart',
-                component: Cart
+                component: Cart,
             },
             {
                 path: 'orderForm',
-                component: Order
-              },
+                component: Order,
+            },
         ],
     },
     {
@@ -149,7 +145,6 @@ const routes = [
             },
         ],
     },
-    
 ];
 
 const router = createRouter({
