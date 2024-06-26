@@ -1,30 +1,16 @@
 <template>
-    <div>
-        <h1>마이페이지</h1>
-        <table class="table">
-            <tr>
-                <thead>
-                    <th>ddd</th>
-                    <th>ddd</th>
-                    <th>ddd</th>
-                    <th>ddd</th>
-                </thead>
-            </tr>
-            <tr>
-                <tbody>
-                    <td>ddfs</td>
-                    <td>ddfs</td>
-                    <td>ddfs</td>
-                    <td>ddfs</td>
-                </tbody>
-            </tr>
-        </table>
-
+    <div id="contentWrap">
+        <MypageNav />
+        <router-view></router-view>
     </div>
 </template>
 
 <script>
+import MypageNav from '../../components/layout/MypageNav.vue';
 export default {
+    components: {
+        MypageNav
+    },
     data() {
         return {
 
@@ -39,4 +25,11 @@ export default {
 }
 </script>
 
-<style></style>
+<style>
+#contentWrap {
+    position: relative;
+    width: 1100px;
+    margin-left: auto;
+    margin-right: auto;
+}
+</style>
