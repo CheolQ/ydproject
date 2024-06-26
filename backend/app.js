@@ -8,9 +8,7 @@ var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 //유저
 
-
 //관리자
-const AdminOrderRouter = require('./routes/AdminOrder')
 
 var app = express();
 
@@ -26,14 +24,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
-
 //유저
 
-
-
 //관리자
-app.use('/AdminOrder', AdminOrderRouter)
-
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
