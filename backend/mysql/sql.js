@@ -17,14 +17,12 @@ module.exports = {
     ...cartsql,
     ...wishsql,
 
-
-    
-    ...adminOrder,
-    ...adminMember,
-
     ...prodSql,
     ...noticeSql,
-    ...mypageSql
+    ...mypageSql,
 
 
+    //관리자
+    ...adminOrder,
+    ...adminMember,
 }
