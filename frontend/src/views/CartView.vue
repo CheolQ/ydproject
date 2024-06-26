@@ -1,5 +1,5 @@
 <template>
-    <h2 class="aside-tit">CART</h2>
+    <h2 class="aside-tit">CART</h2> 
     <!-- Cart Page Start -->
     <div class="container-fluid py-5">
             <div class="container py-5">
