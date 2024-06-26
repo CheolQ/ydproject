@@ -31,6 +31,7 @@ import ProdListView from '@/views/product/ProdListView.vue';
 import ProdInfoView from '@/views/product/ProdInfoView.vue';
 
 //공지
+
 import NoticeListView from '@/views/notice/NoticeListView.vue';
 import NoticeInfoView from '@/views/notice/NoticeInfoView.vue';
 
