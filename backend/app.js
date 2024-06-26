@@ -33,7 +33,7 @@ app.use('/users', usersRouter);
 //유저
 app.use("/shop", prodRouter);
 app.use("/notice", noticeRouter);
-app.use("/review", reviewRouter);
+
 app.use("/mypage", mypageRouter);
 
 //관리자
