@@ -19,6 +19,10 @@ import ProdForm from '../views/admin/AdminProdForm.vue';
 import Orders from '../views/admin/AdminOrder.vue';
 import Members from '../views/admin/AdminMember.vue';
 
+// 회원가입
+// import userjoin from '../views/user/userjoin.vue';
+import login from '../views/user/login.vue';
+
 const routes = [
     {
         path: '/',
@@ -50,8 +54,13 @@ const routes = [
                     },
                 ],
             },
+            {
+                path: 'login',
+                component: login,
+            },
         ],
     },
+
     {
         path: '/admin',
         name: 'Admin',
@@ -90,6 +99,7 @@ const routes = [
             },
         ],
     },
+  
 ];
 
 const router = createRouter({
