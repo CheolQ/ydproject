@@ -25,7 +25,7 @@
                             <td v-if="od.cnt > 1">{{ od.prod_name }} 외 {{ od.cnt -1}} 건</td>
                             <td v-else>{{ od.prod_name}}</td>
                             <td>{{ od.pay_price }}</td>
-                            <td>{{ od.order_status }}</td>
+                            <td v-if="od.order_status === 'P'">결제완료</td>
                             <td><button type="button" class="btn btn-primary" @click="orderInfo(od.order_no)">조회</button></td>
                         </tr>
                     </tbody>
@@ -49,6 +49,7 @@ export default {
             orderList: [],
             page: {},
             pageUnit: 5,
+            order_status: 'P',
         }
     },
     created() {
@@ -57,7 +58,7 @@ export default {
     },
     methods: {
         goPage(page){
-            axios.get(`/api/adminOrder?pageUnit=${this.pageUnit}&page=${page}`)
+            axios.get(`/api/adminOrder?pageUnit=${this.pageUnit}&page=${page}&orderStatus=${this.order_status}`)
             .then(result => {
                 console.log(result.data)
                 this.orderList = result.data.list;

@@ -14,6 +14,7 @@ const userSql = require('./loginSql')
 
 const adminOrder = require('./admin/orderSql')
 const adminMember = require('./admin/memberSql')
+const adminProd = require('./admin/prodSql')
 module.exports = {
 
     ...cartsql,
@@ -31,4 +32,5 @@ module.exports = {
     //관리자
     ...adminOrder,
     ...adminMember,
+
 }
