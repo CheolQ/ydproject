@@ -31,4 +31,10 @@ module.exports = {
     //관리자
     ...adminOrder,
     ...adminMember,
+
+    ...prodSql,
+    ...noticeSql,
+    ...mypageSql
+
+
 }
