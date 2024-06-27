@@ -12,7 +12,7 @@
                             <th scope="col">번호</th>
                             <th scope="col"><input type="checkbox" v-model="allChecked" @click="checkedAll($event.target.checked)"></th>
                             <th scope="col">상품번호</th>
-                            <th scope="col">이미지</th>
+                            <!-- <th scope="col">이미지</th> -->
                             <th scope="col">상품명</th>
                             <th scope="col">금액</th>
                             <th scope="col">삭제</th>
@@ -29,16 +29,16 @@
                                 <td>
                                     <p class="mb-0 mt-4">{{ w.prod_no }}</p>
                                 </td>
-                                <td scope="row">
+                                <!-- <td scope="row">
                                     <div class="d-flex align-items-center">
                                         <img src="#" class="img-fluid me-5 rounded-circle" style="width: 80px; height: 80px;" alt="">
                                     </div>
-                                </td>
+                                </td> -->
                                 <td>
                                     <p class="mb-0 mt-4">{{ w.prod_name }}</p>
                                 </td>
                                 <td>
-                                    <p class="mb-0 mt-4">{{ w.prod_price }}원</p>
+                                    <p class="mb-0 mt-4">{{ formatPrice(w.prod_price) }}원</p>
                                 </td>
                                 <td>
                                     <button class="btn btn-md rounded-circle bg-light border mt-4"  @click="delSel(w.cart_no)" >
@@ -69,15 +69,18 @@
             };
         },
         created(){
-            axios.get('/api/wish/')
-            .then(result => {
-                console.log(result)
-            })
+            // axios.get('/api/wish/')
+            // .then(result => {
+            //     console.log(result)
+            // })
         },
         methods : {
             gotoCart(){
                 
-            }
+            },
+            formatPrice(price){
+                    return price.numberFormat();
+            },
         }
     }
 </script>
