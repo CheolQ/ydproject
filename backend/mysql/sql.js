@@ -7,6 +7,8 @@ const prodSql = require('./prodSql')
 const noticeSql = require('./noticeSql')
 const mypageSql = require('./mypageSql')
 
+//로그인 회원가입
+const userSql = require('./loginSql')
 
 //관리자
 
@@ -20,6 +22,10 @@ module.exports = {
     ...prodSql,
     ...noticeSql,
     ...mypageSql,
+
+    //로그인,회원가입
+    ...userSql,
+
 
 
     //관리자

@@ -5,9 +5,13 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
 var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
+
+//로그인,회원가입
+var usersRouter = require('./routes/users.js');
+
 //유저
 var cartRouter = require('./routes/cart');
+
 //관리자
 const adminMemberRouter = require('./routes/admin/adminMember.js')
 
@@ -29,16 +33,19 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
-app.use('/users', usersRouter);
 
 //유저
-
 app.use('/cart', cartRouter);
+
+//로그인
+app.use('/users', usersRouter);
+
 
 app.use("/shop", prodRouter);
 app.use("/notice", noticeRouter);
 
 app.use("/mypage", mypageRouter);
+
 
 //관리자
 app.use("/adminMember", adminMemberRouter)

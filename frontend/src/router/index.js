@@ -35,12 +35,9 @@ import ProdInfoView from '@/views/product/ProdInfoView.vue';
 import NoticeListView from '@/views/notice/NoticeListView.vue';
 import NoticeInfoView from '@/views/notice/NoticeInfoView.vue';
 
-// 회원가입
-// import userjoin from '../views/user/userjoin.vue';
-
-// 회원가입
-// import userjoin from '../views/user/userjoin.vue';
-// import login from '../views/user/login.vue';
+// 로그인, 회원가입
+import login from '../views/user/loginForm.vue';
+import join from '../views/user/joinForm.vue';
 
 const routes = [
     {
@@ -104,6 +101,14 @@ const routes = [
             {
                 path: 'orderForm',
                 component: Order,
+            },
+            { //로그인
+                path: 'login',
+                component:login,
+            },
+            {//회원가입
+                path: 'join',
+                component:join,
             },
         ],
     },
