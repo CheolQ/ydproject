@@ -10,6 +10,9 @@ import Cart from '@/views/CartView.vue';
 //주문
 import Order from '@/views/OrderForm.vue';
 
+//QnA
+import QnaForm from '@/views/QnaFormView.vue'
+
 // 마이페이지
 import MyPage from '@/views/mypage/MyPage.vue';
 import MyPageHome from '@/components/mypage/MypageHome.vue';
@@ -25,6 +28,9 @@ import Qna from '../views/admin/AdminQna.vue';
 import ProdList from '../views/admin/AdminProdList.vue';
 import ProdForm from '../views/admin/AdminProdForm.vue';
 import Orders from '../views/admin/AdminOrder.vue';
+import OrderInfo from '../views/admin/AdminOrderInfo.vue';
+import AdminOrderDelivery from '../views/admin/AdminOrderDelivery.vue'
+import AdminOrderCancel from '@/views/admin/AdminOrderCancel.vue';
 import Members from '../views/admin/AdminMember.vue';
 
 //상품
@@ -66,7 +72,7 @@ const routes = [
                 component: ProdListView,
             },
             {
-                path: '/shopinfo',
+                path: 'shopinfo',
                 name: 'shopinfo',
                 component: ProdInfoView,
             },
@@ -79,6 +85,11 @@ const routes = [
                 path: '/noticeinfo',
                 name: 'noticeinfo',
                 component: NoticeInfoView,
+            },
+            {
+                path: 'qnaform',
+                name: 'qnaform',
+                component: QnaForm,
             },
             {
                 path: 'mypage',
@@ -144,6 +155,18 @@ const routes = [
             {
                 path: 'orders',
                 component: Orders,
+            },
+            {
+                path: 'ordersInfo',
+                component: OrderInfo
+            },
+            {
+                path: 'orderDelivery',
+                component: AdminOrderDelivery
+            },
+            {
+                path: 'orderCancel',
+                component: AdminOrderCancel
             },
             {
                 path: 'member',
