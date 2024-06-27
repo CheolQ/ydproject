@@ -11,8 +11,8 @@
                           <tr>
                             <th scope="col">번호</th>
                             <th scope="col"><input type="checkbox" v-model="allChecked" @click="checkedAll($event.target.checked)"></th>
-                            <th scope="col">상품번호</th>
-                            <!-- <th scope="col">이미지</th> -->
+                            <!-- <th scope="col">상품번호</th> -->
+                            <th scope="col">이미지</th>
                             <th scope="col">상품명</th>
                             <th scope="col">금액</th>
                             <th scope="col">삭제</th>
@@ -26,14 +26,14 @@
                                 <td>
                                     <p class="mb-0 mt-4"><input type="checkbox" v-model="w.selected" @change="AllChecked"></p>
                                 </td>
-                                <td>
+                                <!-- <td>
                                     <p class="mb-0 mt-4">{{ w.prod_no }}</p>
-                                </td>
-                                <!-- <td scope="row">
-                                    <div class="d-flex align-items-center">
-                                        <img src="#" class="img-fluid me-5 rounded-circle" style="width: 80px; height: 80px;" alt="">
-                                    </div>
                                 </td> -->
+                                <td scope="row">
+                                    <div class="align-items-center">
+                                        <img :src="`/img/prodImages/${w.main_img}`" class="img-fluid rounded-circle" style="width: 80px; height: 80px;">
+                                    </div>
+                                </td>
                                 <td>
                                     <p class="mb-0 mt-4">{{ w.prod_name }}</p>
                                 </td>
@@ -41,7 +41,7 @@
                                     <p class="mb-0 mt-4">{{ formatPrice(w.prod_price) }}원</p>
                                 </td>
                                 <td>
-                                    <button class="btn btn-md rounded-circle bg-light border mt-4"  @click="delSel(w.cart_no)" >
+                                    <button class="btn btn-md rounded-circle bg-light border mt-4"  @click="delSel(w.like_no)" >
                                         <i class="fa fa-times text-danger"></i>
                                     </button>
                                 </td>
@@ -52,35 +52,90 @@
                         <button @click="delAll" class="btn btn-warning">전체삭제</button>
                     </div>
                     <div>
-                        <button @click="gotoCart" class="btn btn-primary">장바구니로 이동</button>
+                        <!-- <router-link to="/user/cart">
+                            
+                        </router-link> -->
+                            <button @click="gotoCart" class="btn btn-primary">장바구니에 담기</button>
                     </div>
                 </div>
             </div>
         </div>
         <!-- Wish Page End -->
+        <Paging v-bind="page" @go-page="goPage" />
 </template>
 <script>
+    import PageMixins from '@/mixin';
     import axios from 'axios';
+    import Paging from '../Paging.vue';
 
     export default {
+        mixins : [PageMixins],
+        components: {
+            Paging
+        },
         data(){
             return{
-                wish : [], 
+                wish : [], w : {}, page : {}, pageUnit : 5, nowPage : 1, allChecked : false
+                //userno: 1
             };
         },
         created(){
-            // axios.get('/api/wish/')
-            // .then(result => {
-            //     console.log(result)
-            // })
+            //this.getWish();
+            this.goPage(1)
         },
         methods : {
+            async goPage(page){
+                try{
+                    let pageUnit = this.pageUnit;
+                    let result = await axios.get(`/api/wish?pageUnit=${pageUnit}&page=${page}`);
+                    this.wish = result.data.list;
+                    this.page = this.pageCalc(page, result.data.count, 5, pageUnit)
+                    console.log(this.page,'현재 페이지를 배열로 가져옴');
+                    this.nowPage = page;
+                    console.log('현재 페이지는', this.nowPage)
+                }catch(err){
+                    console.log(err);
+                }
+            },
+            // getWish(){
+            //     axios.get('/api/wish/', {
+            //             headers: { 'Cache-Control': 'no-cache' }
+            //         })
+            //     .then(result => {
+            //     //console.log(result.data,"데이터는")
+            //     this.wish = result.data;
+            //     })
+            //     .catch(err => console.log(err))
+            // },
             gotoCart(){
-                
+                // let selectedWish = [];
+                // this.wish.forEach(a => {
+                //     if(a.selected){
+                //         selectedWish.push(a)
+                //     }
+                // });
+                // this.$router.push({
+                //     path : 'cart',
+                //     query: { MyWishList: JSON.stringify(selectedWish) }
+                // })
             },
             formatPrice(price){
                     return price.numberFormat();
             },
+            async delSel(no){
+                await axios.delete(`/api/wish/${no}`);
+                //this.goPage(this.page);
+                console.log('페이지 이동한 뒤 현재 페이지는', this.nowPage)
+                this.goPage(this.nowPage); 
+                //nowPage의 단점 : 젤 마지막 페이지에 삭제가 되었을때 이전 페이지로 가야하는데 없어진 페이지에 그대로 머무른다는 점
+            },
+            delAll(){
+                axios.delete('/api/wish');
+                this.goPage(this.nowPage);
+            },
+            checkedAll(checked){
+                this.wish.forEach(a => a.selected = checked);
+            }
         }
     }
 </script>

@@ -9,8 +9,8 @@
                           <tr>
                             <th scope="col">번호</th>
                             <th scope="col"><input type="checkbox" v-model="allChecked" @click="checkedAll($event.target.checked)"></th>
-                            <th scope="col">상품번호</th>
-                            <!-- <th scope="col">이미지</th> -->
+                            <!-- <th scope="col">상품번호</th> -->
+                            <th scope="col">이미지</th>
                             <th scope="col">상품명</th>
                             <th scope="col">개수</th>
                             <th scope="col">금액</th>
@@ -25,27 +25,27 @@
                                 <td>
                                     <p class="mb-0 mt-4"><input type="checkbox" v-model="c.selected" @change="AllChecked"></p>
                                 </td>
-                                <td>
+                                <!-- <td>
                                     <p class="mb-0 mt-4">{{ c.prod_no }}</p>
-                                </td>
-                                <!-- <td scope="row">
-                                    <div class="d-flex align-items-center">
-                                        <img src="#" class="img-fluid me-5 rounded-circle" style="width: 80px; height: 80px;" alt="">
-                                    </div>
                                 </td> -->
+                                <td scope="row">
+                                    <div class="align-items-center">
+                                        <img :src="`/img/prodImages/${c.main_img}`" class="img-fluid rounded-circle" style="width: 90px; height: 90px;">
+                                    </div>
+                                </td>
                                 <td>
                                     <p class="mb-0 mt-4">{{ c.prod_name }}</p>
                                 </td>
                                 <td>
                                     <div class="input-group quantity mt-4" style="width: 100px;">
                                         <div class="input-group-btn">
-                                            <button @click="minusBtn" class="btn btn-sm btn-minus rounded-circle bg-light border" >
+                                            <button v-on:click="c.cnt--" class="btn btn-sm btn-minus rounded-circle bg-light border" >
                                             <i class="fa fa-minus"></i>
                                             </button>
                                         </div>
-                                        <input type="text" v-model="c.cnt" readonly class="form-control form-control-sm text-center border-0" value="1">
+                                        <input type="text" v-model="c.cnt" class="form-control form-control-sm text-center border-0">
                                         <div class="input-group-btn">
-                                            <button @click="plusBtn"  class="btn btn-sm btn-plus rounded-circle bg-light border">
+                                            <button v-on:click="c.cnt++" @click="plusBtn(c.cart_no, c.cnt)" class="btn btn-sm btn-plus rounded-circle bg-light border">
                                                 <i class="fa fa-plus"></i>
                                             </button>
                                         </div>
@@ -76,11 +76,11 @@
 </template>
 <script>
     import axios from 'axios';
-
+    
     export default {
             data(){ 
                 return{
-                    cart : [], c : {}, allChecked : false
+                    cart : [], c : {}, allChecked : false, cnt : 0
                 };   
             },
             created(){
@@ -126,8 +126,13 @@
                 formatPrice(price){
                     return price.numberFormat();
                 },
-                plusBtn(){
-                    
+                // plusBtn(cnt){
+                //     console.log(this.cart[0].cnt);
+                //     this.cart[0].cnt++;
+                // },
+                plusBtn(no, cnt){
+                    //axios
+                    console.log(no, cnt, 'dddddddd')
                 },
                 minusBtn(){
 
