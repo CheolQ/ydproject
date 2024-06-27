@@ -1,6 +1,7 @@
 module.exports = {
     AdminOrderCount: `select count(*) as cnt
-                      from orders`,
+                      from orders
+                      where order_status = ?`,
     AdminOrderList: `select DISTINCT od.order_no, od.order_date, od.user_no, od.pay_price, od.order_status,
 		             substring_index(group_concat(
 		                                    (select prod_name
@@ -11,7 +12,8 @@ module.exports = {
 									        from order_detail
 									        where order_no = od.order_no) as cnt
                     from orders od left join order_detail ods
-					                    on od.order_no = ods.order_no                   
+					                    on od.order_no = ods.order_no
+                    where od.order_status = ?                                       
                     group by od.order_no, od.order_date, od.user_no, od.pay_price, od.order_status
                     limit ?, ? `,
     AdminOrderInfo1: `select u.name, u.tel, u.email,
@@ -23,5 +25,9 @@ module.exports = {
     AdminOrderInfo2: `select pd.main_img, pd.prod_name, pd.prod_price, ord.cnt
                       from order_detail ord join prod pd
                                               on ord.prod_no = pd.prod_no
-                      where ord.order_no = ?;`,                             
+                      where ord.order_no = ?`,
+    AdminOrderInfoUpdate: `update orders
+                           set order_status = ?,
+                           deli_code = ?
+                           where order_no = ?`                                               
 }

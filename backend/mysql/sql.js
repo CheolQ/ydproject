@@ -13,8 +13,11 @@ const userSql = require('./loginSql');
 
 //관리자
 
-const adminOrder = require('./admin/orderSql');
-const adminMember = require('./admin/memberSql');
+
+const adminOrder = require('./admin/orderSql')
+const adminMember = require('./admin/memberSql')
+const adminProd = require('./admin/prodSql')
+
 module.exports = {
     ...categorysql,
 

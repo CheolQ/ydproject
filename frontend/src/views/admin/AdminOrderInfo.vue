@@ -24,9 +24,9 @@
                 <div class="card-body shadow">
                     <div>주문상태</div>
                     <br> 
-                    <select class="form-select" aria-label="Default select example">
-                        <option value="1">결제완료</option>
-                        <option value="2">배송중</option>
+                    <select v-model="orderStatus" class="form-select" aria-label="Default select example">
+                        <option value="P">결제완료</option>
+                        <option value="D5">배송중</option>
                     </select>
                 </div>
             </div>    
@@ -55,7 +55,7 @@
                     </thead>
                     <tbody>
                         <tr v-for="p in prodInfo" :key="p">
-                            <th scope="row">{{ p.main_img }}</th>
+                            <th scope="row"><img :src="`/img/prodImages/${p.main_img}`" style="width: 90px; height: 90px;"></th>
                             <td>{{ p.prod_name }}</td>
                             <td>{{ p.prod_price }}</td>
                             <td>{{ p.cnt }}</td>
@@ -76,6 +76,7 @@ export default{
             orderNo : {no: 1},
             userInfo : [],
             prodInfo : [],
+            orderStatus: 'P',
         }
     },
     created(){
@@ -86,6 +87,7 @@ export default{
             this.userInfo = result.data.list1;
             console.log(result.data.list2)
             this.prodInfo = result.data.list2;
+            this.order_status = result.data.list1[0].order_status;
         })
         .catch(err => console.log(err))
     },
@@ -95,6 +97,17 @@ export default{
                 alert('운송장 번호를 입력하세요');
                 return;
             }
+            if(this.orderStatus === 'P'){
+                alert('주문상태를 변경하세요');
+                return;
+            }
+            axios.put('/api/adminOrder', {no: this.orderNo.no, orderStatus: this.orderStatus, deilCode: this.userInfo[0].deli_code})
+            .then(result => {
+                console.log(result);
+                alert('운송장 번호가 입력 되었습니다')
+                this.$router.push({path : '/admin/orders'})
+            })
+            .catch(err=> console.log(err))
         }
     }
 }
