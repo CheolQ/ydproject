@@ -17,9 +17,11 @@
                                 class="text-white">Email@Example.com</a></small>
                     </div>
                     <div class="top-link pe-2">
+
                         <a href="/user/login" class="text-white"><small class="text-white ms-2">Login</small> /</a>
                         <a href="/user/join" class="text-white"><small class="text-white mx-2">SignUp</small>/</a>
                         <a href="#" class="text-white"><small class="text-white mx-2">what...Should I use it</small></a>
+
                     </div>
                 </div>
             </div>
@@ -40,7 +42,7 @@
                             <div class="nav-item dropdown">
                                 <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Pages</a>
                                 <div class="dropdown-menu m-0 bg-secondary rounded-0">
-                                    <a href="cart.html" class="dropdown-item">Cart</a>
+                                    <a href="/user/cart" class="dropdown-item">Cart</a>
                                     <a href="chackout.html" class="dropdown-item">Chackout</a>
                                     <a href="testimonial.html" class="dropdown-item">Testimonial</a>
                                     <a href="404.html" class="dropdown-item">404 Page</a>

@@ -33,27 +33,31 @@
                                     <table class="table">
                                         <thead>
                                             <tr>
-                                                <!-- <th scope="col">이미지</th> -->
-                                                <th scope="col">상품명</th>
-                                                <th scope="col">개수</th>
-                                                <th scope="col">금액</th>
+                                                <th scope="col">Products</th>
+                                                <th scope="col">Name</th>
+                                                <th scope="col">Price</th>
+                                                <th scope="col">Quantity</th>
+                                                <th scope="col">Total</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <tr v-for="c in selectedCart">
-                                                <!-- <td scope="row">
-                                                    <div class="d-flex align-items-center">
-                                                        <img src="#" class="img-fluid me-5 rounded-circle" style="width: 80px; height: 80px;" alt="">
+                                                <td scope="row">
+                                                    <div class="align-items-center">
+                                                        <img :src="`/img/prodImages/${c.main_img}`" class="img-fluid me-5 rounded-circle" style="width: 90px; height: 90px;">
                                                     </div>
-                                                </td> -->
+                                                </td>
                                                 <td>
                                                     <p class="mb-0 mt-4">{{ c.prod_name }}</p>
+                                                </td>
+                                                <td>
+                                                    <p class="mb-0 mt-4">{{ formatPrice(c.price) }}원</p>
                                                 </td>
                                                 <td>
                                                     <p class="mb-0 mt-4">{{ c.cnt }}</p>
                                                 </td>
                                                 <td>
-                                                    <p class="mb-0 mt-4">{{ c.price }}원</p>
+                                                    <p class="mb-0 mt-4">{{ formatPrice(c.price * c.cnt) }}원</p>
                                                 </td>
                                             </tr>
                                         </tbody>
@@ -109,13 +113,16 @@
             },
             discount(){
                 this.selectedCart.forEach(a => {
-                    this.totalPrice += Number(a.price);
+                    this.totalPrice += Number(a.price * a.cnt);
                 });
             },
             points(){
                 let point = 100
                 this.totalPrice -= point;
-            }
+            },
+            formatPrice(price){
+                    return price.numberFormat();
+            },
         }
     }
 </script>
