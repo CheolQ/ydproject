@@ -36,5 +36,13 @@ export default {
     }
 }
 </script>
+<style>
+.pagination{
+    justify-content: center;
+}
+.pagination > li > a {
+    float: none;
+}
+</style>
 <style scoped src="../assets/admin/css/sb-admin-2.css"></style>
 <style scoped src="../assets/admin/css/sb-admin-2.min.css"></style>
