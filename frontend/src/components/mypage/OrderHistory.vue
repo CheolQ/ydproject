@@ -5,48 +5,29 @@
             <table class="table">
                 <thead>
                     <tr>
-                        <th>
-                            번호
-                        </th>
-                        <th>
-                            주문일
-                        </th>
-                        <th>
-                            상품명
-                        </th>
-                        <th>
-                            결제금액
-                        </th>
-                        <th>
-                            주문처리상태
-                        </th>
-                        <th>
-                            주문상세
-                        </th>
-                        <th>
-                            재구매
-                        </th>
+                        <th>번호</th>
+                        <th>주문일</th>
+                        <th>상품명</th>
+                        <th>결제금액</th>
+                        <th>주문처리상태</th>
+                        <th>주문상세</th>
+                        <th>주문취소</th>
+                        <th>재구매</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
+                    <tr v-for="(v, i) in orderList">
+                        <td>{{ v.order_no }}</td>
+                        <td>{{ v.order_date }}</td>
+                        <td v-if="v.cnt > 0">{{ v.prod_name }} 외 {{ v.cnt - 1 }}</td>
+                        <td v-else>{{ v.prod_name }}</td>
+                        <td>{{ v.pay_price }}원</td>
+                        <td>{{ v.order_status }}</td>
                         <td>
-                            1
+                            <button class="btn btn-primary btn-sm" @click="orderInfoHandler(v.order_no)">주문상세</button>
                         </td>
                         <td>
-                            asdas
-                        </td>
-                        <td>
-                            asdas
-                        </td>
-                        <td>
-                            asdas
-                        </td>
-                        <td>
-                            asdas
-                        </td>
-                        <td>
-                            <button class="btn btn-primary btn-sm">주문상세</button>
+                            <button class="btn btn-primary btn-sm">주문취소</button>
                         </td>
                         <td>
                             <button class="btn btn-primary btn-sm">재구매</button>
@@ -69,12 +50,29 @@ export default {
         }
     },
     created() {
-        axios.get(`/api/`)
+        axios.get(`/api/mypage/orderinfo/` + this.userid)
             .then((result) => {
-
+                console.log(result.data);
+                this.orderList = result.data;
+                for (let v of this.orderList) {
+                    v.pay_price = this.numberFormat(v.pay_price)
+                }
             })
     },
     methods: {
+        numberFormat: function (number) {
+            if (number == 0)
+                return 0;
+            let regex = /(^[+-]?\d+)(\d{3})/;
+            let nstr = (number + '');
+            while (regex.test(nstr)) {
+                nstr = nstr.replace(regex, '$1' + ',' + '$2');
+            }
+            return nstr;
+        },
+        orderInfoHandler: function (no) {
+            this.$router.push({ name: 'orderdetailinfo', query: { no: no } })
+        }
 
     }
 }

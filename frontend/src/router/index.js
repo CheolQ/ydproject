@@ -14,6 +14,7 @@ import Order from '@/views/OrderForm.vue';
 import MyPage from '@/views/mypage/MyPage.vue';
 import MyPageHome from '@/components/mypage/MypageHome.vue';
 import OrderHistory from '@/components/mypage/OrderHistory.vue';
+import OrderDetailInfo from '@/components/mypage/OrderDetailInfo.vue';
 import MyWishList from '@/components/mypage/MyWishList.vue';
 
 //관리자
@@ -90,6 +91,11 @@ const routes = [
                     {
                         path: 'orderhistory',
                         component: OrderHistory,
+                    },
+                    {
+                        path: 'orderdetailinfo',
+                        name: 'orderdetailinfo',
+                        component: OrderDetailInfo,
                     },
                     {
                         path: 'mywishlist',
