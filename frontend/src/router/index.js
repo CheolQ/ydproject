@@ -10,6 +10,9 @@ import Cart from '@/views/CartView.vue';
 //주문
 import Order from '@/views/OrderForm.vue';
 
+//QnA
+import QnaForm from '@/views/QnaFormView.vue'
+
 // 마이페이지
 import MyPage from '@/views/mypage/MyPage.vue';
 import MyPageHome from '@/components/mypage/MypageHome.vue';
@@ -65,7 +68,7 @@ const routes = [
                 component: ProdListView,
             },
             {
-                path: '/shopinfo',
+                path: 'shopinfo',
                 name: 'shopinfo',
                 component: ProdInfoView,
             },
@@ -78,6 +81,11 @@ const routes = [
                 path: '/noticeinfo',
                 name: 'noticeinfo',
                 component: NoticeInfoView,
+            },
+            {
+                path: 'qnaform',
+                name: 'qnaform',
+                component: QnaForm,
             },
             {
                 path: 'mypage',
