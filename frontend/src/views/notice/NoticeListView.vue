@@ -10,11 +10,11 @@
  	      </tr>
  	     </thead>
  	     <tbody>
- 	   <tr :key ="i" v-for ="(notice, i) in noticeList" @click ="goToDetail(notice.NOTICE_NO)">
- 	    <td>{{notice.NOTICE_NO}}</td>
- 	    <td>{{notice.TITLE }}</td>
- 	    <td>{{notice.USER_ID }}</td>
- 	    <td>{{notice.CREATE_DATE }}</td>
+ 	   <tr :key ="i" v-for ="(notice, i) in noticeList" @click ="goToDetail(notice.notice_no)">
+ 	    <td>{{notice.notice_no}}</td>
+ 	    <td>{{notice.title }}</td>
+ 	    <td>{{notice.user_id }}</td>
+ 	    <td>{{notice.create_date }}</td>
 
 
  	    

@@ -4,6 +4,7 @@ const query = require('../mysql/index');
 //목록
 router.get("/",	async(req ,	res )	=> {
  	let result =	await query("noticeList");
+	console.log(result)
  	res.send(result);
 });
 
@@ -12,5 +13,7 @@ router.get("/:no",	async (req , res )	=> {
  	let result =	await query("noticeInfo",	req.params.no );
  	res.send(result);
 });
+
+
 
 module.exports = router ;

@@ -13,7 +13,6 @@ const adminMemberRouter = require('./routes/admin/adminMember.js')
 
 const prodRouter = require('./routes/prod.js');
 const noticeRouter = require('./routes/notice.js');
-
 const mypageRouter = require('./routes/mypage.js');
 
 var app = express();
