@@ -21,6 +21,7 @@
             </div>
             <div class="tab-pane" id="nav-mission" role="tabpanel" aria-labelledby="nav-mission-tab">
 				<div class ="container">
+					<caption>Review</caption>
 					 <table class ="table table-hover">
 						<thead>
 					   <tr>
@@ -34,9 +35,9 @@
 					  <tbody>
 					<tr :key ="i" v-for ="(review, i) in reviewList">
 					 <td>{{review.review_no}}</td>
-					 <td>{{review.user_id }}</td>
 					 <td>{{review.review_content }}</td>
-					 <td>{{review.create_date }}</td>
+					 <td>{{review.user_id }}</td>
+					 <td>{{getDateFormat(review.create_date) }}</td>
 					 <td>
 						<i class="fa fa-star text-secondary"></i>                                    
 						<i class="fa fa-star text-secondary"></i>                                    
@@ -49,28 +50,27 @@
             </div>
 			<div class="tab-pane" id="nav-qna" role="tabpanel" aria-labelledby="nav-qna-tab">
 				<div class ="container">
+					<caption>QnA</caption>
 					 <table class ="table table-hover">
 						<thead>
 					   <tr>
-						<th>222222NO.</th>
-						<th>CONTENT</th>
+						<th>NO.</th>
+						<th>TITLE</th>
 						<th>NAME</th>
 						<th>DATE</th>
-						<th>Rating</th>
 					   </tr>
 					  </thead>
-					  <tbody>
-					<tr :key ="i" v-for ="(qna, i) in qnaList">
-					 <td>{{qna.user_id }}</td>
+					  <tbody :key ="i" v-for ="(qna, i) in qnaList">
+					<tr @click= "qnaOnOff(qna.board_no)"  >
+					 <td>{{qna.board_no }}</td>
 					 <td>{{qna.title }}</td>
-					 <td>{{qna.create_date }}</td>
-					 <td>
-						<i class="fa fa-star text-secondary"></i>                                    
-						<i class="fa fa-star text-secondary"></i>                                    
-						<i class="fa fa-star"></i>
-					 </td>
+					 <td>{{qna.user_id }}</td>
+					 <td>{{getDateFormat(qna.create_date) }}</td>
 					</tr>
-				   </tbody>
+					<tr v-if="qnaInfo">
+						<td>{{ qna.content }}</td>
+					</tr>
+				</tbody>
 				  </table>
 				 </div>
             </div>
@@ -85,7 +85,10 @@ export default {
         return {
             searchNo:"",
 			reviewList: [],
-			qnaList:[]
+			qnaList:[],
+			qnaInfo: false,
+			qnacon: {},
+			qnacontent:{prodno: 1 , qnano: 1}
         }
     },
     created() {
@@ -99,10 +102,28 @@ export default {
  	  	this.reviewList = (await axios.get(`/api/shop/review/${this.searchNo}`)).data ;	 	
         // console.log(this.reviewList);
     },
-	async getQnaList()	{
- 	  	this.qnaList = (await axios.get(`/api/shop/qna/${this.searchNo}`)).data ;	 	
+		async getQnaList()	{
+ 	  		this.qnaList = (await axios.get(`/api/shop/qnaList/${this.searchNo}`)).data ;	 	
         // console.log(this.reviewList);
     },
+	getDateFormat(val )	{
+        let date = val == '' ? new Date() : new Date(val);
+        let year = date.getFullYear();
+        let month = ('0' + (date.getMonth() + 1)).slice(-2);
+        let day = ('0' + date.getDate()).slice(-2);
+        return `${year}-${month}-${day}`;
+ 	 },
+	  qnaOnOff:function(no){
+		
+		this.qnacontent.prodno = this.searchNo;
+		this.qnacontent.qnano = no;
+		this.qnaInfo = !this.qnaInfo;
+		axios.post(`/api/shop/qna/${no}`,this.qnacontent)
+			.then(result => {
+				this.qnacon = result.data[0]
+			})
+	  
+	}
     }
 }
 

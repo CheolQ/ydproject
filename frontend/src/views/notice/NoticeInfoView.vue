@@ -1,31 +1,33 @@
 <template>
-    <div>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       
-         <h3>상세화면</h3>
-         <div class="row">
-            <div class="col-md-12 border p-3">
-         <table class="table table-spride table-hover border">
-            <thead>
-            <tr>
-                <th>제목</th>
-                <th>작성자</th>
-                <th>작성일</th>
-                <th>내용</th>
-             </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td scope ="col"class ="text-center">{{noticeInfo.title }}</td>
-                <td scope ="col"class ="text-center">{{noticeInfo.user_id }}</td>
-                <td scope ="col"class ="text-center">{{noticeInfo.create_date }}</td>
-                <td scope ="col"class ="text-center">{{noticeInfo.content }}</td>
-            </tr>
-        </tbody>
+    <div class="container-fluid fruite py-5">
+        <div class="container py-5">
+            <h1 class="mb-4">Notice</h1>
+ 			<table class ="table width:100%">
+                <thead>
+                    <tr class="tr1">
+                        <th class="thwidth">제목</th>
+                        <td scope ="col"  colspan="4">{{noticeInfo.title }}</td>
+                        <th class ="thwidth">작성일</th>
+                        <td scope ="col"class ="thwidth">{{getDateFormat(noticeInfo.create_date) }}</td>
+                    </tr>
+                    <tr>
+                        <th>작성자</th>
+                        <td scope ="col" class ="dd" colspan="6">{{noticeInfo.user_id }}</td>
+                      
+                    </tr>        
+                </thead>
+                <tbody>
+                    <tr>
+                        <td scope ="col"class ="text-center"  colspan="7">{{noticeInfo.content }}</td>
+                    </tr>
+                </tbody>               
             </table>
-     </div>
-     </div>
-     <button @click="goToList">목록</button>
+        </div>
+        <button @click="goToList" class="btn border border-secondary rounded-pill px-4 py-2 mb-4 text-primary">
+            List</button>
+       
     </div>
-     </template>
+</template>
 
 <script	>
 import axios from "axios";
@@ -44,17 +46,27 @@ export	default {
  	 async getNoticeInfo()	{
  	  this.noticeInfo = (await axios.get(`/api/notice/${this.searchNo}`)).data[0];
  	 },
- 	//  getDateFormat(date )	{
- 	//   return this .$dateFormat(date );
- 	//  },
-
-
+     getDateFormat(val )	{
+        let date = val == '' ? new Date() : new Date(val);
+        let year = date.getFullYear();
+        let month = ('0' + (date.getMonth() + 1)).slice(-2);
+        let day = ('0' + date.getDate()).slice(-2);
+        return `${year}-${month}-${day}`;
+ 	 },
  	 goToList( ){
  	  this.$router.push({ path:"/user/notice"});
  	 },
  	},
- 	
 };
 </script>
 <style>
+.thw{
+    width: 70%;
+}
+.thwidth{
+    width: 10%;
+}
+.dd{
+   text-align: left;
+}
 </style>

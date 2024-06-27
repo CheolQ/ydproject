@@ -17,9 +17,11 @@
                                 class="text-white">Email@Example.com</a></small>
                     </div>
                     <div class="top-link pe-2">
-                        <a href="#" class="text-white"><small class="text-white mx-2">Privacy Policy</small>/</a>
-                        <a href="#" class="text-white"><small class="text-white mx-2">Terms of Use</small>/</a>
-                        <a href="#" class="text-white"><small class="text-white ms-2">Sales and Refunds</small></a>
+
+                        <a href="/user/login" class="text-white"><small class="text-white ms-2">Login</small> /</a>
+                        <a href="/user/join" class="text-white"><small class="text-white mx-2">SignUp</small>/</a>
+                        <a href="#" class="text-white"><small class="text-white mx-2">what...Should I use it</small></a>
+
                     </div>
                 </div>
             </div>
@@ -60,7 +62,7 @@
                                         style="top: -5px; left: 15px; height: 20px; min-width: 20px;">3</span>
                                 </a>
                             </router-link>
-                            <router-link to="/mypage" class="my-auto">
+                            <router-link to="/user/mypage" class="my-auto">
                                 <i class="fas fa-user fa-2x"></i>
                             </router-link>
                         </div>

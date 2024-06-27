@@ -10,10 +10,14 @@ import Cart from '@/views/CartView.vue';
 //주문
 import Order from '@/views/OrderForm.vue';
 
+//QnA
+import QnaForm from '@/views/QnaFormView.vue'
+
 // 마이페이지
 import MyPage from '@/views/mypage/MyPage.vue';
 import MyPageHome from '@/components/mypage/MypageHome.vue';
 import OrderHistory from '@/components/mypage/OrderHistory.vue';
+import OrderDetailInfo from '@/components/mypage/OrderDetailInfo.vue';
 import MyWishList from '@/components/mypage/MyWishList.vue';
 
 //관리자
@@ -38,12 +42,9 @@ import ProdInfoView from '@/views/product/ProdInfoView.vue';
 import NoticeListView from '@/views/notice/NoticeListView.vue';
 import NoticeInfoView from '@/views/notice/NoticeInfoView.vue';
 
-// 회원가입
-// import userjoin from '../views/user/userjoin.vue';
-
-// 회원가입
-// import userjoin from '../views/user/userjoin.vue';
-// import login from '../views/user/login.vue';
+// 로그인, 회원가입
+import login from '../views/user/loginForm.vue';
+import join from '../views/user/joinForm.vue';
 
 const routes = [
     {
@@ -68,7 +69,7 @@ const routes = [
                 component: ProdListView,
             },
             {
-                path: '/shopinfo',
+                path: 'shopinfo',
                 name: 'shopinfo',
                 component: ProdInfoView,
             },
@@ -83,6 +84,11 @@ const routes = [
                 component: NoticeInfoView,
             },
             {
+                path: 'qnaform',
+                name: 'qnaform',
+                component: QnaForm,
+            },
+            {
                 path: 'mypage',
                 component: MyPage,
                 children: [
@@ -93,6 +99,11 @@ const routes = [
                     {
                         path: 'orderhistory',
                         component: OrderHistory,
+                    },
+                    {
+                        path: 'orderdetailinfo',
+                        name: 'orderdetailinfo',
+                        component: OrderDetailInfo,
                     },
                     {
                         path: 'mywishlist',
@@ -107,6 +118,14 @@ const routes = [
             {
                 path: 'orderForm',
                 component: Order,
+            },
+            { //로그인
+                path: 'login',
+                component:login,
+            },
+            {//회원가입
+                path: 'join',
+                component:join,
             },
         ],
     },
