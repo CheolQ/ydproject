@@ -43,7 +43,7 @@
                                             <i class="fa fa-minus"></i>
                                             </button>
                                         </div>
-                                        <input type="text" v-model="c.cnt" class="form-control form-control-sm text-center border-0">
+                                        <input type="number" readonly min="0" max="10" v-model="c.cnt" class="form-control form-control-sm text-center border-0">
                                         <div class="input-group-btn">
                                             <button v-on:click="c.cnt++" @click="cntBtn(c.cart_no, c.cnt, c.prod_price)" class="btn btn-sm btn-plus rounded-circle bg-light border">
                                                 <i class="fa fa-plus"></i>
