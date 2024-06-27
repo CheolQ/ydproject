@@ -14,10 +14,10 @@
         </thead>
         <tbody>
             <tr>
-                <td scope ="col"class ="text-center">{{noticeInfo.TITLE }}</td>
-                <td scope ="col"class ="text-center">{{noticeInfo.USER_ID }}</td>
-                <td scope ="col"class ="text-center">{{noticeInfo.CREATE_DATE }}</td>
-                <td scope ="col"class ="text-center">{{noticeInfo.CONTENT }}</td>
+                <td scope ="col"class ="text-center">{{noticeInfo.title }}</td>
+                <td scope ="col"class ="text-center">{{noticeInfo.user_id }}</td>
+                <td scope ="col"class ="text-center">{{noticeInfo.create_date }}</td>
+                <td scope ="col"class ="text-center">{{noticeInfo.content }}</td>
             </tr>
         </tbody>
             </table>
@@ -50,7 +50,7 @@ export	default {
 
 
  	 goToList( ){
- 	  this.$router.push({ path:"/notice"});
+ 	  this.$router.push({ path:"/user/notice"});
  	 },
  	},
  	

@@ -9,8 +9,8 @@
                     id="nav-mission-tab" data-bs-toggle="tab" data-bs-target="#nav-mission"
                     aria-controls="nav-mission" aria-selected="false">Reviews</button>
 				<button class="nav-link border-white border-bottom-0" type="button" role="tab"
-                    id="nav-qna-tab" data-bs-toggle="tab" data-bs-target="#nav-mission"
-                    aria-controls="nav-mission" aria-selected="false">QnA</button>
+                    id="nav-qna-tab" data-bs-toggle="tab" data-bs-target="#nav-qna"
+                    aria-controls="nav-qna" aria-selected="false">QnA</button>
             </div>
         </nav>
         <div class="tab-content mb-5">
@@ -47,6 +47,33 @@
 				  </table>
 				 </div>
             </div>
+			<div class="tab-pane" id="nav-qna" role="tabpanel" aria-labelledby="nav-qna-tab">
+				<div class ="container">
+					 <table class ="table table-hover">
+						<thead>
+					   <tr>
+						<th>222222NO.</th>
+						<th>CONTENT</th>
+						<th>NAME</th>
+						<th>DATE</th>
+						<th>Rating</th>
+					   </tr>
+					  </thead>
+					  <tbody>
+					<tr :key ="i" v-for ="(qna, i) in qnaList">
+					 <td>{{qna.user_id }}</td>
+					 <td>{{qna.title }}</td>
+					 <td>{{qna.create_date }}</td>
+					 <td>
+						<i class="fa fa-star text-secondary"></i>                                    
+						<i class="fa fa-star text-secondary"></i>                                    
+						<i class="fa fa-star"></i>
+					 </td>
+					</tr>
+				   </tbody>
+				  </table>
+				 </div>
+            </div>
 		</div>
 	</div>
 </template>
@@ -58,15 +85,22 @@ export default {
         return {
             searchNo:"",
 			reviewList: [],
+			qnaList:[]
         }
     },
     created() {
         this.searchNo = this.$route.query.no ;
         this.getReviewList();
+        this.getQnaList();
+
     },
     methods: {
         async getReviewList()	{
  	  	this.reviewList = (await axios.get(`/api/shop/review/${this.searchNo}`)).data ;	 	
+        // console.log(this.reviewList);
+    },
+	async getQnaList()	{
+ 	  	this.qnaList = (await axios.get(`/api/shop/qna/${this.searchNo}`)).data ;	 	
         // console.log(this.reviewList);
     },
     }
