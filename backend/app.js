@@ -4,12 +4,14 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
+var indexRouter = require('./routes/index.js');
+var usersRouter = require('./routes/users.js');
 //유저
+
 var cartRouter = require('./routes/cart');
 // var wishRouter = require('./routes/wish');
 const wishRouter = require('./routes/wish.js')
+
 //관리자
 const adminMemberRouter = require('./routes/admin/adminMember.js')
 const AdminOrderRouter = require('./routes/admin/adminOrder.js')

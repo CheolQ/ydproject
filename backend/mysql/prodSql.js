@@ -10,5 +10,9 @@ module.exports = {
   qnaList: `SELECT board_no, user_id, title, content, create_date, board_pw, update_date, user_no, prod_no   
             FROM qna 
             where prod_no = ?`,
+  qnaInfo: `SELECT board_no, user_id, title, content, create_date, board_pw, update_date, user_no, prod_no   
+            FROM qna 
+            where prod_no = ? and board_no = ?`,
+  qnaInsert: `insert into qna set ?`
 
 };
