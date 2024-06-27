@@ -33,7 +33,7 @@
                                     <table class="table">
                                         <thead>
                                             <tr>
-                                                <th scope="col">이미지</th>
+                                                <!-- <th scope="col">이미지</th> -->
                                                 <th scope="col">상품명</th>
                                                 <th scope="col">개수</th>
                                                 <th scope="col">금액</th>
@@ -41,11 +41,11 @@
                                         </thead>
                                         <tbody>
                                             <tr v-for="c in selectedCart">
-                                                <td scope="row">
+                                                <!-- <td scope="row">
                                                     <div class="d-flex align-items-center">
                                                         <img src="#" class="img-fluid me-5 rounded-circle" style="width: 80px; height: 80px;" alt="">
                                                     </div>
-                                                </td>
+                                                </td> -->
                                                 <td>
                                                     <p class="mb-0 mt-4">{{ c.prod_name }}</p>
                                                 </td>
@@ -97,6 +97,7 @@
             const queryCart = this.$route.query.Cart;
             if (queryCart) {
                 this.selectedCart = JSON.parse(queryCart);
+                console.log(this.selectedCart, '확인!')
             }
         },
         mounted(){
@@ -108,7 +109,7 @@
             },
             discount(){
                 this.selectedCart.forEach(a => {
-                    this.totalPrice += Number(a.PRICE);
+                    this.totalPrice += Number(a.price);
                 });
             },
             points(){

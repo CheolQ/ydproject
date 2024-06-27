@@ -53,7 +53,7 @@
                                 class="btn-search btn border border-secondary btn-md-square rounded-circle bg-white me-4"
                                 @click="modalOpen"><i class="fas fa-search text-primary"></i></button>
                             <router-link to="/user/cart">
-                                <a href="cart.html" class="position-relative me-4 my-auto">
+                                <a href="#" class="position-relative me-4 my-auto">
                                     <i class="fa fa-shopping-bag fa-2x"></i>
                                     <span
                                         class="position-absolute bg-secondary rounded-circle d-flex align-items-center justify-content-center text-dark px-1"
