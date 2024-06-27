@@ -40,7 +40,7 @@
                             <div class="nav-item dropdown">
                                 <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Pages</a>
                                 <div class="dropdown-menu m-0 bg-secondary rounded-0">
-                                    <a href="cart.html" class="dropdown-item">Cart</a>
+                                    <a href="/user/cart" class="dropdown-item">Cart</a>
                                     <a href="chackout.html" class="dropdown-item">Chackout</a>
                                     <a href="testimonial.html" class="dropdown-item">Testimonial</a>
                                     <a href="404.html" class="dropdown-item">404 Page</a>
@@ -60,7 +60,7 @@
                                         style="top: -5px; left: 15px; height: 20px; min-width: 20px;">3</span>
                                 </a>
                             </router-link>
-                            <router-link to="/user/mypage" class="my-auto">
+                            <router-link to="/mypage" class="my-auto">
                                 <i class="fas fa-user fa-2x"></i>
                             </router-link>
                         </div>

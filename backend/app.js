@@ -8,13 +8,14 @@ var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 //유저
 var cartRouter = require('./routes/cart');
+// var wishRouter = require('./routes/wish');
+const wishRouter = require('./routes/wish.js')
 //관리자
 const adminMemberRouter = require('./routes/admin/adminMember.js')
 const AdminOrderRouter = require('./routes/admin/adminOrder.js')
 
 const prodRouter = require('./routes/prod.js');
 const noticeRouter = require('./routes/notice.js');
-
 const mypageRouter = require('./routes/mypage.js');
 
 var app = express();
@@ -35,6 +36,8 @@ app.use('/users', usersRouter);
 //유저
 
 app.use('/cart', cartRouter);
+
+app.use('/wish', wishRouter);
 
 app.use("/shop", prodRouter);
 app.use("/notice", noticeRouter);
