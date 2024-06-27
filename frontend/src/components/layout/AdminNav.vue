@@ -69,10 +69,10 @@
                     <router-link to="/admin/orders">
                         <a class="collapse-item" href="#">주문조회</a>
                     </router-link>
-                    <router-link to="#">
+                    <router-link to="/admin/orderDelivery">
                         <a class="collapse-item" href="#">배송조회</a>
                     </router-link>
-                    <router-link to="#">
+                    <router-link to="/admin/orderCancel">
                         <a class="collapse-item" href="#">주문취소</a>
                     </router-link>
                 </div>

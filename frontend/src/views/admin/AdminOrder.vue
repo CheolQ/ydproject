@@ -18,33 +18,58 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <th scope="row">1</th>
-                            <td>Mark</td>
-                            <td>Otto</td>
-                            <td>@mdo</td>
-                            <td>Mark</td>
-                            <td>Otto</td>
-                            <td><button>보기</button></td>
+                        <tr v-for="od in orderList" v-bind:key="od">
+                            <th scope="row">{{ od.order_no }}</th>
+                            <td>{{ od.order_date }}</td>
+                            <td>{{ od.user_no }}</td>
+                            <td v-if="od.cnt > 1">{{ od.prod_name }} 외 {{ od.cnt -1}} 건</td>
+                            <td v-else>{{ od.prod_name}}</td>
+                            <td>{{ od.pay_price }}</td>
+                            <td>{{ od.order_status }}</td>
+                            <td><button type="button" class="btn btn-primary" @click="orderInfo(od.order_no)">조회</button></td>
                         </tr>
                     </tbody>
                 </table>
+                <paging-component v-bind="page" @go-page="goPage"/>
             </div>
         </div>
     </div>
 </template>
 <script>
+import Paging from "../../mixin";
+import axios from 'axios';
+import PagingComponent from '@/components/Paging.vue'
 export default {
+    mixins : [Paging],
+    components: {
+        PagingComponent
+    },
     data() {
         return {
-            
+            orderList: [],
+            page: {},
+            pageUnit: 5,
         }
     },
     created() {
-
+        this.goPage(1);
+        
     },
     methods: {
-
+        goPage(page){
+            axios.get(`/api/adminOrder?pageUnit=${this.pageUnit}&page=${page}`)
+            .then(result => {
+                console.log(result.data)
+                this.orderList = result.data.list;
+                this.page = page;
+                this.page = this.pageCalc(page, result.data.count[0].cnt, 5, this.pageUnit);
+            })
+            .catch(err => console.log(err))
+        },
+        orderInfo(orderNo){
+            console.log(orderNo);
+            this.$router.push({path: 'ordersInfo', query: {bno: orderNo}})
+        }
     }
 }
 </script>

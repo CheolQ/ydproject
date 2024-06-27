@@ -73,7 +73,6 @@
                    						  	<div class="text-white bg-secondary px-3 py-1 rounded position-absolute" style="top: 10px; left: 10px;">Fruits</div>
                     						<div class="p-4 border border-secondary border-top-0 rounded-bottom">
                         						<h4>{{prod.prod_name }}</h4>
-												{{ prod.main_img }}
 												<div class="d-flex justify-content-between flex-lg-wrap">
                   									<p class="text-dark fs-5 fw-bold mb-0">{{prod.prod_price }}</p>
                     								<a href="#" class="btn border border-secondary rounded-pill px-3 text-primary"><i class="fa fa-shopping-bag me-2 text-primary"></i> Add to cart</a>
@@ -94,12 +93,14 @@
 
 <script>
 import axios from "axios";
+import { computed } from "vue";
 export default { 
     data() { 
         return {
 			prodList: [],
         }
     },
+
     created() {
 		this.getProdList();
     },
@@ -111,6 +112,7 @@ export default {
 	 	goToDetail(no)	{
  	  	this.$router.push({	path:"/shopinfo",	query: { no:no }	});
  	 	},
+  
     }
 }
 </script>
