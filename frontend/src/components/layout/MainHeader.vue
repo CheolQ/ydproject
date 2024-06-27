@@ -17,9 +17,11 @@
                                 class="text-white">Email@Example.com</a></small>
                     </div>
                     <div class="top-link pe-2">
-                        <a href="#" class="text-white"><small class="text-white mx-2">Privacy Policy</small>/</a>
-                        <a href="#" class="text-white"><small class="text-white mx-2">Terms of Use</small>/</a>
-                        <a href="notice" class="text-white"><small class="text-white ms-2">Notice</small></a>
+
+                        <a href="/user/login" class="text-white"><small class="text-white ms-2">Login</small> /</a>
+                        <a href="/user/join" class="text-white"><small class="text-white mx-2">SignUp</small>/</a>
+                        <a href="#" class="text-white"><small class="text-white mx-2">what...Should I use it</small></a>
+
                     </div>
                 </div>
             </div>
