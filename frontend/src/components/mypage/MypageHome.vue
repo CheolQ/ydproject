@@ -1,7 +1,7 @@
 <template>
     <div id="mypage">
         <div class="page-body">
-            <h5 id="mypage-sub">마이페이지 홈</h5>
+            <h5 id="mypage-sub">마이페이지</h5>
             <div class="info-wrap">
                 <div class="info">
                     <div class="user">

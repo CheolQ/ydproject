@@ -1,11 +1,11 @@
 <template>
     <nav aria-label="Page navigation example">
         <ul class="pagination">
-            <li class="page-item"><a class="page-link" href="#">&#60;</a></li>
+            <li class="page-item"><a class="page-link" href="#" @click="goPrevious">&#60;</a></li>
             <li class="page-item" v-for="page in pageArr" v-bind:key="page">
                 <a class="page-link" href="#" @click="goPage(page)">{{ page }}</a>
             </li>
-            <li class="page-item"><a class="page-link" href="#">&#62;</a></li>
+            <li class="page-item"><a class="page-link" href="#" @click="goNext">&#62;</a></li>
         </ul>
     </nav>
 </template>
@@ -32,6 +32,16 @@ export default {
         goPage(page){
             console.log(page);
             this.$emit('go-page', page);
+        },
+        goPrevious() {
+            if (this.currentPage > this.firstPage) {
+            this.$emit('go-page', this.currentPage - 1);
+            }
+        },
+        goNext() {
+            if (this.currentPage < this.lastPage) {
+            this.$emit('go-page', this.currentPage + 1);
+            }
         }
     }
 }
@@ -42,6 +52,10 @@ export default {
 }
 .pagination > li > a {
     float: none;
+}
+.pagination > li.disabled > a {
+    pointer-events: none;
+    cursor: default;
 }
 </style>
 <style scoped src="../assets/admin/css/sb-admin-2.css"></style>
