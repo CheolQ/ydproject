@@ -31,7 +31,7 @@
                                 </td> -->
                                 <td scope="row">
                                     <div class="align-items-center">
-                                        <img :src="`/img/prodImages/${w.main_img}`" class="img-fluid rounded-circle" style="width: 80px; height: 80px;">
+                                        <img :src="`/api/upload/${w.main_img}`" class="img-fluid rounded-circle" style="width: 80px; height: 80px;">
                                     </div>
                                 </td>
                                 <td>
@@ -75,7 +75,7 @@
         },
         data(){
             return{
-                wish : [], w : {}, page : {}, pageUnit : 5, nowPage : 1, allChecked : false
+                wish : [], page : {}, pageUnit : 5, nowPage : 1, allChecked : false
                 //userno: 1
             };
         },
@@ -88,11 +88,16 @@
                 try{
                     let pageUnit = this.pageUnit;
                     let result = await axios.get(`/api/wish?pageUnit=${pageUnit}&page=${page}`);
+                    console.log(result.data.list.length,'결과')
+                    if(result.data.list.length == 0 && this.nowPage != 1){
+                        this.nowPage = this.nowPage - 1;
+                        this.goPage(this.nowPage);
+                    }
                     this.wish = result.data.list;
                     this.page = this.pageCalc(page, result.data.count, 5, pageUnit)
-                    console.log(this.page,'현재 페이지를 배열로 가져옴');
+                    //console.log(this.page,'현재 페이지를 배열로 가져옴');
                     this.nowPage = page;
-                    console.log('현재 페이지는', this.nowPage)
+                    //console.log('현재 페이지는', this.nowPage)
                 }catch(err){
                     console.log(err);
                 }
@@ -125,7 +130,7 @@
             async delSel(no){
                 await axios.delete(`/api/wish/${no}`);
                 //this.goPage(this.page);
-                console.log('페이지 이동한 뒤 현재 페이지는', this.nowPage)
+                //console.log('페이지 이동한 뒤 현재 페이지는', this.nowPage)
                 this.goPage(this.nowPage); 
                 //nowPage의 단점 : 젤 마지막 페이지에 삭제가 되었을때 이전 페이지로 가야하는데 없어진 페이지에 그대로 머무른다는 점
             },

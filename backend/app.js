@@ -43,6 +43,7 @@ app.use('/', indexRouter);
 //유저
 app.use('/cart', cartRouter);
 
+app.use('/upload', express.static('C:/Users/ekdms/Desktop/images/prodImages'));
 
 //로그인
 app.use('/users', usersRouter);
