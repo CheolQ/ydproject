@@ -60,7 +60,7 @@
                                         style="top: -5px; left: 15px; height: 20px; min-width: 20px;">3</span>
                                 </a>
                             </router-link>
-                            <router-link to="/user/mypage" class="my-auto">
+                            <router-link to="/mypage" class="my-auto">
                                 <i class="fas fa-user fa-2x"></i>
                             </router-link>
                         </div>

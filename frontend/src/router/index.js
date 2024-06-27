@@ -45,10 +45,10 @@ import NoticeInfoView from '@/views/notice/NoticeInfoView.vue';
 const routes = [
     {
         path: '/',
-        redirect: '/home',
+        redirect: '/user/home',
     },
     {
-        path: '/',
+        path: '/user',
         name: 'user',
         component: DefaultLayout,
         meta: {
