@@ -10,6 +10,7 @@ var usersRouter = require('./routes/users');
 var cartRouter = require('./routes/cart');
 //관리자
 const adminMemberRouter = require('./routes/admin/adminMember.js')
+const AdminOrderRouter = require('./routes/admin/adminOrder.js')
 
 const prodRouter = require('./routes/prod.js');
 const noticeRouter = require('./routes/notice.js');
@@ -42,6 +43,7 @@ app.use("/mypage", mypageRouter);
 
 //관리자
 app.use("/adminMember", adminMemberRouter)
+app.use("/adminOrder", AdminOrderRouter)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

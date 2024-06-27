@@ -24,6 +24,9 @@ import Qna from '../views/admin/AdminQna.vue';
 import ProdList from '../views/admin/AdminProdList.vue';
 import ProdForm from '../views/admin/AdminProdForm.vue';
 import Orders from '../views/admin/AdminOrder.vue';
+import OrderInfo from '../views/admin/AdminOrderInfo.vue';
+import AdminOrderDelivery from '../views/admin/AdminOrderDelivery.vue'
+import AdminOrderCancel from '@/views/admin/AdminOrderCancel.vue';
 import Members from '../views/admin/AdminMember.vue';
 
 //상품
@@ -138,6 +141,18 @@ const routes = [
             {
                 path: 'orders',
                 component: Orders,
+            },
+            {
+                path: 'ordersInfo',
+                component: OrderInfo
+            },
+            {
+                path: 'orderDelivery',
+                component: AdminOrderDelivery
+            },
+            {
+                path: 'orderCancel',
+                component: AdminOrderCancel
             },
             {
                 path: 'member',
