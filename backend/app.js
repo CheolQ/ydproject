@@ -3,17 +3,16 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-
-//로그인,회원가입
 var indexRouter = require('./routes/index.js');
 var usersRouter = require('./routes/users.js');
-
 //유저
 
 var cartRouter = require('./routes/cart');
 
+
 // var wishRouter = require('./routes/wish');
-const wishRouter = require('./routes/wish.js');
+const wishRouter = require('./routes/wish.js')
+
 
 //관리자
 const adminMemberRouter = require('./routes/admin/adminMember.js')
@@ -42,15 +41,18 @@ app.use('/', indexRouter);
 
 //공통
 app.use('/common', commonRouter);
+app.use('/users', usersRouter);
 
 //유저
+
 app.use('/cart', cartRouter);
+
+app.use('/upload', express.static('C:/Users/ekdms/Desktop/images/prodImages'));
 
 //로그인
 app.use('/users', usersRouter);
 
 app.use('/wish', wishRouter);
-
 app.use('/shop', prodRouter);
 app.use('/notice', noticeRouter);
 
