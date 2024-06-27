@@ -75,6 +75,9 @@
 				 </div>
             </div>
 		</div>
+		<button @click="goToInsert" class="btnq border border-secondary rounded-pill px-4 py-2 mb-4 text-primary">
+            Write</button>
+       
 	</div>
 </template>
 
@@ -106,6 +109,9 @@ export default {
  	  		this.qnaList = (await axios.get(`/api/shop/qnaList/${this.searchNo}`)).data ;	 	
         // console.log(this.reviewList);
     },
+	goToInsert( ){
+ 	  this.$router.push({ path:"/user/qnaForm"});
+ 	 },
 	getDateFormat(val )	{
         let date = val == '' ? new Date() : new Date(val);
         let year = date.getFullYear();
@@ -114,7 +120,6 @@ export default {
         return `${year}-${month}-${day}`;
  	 },
 	  qnaOnOff:function(no){
-		
 		this.qnacontent.prodno = this.searchNo;
 		this.qnacontent.qnano = no;
 		this.qnaInfo = !this.qnaInfo;
@@ -130,4 +135,7 @@ export default {
 </script>
 
 <style>
+.btnq{
+	margin-left: 700px;
+}
 </style>

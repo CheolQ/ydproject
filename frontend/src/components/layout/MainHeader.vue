@@ -20,7 +20,7 @@
 
                         <a href="/user/login" class="text-white"><small class="text-white ms-2">Login</small> /</a>
                         <a href="/user/join" class="text-white"><small class="text-white mx-2">SignUp</small>/</a>
-                        <a href="#" class="text-white"><small class="text-white mx-2">what...Should I use it</small></a>
+                        <a href="notice" class="text-white"><small class="text-white mx-2">Notice</small></a>
 
                     </div>
                 </div>
