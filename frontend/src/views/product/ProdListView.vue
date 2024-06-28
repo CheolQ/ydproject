@@ -93,7 +93,7 @@
 
 <script>
 import axios from "axios";
-import { computed } from "vue";
+
 export default { 
     data() { 
         return {
