@@ -20,7 +20,7 @@
                     <h2 class="txt txt2">SHOPPING QUESTION</h2>
                     <div class="lnb">
                         <ul>
-                            <li class="first"><a href="/shop/mypage.html?mypage_type=myarticle">내 게시글 보기</a></li>
+                            <li class="first"><a href="/shop/mypage.html?mypage_type=myarticle">내 QnA 조회 / 수정</a></li>
                             <li><a href="/shop/mypage.html?mypage_type=myemail">리뷰 관리</a></li>
                         </ul>
                     </div>
