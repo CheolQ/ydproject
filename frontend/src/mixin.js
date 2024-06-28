@@ -12,6 +12,23 @@ export default{
             console.log(firstPage, lastPage, startIdx, endIdx);
             return {currentPage, firstPage, lastPage, startIdx, endIdx };
         },
+        $dateFormat (val ){
+            let date =	val ==	'' ?	new Date ()	:	new Date (val );
+            let year =	date .getFullYear ();
+            let month =	('0' +	(date .getMonth ()	+	1 )).slice (-2 );
+            let day =	('0' +	date .getDate ()).slice (-2 );
+            return `${year }-${month }-${day }`;
+        },
+        $numberFormat (number) {
+            if (number == 0)
+            return 0;
+            let regex = /(^[+-]?\d+)(\d{3})/;
+            let nstr = (number + '');
+            while (regex.test(nstr)) {
+                nstr = nstr.replace(regex, '$1' + ',' + '$2');
+            }
+            return nstr;
+        }
     }
 }
 
