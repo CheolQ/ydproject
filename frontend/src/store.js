@@ -2,11 +2,12 @@ import { createStore } from 'vuex';
 import persistedstate from 'vuex-persistedstate';
 
 const store = createStore({
-    // state() {
-    //     return {
-    //         user: {},
-    //     };
-    // },
+    state() {
+        return {
+            // user: {},
+            cart: []
+        };
+    }
     //   getters: {
     //     cartCount: (state) => {
     //       return state.cart.length;

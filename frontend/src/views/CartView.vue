@@ -18,44 +18,44 @@
                           </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="c in cart">
+                            <tr v-for="cart in cartList">
                                 <td>
-                                    <p class="mb-0 mt-4">{{ c.cart_no }}</p>
+                                    <p class="mb-0 mt-4">{{ cart.cart_no }}</p>
                                 </td>
                                 <td>
-                                    <p class="mb-0 mt-4"><input type="checkbox" v-model="c.selected" @change="AllChecked"></p>
+                                    <p class="mb-0 mt-4"><input type="checkbox" v-model="cart.selected" @change="AllChecked"></p>
                                 </td>
                                 <!-- <td>
                                     <p class="mb-0 mt-4">{{ c.prod_no }}</p>
                                 </td> -->
                                 <td scope="row">
                                     <div class="align-items-center">
-                                        <img :src="`/api/upload/${c.main_img}`" class="img-fluid rounded-circle" style="width: 90px; height: 90px;">
+                                        <img :src="`/api/upload/${cart.main_img}`" class="img-fluid rounded-circle" style="width: 90px; height: 90px;">
                                     </div>
                                 </td>
                                 <td>
-                                    <p class="mb-0 mt-4">{{ c.prod_name }}</p>
+                                    <p class="mb-0 mt-4">{{ cart.prod_name }}</p>
                                 </td>
                                 <td>
                                     <div class="input-group quantity mt-4" style="width: 100px;">
                                         <div class="input-group-btn">
-                                            <button v-on:click="c.cnt--" @click="cntBtn(c.cart_no, c.cnt, c.prod_price)" class="btn btn-sm btn-minus rounded-circle bg-light border" >
-                                            <i class="fa fa-minus"></i>
+                                            <button @click="cntBtn(cart, false)" class="btn btn-sm btn-minus rounded-circle bg-light border" >
+                                                <i class="fa fa-minus"></i>
                                             </button>
                                         </div>
-                                        <input type="number" readonly min="0" max="10" v-model="c.cnt" class="form-control form-control-sm text-center border-0">
+                                        <input type="number" readonly v-model="cart.cnt" class="form-control form-control-sm text-center border-0">
                                         <div class="input-group-btn">
-                                            <button v-on:click="c.cnt++" @click="cntBtn(c.cart_no, c.cnt, c.prod_price)" class="btn btn-sm btn-plus rounded-circle bg-light border">
+                                            <button @click="cntBtn(cart, true)" class="btn btn-sm btn-plus rounded-circle bg-light border">
                                                 <i class="fa fa-plus"></i>
                                             </button>
                                         </div>
                                     </div>
                                 </td>
                                 <td>
-                                    <p class="mb-0 mt-4">{{ formatPrice(c.prod_price * c.cnt) }}원</p>
+                                    <p class="mb-0 mt-4">{{ formatPrice(cart.prod_price * cart.cnt) }}원</p>
                                 </td>
                                 <td>
-                                    <button class="btn btn-md rounded-circle bg-light border mt-4"  @click="delSel(c.cart_no)" >
+                                    <button class="btn btn-md rounded-circle bg-light border mt-4"  @click="delSel(cart.cart_no)" >
                                         <i class="fa fa-times text-danger"></i>
                                     </button>
                                 </td>
@@ -80,7 +80,7 @@
     export default {
             data(){ 
                 return{
-                    cart : [], allChecked : false, cnt : 0
+                    cartList : [], allChecked : false, cnt : 1
                 };   
             },
             created(){
@@ -93,7 +93,7 @@
                     })
                     .then(result => {
                         console.log(result);
-                        this.cart = result.data;
+                        this.cartList = result.data;
                     })
                     .catch(err => console.log(err));
                 },
@@ -107,34 +107,42 @@
                 },
                 orderSel() {
                     let selectedCart = [];
-                    this.cart.forEach(a => {
+                    this.cartList.forEach(a => {
                         if (a.selected) {
                             selectedCart.push(a);
                         }
                     });
+                    this.$store.state.cart = selectedCart;
+                    console.log(this.$store.state.cart)
                     this.$router.push({
-                        path: 'orderForm',
-                        query: { Cart: JSON.stringify(selectedCart) }
+                        name: 'orderForm',
                     });
                 },
                 orderAll() {
                     // 전체 주문 처리 로직
                 },
                 checkedAll(checked) {
-                    this.cart.forEach(a => a.selected = checked);
+                    this.cartList.forEach(a => a.selected = checked);
                 },
                 formatPrice(price){
                     return price.numberFormat();
                 },
-                // plusBtn(cnt){
-                //     console.log(this.cart[0].cnt);
-                //     this.cart[0].cnt++;
+                // cntBtn(no, cnt, prodPrice){
+                //     console.log(no, cnt, prodPrice, '값')
+                //     axios.put(`/api/cart/updateCnt/?no=${no}&cnt=${cnt}&price=${prodPrice}`)
+                //     //this.getCart();
                 // },
-                cntBtn(no, cnt, prodPrice){
-                    console.log(no, cnt, prodPrice, '값')
-                    axios.put(`/api/cart/updateCnt/?no=${no}&cnt=${cnt}&price=${prodPrice}`)
-                    //this.getCart();
-                    //console.log(no, cnt, 'dddddddd')
+                cntBtn(cartInfo, mode){
+                //cntBtn(no, cnt, prodPrice){
+                    if(mode){
+                        cartInfo.cnt++;
+                    }else if(cartInfo.cnt > 1){
+                        cartInfo.cnt--;                
+                    }else{
+                        alert('1개 이상 담을 수 있습니다.') 
+                        cartInfo.cnt = 1;
+                    }
+                    axios.put(`/api/cart/updateCnt?no=${cartInfo.cart_no}&cnt=${cartInfo.cnt}&price=${cartInfo.prod_price}`);
                 },
             }
         }

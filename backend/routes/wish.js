@@ -38,4 +38,17 @@ router.delete("/", (req, res) => {
     .then(result => res.send(result))
 })
 
+//관심상품 등록
+router.post("/:no", (req, res) => {
+    console.log(req.params.no, '이동 확인ㅇㅇㅇㅇ')
+    query("wishInsert", req.params.no)
+    .then(result => res.send(result))
+})
+
+//관심상품에서 장바구니로 insert
+// router.post("/updateCart", (req, res) => {
+//     query("wishToCartInsert", req.params)
+//     .then(result => console.log(err))
+// })
+
 module.exports = router;

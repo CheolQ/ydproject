@@ -117,6 +117,7 @@ const routes = [
             },
             {
                 path: 'orderForm',
+                name: 'orderForm',
                 component: Order,
             },
             { //로그인
