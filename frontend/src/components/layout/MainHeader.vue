@@ -10,25 +10,17 @@
         <div class="container-fluid fixed-top">
             <div class="container topbar bg-primary d-none d-lg-block">
                 <div class="d-flex justify-content-between">
-                    <div class="top-info ps-2">
-                        <small class="me-3"><i class="fas fa-map-marker-alt me-2 text-secondary"></i> <a href="#"
-                                class="text-white">123 Street, New York</a></small>
-                        <small class="me-3"><i class="fas fa-envelope me-2 text-secondary"></i><a href="#"
-                                class="text-white">Email@Example.com</a></small>
-                    </div>
                     <div class="top-link pe-2">
-
                         <a href="/user/login" class="text-white"><small class="text-white ms-2">Login</small> /</a>
                         <a href="/user/join" class="text-white"><small class="text-white mx-2">SignUp</small>/</a>
                         <a href="notice" class="text-white"><small class="text-white mx-2">Notice</small></a>
-
                     </div>
                 </div>
             </div>
             <div class="container px-0">
                 <nav class="navbar navbar-light bg-white navbar-expand-xl">
                     <router-link to="/" class="navbar-brand">
-                        <h1 class="text-primary display-6">까까무라</h1>
+                        <img class="logoImg" :src="`/logo.png`" alt="까까무라로고">
                     </router-link>
                     <button class="navbar-toggler py-2 px-3" type="button" data-bs-toggle="collapse"
                         data-bs-target="#navbarCollapse">
@@ -81,7 +73,8 @@
                         <div class="input-group w-75 mx-auto d-flex">
                             <input type="search" class="form-control p-3" placeholder="keywords"
                                 aria-describedby="search-icon-1">
-                            <span id="search-icon-1" class="input-group-text p-3"><i class="fa fa-search"></i></span>
+                            <span id="search-icon-1" class="input-group-text p-3" @click="searchHandler"><i
+                                    class="fa fa-search"></i></span>
                         </div>
                     </div>
                 </div>
@@ -119,10 +112,19 @@ export default {
         },
         modalOpen() {
             this.modalCheck = !this.modalCheck
+        },
+        searchHandler() {
+            this.$router.push('shop');
+            this.modalOpen();
         }
     }
 }
 </script>
+<style>
+.logoImg {
+    width: 220px;
+}
+</style>
 
 <style scoped>
 /* dimmed */

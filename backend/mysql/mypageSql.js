@@ -44,9 +44,20 @@ module.exports = {
                 where user_no = (
                     select user_no
                     from user
-                    where user_id = 'user15'
+                    where user_id = ?
                 )
-                group by od.order_no, od.order_date, od.user_no, od.pay_price, od.order_status`,
+                group by od.order_no, od.order_date, od.user_no, od.pay_price, od.order_status 
+                limit ? , ?`,
+
+    countUserOrderList: `select count(*) as cnt
+                        from orders 
+                        where user_no = 
+                            (
+                                select user_no
+                                from user
+                                where user_id = ?
+                            )`,
+
     userOrderDetailList: `select order_detail_no, p.prod_name, cnt, p.prod_price, o.order_date, p.main_img
                             from order_detail od
                             join prod p
@@ -64,6 +75,5 @@ module.exports = {
                         where order_no = ?`,
 
     applyOrderCancel2: `insert into order_cancel(order_no)
-                        values(?)`
-                            
+                        values(?)`,
 };
