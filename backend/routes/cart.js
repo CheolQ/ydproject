@@ -21,7 +21,6 @@ router.delete("/", (req, res) => {
 });
 //장바구니 수량 변경
 router.put("/updateCnt/", (req, res) => {
-    console.log("확인확인")
     let newPrice = req.query.price * req.query.cnt;
     query("cartCntUpdate", [req.query.cnt, newPrice, req.query.no ])
     .then(result => res.send(result))
@@ -29,10 +28,20 @@ router.put("/updateCnt/", (req, res) => {
 });
 //장바구니 등록
 router.post("/:no", (req, res) => {
-    //console.log(req.params, '등록되었나')
-    query("cartInsert", req.params.no)
-    .then(result => res.send(result))
-    .catch(err => console.log(err))
+    console.log(req.params, '등록되었나')
+    // query("cartInsert", req.params.no)
+    // .then(result => res.send(result))
+    // .catch(err => console.log(err))
+    // console.log(req.params.no);
+    query("cartSearch", req.params.no)
+    .then(result => {
+        if(result.length != 0){
+            query("cartUpdate", req.params.no)
+        }else{
+            query("cartInsert", req.params.no)
+        }
+    });
+
 })
 
 
