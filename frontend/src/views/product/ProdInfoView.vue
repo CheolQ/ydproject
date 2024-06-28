@@ -34,7 +34,7 @@
                                             <i class="fa fa-minus"></i>
                                         </button>
                                     </div>
-                                    <input type="text" class="form-control form-control-sm text-center border-0"  v-model="number">
+                                    <input type="number" readonly class="form-control form-control-sm text-center border-0"  v-model="number">
                                     <div class="input-group-btn">
                                         <button class="btn btn-sm btn-plus rounded-circle bg-light border"
                                         v-on:click="increase" >
@@ -42,9 +42,10 @@
                                         </button>
                                     </div>
                                 </div>
-                                <a href="#" class="btn border border-secondary rounded-pill px-4 py-2 mb-4 text-primary marinleftjh"><i class="fa fa-shopping-bag me-2 text-primary"></i> Like</a>
-                                <a href="#" class="btn border border-secondary rounded-pill px-4 py-2 mb-4 text-primary marinleftjh"><i class="fa fa-shopping-bag me-2 text-primary"></i> Add to cart</a>
-                                <a href="#" class="btn border border-secondary rounded-pill px-4 py-2 mb-4 text-primary"><i class="fa fa-shopping-bag me-2 text-primary"></i> Buy Now</a>
+                                <!-- <a href="/user/mypage/mywishlist/" class="btn border border-secondary rounded-pill px-4 py-2 mb-4 text-primary marinleftjh"><i class="fa fa-shopping-bag me-2 text-primary"></i> Like</a> -->
+                                <button @click="gotoWish(prodInfo.prod_no)" class="btn border border-secondary rounded-pill px-4 py-2 mb-4 text-primary marinleftjh"><i class="fa fa-shopping-bag me-2 text-primary"></i> Like</button>
+                                <button @click="gotoCart(prodInfo.prod_no)" class="btn border border-secondary rounded-pill px-4 py-2 mb-4 text-primary marinleftjh"><i class="fa fa-shopping-bag me-2 text-primary"></i> Add to cart</button>
+                                <button @click="gotoPayments" class="btn border border-secondary rounded-pill px-4 py-2 mb-4 text-primary"><i class="fa fa-shopping-bag me-2 text-primary"></i> Buy Now</button>
                              </div>
                             <review />
                         </div>
@@ -58,59 +59,91 @@
 <script	>
 import axios from "axios";
 import review from '@/components/Review.vue'
+import Swal from "sweetalert2";
 
 export	default {
     components:{review},
  	data ()	{
- 	 return {
- 	  searchNo:"",
- 	  prodInfo: {},
-      number: 1
- 	 };
+        return {
+                searchNo:"",
+                prodInfo: {},
+                number: 1
+        };
  	},
- 	created()	{
- 	 this.searchNo = this.$route.query.no ;
- 	 this.getProdInfo();
+ 	created(){
+        this.searchNo = this.$route.query.no ;
+        this.getProdInfo();
  	},
  	methods: {
- 	 async getProdInfo()	{
- 	    this.prodInfo = 
-        (await axios.get(`/api/shop/${this.searchNo}`)).data[0];
- 	 },
- 	//  getDateFormat(date )	{
- 	//   return this .$dateFormat(date );
- 	//  },
-     getDateFormat(val )	{
-        let date = val == '' ? new Date() : new Date(val);
-        let year = date.getFullYear();
-        let month = ('0' + (date.getMonth() + 1)).slice(-2);
-        let day = ('0' + date.getDate()).slice(-2);
-        return `${year}-${month}-${day}`;
- 	 },
-
- 	 goToList( ){
- 	  this.$router.push({ path:"/shop"});
- 	 },
-     increase(){
-        this.number++;
-     },
-     decrease(){
-        this.number--;
-     },
-     numberFormat: function (number) {
-        if (number == 0)
-        return 0;
-        let regex = /(^[+-]?\d+)(\d{3})/;
-        let nstr = (number + '');
-        while (regex.test(nstr)) {
-            nstr = nstr.replace(regex, '$1' + ',' + '$2');
-        }
-        return nstr;
+        async getProdInfo()	{
+            this.prodInfo = 
+            (await axios.get(`/api/shop/${this.searchNo}`)).data[0];
+        },
+        //  getDateFormat(date )	{
+        //   return this .$dateFormat(date );
+        //  },
+        getDateFormat(val )	{
+            let date = val == '' ? new Date() : new Date(val);
+            let year = date.getFullYear();
+            let month = ('0' + (date.getMonth() + 1)).slice(-2);
+            let day = ('0' + date.getDate()).slice(-2);
+            return `${year}-${month}-${day}`;
+        },
+        goToList( ){
+        this.$router.push({ path:"/shop"});
+        },
+        increase(){
+            this.number++;
+        },
+        decrease(){
+            this.number--;
+        },
+        numberFormat: function (number) {
+            if (number == 0)
+            return 0;
+            let regex = /(^[+-]?\d+)(\d{3})/;
+            let nstr = (number + '');
+            while (regex.test(nstr)) {
+                nstr = nstr.replace(regex, '$1' + ',' + '$2');
+            }
+            return nstr;
+            },
+        gotoWish(no){
+            axios.post(`/api/wish/${no}`,this.prodInfo.prod_no)
+            //.then(()=> alert('관심상품에 등록되었습니다.'))
+            .then(
+                Swal.fire({
+                    position: "center",
+                    icon: "success",
+                    title: "관심상품에 등록되었습니다.",
+                    showConfirmButton: false,
+                    timer: 1500
+                })
+            )
+        },
+        gotoCart(no){
+            axios.post(`/api/cart/${no}`, this.prodInfo.prod_no)
+            .then(
+                Swal.fire({
+                title: "장바구니로 이동하겠습니까?",
+                showDenyButton: true,
+				confirmButtonText: "이동",
+				denyButtonText: `계속 쇼핑`
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        this.$router.push('cart')
+                    } else if (result.isDenied) {
+                    }
+                })
+            )
+        },
+        gotoPayments(){
+            
         }
  	},
  	
 };
-</script	>
+</script>
 
 
 <style>
@@ -121,5 +154,4 @@ export	default {
 .marinleftjh{
     margin-right: 10px;
 }
-
 </style>

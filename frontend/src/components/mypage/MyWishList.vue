@@ -52,10 +52,7 @@
                         <button @click="delAll" class="btn btn-warning">전체삭제</button>
                     </div>
                     <div>
-                        <!-- <router-link to="/user/cart">
-                            
-                        </router-link> -->
-                            <button @click="gotoCart" class="btn btn-primary">장바구니에 담기</button>
+                        <button @click="gotoCart(w.prod_no)" class="btn btn-primary">장바구니에 담기</button>
                     </div>
                 </div>
             </div>
@@ -76,12 +73,11 @@
         data(){
             return{
                 wish : [], page : {}, pageUnit : 5, nowPage : 1, allChecked : false
-                //userno: 1
             };
         },
         created(){
+            this.goPage(1);
             //this.getWish();
-            this.goPage(1)
         },
         methods : {
             async goPage(page){
@@ -112,7 +108,9 @@
             //     })
             //     .catch(err => console.log(err))
             // },
-            gotoCart(){
+            gotoCart(no){
+                // axios.post(`/api/cart/updateCart/${no}`, this.wish)
+                // .then(this.$router.push('/cart'));
                 // let selectedWish = [];
                 // this.wish.forEach(a => {
                 //     if(a.selected){
@@ -132,8 +130,7 @@
                 //this.goPage(this.page);
                 //console.log('페이지 이동한 뒤 현재 페이지는', this.nowPage)
                 this.goPage(this.nowPage); 
-                //nowPage의 단점 : 젤 마지막 페이지에 삭제가 되었을때 이전 페이지로 가야하는데 없어진 페이지에 그대로 머무른다는 점
-            },
+            },  
             delAll(){
                 axios.delete('/api/wish');
                 this.goPage(this.nowPage);
