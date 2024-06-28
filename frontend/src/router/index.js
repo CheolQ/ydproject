@@ -26,6 +26,7 @@ import AdminHome from '../views/AdminHome.vue';
 import Notice from '../views/admin/AdminNotice.vue';
 import Qna from '../views/admin/AdminQna.vue';
 import ProdList from '../views/admin/AdminProdList.vue';
+import AdminProdInfo from '../views/admin/AdminProdInfo.vue'
 import ProdForm from '../views/admin/AdminProdForm.vue';
 import Orders from '../views/admin/AdminOrder.vue';
 import OrderInfo from '../views/admin/AdminOrderInfo.vue';
@@ -162,6 +163,10 @@ const routes = [
             {
                 path: 'prodForm',
                 component: ProdForm,
+            },
+            {
+                path: 'prodInfo',
+                component: AdminProdInfo,
             },
             {
                 path: 'orders',
