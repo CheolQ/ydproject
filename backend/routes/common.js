@@ -1,6 +1,12 @@
 const express = require('express');
 const router = express.Router();
 const query = require('../mysql/index');
+const Codes = require('../../config/codes');
+
+// 공통코드
+router.get('/codes', (req,res) => {
+  res.json(Codes);
+})
 
 // 카테고리 리스트 출력
 router.get('/categories', async (req, res) => {
@@ -57,5 +63,7 @@ router.get('/categories', async (req, res) => {
     res.status(500).json({ error: 'Internal server error' });
   }
 });
+
+
 
 module.exports = router;
