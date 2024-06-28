@@ -97,17 +97,16 @@
     <!-- Checkout Page End -->
 </template>
 <script>
-<<<<<<< HEAD
-export default {
-    data() {
-        return {
-            selectedCart: [],
-            totalPrice: 0
-        };
-    },
-    created() {
-        // const queryCart = this.$route.query.Cart;
-        const queryCart = JSON.stringify(this.$store.state.cart);
+    export default {
+        data(){
+            return{
+                selectedCart : [],
+                totalPrice : 0
+            };
+        },
+        created() {
+            // const queryCart = this.$route.query.Cart;
+            const queryCart = JSON.stringify(this.$store.state.cart);
         console.log(queryCart)
         console.log(this.$store.state.cart);
         console.log(queryCart);
@@ -116,16 +115,15 @@ export default {
             console.log(this.selectedCart, '확인!')
         }
     },
-    mounted() {
-        this.discount();
-    },
-    methods: {
-        payments() {
+        mounted(){
+            this.discount();
+        },
+        methods : {
+            payments(){
 
         },
         discount() {
             this.selectedCart.forEach(a => {
-
                 this.totalPrice += Number(a.prod_price * a.cnt);
             });
         },
@@ -135,9 +133,9 @@ export default {
         },
         formatPrice(price) {
             return price.numberFormat();
-        },
-    }
-}
+                },
+            }
+        }
 </script>
 <style>
 .aside-tit {
