@@ -12,7 +12,6 @@
                         <th>주문처리상태</th>
                         <th>주문상세</th>
                         <th>주문취소</th>
-                        <th>재구매</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -22,15 +21,13 @@
                         <td v-if="v.cnt > 0">{{ v.prod_name }} 외 {{ v.cnt - 1 }}</td>
                         <td v-else>{{ v.prod_name }}</td>
                         <td>{{ v.pay_price }}원</td>
-                        <td>{{ v.order_status }}</td>
+                        <td>{{ getCodeMeaning(v.order_status) }}</td>
                         <td>
                             <button class="btn btn-primary btn-sm" @click="orderInfoHandler(v.order_no)">주문상세</button>
                         </td>
                         <td>
-                            <button class="btn btn-primary btn-sm">주문취소</button>
-                        </td>
-                        <td>
-                            <button class="btn btn-primary btn-sm">재구매</button>
+                            <button v-if="v.order_status == 'D1'" class="btn btn-primary btn-sm"
+                                @click="applyOrderCancel(v.order_no)">주문취소</button>
                         </td>
                     </tr>
                 </tbody>
@@ -46,10 +43,19 @@ export default {
     data() {
         return {
             userid: 'user1',
-            orderList: []
+            orderList: [],
+            codes: {}
         }
     },
     created() {
+        axios.get('/api/common/codes')
+            .then(response => {
+                this.codes = response.data;
+                console.log(response.data)
+            })
+            .catch(error => {
+                console.error('API 호출 중 오류:', error);
+            });
         axios.get(`/api/mypage/orderinfo/` + this.userid)
             .then((result) => {
                 console.log(result.data);
@@ -72,7 +78,24 @@ export default {
         },
         orderInfoHandler: function (no) {
             this.$router.push({ name: 'orderdetailinfo', query: { no: no } })
+        },
+        getCodeMeaning(code) {
+            console.log(code);
+            return this.codes.OrderStatus[code] || code; // 코드에 맞는 의미 있는 문자열 반환
+        },
+        applyOrderCancel: function (no) {
+            axios.patch(`/api/mypage/ordercancel/` + Number(no))
+                .then((result) => {
+                    console.log(result.data);
+                    axios.post(`/api/mypage/ordercancel/` + Number(no))
+                        .then((result) => {
+                            console.log(result.data)
+                        })
+                })
         }
+
+    },
+    mounted() {
 
     }
 }
