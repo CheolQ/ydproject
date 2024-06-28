@@ -6,55 +6,56 @@ const query = require('../mysql/index');
 router.get('/categories', async (req, res) => {
     try {
         let result = await query('categoryList');
-        const formattedData = [];
-        let currentParent = null;
-        let currentParentCode = null;
-        let childNames = [];
-        let childCodes = [];
+        console.log('sdfsdf')
+        console.log(result);
+        const categoryList = [];
+    let catMap = null;
+    let catList = null;
+    let codeList = null;
+    let curCateName = null, preCateName = null;
 
-        result.forEach((row) => {
-            // Check if parent value exists and is not empty
-            if (row.parent !== undefined && row.parent !== '') {
-                // If there's a current parent being tracked, push it to formattedData
-                if (currentParent !== null) {
-                    formattedData.push({
-                        parent: currentParent,
-                        parentCode: currentParentCode,
-                        child: childNames,
-                        childCode: childCodes,
-                    });
-                }
-                // Update currentParent and currentParentCode
-                currentParent = row.parent;
-                currentParentCode = row.parentCode;
-                // Reset childNames and childCodes arrays
-                childNames = [];
-                childCodes = [];
-            }
-            // Check if child value exists and is not empty
-            if (row.child !== undefined && row.child !== '') {
-                childNames.push(row.child);
-                childCodes.push(row.childCode);
-            }
-        });
+    result.forEach((row) => {
+      const p_code = row.parent;
+      const p_name = row.parent;
+      const c_code = row.child;
+      const c_name = row.child;
+      const categoryCode = row.parentCode || row.childCode;
 
-        // After loop, push the last category group if exists
-        if (currentParent !== null) {
-            formattedData.push({
-                parent: currentParent,
-                parentCode: currentParentCode,
-                child: childNames,
-                childCode: childCodes,
-            });
+      if (p_name !== '') {
+        curCateName = p_name;
+        if (catMap) {
+          catMap.child = catList;
+          catMap.childCode = codeList;
+          categoryList.push(catMap);
         }
+        catMap = {};
+        catList = [];
+        codeList = [];
+        catMap.parent = p_name;
+        catMap.parentCode = categoryCode;
+      }
+      if (c_name !== '') {
+        if (!catList) catList = [];
+        if (!codeList) codeList = [];
+        catList.push(c_name);
+        codeList.push(categoryCode);
+      }
+    });
 
-        // JSON으로 변환하여 클라이언트에 응답
-        console.log(formattedData);
-        res.json(formattedData);
-    } catch (error) {
-        console.error('Error fetching categories:', error);
-        res.status(500).json({ error: 'Internal server error' });
+    // 마지막 데이터 추가
+    if (catMap) {
+      catMap.child = catList;
+      catMap.childCode = codeList;
+      categoryList.push(catMap);
     }
+
+    // JSON으로 변환하여 클라이언트에 응답
+    console.log(categoryList);
+    res.json(categoryList);
+  } catch (error) {
+    console.error('Error fetching categories:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
 });
 
 module.exports = router;
