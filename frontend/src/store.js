@@ -22,8 +22,8 @@ const store = createStore({
 
             // user: {},
             cart: []
-        };
-    }
+        }
+    
     //   getters: {
     //     cartCount: (state) => {
     //       return state.cart.length;
@@ -36,6 +36,6 @@ const store = createStore({
     // },
     // plugins: [persistedstate({ paths: ['user'] })],
 
-});
+)
 
 export default store;
