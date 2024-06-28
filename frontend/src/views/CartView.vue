@@ -112,9 +112,10 @@
                             selectedCart.push(a);
                         }
                     });
+                    this.$store.state.cart = selectedCart;
+                    console.log(this.$store.state.cart)
                     this.$router.push({
-                        path: 'orderForm',
-                        query: { Cart: JSON.stringify(selectedCart) }
+                        name: 'orderForm',
                     });
                 },
                 orderAll() {

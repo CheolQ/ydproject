@@ -130,24 +130,9 @@
         },
         formatPrice(price) {
             return price.numberFormat();
-        },
-    }
-}
-            },
-            discount(){
-                this.selectedCart.forEach(a => {
-                    this.totalPrice += Number(a.price * a.cnt);
-                });
-            },
-            points(){
-                let point = 100
-                this.totalPrice -= point;
-            },
-            formatPrice(price){
-                    return price.numberFormat();
-            },
+                },
+            }
         }
-    }
 </script>
 <style>
 .aside-tit {
