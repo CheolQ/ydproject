@@ -30,7 +30,7 @@
                                 </td> -->
                                 <td scope="row">
                                     <div class="align-items-center">
-                                        <img :src="`/img/prodImages/${c.main_img}`" class="img-fluid rounded-circle" style="width: 90px; height: 90px;">
+                                        <img :src="`/api/upload/${c.main_img}`" class="img-fluid rounded-circle" style="width: 90px; height: 90px;">
                                     </div>
                                 </td>
                                 <td>
@@ -39,20 +39,20 @@
                                 <td>
                                     <div class="input-group quantity mt-4" style="width: 100px;">
                                         <div class="input-group-btn">
-                                            <button v-on:click="c.cnt--" class="btn btn-sm btn-minus rounded-circle bg-light border" >
+                                            <button v-on:click="c.cnt--" @click="cntBtn(c.cart_no, c.cnt, c.prod_price)" class="btn btn-sm btn-minus rounded-circle bg-light border" >
                                             <i class="fa fa-minus"></i>
                                             </button>
                                         </div>
-                                        <input type="text" v-model="c.cnt" class="form-control form-control-sm text-center border-0">
+                                        <input type="number" readonly min="0" max="10" v-model="c.cnt" class="form-control form-control-sm text-center border-0">
                                         <div class="input-group-btn">
-                                            <button v-on:click="c.cnt++" @click="plusBtn(c.cart_no, c.cnt)" class="btn btn-sm btn-plus rounded-circle bg-light border">
+                                            <button v-on:click="c.cnt++" @click="cntBtn(c.cart_no, c.cnt, c.prod_price)" class="btn btn-sm btn-plus rounded-circle bg-light border">
                                                 <i class="fa fa-plus"></i>
                                             </button>
                                         </div>
                                     </div>
                                 </td>
                                 <td>
-                                    <p class="mb-0 mt-4">{{ formatPrice(c.price) }}원</p>
+                                    <p class="mb-0 mt-4">{{ formatPrice(c.prod_price * c.cnt) }}원</p>
                                 </td>
                                 <td>
                                     <button class="btn btn-md rounded-circle bg-light border mt-4"  @click="delSel(c.cart_no)" >
@@ -80,7 +80,7 @@
     export default {
             data(){ 
                 return{
-                    cart : [], c : {}, allChecked : false, cnt : 0
+                    cart : [], allChecked : false, cnt : 0
                 };   
             },
             created(){
@@ -130,12 +130,11 @@
                 //     console.log(this.cart[0].cnt);
                 //     this.cart[0].cnt++;
                 // },
-                plusBtn(no, cnt){
-                    //axios
-                    console.log(no, cnt, 'dddddddd')
-                },
-                minusBtn(){
-
+                cntBtn(no, cnt, prodPrice){
+                    console.log(no, cnt, prodPrice, '값')
+                    axios.put(`/api/cart/updateCnt/?no=${no}&cnt=${cnt}&price=${prodPrice}`)
+                    //this.getCart();
+                    //console.log(no, cnt, 'dddddddd')
                 },
             }
         }

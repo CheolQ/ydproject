@@ -77,9 +77,31 @@ export default {
     }
 }
 </script>
-
 <style>
-#mypage-sub {
+mypage-sub {
+    width: 100%;
+    text-align: left;
+    margin-left: 15px;
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 24px;
+    color: #555;
+    padding: 20px 0;
+    border-bottom: 2px solid #ddd;
+}
+
+/* 페이지 컨테이너 스타일 */
+#mypage {
+    position: relative;
+    margin: 0 auto;
+    margin-bottom: 100px;
+    max-width: 1200px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+</style>
+<style scoped>
+/* #mypage-sub {
     width: 100%;
     text-align: left;
     margin-left: 15px;
@@ -98,5 +120,99 @@ export default {
 
 table {
     font-family: 'Noto Sans KR', sans-serif;
+} */
+
+/* 기본 스타일 설정 */
+
+/* 페이지 제목 스타일 */
+#mypage-sub {
+    width: 100%;
+    text-align: left;
+    margin-left: 15px;
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 24px;
+    color: #555;
+    padding: 20px 0;
+    border-bottom: 2px solid #ddd;
+}
+
+/* 페이지 컨테이너 스타일 */
+#mypage {
+    position: relative;
+    margin: 0 auto;
+    margin-bottom: 100px;
+    max-width: 1200px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+/* 테이블 스타일 */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+table thead {
+    background-color: #f0f0f0;
+}
+
+table th,
+table td {
+    padding: 12px 15px;
+    text-align: center;
+    border-bottom: 1px solid #ddd;
+}
+
+table th {
+    font-weight: bold;
+    color: #333;
+}
+
+table tbody tr:hover {
+    background-color: #f9f9f9;
+}
+
+/* 버튼 스타일 */
+.btn {
+    padding: 8px 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    margin: 5px 0;
+}
+
+.btn-primary {
+    background-color: #007bff;
+    color: #fff;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
+}
+
+.btn-danger {
+    background-color: #dc3545;
+    color: #fff;
+}
+
+.btn-danger:hover {
+    background-color: #c82333;
+}
+
+.btn-success {
+    background-color: #28a745;
+    color: #fff;
+}
+
+.btn-success:hover {
+    background-color: #218838;
+}
+
+.btn-sm {
+    padding: 6px 10px;
+    font-size: 12px;
 }
 </style>

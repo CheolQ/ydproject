@@ -8,4 +8,7 @@ module.exports = {
     cartAllDelete : `delete 
                         from cart 
                         where user_no = ?`,
+    cartCntUpdate : `update cart 
+                        set cnt = ?, price = ?
+                        where cart_no = ?`,
 }; 
