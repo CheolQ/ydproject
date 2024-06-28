@@ -46,6 +46,7 @@ import NoticeInfoView from '@/views/notice/NoticeInfoView.vue';
 // 로그인, 회원가입
 import login from '../views/user/loginForm.vue';
 import join from '../views/user/joinForm.vue';
+import findidpw from '../views/user/findidpw.vue';
 
 const routes = [
     {
@@ -85,8 +86,8 @@ const routes = [
                 component: NoticeInfoView,
             },
             {
-                path: 'qnaform',
-                name: 'qnaform',
+                path: 'qna',
+                name: 'qna',
                 component: QnaForm,
             },
             {
@@ -118,6 +119,7 @@ const routes = [
             },
             {
                 path: 'orderForm',
+                name: 'orderForm',
                 component: Order,
             },
             { //로그인
@@ -127,6 +129,10 @@ const routes = [
             {//회원가입
                 path: 'join',
                 component:join,
+            },
+            {//아이디,비밀번호찾기
+                path: 'findidpw',
+                component:findidpw,
             },
         ],
     },

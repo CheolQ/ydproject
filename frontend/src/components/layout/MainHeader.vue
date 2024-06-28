@@ -36,19 +36,14 @@
                     </button>
                     <div class="collapse navbar-collapse bg-white" id="navbarCollapse">
                         <div class="navbar-nav mx-auto">
-                            <router-link to="/" class="nav-item nav-link active">Home</router-link>
-                            <a href="shop" class="nav-item nav-link">Shop</a>
-                            <a href="shop-detail.html" class="nav-item nav-link">Shop Detail</a>
-                            <div class="nav-item dropdown">
-                                <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Pages</a>
+                            <a href="shop" class="nav-item nav-link">전체상품</a>
+                            <div v-for="v in categories" class="nav-item dropdown">
+                                <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">{{ v.parent
+                                    }}</a>
                                 <div class="dropdown-menu m-0 bg-secondary rounded-0">
-                                    <a href="/user/cart" class="dropdown-item">Cart</a>
-                                    <a href="/user/orderForm" class="dropdown-item">Chackout</a>
-                                    <a href="testimonial.html" class="dropdown-item">Testimonial</a>
-                                    <a href="404.html" class="dropdown-item">404 Page</a>
+                                    <a v-for="c in v.child" href="404.html" class="dropdown-item">{{ c }}</a>
                                 </div>
                             </div>
-                            <a href="contact.html" class="nav-item nav-link">Contact</a>
                         </div>
                         <div class="d-flex m-3 me-0">
                             <button
@@ -101,7 +96,8 @@ import axios from 'axios';
 export default {
     data() {
         return {
-            modalCheck: false
+            modalCheck: false,
+            categories: []
         }
     },
     created() {

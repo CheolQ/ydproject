@@ -1,7 +1,7 @@
 import { createApp } from 'vue';
-import App from './App.vue';
-import router from './router';
 import store from './store'; // Vuex 스토어 설정이 있는 경우
+import router from './router';
+import App from './App.vue';
 
 // import 'bootstrap'
 // import './assets/home/css/bootstrap.min.css';

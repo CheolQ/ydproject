@@ -16,7 +16,7 @@
         <div class="tab-content mb-5">
             <div class="tab-pane active" id="nav-about" role="tabpanel" aria-labelledby="nav-about-tab">
 				<div class="fruite-img">
-                    <img src="../../public/img/prodImg/시리얼.jpg" class="img-fluid w-100 rounded-top" alt="">
+                    <img :src="`/img/prodImg/${prodList.detail_img}`"  class="img-fluid w-100 rounded-top" alt="">
                 </div>
             </div>
             <div class="tab-pane" id="nav-mission" role="tabpanel" aria-labelledby="nav-mission-tab">
@@ -72,11 +72,12 @@
 					</tr>
 				</tbody>
 				  </table>
+				  <button @click="goToInsert" class="btnq border border-secondary rounded-pill px-4 py-2 mb-4 text-primary">
+					Write</button>
 				 </div>
             </div>
 		</div>
-		<button @click="goToInsert" class="btnq border border-secondary rounded-pill px-4 py-2 mb-4 text-primary">
-            Write</button>
+		
        
 	</div>
 </template>
@@ -89,28 +90,32 @@ export default {
             searchNo:"",
 			reviewList: [],
 			qnaList:[],
+			prodList: [],
 			qnaInfo: false,
 			qnacon: {},
-			qnacontent:{prodno: 1 , qnano: 1}
+			qnacontent:{ prodno: 1 , qnano: 1}
         }
     },
     created() {
         this.searchNo = this.$route.query.no ;
         this.getReviewList();
         this.getQnaList();
+		this.getProdList();
 
     },
     methods: {
+		async getProdList()	{
+ 	  	let result =	await axios.get(`/api/shop/${this.searchNo}`);
+ 	  	this.prodList =	result.data[0] ;
+ 	 	},
         async getReviewList()	{
  	  	this.reviewList = (await axios.get(`/api/shop/review/${this.searchNo}`)).data ;	 	
-        // console.log(this.reviewList);
     },
 		async getQnaList()	{
- 	  		this.qnaList = (await axios.get(`/api/shop/qnaList/${this.searchNo}`)).data ;	 	
-        // console.log(this.reviewList);
+ 	  		this.qnaList = (await axios.get(`/api/shop/qna/${this.searchNo}`)).data ;	 	
     },
 	goToInsert( ){
- 	  this.$router.push({ path:"/user/qnaForm"});
+ 	  this.$router.push({ name:"qna", query:{no : this.searchNo}});
  	 },
 	getDateFormat(val )	{
         let date = val == '' ? new Date() : new Date(val);
@@ -122,14 +127,24 @@ export default {
 	  qnaOnOff:function(no){
 		this.qnacontent.prodno = this.searchNo;
 		this.qnacontent.qnano = no;
-		this.qnaInfo = !this.qnaInfo;
-		axios.post(`/api/shop/qna/${no}`,this.qnacontent)
-			.then(result => {
-				this.qnacon = result.data[0]
+		console.log('제품번호',this.qnacontent.prodno);
+		console.log('qna번호',this.qnacontent.qnano);
+		console.log('보드번호',this.qnaList[0].board_no);
+		
+		// if(this.qnaList[{no}].board_no == no){
+		// this.qnacon
+
+
+		axios.post(`/api/shop/qna/${no}`)
+		.then(result => {
+			// this.qnaList = result.data;
+			this.qnaInfo = !this.qnaInfo;
+			console.log('버튼',no);
+			this.qnacon = result.data[0]
 			})
-	  
+		}
 	}
-    }
+    // }
 }
 
 </script>

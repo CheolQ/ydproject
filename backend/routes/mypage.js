@@ -26,6 +26,18 @@ router.get("/orderdetaildelinfo/:no", async(req, res) => {
 	res.send(result);
 })
 
+// 주문취소1
+router.patch("/ordercancel/:no", async(req, res) => {
+	let result = await query("applyOrderCancel1", [req.params.no]);
+	res.send(result);
+})
+// 주문취소2
+router.post("/ordercancel/:no", async(req, res) => {
+	let result = await query("applyOrderCancel2", [req.params.no]);
+	res.send(result);
+})
+
+
 // //단건조회
 // router.get("/:no",	async (req , res )	=> {
 //  	let result =	await query("noticeInfo",	req.params.no );
