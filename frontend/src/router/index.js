@@ -45,6 +45,7 @@ import NoticeInfoView from '@/views/notice/NoticeInfoView.vue';
 // 로그인, 회원가입
 import login from '../views/user/loginForm.vue';
 import join from '../views/user/joinForm.vue';
+import findidpw from '../views/user/findidpw.vue';
 
 const routes = [
     {
@@ -127,6 +128,10 @@ const routes = [
             {//회원가입
                 path: 'join',
                 component:join,
+            },
+            {//아이디,비밀번호찾기
+                path: 'findidpw',
+                component:findidpw,
             },
         ],
     },
