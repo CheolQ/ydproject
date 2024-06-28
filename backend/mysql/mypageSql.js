@@ -57,6 +57,13 @@ module.exports = {
 
     OrderDetailDeliInfo: `select name, tel, addr, postcode, detail_addr, order_total_price, pay_price, use_point, point
                             from orders
-                            where order_no = ?`
+                            where order_no = ?`,
+
+    applyOrderCancel1: `update orders
+                        set order_status = 'D2' 
+                        where order_no = ?`,
+
+    applyOrderCancel2: `insert into order_cancel(order_no)
+                        values(?)`
                             
 };

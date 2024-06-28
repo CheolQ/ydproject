@@ -17,7 +17,7 @@
                     <tr v-for="v in orderDetailList">
                         <td><img :src="`/img/prodImg/${v.main_img}`" alt="" class="img-size">{{ v.prod_name }}</td>
                         <td>{{ v.cnt }}</td>
-                        <td>{{ v.prod_price }}원</td>
+                        <td>{{ numberFormat(v.prod_price) }}원</td>
                     </tr>
                 </tbody>
             </table>
@@ -63,7 +63,7 @@
                             <p class="label">주문금액</p>
                             <div class="right_box">
                                 <span class="price">
-                                    <span class="val">{{ delInfo.order_total_price }}</span>
+                                    <span class="val">{{ numberFormat(delInfo.order_total_price) }}</span>
                                     <span class="unit">원</span>
                                 </span>
                             </div>
@@ -78,7 +78,7 @@
                             <p class="label">사용 포인트</p>
                             <div class="right_box">
                                 <span class="price">
-                                    <span class="val">{{ delInfo.use_point }}</span>
+                                    <span class="val">{{ numberFormat(delInfo.use_point) }}</span>
                                     <span class="unit">P</span>
                                 </span>
                             </div>
@@ -95,7 +95,7 @@
                             <p class="label">결제금액</p>
                             <div class="right_box">
                                 <span class="price">
-                                    <span class="val">{{ delInfo.pay_price }}</span>
+                                    <span class="val">{{ numberFormat(delInfo.pay_price) }}</span>
                                     <span class="unit">원</span>
                                 </span>
                             </div>
@@ -113,7 +113,7 @@
                             <p class="label">포인트 적립 </p>
                             <div class="right_box">
                                 <span class="price">
-                                    <span class="val">{{ delInfo.point }}</span>
+                                    <span class="val">{{ numberFormat(delInfo.point) }}</span>
                                     <span class="unit">P</span>
                                 </span>
                             </div>
@@ -127,6 +127,7 @@
                 <li class="bul_item_dot font_size_xxs fc_light_gray">적립금은 결제이후 예상적립금이 안내됩니다.</li>
             </ul>
         </div>
+        <button class="btn btn-primary" @click="repurchaseHandler"> 재구매</button>
         <button class="btn btn-primary" @click="moveToOrderHistory"> 주문목록</button>
     </div>
 </template>
@@ -149,9 +150,9 @@ export default {
             .then(result => {
                 console.log(result)
                 this.orderDetailList = result.data;
-                for (let v of this.orderDetailList) {
-                    v.prod_price = this.numberFormat(v.prod_price)
-                }
+                // for (let v of this.orderDetailList) {
+                //     v.prod_price = this.numberFormat(v.prod_price)
+                // }
                 console.log(result.data[0].order_date)
                 this.orderDate = result.data[0].order_date;
                 this.orderDate = this.getDateFormat(this.orderDate)
@@ -160,10 +161,10 @@ export default {
             .then(result => {
                 console.log(result)
                 this.delInfo = result.data[0]
-                this.delInfo.order_total_price = this.numberFormat(this.delInfo.order_total_price);
-                this.delInfo.pay_price = this.numberFormat(this.delInfo.pay_price);
-                this.delInfo.use_point = this.numberFormat(this.delInfo.use_point);
-                this.delInfo.point = this.numberFormat(this.delInfo.point);
+                // this.delInfo.order_total_price = this.numberFormat(this.delInfo.order_total_price);
+                // this.delInfo.pay_price = this.numberFormat(this.delInfo.pay_price);
+                // this.delInfo.use_point = this.numberFormat(this.delInfo.use_point);
+                // this.delInfo.point = this.numberFormat(this.delInfo.point);
             })
     },
     methods: {
@@ -186,6 +187,17 @@ export default {
         },
         moveToOrderHistory: function () {
             this.$router.push('orderhistory')
+        },
+        repurchaseHandler: function () {
+            let selectedCart = [];
+            this.orderDetailList.forEach(a => {
+                selectedCart.push(a);
+            });
+            this.$store.state.cart = selectedCart;
+            console.log(this.$store.state.cart)
+            this.$router.push({
+                name: 'orderForm',
+            });
         }
     }
 }
