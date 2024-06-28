@@ -120,7 +120,6 @@
         },
         discount() {
             this.selectedCart.forEach(a => {
-
                 this.totalPrice += Number(a.prod_price * a.cnt);
             });
         },
