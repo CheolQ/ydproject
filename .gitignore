@@ -1,6 +1,9 @@
 .DS_Store
 /dist
+sessions/ 
 
+# nodemon 이용하는중이라 오류방지 
+--ignore ./sessions
 
 # local env files
 .env.local
