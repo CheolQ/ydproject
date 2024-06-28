@@ -1,9 +1,19 @@
 const express = require('express');
 const router = express.Router()
-const multer  = require('multer')
-let upload = multer({ dest: 'uploads/' });
-
 const query = require("../../mysql/index")
+const multer  = require('multer')
+
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) { //파일이 저장 될 위치 지정
+      cb(null, 'd:/upload'); 
+    },
+    filename: function (req, file, cb) {
+      const originalname = Buffer.from(file.originalname, 'latin1').toString('utf8'); // 파일 utf-8로 변환
+      cb(null, originalname);
+    }
+  });
+const upload = multer({ storage: storage });
+
 
 router.get("/", async (req, res) => {
     let page = Number(req.query.page);
@@ -29,8 +39,13 @@ router.post("/category", async (req, res) => {
     res.send(list);
 })
 
-router.post("/prod", upload.array('img'), (req,res,next) =>{
-    console.log(req.file, req.body)
+const cpUpload = upload.fields([{ name: 'image1', maxCount: 1}, { name: 'image2', maxCount: 1}])
+router.post("/prod", cpUpload, (req,res) =>{
+    let data = { ...req.body };
+    console.log(data);
+    console.log(req.files);
+    console.log(req.files.length);
+    
 })
 
 

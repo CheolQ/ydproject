@@ -60,19 +60,22 @@
                     <div class="col">
                         <div>메인이미지</div>
                         <div class="mb-3">
-                            <input class="form-control" type="file" id="formFile" ref="file1" @change="FileUpload1">
+                            <input class="form-control" type="file" id="formFile" ref="file1" @change="FileUpload1" accept="image/*">
                         </div>
                     </div>
                     <div class="col">
                         <div>상세이미지</div>
                         <div class="mb-3">
-                            <input class="form-control" type="file" id="formFile" ref="file2" @change="FileUpload2">
+                            <input class="form-control" type="file" id="formFile" ref="file2" @change="FileUpload2" accept="image/*">
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <button @click="prodReg">등록</button>        
+        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+            <button @click="prodReg" class="btn btn-primary btn-lg">등록</button>        
+            <button class="btn btn-secondary btn-lg">취소</button>
+        </div>
     </div>            
 </template>
 <script>
@@ -110,30 +113,49 @@ export default{
             .catch(err => console.log(err))
         },
         FileUpload1(){
-            this.file1 = this.$refs.file1.files[0]
+            this.file1 = this.$refs.file1.files[0];
             console.log(this.file1);
         },
         FileUpload2(){
-            this.file2 = this.$refs.file2.files[0]
+            this.file2 = this.$refs.file2.files[0];
             console.log(this.file2);
         },
-        prodReg(){
+        async prodReg(){
             this.prodInfo.category = this.childSelect;
-            let formData = new FormData();
-            formData.append("file1", this.file1);
-            formData.append("file2", this.file2);
+            if(!this.prodInfo.category){
+                alert('카테고리를 입력하세요')
+                return;
+            }
+            if(!this.prodInfo.name){
+                alert('제품이름을 입력하세요')
+                return;
+            }
+            if(!this.prodInfo.price){
+                alert('가격을 입력하세요')
+                return;
+            }
+            if(!this.prodInfo.maker){
+                alert('제조사를 입력하세요')
+                return;
+            }
+            if(!this.prodInfo.origin){
+                alert('원산지를 입력하세요')
+                return;
+            }
+            let data = new FormData();
+            console.log(this.file1)
+            console.log(this.file2)
+            data.append('category', this.prodInfo.category);
+            data.append('name', this.prodInfo.name);
+            data.append('price', this.prodInfo.price);
+            data.append('maker', this.prodInfo.maker);
+            data.append('orgin', this.prodInfo.origin);
             
-            let prodInfo = new Blob([JSON.stringify(this.prodInfo)], {
-                    type: 'application/json',
-                });
-            formData.append("prod", prodInfo);
-            const config = {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                },
-                data: formData
-            };
-            axios.post('/api/adminProd/prod', config)
+            data.append("image1", this.file1);
+            data.append("image2", this.file2);
+
+            await axios.post('/api/adminProd/prod',data,
+            { headers:{'Content-Type':'multipart/form-data'}})
             .then(result => console.log(result))
             .catch(err => console.log(err))
         }
