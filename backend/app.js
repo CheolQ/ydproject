@@ -6,6 +6,7 @@ var path = require('path');
 var logger = require('morgan');
 var indexRouter = require('./routes/index.js');
 var usersRouter = require('./routes/users.js');
+
 //유저
 
 var cartRouter = require('./routes/cart');
@@ -70,7 +71,12 @@ app.use('/users', usersRouter);
 
 app.use('/cart', cartRouter);
 
-app.use('/upload', express.static('C:/Users/ekdms/Desktop/images/prodImages'));
+//이미지 로컬경로
+
+//app.use('/upload', express.static('C:/Users/ekdms/Desktop/images/prodImages'));
+
+app.use('/upload', express.static('D:/images/prodImages'));
+
 
 //로그인
 app.use('/users', usersRouter);

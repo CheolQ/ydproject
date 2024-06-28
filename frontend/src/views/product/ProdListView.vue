@@ -75,7 +75,7 @@
                         						<h4>{{prod.prod_name }}</h4>
 												<div class="d-flex justify-content-between flex-lg-wrap">
                   									<p class="text-dark fs-5 fw-bold mb-0">{{numberFormat(prod.prod_price) }}</p>
-                    								<a href="#" class="btn border border-secondary rounded-pill px-3 text-primary"><i class="fa fa-shopping-bag me-2 text-primary"></i> Add to cart</a>
+                    								<button @click="gotoCart(prod.prod_no)" class="btn border border-secondary rounded-pill px-3 text-primary"><i class="fa fa-shopping-bag me-2 text-primary"></i> Add to cart</button>
                								 	</div>
                    							 </div>
                   						</div>
@@ -93,7 +93,9 @@
 
 <script>
 import axios from "axios";
+import Swal from "sweetalert2";
 import { computed } from "vue";
+
 export default { 
     data() { 
         return {
@@ -109,8 +111,8 @@ export default {
  	  	let result =	await axios.get(`/api/shop`);
  	  	this.prodList =	result.data ;
  	 	},
-	 	goToDetail(no)	{
- 	  	this.$router.push({	name:"shopinfo",	query: { no:no }	});
+	 	async goToDetail(no)	{
+ 	  	await this.$router.push({	name:"shopinfo",	query: { no:no }	});
  	 	},
         numberFormat: function (number) {
             if (number == 0)
@@ -121,6 +123,17 @@ export default {
                 nstr = nstr.replace(regex, '$1' + ',' + '$2');
             }
             return nstr;
+        },
+        async gotoCart(no){
+            await axios.post(`/api/cart/${no}`, this.prodList.prod_no)
+                Swal.fire({ 
+                    position: "center",
+                    icon: "success",
+                    title: "장바구니에 등록되었습니다.",
+                    showConfirmButton: false,
+                    timer: 1500
+                })
+            
         }
   
     }
