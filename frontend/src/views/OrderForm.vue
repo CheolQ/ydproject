@@ -97,6 +97,7 @@
     <!-- Checkout Page End -->
 </template>
 <script>
+<<<<<<< HEAD
 export default {
     data() {
         return {

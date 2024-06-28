@@ -43,7 +43,7 @@
                                             <i class="fa fa-minus"></i>
                                             </button>
                                         </div>
-                                        <input type="number" readonly min="0" max="10" v-model="c.cnt" class="form-control form-control-sm text-center border-0">
+                                        <input type="number" readonly v-model="c.cnt" class="form-control form-control-sm text-center border-0">
                                         <div class="input-group-btn">
                                             <button v-on:click="c.cnt++" @click="cntBtn(c.cart_no, c.cnt, c.prod_price)" class="btn btn-sm btn-plus rounded-circle bg-light border">
                                                 <i class="fa fa-plus"></i>
@@ -106,7 +106,7 @@
                     this.getCart();
                 },
                 orderSel() {
-                    let selectedCart = [];
+                    let selectedCart = {};
                     this.cart.forEach(a => {
                         if (a.selected) {
                             selectedCart.push(a);
@@ -126,15 +126,23 @@
                 formatPrice(price){
                     return price.numberFormat();
                 },
-                // plusBtn(cnt){
-                //     console.log(this.cart[0].cnt);
-                //     this.cart[0].cnt++;
+                // cntBtn(no, cnt, prodPrice){
+                //     console.log(no, cnt, prodPrice, '값')
+                //     axios.put(`/api/cart/updateCnt/?no=${no}&cnt=${cnt}&price=${prodPrice}`)
+                //     //this.getCart();
                 // },
                 cntBtn(no, cnt, prodPrice){
-                    console.log(no, cnt, prodPrice, '값')
-                    axios.put(`/api/cart/updateCnt/?no=${no}&cnt=${cnt}&price=${prodPrice}`)
-                    //this.getCart();
-                    //console.log(no, cnt, 'dddddddd')
+                    if(cnt > 1){
+                        cnt--;
+                        axios.put(`/api/cart/updateCnt/?no=${no}&cnt=${cnt}&price=${prodPrice}`)
+                    }else if(cnt === 1){
+                        cnt--;
+                        axios.put(`/api/cart/updateCnt/?no=${no}&cnt=${cnt}&price=${prodPrice}`)
+                    }else{
+                        alert('1개 이상 담을 수 있습니다.') 
+                        cnt++;
+                        return;
+                    }
                 },
             }
         }
