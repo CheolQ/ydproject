@@ -85,8 +85,8 @@ const routes = [
                 component: NoticeInfoView,
             },
             {
-                path: 'qnaform',
-                name: 'qnaform',
+                path: 'qna',
+                name: 'qna',
                 component: QnaForm,
             },
             {

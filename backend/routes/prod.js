@@ -1,13 +1,13 @@
 const express = require('express');
 const router = express.Router()
 const query = require('../mysql/index.js');
-//목록
+//상품목록
 router.get("/",	async(req ,	res )	=> {
  	let result =	await query("prodList");
  	res.send(result);
 });
 
-//단건조회
+//상품단건조회
 router.get("/:no",	async (req , res )	=> {
  	let result =	await query("prodInfo",	req.params.no );
 	console.log(result);
@@ -20,7 +20,7 @@ router.get("/review/:no",	async(req ,	res )	=> {
 	res.send(result);
 });
 //qna조회
-router.get("/qnaList/:no",	async(req ,	res )	=> {
+router.get("/qna/:no",	async(req ,	res )	=> {
 	let result =	await query("qnaList", req.params.no);
 	// console.log('aaaa'+ result[0].review_no);
 	res.send(result);
@@ -35,11 +35,19 @@ router.post("/qna/:no",	async(req ,	res )	=> {
 	res.send(result);
 
 });
+
+
 //qna작성
-router.post("/qnaform", async(req ,	res )	=> {
+router.post("/qna", async(req ,	res )	=> {
 	let result =	await query("qnaInsert", req.body);
+	console.log('등록되니',result);
 	res.send(result);
 });
 
+//qna수정
+router.put("/qna/:no",	async (req ,res )	=> {
+	let result = await query("qnauUpdate",	[req.body,	req.params.no]);
+	res.send(result);
+});
 
 module.exports = router ;
