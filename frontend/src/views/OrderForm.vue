@@ -93,7 +93,7 @@
     export default {
         data(){
             return{
-                selectedCart : [],
+                selectedCart : {},
                 totalPrice : 0
             };
         },
@@ -121,7 +121,7 @@
                 this.totalPrice -= point;
             },
             formatPrice(price){
-                    return price.numberFormat();
+                return price.numberFormat();
             },
         }
     }

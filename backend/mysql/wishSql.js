@@ -20,5 +20,12 @@ module.exports = {
     wishAllDelete : `delete 
                         from  likes 
                         where user_no = ?`,
+    wishInsert : `insert into likes (prod_no, user_no)
+                    values (?, 1)`,
+    wishToCartInsert : `insert into cart 
+                            set prod_no = ?,
+                                user_no = 1,
+                                cnt = ?,
+                                price = ?`            
                 
 }; 

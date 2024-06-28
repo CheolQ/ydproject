@@ -47,7 +47,12 @@ app.use('/users', usersRouter);
 
 app.use('/cart', cartRouter);
 
-app.use('/upload', express.static('C:/Users/ekdms/Desktop/images/prodImages'));
+//이미지 로컬경로
+
+//app.use('/upload', express.static('C:/Users/ekdms/Desktop/images/prodImages'));
+
+app.use('/upload', express.static('D:/images/prodImages'));
+
 
 //로그인
 app.use('/users', usersRouter);
