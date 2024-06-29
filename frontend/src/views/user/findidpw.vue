@@ -1,48 +1,52 @@
 <template>
+
     <body>
-    <div class="login-wrapper">
-        <h2>아이디 찾기</h2>
-        <form method="post" action="서버의url" id="login-form">
-            <input type="text" name="userName" placeholder="Name" v-model="name">
-            <input type="text" name="userPassword" placeholder="TEL" v-model="tel">
-            <label for="remember-check">
-                <input type="checkbox" id="remember-check">아이디 저장하기
-            </label>
-            <input type="submit" value="Login">
-        </form>
-    </div>
-</body>
-    </template>
-    <script>
-    export default {
-    data(){return {}; },
-    created () {},
-    methods : {},
-    }
-    </script>
-    <style>
-*{
+        <div class="login-wrapper">
+            <h2>아이디 찾기</h2>
+            <form method="post" action="서버의url" id="login-form">
+                <input type="text" name="userName" placeholder="Name" v-model="name">
+                <input type="text" name="userPassword" placeholder="TEL" v-model="tel">
+                <label for="remember-check">
+                    <input type="checkbox" id="remember-check">아이디 저장하기
+                </label>
+                <input type="submit" value="Login">
+            </form>
+        </div>
+    </body>
+</template>
+<script>
+export default {
+    data() { return {}; },
+    created() { },
+    methods: {},
+}
+</script>
+<style scoped>
+* {
     padding: 0;
     margin: 0;
     border: none;
 }
-body{
+
+body {
     font-size: 14px;
     font-family: 'Roboto', sans-serif;
 }
-.login-wrapper{
+
+.login-wrapper {
     width: 400px;
     height: 350px;
     padding: 40px;
     box-sizing: border-box;
 }
 
-.login-wrapper > h2{
+.login-wrapper>h2 {
     font-size: 24px;
     color: #6A24FE;
     margin-bottom: 20px;
 }
-#login-form > input{
+
+#login-form>input {
     width: 100%;
     height: 48px;
     padding: 0 10px;
@@ -51,10 +55,12 @@ body{
     border-radius: 6px;
     background-color: #F8F8F8;
 }
-#login-form > input::placeholder{
+
+#login-form>input::placeholder {
     color: #D2D2D2;
 }
-#login-form > input[type="submit"]{
+
+#login-form>input[type="submit"] {
     color: #fff;
     font-size: 16px;
     background-color: #6A24FE;
