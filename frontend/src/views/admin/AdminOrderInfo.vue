@@ -55,7 +55,7 @@
                     </thead>
                     <tbody>
                         <tr v-for="p in prodInfo" :key="p">
-                            <th scope="row"><img :src="`/img/prodImages/${p.main_img}`" style="width: 90px; height: 90px;"></th>
+                            <th scope="row"><img :src="`/img/prodImg/${p.main_img}`" style="width: 90px; height: 90px;"></th>
                             <td>{{ p.prod_name }}</td>
                             <td>{{ p.prod_price }}</td>
                             <td>{{ p.cnt }}</td>

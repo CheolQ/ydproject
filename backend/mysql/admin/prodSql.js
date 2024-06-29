@@ -25,6 +25,7 @@ module.exports = {
     AdminProdCategory2:`select category_code, category_name, seqs
                         from category
                         where pre_category = ?
-                        order by seqs`,                                     
+                        order by seqs`,
+    AdminProdInsert: `insert into prod set ?`                                                         
 
 }

@@ -145,18 +145,23 @@ export default{
             let data = new FormData();
             console.log(this.file1)
             console.log(this.file2)
-            data.append('category', this.prodInfo.category);
-            data.append('name', this.prodInfo.name);
-            data.append('price', this.prodInfo.price);
+            data.append('category_code', this.prodInfo.category);
+            data.append('prod_name', this.prodInfo.name);
+            data.append('prod_price', this.prodInfo.price);
             data.append('maker', this.prodInfo.maker);
-            data.append('orgin', this.prodInfo.origin);
+            data.append('origin', this.prodInfo.origin);
             
             data.append("image1", this.file1);
             data.append("image2", this.file2);
 
             await axios.post('/api/adminProd/prod',data,
             { headers:{'Content-Type':'multipart/form-data'}})
-            .then(result => console.log(result))
+            .then(result => {
+                if(result.data === 'ok'){
+                    alert("등록되었습니다");
+                    this.$router.push({path: 'prodList'});
+                }
+            })
             .catch(err => console.log(err))
         }
     }
