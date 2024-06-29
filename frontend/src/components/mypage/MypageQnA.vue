@@ -1,6 +1,7 @@
 <template>
     <div id="mypage">
         <h5 id="mypage-sub">문의내역</h5>
+        <div class="user-message">{{ userid }}님께서 작성하신 게시글 내역입니다.</div>
         <table class="table">
             <thead>
                 <tr>
@@ -113,6 +114,15 @@ table {
     padding: 20px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     border-radius: 8px;
+}
+
+/* 사용자 메시지 스타일 */
+.user-message {
+    text-align: right;
+    margin-bottom: 10px;
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 16px;
+    color: #333;
 }
 
 /* 테이블 스타일 */
