@@ -49,10 +49,30 @@ router.post('/ordercancel/:no', async (req, res) => {
     res.send(result);
 });
 
-// //단건조회
-// router.get("/:no",	async (req , res )	=> {
-//  	let result =	await query("noticeInfo",	req.params.no );
-//  	res.send(result);
-// });
+// 마이페이지 qna 리스트 조회
+router.get('/qnalist/:id', async (req, res) => {
+    console.log(req.params.id);
+    let page = Number(req.query.page);
+    let pageUnit = Number(req.query.pageUnit);
+
+    if (!page) {
+        page = 1;
+    }
+    if (!pageUnit) {
+        pageUnit = 10;
+    }
+    let offset = (page - 1) * pageUnit;
+    let result = await query('qnaList', [req.params.id, offset, pageUnit]);
+    console.log(result);
+    let count = await query('countUserOrderList', [req.params.id]);
+    res.send({ result, count });
+});
+
+// // 마이페이지 qna 단건조회
+router.get('/qnainfo/:no', async (req, res) => {
+    let result = await query('userQnAInfo', req.params.no);
+    console.log(result);
+    res.send(result);
+});
 
 module.exports = router;

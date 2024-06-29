@@ -20,8 +20,10 @@
                     <h2 class="txt txt2">SHOPPING QUESTION</h2>
                     <div class="lnb">
                         <ul>
-                            <li class="first"><a href="/shop/mypage.html?mypage_type=myarticle">내 QnA 조회 / 수정</a></li>
-                            <li><a href="/shop/mypage.html?mypage_type=myemail">리뷰 관리</a></li>
+                            <li class="first">
+                                <router-link to="/user/mypage/mypageqna/">문의내역</router-link>
+                            </li>
+                            <li><a href="/shop/mypage.html?mypage_type=myemail">리뷰관리</a></li>
                         </ul>
                     </div>
                 </div>

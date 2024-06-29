@@ -34,6 +34,9 @@
             </table>
             <paging-component v-bind="page" @go-page="goPage" />
         </div>
+        <form action="/api/mypage/orderinfo/" method="post">
+            <input type="hidden" name="userid" id="userid">
+        </form>
     </div>
 </template>
 
@@ -109,6 +112,7 @@ export default {
                             console.log(result.data)
                         })
                 })
+                .catch(err => console.log(err))
         }
 
     },
@@ -118,7 +122,7 @@ export default {
 }
 </script>
 <style>
-mypage-sub {
+#mypage-sub {
     width: 100%;
     text-align: left;
     margin-left: 15px;
@@ -165,7 +169,7 @@ table {
 /* 기본 스타일 설정 */
 
 /* 페이지 제목 스타일 */
-#mypage-sub {
+/* #mypage-sub {
     width: 100%;
     text-align: left;
     margin-left: 15px;
@@ -174,7 +178,7 @@ table {
     color: #555;
     padding: 20px 0;
     border-bottom: 2px solid #ddd;
-}
+} */
 
 /* 페이지 컨테이너 스타일 */
 #mypage {
