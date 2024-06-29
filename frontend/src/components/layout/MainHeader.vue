@@ -122,7 +122,7 @@ export default {
 </script>
 <style>
 .logoImg {
-    width: 220px;
+    width: 195px;
 }
 </style>
 
