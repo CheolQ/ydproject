@@ -1,22 +1,22 @@
 <template>
   <div class="container">
 
-      <div class="login-wrapper">
-          <h2 class="aside-tit">Login</h2>
-          <form id="login-form">
-              <input v-model="form.user_id" type="text" placeholder="ID" name="userName">
-              <input v-model="form.user_pw" type="password" placeholder="PassWord" name="userPassword">
-              <!-- <label for="remember-check">
+    <div class="login-wrapper">
+      <h2 class="aside-tit">Login</h2>
+      <form id="login-form">
+        <input v-model="form.user_id" type="text" placeholder="ID" name="userName">
+        <input v-model="form.user_pw" type="password" placeholder="PassWord" name="userPassword">
+        <!-- <label for="remember-check">
                   <input type="checkbox" id="remember-check">아이디 저장하기
               </label> -->
-              <input type="button" @click="loginHandler" value="로그인" />
-          </form>
-          <router-link to="/user/join">
-      <button class="btn btn-primary">회원가입</button>
+        <input type="button" @click="loginHandler" value="로그인" />
+      </form>
+      <router-link to="/user/join">
+        <button class="btn btn-primary">회원가입</button>
       </router-link>
-      </div>
+    </div>
   </div>
-  </template>
+</template>
 
 
 <script>
@@ -25,9 +25,9 @@ import axios from 'axios';
 export default {
   data() {
 
-      return {
-          form: { user_id: '', user_pw: '' },
-      }
+    return {
+      form: { user_id: '', user_pw: '' },
+    }
 
 
   },
@@ -49,8 +49,10 @@ export default {
     loginHandler() {
       axios.post("/api/users/login", this.form)
         .then(result => {
-          this.$store.commit('user', result.data);
-          console.log("성공");
+          console.log(result.data)
+          this.$store.commit('user', result.data); // mytation 호출
+          console.log("로그인 성공");
+          console.log(this.$store.state.user)
           this.$router.push('/user/home');
         })
         .catch(err => {
@@ -73,8 +75,7 @@ export default {
 };
 </script>
 
-<style>
-
+<style scoped>
 .aside-tit {
   padding: 65px 0 30px;
   font-size: 24px;
@@ -85,18 +86,19 @@ export default {
 }
 
 
-*{
+* {
 
   padding: 0;
   margin: 0;
   border: none;
 }
 
-body{
+body {
   font-size: 14px;
   font-family: 'Roboto', sans-serif;
 }
-.login-wrapper{
+
+.login-wrapper {
 
   width: 400px;
   height: 350px;
@@ -104,14 +106,14 @@ body{
   box-sizing: border-box;
 }
 
-.login-wrapper > h2{
+.login-wrapper>h2 {
 
   font-size: 24px;
   color: #6A24FE;
   margin-bottom: 20px;
 }
 
-#login-form > input{
+#login-form>input {
 
   width: 100%;
   height: 48px;
@@ -122,10 +124,11 @@ body{
   background-color: #F8F8F8;
 }
 
-#login-form > input::placeholder{
+#login-form>input::placeholder {
   color: #D2D2D2;
 }
-#login-form > input[type="button"]{
+
+#login-form>input[type="button"] {
 
   color: #fff;
   font-size: 16px;
@@ -133,13 +136,15 @@ body{
   margin-top: 20px;
 }
 
-#login-form > input[type="checkbox"]{
+#login-form>input[type="checkbox"] {
   display: none;
 }
-#login-form > label{
+
+#login-form>label {
   color: #999999;
 }
-#login-form input[type="submit"] + label{
+
+#login-form input[type="submit"]+label {
 
 
   cursor: pointer;
@@ -149,7 +154,7 @@ body{
   background-size: contain;
 }
 
-#login-form input[type="checkbox"]:checked + label{
+#login-form input[type="checkbox"]:checked+label {
 
 
   /* background-image: url("checkbox-active.png"); */

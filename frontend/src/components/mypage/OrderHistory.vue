@@ -76,7 +76,7 @@ export default {
     },
     methods: {
         goPage(page) {
-            axios.get(`/api/mypage/orderinfo/${this.userid}?pageUnit=${this.pageUnit}&page=${page}`)
+            axios.get(`/api/mypage/orderinfo/?pageUnit=${this.pageUnit}&page=${page}`)
                 .then(result => {
                     console.log(result)
                     this.orderList = result.data.result;
