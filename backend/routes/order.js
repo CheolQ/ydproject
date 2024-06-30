@@ -3,25 +3,25 @@ const router = express.Router();
 const query = require("../mysql/index"); 
 
 router.post('/', async (req, res) => {
-    let orderData = [
+    let orderData = [ //쿼리 물음표 순서대로 물음표 여러개니까 배열안에 순서대로 넣음
         req.body.buyerName,
         req.body.paidAmount,
-        'P',
+        'P', //주문 상태인데 default로 우리는 박아뒀음
         req.body.buyerTel,
         req.body.buyerAdd,
         req.body.buyerPost,
         req.body.detail_addr,
         req.session.user_no,
         req.body.paidAmount / 10,
-        req.body.merchantUid // 결제번호
+        req.body.merchantUid //결제번호(코드)int였는데 varchar로 타입바꿈 
     ];
 
     try {
         let orderDetail = req.body.products;
         let result = await query("orderInsert", orderData);
 
-        // Promise 배열 생성
-        let promises = orderDetail.map(async dtorder => {
+        //promise배열
+        let promises = orderDetail.map(async dtorder => { //foreach 대신 map씀
             let price = await query("getPrice", dtorder.prod_no);
             let data = [
                 dtorder.cnt,
@@ -33,20 +33,14 @@ router.post('/', async (req, res) => {
             return val.insertId;
         });
 
-        // Promise 배열을 모두 기다림
+        //promise배열 끝날때까지 기다려
         let dtCount = await Promise.all(promises);
-
-        console.log(dtCount); // 여기서 dtCount 배열이 채워진 값이 출력됨
-
+        console.log(dtCount); //dtCount배열 출력(오더디테일에 있는 오더넘버 하나하나가 오더디테일넘버..)
         res.send({
             dtCount: dtCount
         });
-    } catch (error) {
-        console.error(error);
+    }catch(err){console.error(err);
     }
 });
-//오더 결과가 페이지이동하면서 잘받아지는지 확인
-
-
 
 module.exports = router;

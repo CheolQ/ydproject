@@ -14,6 +14,7 @@
             getProd(dtCount);
         },
         methods : {
+            //상품이름가져오려고 상품넘버 이용
             // async getProd(dtCount){
             //     await for(let dt of dtCount){
 
