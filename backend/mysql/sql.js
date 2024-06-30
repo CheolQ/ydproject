@@ -12,7 +12,7 @@ const mypageSql = require('./mypageSql');
 const userSql = require('./loginSql');
 
 //관리자
-
+const adminNotice = require('./admin/noticeSql')
 const adminQna = require('./admin/qnaSql')
 const adminOrder = require('./admin/orderSql')
 const adminMember = require('./admin/memberSql')
@@ -36,7 +36,7 @@ module.exports = {
     ...adminOrder,
     ...adminMember,
     ...adminProd,
-
+    ...adminNotice,
 
     ...prodSql,
     ...noticeSql,

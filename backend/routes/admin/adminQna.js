@@ -15,5 +15,4 @@ router.get("/", async (req, res) => {
     res.send({list, count})
 })
 
-
 module.exports = router;

@@ -25,7 +25,10 @@ import MyWishList from '@/components/mypage/MyWishList.vue';
 //관리자
 import AdminLayout from '../layouts/AdminLayout.vue';
 import AdminHome from '../views/AdminHome.vue';
-import Notice from '../views/admin/AdminNotice.vue';
+import AdminNotice from '../views/admin/AdminNotice.vue';
+import AdminNoticeForm from '../views/admin/AdminNoticeForm.vue'
+import AdminNoticeInfo from '../views/admin/AdminNoticeInfo';
+import AdminNoticeModify from '../views/admin/AdminNoticeModify.vue';
 import Qna from '../views/admin/AdminQna.vue';
 import ProdList from '../views/admin/AdminProdList.vue';
 import AdminProdInfo from '../views/admin/AdminProdInfo.vue';
@@ -154,7 +157,6 @@ const routes = [
     },
     {
         path: '/admin',
-        name: 'Admin',
         component: AdminLayout,
         meta: {
             template: 'admin', // Admin 템플릿
@@ -166,7 +168,19 @@ const routes = [
             },
             {
                 path: 'notice',
-                component: Notice,
+                component: AdminNotice,
+            },
+            {
+                path: 'noticeForm',
+                component: AdminNoticeForm,
+            },
+            {
+                path: 'noticeInfo',
+                component: AdminNoticeInfo,
+            },
+            {
+                path: 'noticeModify',
+                component: AdminNoticeModify,
             },
             {
                 path: 'qna',
