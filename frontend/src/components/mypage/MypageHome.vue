@@ -51,7 +51,7 @@ export default {
     },
     created() {
         console.log('sdfsdf' + this.userid)
-        axios.get(`/api/mypage/userinfo/` + this.userid)
+        axios.get(`/api/mypage/userinfo/`)
             .then(result => {
                 console.log(result.data);
                 this.user = result.data[0]
