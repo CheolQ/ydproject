@@ -1,7 +1,7 @@
 <template>
     <div id="mypage">
         <h5 id="mypage-sub">문의내역</h5>
-        <div class="user-message">{{ userid }}님께서 작성하신 게시글 내역입니다.</div>
+        <div class="user-message">{{ loggedInUserId }}님께서 작성하신 게시글 내역입니다.</div>
         <table class="table">
             <thead>
                 <tr>
@@ -36,7 +36,7 @@ export default {
     },
     data() {
         return {
-            userid: 'user1',
+            // userid: this.$store.state.user[0].user_id,
             qnaList: [],
             page: {},
             pageUnit: 10,
@@ -50,10 +50,17 @@ export default {
         //         this.qnaList = result.data;
         //     })
         this.goPage(1);
+        console.log('aaa')
+        console.log(this.$store.state.user.user_id)
+    },
+    computed: {
+        loggedInUserId() {
+            return this.$store.getters.loggedInUserId;
+        }
     },
     methods: {
         goPage(page) {
-            axios.get(`/api/mypage/qnalist/${this.userid}?pageUnit=${this.pageUnit}&page=${page}`)
+            axios.get(`/api/mypage/qnalist?pageUnit=${this.pageUnit}&page=${page}`)
                 .then(result => {
                     console.log(result)
                     this.qnaList = result.data.result;

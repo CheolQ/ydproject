@@ -30,7 +30,7 @@ import Qna from '../views/admin/AdminQna.vue';
 import ProdList from '../views/admin/AdminProdList.vue';
 import AdminProdInfo from '../views/admin/AdminProdInfo.vue';
 import ProdForm from '../views/admin/AdminProdForm.vue';
-import AdminProdModify from '../views/admin/AdminProdModify.vue'
+import AdminProdModify from '../views/admin/AdminProdModify.vue';
 import Orders from '../views/admin/AdminOrder.vue';
 import OrderInfo from '../views/admin/AdminOrderInfo.vue';
 import AdminOrderDelivery from '../views/admin/AdminOrderDelivery.vue';

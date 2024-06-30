@@ -44,8 +44,10 @@ export default {
     loginHandler() {
       axios.post("/api/users/login", this.form)
         .then(result => {
-          this.$store.commit('user', result.data);
-          console.log("성공");
+          console.log(result.data)
+          this.$store.commit('user', result.data); // mytation 호출
+          console.log("로그인 성공");
+          console.log(this.$store.state.user)
           this.$router.push('/user/home');
         })
         .catch(err => {
