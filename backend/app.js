@@ -21,7 +21,7 @@ app.use(
             // 세션 쿠키 설정 (세션 관리 시 클라이언트에 보내는 쿠키)
             httpOnly: true, // true 이면 클라이언트 자바스크립트에서 document.cookie로 쿠키 정보를 볼 수 없음
             secure: false, // true 이면 https 환경에서만 쿠키 정보를 주고 받도록 처리,
-            maxAge: 60000, // 쿠키가 유지되는 시간 (밀리세컨드 단위)
+            maxAge: 60000000, // 쿠키가 유지되는 시간 (밀리세컨드 단위)
         },
         store: new fileStore(), // 세션 저장소로 fileStore 사용
     })
@@ -30,6 +30,7 @@ app.use(
 //유저
 
 var cartRouter = require('./routes/cart');
+var orderRouter = require('./routes/order');
 
 // var wishRouter = require('./routes/wish');
 const wishRouter = require('./routes/wish.js');
@@ -60,6 +61,24 @@ app.use(express.static(path.join(__dirname, 'public')));
 const cookieParser = require('cookie-parser');
 app.use(cookieParser());
 
+
+app.get("/api/account", (req, res) => {
+  //if (req.cookies && req.cookies.account) {
+  if (req.session.is_logined) {
+    const member = JSON.parse({userid : req.session.userId});
+    return res.send(member);
+  }
+  res.send(401);
+});
+
+app.post('/api/logout', (req, res) => {
+  //res.clearCookie("account");
+  req.session.destroy();
+  res.send(200);
+});
+
+
+
 app.use('/', indexRouter);
 
 //공통
@@ -69,6 +88,9 @@ app.use('/users', usersRouter);
 //유저
 
 app.use('/cart', cartRouter);
+
+//주문
+app.use('/order', orderRouter);
 
 //이미지 로컬경로
 

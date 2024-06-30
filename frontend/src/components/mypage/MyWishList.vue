@@ -52,7 +52,7 @@
                         <button @click="delAll" class="btn btn-warning">전체삭제</button>
                     </div>
                     <div>
-                        <button @click="gotoCart(w.prod_no)" class="btn btn-primary">장바구니에 담기</button>
+                        <button @click="gotoCart" class="btn btn-primary">장바구니에 담기</button>
                     </div>
                 </div>
             </div>
@@ -109,14 +109,18 @@
             //     .catch(err => console.log(err))
             // },
             gotoCart(no){
-                // axios.post(`/api/cart/updateCart/${no}`, this.wish)
-                // .then(this.$router.push('/cart'));
-                // let selectedWish = [];
-                // this.wish.forEach(a => {
-                //     if(a.selected){
-                //         selectedWish.push(a)
-                //     }
-                // });
+                let selectedWish = [];
+                this.wish.forEach(a => {
+                    if(a.selected){
+                        selectedWish.push({
+                            prod_no : a.prod_no,
+                            price : a.prod_price
+                        })
+                    }
+                });
+                axios.post(`/api/cart/updateCart`, selectedWish)
+                .then(result => result.data.count);
+                //.then(this.$router.push('/cart'));
                 // this.$router.push({
                 //     path : 'cart',
                 //     query: { MyWishList: JSON.stringify(selectedWish) }

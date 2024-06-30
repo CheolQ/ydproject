@@ -3,6 +3,8 @@ const categorysql = require('./commonSql');
 //유저
 const cartsql = require('./cartSql');
 const wishsql = require('./wishSql');
+const ordersql = require('./orderSql');
+
 
 const prodSql = require('./prodSql');
 const noticeSql = require('./noticeSql');
@@ -23,6 +25,7 @@ module.exports = {
 
     ...cartsql,
     ...wishsql,
+    ...ordersql,
 
     ...prodSql,
     ...noticeSql,
