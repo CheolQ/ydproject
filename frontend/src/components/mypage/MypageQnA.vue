@@ -8,6 +8,7 @@
                     <th>번호</th>
                     <th>제목</th>
                     <th>작성일</th>
+                    <th>답변상태</th>
                 </tr>
             </thead>
             <tbody>
@@ -15,6 +16,8 @@
                     <td>{{ v.board_no }}</td>
                     <td>{{ v.title }}</td>
                     <td>{{ v.create_date }}</td>
+                    <td v-if="v.reply_no != null">답변 완료</td>
+                    <td v-else>답변 대기중</td>
                 </tr>
             </tbody>
         </table>
@@ -33,7 +36,7 @@ export default {
     },
     data() {
         return {
-            userid: 'john_doe',
+            userid: 'user1',
             qnaList: [],
             page: {},
             pageUnit: 10,

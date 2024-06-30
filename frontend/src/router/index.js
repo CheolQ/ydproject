@@ -59,9 +59,6 @@ const routes = [
         path: '/user',
         name: 'user',
         component: DefaultLayout,
-        meta: {
-            template: 'home', // Home 템플릿
-        },
         children: [
             {
                 path: 'home',
@@ -83,7 +80,7 @@ const routes = [
                 component: NoticeListView,
             },
             {
-                path: '/noticeinfo',
+                path: 'noticeinfo',
                 name: 'noticeinfo',
                 component: NoticeInfoView,
             },
@@ -91,6 +88,7 @@ const routes = [
                 path: 'qna',
                 name: 'qna',
                 component: QnaForm,
+                props: (route) => ({ qnadata: route.query.qna ? JSON.parse(route.query.qna) : {} }),
             },
             {
                 path: 'mypage',
@@ -135,17 +133,14 @@ const routes = [
                 component: Order,
             },
             {
-                //로그인
                 path: 'login',
                 component: login,
             },
             {
-                //회원가입
                 path: 'join',
                 component: join,
             },
             {
-                //아이디,비밀번호찾기
                 path: 'findidpw',
                 component: findidpw,
             },
@@ -155,9 +150,6 @@ const routes = [
         path: '/admin',
         name: 'Admin',
         component: AdminLayout,
-        meta: {
-            template: 'admin', // Admin 템플릿
-        },
         children: [
             {
                 path: '',

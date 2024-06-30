@@ -16,4 +16,6 @@ module.exports = {
 
     qnaInsert: `insert into qna set ?`,
     qnaUpdate: 'UPDATE qna SET ? WHERE board_no = ?',
+
+    selectuserno: `select user_no from user where user_id = ?`,
 };
