@@ -1,8 +1,6 @@
 <template>
     <div>
-        <div class="card mb-4">
-            <div class="card-body shadow">상품 등록</div>
-        </div>
+        <ContentHeader title="상품 등록"></ContentHeader>
         <div class="card mb-4">
             <div class="card-body shadow">
                 <div class="row">
@@ -51,6 +49,12 @@
                             <input type="text" v-model="prodInfo.origin" class="form-control"  aria-label="Username" aria-describedby="basic-addon1">
                         </div>
                     </div>
+                    <div class="col">
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" id="basic-addon1">유통기간</span>
+                            <input type="date" v-model="prodInfo.date" class="form-control"  aria-label="Username" aria-describedby="basic-addon1">
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -60,26 +64,32 @@
                     <div class="col">
                         <div>메인이미지</div>
                         <div class="mb-3">
-                            <input class="form-control" type="file" id="formFile" ref="file1" @change="FileUpload1">
+                            <input class="form-control" type="file" id="formFile" ref="file1" @change="FileUpload1" accept="image/*">
                         </div>
                     </div>
                     <div class="col">
                         <div>상세이미지</div>
                         <div class="mb-3">
-                            <input class="form-control" type="file" id="formFile" ref="file2" @change="FileUpload2">
+                            <input class="form-control" type="file" id="formFile" ref="file2" @change="FileUpload2" accept="image/*">
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <button @click="prodReg">등록</button>        
+        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+            <button @click="prodReg" class="btn btn-primary btn-lg">등록</button>        
+            <button @click="prodCancel" class="btn btn-secondary btn-lg">취소</button>
+        </div>
     </div>            
 </template>
 <script>
 import axios from 'axios';
 import FormData from 'form-data';
-
+import ContentHeader from '@/components/admin/ContentHeader.vue'
 export default{
+    components: {
+            ContentHeader
+        },
     data() {
         return {
             parentCategory: [],
@@ -110,32 +120,60 @@ export default{
             .catch(err => console.log(err))
         },
         FileUpload1(){
-            this.file1 = this.$refs.file1.files[0]
+            this.file1 = this.$refs.file1.files[0];
             console.log(this.file1);
         },
         FileUpload2(){
-            this.file2 = this.$refs.file2.files[0]
+            this.file2 = this.$refs.file2.files[0];
             console.log(this.file2);
         },
-        prodReg(){
+        async prodReg(){
             this.prodInfo.category = this.childSelect;
-            let formData = new FormData();
-            formData.append("file1", this.file1);
-            formData.append("file2", this.file2);
-            
-            let prodInfo = new Blob([JSON.stringify(this.prodInfo)], {
-                    type: 'application/json',
-                });
-            formData.append("prod", prodInfo);
-            const config = {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                },
-                data: formData
-            };
-            axios.post('/api/adminProd/prod', config)
-            .then(result => console.log(result))
+            if(!this.prodInfo.category){
+                alert('카테고리를 입력하세요')
+                return;
+            }
+            if(!this.prodInfo.name){
+                alert('제품이름을 입력하세요')
+                return;
+            }
+            if(!this.prodInfo.price){
+                alert('가격을 입력하세요')
+                return;
+            }
+            if(!this.prodInfo.maker){
+                alert('제조사를 입력하세요')
+                return;
+            }
+            if(!this.prodInfo.origin){
+                alert('원산지를 입력하세요')
+                return;
+            }
+            let data = new FormData();
+            console.log(this.file1)
+            console.log(this.file2)
+            data.append('category_code', this.prodInfo.category);
+            data.append('prod_name', this.prodInfo.name);
+            data.append('prod_price', this.prodInfo.price);
+            data.append('maker', this.prodInfo.maker);
+            data.append('origin', this.prodInfo.origin);
+            data.append('exp_date', this.prodInfo.date)
+
+            data.append("image1", this.file1);
+            data.append("image2", this.file2);
+
+            await axios.post('/api/adminProd/prod',data,
+            { headers:{'Content-Type':'multipart/form-data'}})
+            .then(result => {
+                if(result.data === 'ok'){
+                    alert("등록되었습니다");
+                    this.$router.push({path: 'prodList'});
+                }
+            })
             .catch(err => console.log(err))
+        },
+        prodCancel(){
+            this.$router.push({path: 'prodList'});
         }
     }
 }

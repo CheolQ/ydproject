@@ -1,39 +1,44 @@
 <template>
-    <div class="container text-center">
-        <div class="row">
-            <div class="col-md-12">
-                <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                    <h1 class="h3 mb-0 text-gray-800">공지사항</h1>
-                </div>
+    <div>
+        <ContentHeader title="공지사항"></ContentHeader>
+        <div class="card mb-4">
+            <div class="card-body shadow">
                 <table class="table">
                     <thead>
                         <tr>
-                            <th scope="col">번호</th>
+                            <th scope="col">게시글번호</th>
                             <th scope="col">제목</th>
                             <th scope="col">작성자</th>
-                            <th scope="col">작성일</th>
+                            <th scope="col">작성일자</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <th scope="row">1</th>
-                            <td>Mark</td>
-                            <td>Otto</td>
-                            <td>@mdo</td>
+                        <tr v-for="n in noticeList" v-bind:key="n">
+                            <th scope="row">{{ n.board_no }}</th>
+                            <td>{{ n.title }}</td>
+                            <td>{{ n.user_id }}</td>
+                            <td>{{ getDateFormat(n.create_date) }}</td>
                         </tr>
                     </tbody>
                 </table>
             </div>
         </div>
-    </div>        
+        <paging-component v-bind="page" @go-page="goPage"/>          
+    </div>
 </template>
 <script>
+import Paging from "../../mixin";
 import axios from 'axios';
-
+import PagingComponent from '@/components/Paging.vue'
+import ContentHeader from '@/components/admin/ContentHeader.vue'
 export default {
+    mixins : [Paging],
+    components: {
+        ContentHeader, PagingComponent
+    },
     data() {
         return {
-            notice: [],
+            noticeList: [],
         }
     },
     created(){

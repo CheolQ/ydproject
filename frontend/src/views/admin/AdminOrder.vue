@@ -1,8 +1,6 @@
 <template>
     <div>
-        <div class="card mb-4">
-            <div class="card-body shadow">주문조회</div>
-        </div>
+        <ContentHeader title="주문상세"></ContentHeader>
         <div class="card mb-4">
             <div class="card-body shadow">
                 <table class="table">
@@ -39,10 +37,11 @@
 import Paging from "../../mixin";
 import axios from 'axios';
 import PagingComponent from '@/components/Paging.vue'
+import ContentHeader from '@/components/admin/ContentHeader.vue'
 export default {
     mixins : [Paging],
     components: {
-        PagingComponent
+        PagingComponent, ContentHeader
     },
     data() {
         return {

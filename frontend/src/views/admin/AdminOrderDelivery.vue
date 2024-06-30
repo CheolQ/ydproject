@@ -1,7 +1,9 @@
 <template>
     <div>
         <div class="card mb-4">
-            <div class="card-body shadow">배송조회</div>
+            <div class="card-body shadow">
+                <h3>배송조회</h3>
+            </div>
         </div>
         <div class="card mb-4">
             <div class="card-body shadow">
@@ -19,7 +21,7 @@
                     <tbody>
                         <tr v-for="od in orderList" v-bind:key="od">
                             <th scope="row">{{ od.order_no }}</th>
-                            <td>{{ od.order_date }}</td>
+                            <td>{{ getDateFormat(od.order_date) }}</td>
                             <td>{{ od.user_no }}</td>
                             <td v-if="od.cnt > 1">{{ od.prod_name }} 외 {{ od.cnt -1}} 건</td>
                             <td v-else>{{ od.prod_name}}</td>
@@ -66,6 +68,12 @@ export default {
             })
             .catch(err => console.log(err))
         },
+        getDateFormat (date ){
+ 	        return this .$dateFormat (date );
+ 	    },
+        getNumberFormat (number ){
+            return this .$numberFormat (number );
+        }
     }
 }
 </script>

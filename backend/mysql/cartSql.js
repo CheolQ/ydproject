@@ -2,7 +2,7 @@ module.exports = {
     cartList : `select  prod.prod_no, cart.cart_no, prod.prod_name, prod.main_img, prod.prod_price, cart.cnt
                 from    prod join cart 
                 on      prod.prod_no = cart.prod_no
-                where   cart.user_no = 1
+                where   cart.user_no = ?
                 order by cart_no desc`,
     cartDelete : `delete 
                     from cart 
@@ -23,6 +23,11 @@ module.exports = {
                     and user_no = 1`,
     cartUpdate : `update cart set 
 	                            cnt = cnt + 1
-                    where user_no = 1 and prod_no = ?`
+                    where user_no = 1 and prod_no = ?`,
+    wishToCartInsert : `insert into cart 
+                            set prod_no = ?,
+                                price = ?,
+                                user_no = ?,
+                                cnt = 1` 
     
 }; 

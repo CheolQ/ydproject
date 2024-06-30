@@ -21,7 +21,7 @@ app.use(
             // 세션 쿠키 설정 (세션 관리 시 클라이언트에 보내는 쿠키)
             httpOnly: true, // true 이면 클라이언트 자바스크립트에서 document.cookie로 쿠키 정보를 볼 수 없음
             secure: false, // true 이면 https 환경에서만 쿠키 정보를 주고 받도록 처리,
-            maxAge: 60000, // 쿠키가 유지되는 시간 (밀리세컨드 단위)
+            maxAge: 600000, // 쿠키가 유지되는 시간 (밀리세컨드 단위)
         },
         store: new fileStore(), // 세션 저장소로 fileStore 사용
     })
@@ -35,9 +35,12 @@ var cartRouter = require('./routes/cart');
 const wishRouter = require('./routes/wish.js');
 
 //관리자
-const adminMemberRouter = require('./routes/admin/adminMember.js');
-const AdminOrderRouter = require('./routes/admin/adminOrder.js');
-const adminProdRouter = require('./routes/admin/adminProd.js');
+
+const adminMemberRouter = require('./routes/admin/adminMember.js')
+const adminOrderRouter = require('./routes/admin/adminOrder.js')
+const adminProdRouter = require('./routes/admin/adminProd.js')
+const adminQnaRouter = require('./routes/admin/adminQna.js')
+
 
 const prodRouter = require('./routes/prod.js');
 const noticeRouter = require('./routes/notice.js');
@@ -88,9 +91,11 @@ app.use('/mypage', mypageRouter);
 
 //관리자
 
-app.use('/adminMember', adminMemberRouter);
-app.use('/adminOrder', AdminOrderRouter);
-app.use('/adminProd', adminProdRouter);
+
+app.use("/adminQna", adminQnaRouter)
+app.use("/adminMember", adminMemberRouter)
+app.use("/adminOrder", adminOrderRouter)
+app.use("/adminProd", adminProdRouter)
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
