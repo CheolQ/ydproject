@@ -11,13 +11,15 @@ import Cart from '@/views/CartView.vue';
 import Order from '@/views/OrderForm.vue';
 
 //QnA
-import QnaForm from '@/views/QnaFormView.vue'
+import QnaForm from '@/views/QnaFormView.vue';
 
 // 마이페이지
 import MyPage from '@/views/mypage/MyPage.vue';
 import MyPageHome from '@/components/mypage/MypageHome.vue';
 import OrderHistory from '@/components/mypage/OrderHistory.vue';
 import OrderDetailInfo from '@/components/mypage/OrderDetailInfo.vue';
+import MyPageQnA from '@/components/mypage/MypageQnA.vue';
+import MyPageQnAInfo from '@/components/mypage/MypageQnAInfo.vue';
 import MyWishList from '@/components/mypage/MyWishList.vue';
 
 //관리자
@@ -26,12 +28,12 @@ import AdminHome from '../views/AdminHome.vue';
 import Notice from '../views/admin/AdminNotice.vue';
 import Qna from '../views/admin/AdminQna.vue';
 import ProdList from '../views/admin/AdminProdList.vue';
-import AdminProdInfo from '../views/admin/AdminProdInfo.vue'
+import AdminProdInfo from '../views/admin/AdminProdInfo.vue';
 import ProdForm from '../views/admin/AdminProdForm.vue';
 import AdminProdModify from '../views/admin/AdminProdModify.vue'
 import Orders from '../views/admin/AdminOrder.vue';
 import OrderInfo from '../views/admin/AdminOrderInfo.vue';
-import AdminOrderDelivery from '../views/admin/AdminOrderDelivery.vue'
+import AdminOrderDelivery from '../views/admin/AdminOrderDelivery.vue';
 import AdminOrderCancel from '@/views/admin/AdminOrderCancel.vue';
 import Members from '../views/admin/AdminMember.vue';
 
@@ -109,6 +111,16 @@ const routes = [
                         component: OrderDetailInfo,
                     },
                     {
+                        path: 'mypageqna',
+                        name: 'mypageqna',
+                        component: MyPageQnA,
+                    },
+                    {
+                        path: 'mypageqnainfo',
+                        name: 'mypageqnainfo',
+                        component: MyPageQnAInfo,
+                    },
+                    {
                         path: 'mywishlist',
                         component: MyWishList,
                     },
@@ -123,17 +135,20 @@ const routes = [
                 name: 'orderForm',
                 component: Order,
             },
-            { //로그인
+            {
+                //로그인
                 path: 'login',
-                component:login,
+                component: login,
             },
-            {//회원가입
+            {
+                //회원가입
                 path: 'join',
-                component:join,
+                component: join,
             },
-            {//아이디,비밀번호찾기
+            {
+                //아이디,비밀번호찾기
                 path: 'findidpw',
-                component:findidpw,
+                component: findidpw,
             },
         ],
     },
@@ -179,15 +194,15 @@ const routes = [
             },
             {
                 path: 'ordersInfo',
-                component: OrderInfo
+                component: OrderInfo,
             },
             {
                 path: 'orderDelivery',
-                component: AdminOrderDelivery
+                component: AdminOrderDelivery,
             },
             {
                 path: 'orderCancel',
-                component: AdminOrderCancel
+                component: AdminOrderCancel,
             },
             {
                 path: 'member',

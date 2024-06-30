@@ -4,8 +4,8 @@ import persistedstate from 'vuex-persistedstate';
 const store = createStore({
     state() {
         return {
-
             user: {},
+            cart: [],
         };
     },
     //   getters: {
@@ -35,7 +35,6 @@ const store = createStore({
     //     },
     // },
     // plugins: [persistedstate({ paths: ['user'] })],
-
 });
 
 export default store;

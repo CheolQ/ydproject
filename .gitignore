@@ -2,8 +2,6 @@
 /dist
 sessions/ 
 
-# nodemon 이용하는중이라 오류방지 
---ignore ./sessions
 
 # local env files
 .env.local
@@ -23,4 +21,5 @@ pnpm-debug.log*
 *.njsproj
 *.sln
 *.sw?
+sessions/
 node_modules/

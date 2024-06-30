@@ -39,13 +39,13 @@
                                 <td>
                                     <div class="input-group quantity mt-4" style="width: 100px;">
                                         <div class="input-group-btn">
-                                            <button @click="cntBtn(cart, false)" class="btn btn-sm btn-minus rounded-circle bg-light border" >
+                                            <button @click="minusBtn(cart)" class="btn btn-sm btn-minus rounded-circle bg-light border" >
                                                 <i class="fa fa-minus"></i>
                                             </button>
                                         </div>
                                         <input type="number" readonly v-model="cart.cnt" class="form-control form-control-sm text-center border-0">
                                         <div class="input-group-btn">
-                                            <button @click="cntBtn(cart, true)" class="btn btn-sm btn-plus rounded-circle bg-light border">
+                                            <button @click="plusBtn(cart)" class="btn btn-sm btn-plus rounded-circle bg-light border">
                                                 <i class="fa fa-plus"></i>
                                             </button>
                                         </div>
@@ -80,7 +80,7 @@
     export default {
             data(){ 
                 return{
-                    cartList : [], allChecked : false, cnt : 1
+                    cartList : [], allChecked : false, cnt : 0
                 };   
             },
             created(){
@@ -124,26 +124,39 @@
                 checkedAll(checked) {
                     this.cartList.forEach(a => a.selected = checked);
                 },
-                formatPrice(price){
-                    return price.numberFormat();
+                formatPrice(prod_price){
+                    return prod_price.numberFormat();
                 },
-                // cntBtn(no, cnt, prodPrice){
+                // cntBtn(no, cnt, prodPrice){ /db값은 변경되지만 음수의 값은 컨트롤 x
                 //     console.log(no, cnt, prodPrice, '값')
                 //     axios.put(`/api/cart/updateCnt/?no=${no}&cnt=${cnt}&price=${prodPrice}`)
                 //     //this.getCart();
                 // },
-                cntBtn(cartInfo, mode){
-                //cntBtn(no, cnt, prodPrice){
-                    if(mode){
-                        cartInfo.cnt++;
-                    }else if(cartInfo.cnt > 1){
-                        cartInfo.cnt--;                
-                    }else{
-                        alert('1개 이상 담을 수 있습니다.') 
-                        cartInfo.cnt = 1;
-                    }
-                    axios.put(`/api/cart/updateCnt?no=${cartInfo.cart_no}&cnt=${cartInfo.cnt}&price=${cartInfo.prod_price}`);
+                // cntBtn(cartInfo, mode){ /하나의 로직에서 두가지 기능을 구현
+                // //cntBtn(no, cnt, prodPrice){
+                //     if(mode){
+                //         cartInfo.cnt++;
+                //     }else if(cartInfo.cnt > 1){
+                //         cartInfo.cnt--;                
+                //     }else{
+                //         alert('1개 이상 담을 수 있습니다.') 
+                //         cartInfo.cnt = 1;
+                //     }
+                //     axios.put(`/api/cart/updateCnt?no=${cartInfo.cart_no}&cnt=${cartInfo.cnt}&price=${cartInfo.prod_price}`);
+                // },
+                plusBtn(cart){
+                    cart.cnt++;
+                    axios.put(`/api/cart/updateCnt?no=${cart.cart_no}&cnt=${cart.cnt}&price=${cart.prod_price}`);
                 },
+                minusBtn(cart){
+                    if(cart.cnt < 2){
+                        alert('1개 이상 담을 수 있습니다.')
+                        return;
+                    }else{
+                        cart.cnt--;
+                    }
+                    axios.put(`/api/cart/updateCnt?no=${cart.cart_no}&cnt=${cart.cnt}&price=${cart.prod_price}`);
+                }
             }
         }
 </script>
