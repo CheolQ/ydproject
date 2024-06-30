@@ -7,6 +7,9 @@
     "build": "vue-cli-service build"
   },
   "dependencies": {
+    "@portone/browser-sdk": "^0.0.7",
+    "vuetify": "^3.6.9",
+    "vuex": "^4.0.2",
     "autoprefixer": "10.4.5",
     "axios": "^1.7.2",
     "chart.js": "^3.0.0",

@@ -8,33 +8,20 @@ const store = createStore({
             cart: [],
         };
     },
-    //   getters: {
     //     cartCount: (state) => {
     //       return state.cart.length;
     //     },
     //   },
-    // mutations: {
-    //     user(state, data) {
-    //         state.user = data;
-    //     },
-    // },
-    // plugins: [persistedstate({ paths: ['user'] })],
 
-    //         // user: {},
-    //         cart: []
-    //     };
-    // }
-    // //   getters: {
-    //     cartCount: (state) => {
-    //       return state.cart.length;
-    //     },
-    //   },
-    // mutations: {
-    //     user(state, data) {
-    //         state.user = data;
-    //     },
-    // },
-    // plugins: [persistedstate({ paths: ['user'] })],
+    mutations: {
+        user(state, data) {
+            state.user = data;
+        },
+    },
+    plugins: [persistedstate({ paths: ['user'] })],
+
 });
 
+
 export default store;
+

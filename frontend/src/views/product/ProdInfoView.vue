@@ -109,7 +109,7 @@ export	default {
             return nstr;
             },
         gotoWish(no){
-            axios.post(`/api/wish/${no}`,this.prodInfo.prod_no)
+            axios.post(`/api/cart/insert/${no}`,this.prodInfo.prod_no)
             //.then(()=> alert('관심상품에 등록되었습니다.'))
             .then(
                 Swal.fire({
@@ -122,7 +122,7 @@ export	default {
             )
         },
         gotoCart(no){
-            axios.post(`/api/cart/${no}`, this.prodInfo.prod_no)
+            axios.post(`/api/cart/cartInsert/${no}`, this.prodInfo.prod_no)
             .then(
                 Swal.fire({
                 title: "장바구니로 이동하겠습니까?",
