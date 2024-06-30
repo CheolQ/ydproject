@@ -21,7 +21,7 @@ app.use(
             // 세션 쿠키 설정 (세션 관리 시 클라이언트에 보내는 쿠키)
             httpOnly: true, // true 이면 클라이언트 자바스크립트에서 document.cookie로 쿠키 정보를 볼 수 없음
             secure: false, // true 이면 https 환경에서만 쿠키 정보를 주고 받도록 처리,
-            maxAge: 60000, // 쿠키가 유지되는 시간 (밀리세컨드 단위)
+            maxAge: 600000, // 쿠키가 유지되는 시간 (밀리세컨드 단위)
         },
         store: new fileStore(), // 세션 저장소로 fileStore 사용
     })
