@@ -1,8 +1,6 @@
 <template>
     <div>
-        <div class="card mb-4">
-            <div class="card-body shadow">상품 등록</div>
-        </div>
+        <ContentHeader title="상품 등록"></ContentHeader>
         <div class="card mb-4">
             <div class="card-body shadow">
                 <div class="row">
@@ -51,6 +49,12 @@
                             <input type="text" v-model="prodInfo.origin" class="form-control"  aria-label="Username" aria-describedby="basic-addon1">
                         </div>
                     </div>
+                    <div class="col">
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" id="basic-addon1">유통기간</span>
+                            <input type="date" v-model="prodInfo.date" class="form-control"  aria-label="Username" aria-describedby="basic-addon1">
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -74,15 +78,18 @@
         </div>
         <div class="d-grid gap-2 d-md-flex justify-content-md-end">
             <button @click="prodReg" class="btn btn-primary btn-lg">등록</button>        
-            <button class="btn btn-secondary btn-lg">취소</button>
+            <button @click="prodCancel" class="btn btn-secondary btn-lg">취소</button>
         </div>
     </div>            
 </template>
 <script>
 import axios from 'axios';
 import FormData from 'form-data';
-
+import ContentHeader from '@/components/admin/ContentHeader.vue'
 export default{
+    components: {
+            ContentHeader
+        },
     data() {
         return {
             parentCategory: [],
@@ -150,7 +157,8 @@ export default{
             data.append('prod_price', this.prodInfo.price);
             data.append('maker', this.prodInfo.maker);
             data.append('origin', this.prodInfo.origin);
-            
+            data.append('exp_date', this.prodInfo.date)
+
             data.append("image1", this.file1);
             data.append("image2", this.file2);
 
@@ -163,6 +171,9 @@ export default{
                 }
             })
             .catch(err => console.log(err))
+        },
+        prodCancel(){
+            this.$router.push({path: 'prodList'});
         }
     }
 }

@@ -1,8 +1,6 @@
 <template>
     <div>
-        <div class="card mb-4">
-            <div class="card-body shadow">상품 상세</div>
-        </div>
+        <ContentHeader title="상품 상세"></ContentHeader>
         <div class="card mb-4">
             <div class="card-body shadow">
                 <div class="row">
@@ -28,8 +26,12 @@
 <script>
 import Paging from "../../mixin";
 import axios from "axios";
+import ContentHeader from '@/components/admin/ContentHeader.vue'
     export default {
         mixins : [Paging],
+        components: {
+            ContentHeader
+        },
         data() {
             return {
                 prodInfo: {},
