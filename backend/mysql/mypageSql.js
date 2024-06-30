@@ -90,10 +90,10 @@ module.exports = {
     applyOrderCancel2: `insert into order_cancel(order_no)
                         values(?)`,
 
-    qnaList: `select board_no,
-                    title, 
-                    create_date, 
-                    u.name 
+    mypageQnaList: `select board_no,
+                        title, 
+                        create_date, 
+                        u.name 
                 from qna q
                 join user u
                 on q.user_no = u.user_no

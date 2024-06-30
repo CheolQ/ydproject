@@ -9,42 +9,40 @@ var indexRouter = require('./routes/index.js');
 var usersRouter = require('./routes/users.js');
 
 //로그인
-const session = require('express-session'); 
+const session = require('express-session');
 const fileStore = require('session-file-store')(session);
 
-app.use(session({
-  secret: 'secret key', //암호화하는 데 쓰일 키
-  resave: false, // 세션에 변경사항이 없어도 항상 다시 저장할지 여부
-  saveUninitialized: true, // 초기화되지 않은 세션을 스토어(저장소)에 강제로 저장할지 여부
-  cookie: { // 세션 쿠키 설정 (세션 관리 시 클라이언트에 보내는 쿠키)
-    httpOnly: true, // true 이면 클라이언트 자바스크립트에서 document.cookie로 쿠키 정보를 볼 수 없음
-    secure: false, // true 이면 https 환경에서만 쿠키 정보를 주고 받도록 처리,
-    maxAge: 60000 // 쿠키가 유지되는 시간 (밀리세컨드 단위)
-  },
-  store: new fileStore() // 세션 저장소로 fileStore 사용
-}
-));
+app.use(
+    session({
+        secret: 'secret key', //암호화하는 데 쓰일 키
+        resave: false, // 세션에 변경사항이 없어도 항상 다시 저장할지 여부
+        saveUninitialized: true, // 초기화되지 않은 세션을 스토어(저장소)에 강제로 저장할지 여부
+        cookie: {
+            // 세션 쿠키 설정 (세션 관리 시 클라이언트에 보내는 쿠키)
+            httpOnly: true, // true 이면 클라이언트 자바스크립트에서 document.cookie로 쿠키 정보를 볼 수 없음
+            secure: false, // true 이면 https 환경에서만 쿠키 정보를 주고 받도록 처리,
+            maxAge: 60000, // 쿠키가 유지되는 시간 (밀리세컨드 단위)
+        },
+        store: new fileStore(), // 세션 저장소로 fileStore 사용
+    })
+);
 
 //유저
 
 var cartRouter = require('./routes/cart');
 
 // var wishRouter = require('./routes/wish');
-const wishRouter = require('./routes/wish.js')
-
+const wishRouter = require('./routes/wish.js');
 
 //관리자
-const adminMemberRouter = require('./routes/admin/adminMember.js')
-const AdminOrderRouter = require('./routes/admin/adminOrder.js')
-const adminProdRouter = require('./routes/admin/adminProd.js')
-
+const adminMemberRouter = require('./routes/admin/adminMember.js');
+const AdminOrderRouter = require('./routes/admin/adminOrder.js');
+const adminProdRouter = require('./routes/admin/adminProd.js');
 
 const prodRouter = require('./routes/prod.js');
 const noticeRouter = require('./routes/notice.js');
 const mypageRouter = require('./routes/mypage.js');
 const commonRouter = require('./routes/common.js');
-
-
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -56,11 +54,8 @@ app.use(express.urlencoded({ extended: false }));
 // app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-
-
-const cookieParser = require("cookie-parser");
+const cookieParser = require('cookie-parser');
 app.use(cookieParser());
-
 
 app.use('/', indexRouter);
 
@@ -78,15 +73,12 @@ app.use('/cart', cartRouter);
 
 app.use('/upload', express.static('D:/images/prodImages'));
 
-
 //로그인
 app.use('/users', usersRouter);
 
-
-app.get("/", (req, res) => {
-    res.send("Hello World!~~");
+app.get('/', (req, res) => {
+    res.send('Hello World!~~');
 });
-
 
 app.use('/wish', wishRouter);
 app.use('/shop', prodRouter);
@@ -96,10 +88,9 @@ app.use('/mypage', mypageRouter);
 
 //관리자
 
-app.use("/adminMember", adminMemberRouter)
-app.use("/adminOrder", AdminOrderRouter)
-app.use("/adminProd", adminProdRouter)
-
+app.use('/adminMember', adminMemberRouter);
+app.use('/adminOrder', AdminOrderRouter);
+app.use('/adminProd', adminProdRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

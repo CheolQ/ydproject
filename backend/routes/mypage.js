@@ -62,7 +62,7 @@ router.get('/qnalist/:id', async (req, res) => {
         pageUnit = 10;
     }
     let offset = (page - 1) * pageUnit;
-    let result = await query('qnaList', [req.params.id, offset, pageUnit]);
+    let result = await query('mypageQnaList', [req.params.id, offset, pageUnit]);
     console.log(result);
     let count = await query('countUserOrderList', [req.params.id]);
     res.send({ result, count });
