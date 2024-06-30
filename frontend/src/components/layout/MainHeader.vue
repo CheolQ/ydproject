@@ -34,13 +34,13 @@
                     <div class="collapse navbar-collapse bg-white" id="navbarCollapse">
                         <div class="navbar-nav mx-auto">
                             <a href="/user/shop" class="nav-item nav-link">전체상품</a>
-                            <div v-for="v in categories" class="nav-item dropdown">
+                            <!-- <div v-for="v in categories" class="nav-item dropdown">
                                 <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">{{ v.parent
                                     }}</a>
                                 <div class="dropdown-menu m-0 bg-secondary rounded-0">
                                     <a v-for="c in v.child" href="404.html" class="dropdown-item">{{ c }}</a>
                                 </div>
-                            </div>
+                            </div> -->
                         </div>
                         <div class="d-flex m-3 me-0">
                             <button

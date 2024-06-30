@@ -8,7 +8,6 @@ const store = createStore({
             cart: [],
         };
     },
-    //   getters: {
     //     cartCount: (state) => {
     //       return state.cart.length;
     //     },
