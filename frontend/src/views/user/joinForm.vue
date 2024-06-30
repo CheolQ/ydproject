@@ -38,11 +38,13 @@
             <label for="detailAddress">상세주소</label>
             <input type="text" id="detailAddress" v-model="form.detail_address" placeholder="상세주소"/>
         </div>
-        <button class="btn btn-primary" @click="joinUser()">회원가입</button>
+        <button class="btn btn-primary" @click="joinUser">회원가입</button>
     </div>
 </template>
 
 <script>
+import axios from 'axios';
+
 export default {
     data() {
         return {
@@ -59,88 +61,71 @@ export default {
             }
         };
     },
-
     computed: {},
-    created() {
-        this.searchNo = this.$route.query.form.user_id;
-        if (this.searchNo > 0) {
-            this.getuserInfo();
-        }
-    },
+    created() {},
     methods: {
         confirmPassword() {
             // 비밀번호 확인 메서드
-            if (this.userInfo.form.user_pw !== this.userInfo.form.user_pw2) {
+            if (this.form.user_pw !== this.form.user_pw2) {
                 alert('비밀번호가 일치하지 않습니다.');
                 return false;
             }
             return true;
         },
-        async getuserInfo() {
-            let result = await axios.get(`/api/users/${this.searchNo}`);
-            this.userInfo = result.data[0];
-        },
         async joinUser() {
             if (!this.confirmPassword()) {
                 return;
             }
-            const url = "/api/users/insert";
+            const url = "/api/users";
             let param = {
-                user_id: this.userInfo.form.user_id,
-                user_pw: this.userInfo.form.user_pw,
-                user_name: this.userInfo.user_name,
-                user_post: this.userInfo.user_post || 0,  // 기본값을 0으로 설정
-                user_address: this.userInfo.user_address,
-                user_detail_addr: this.userInfo.user_detail_addr,
-                user_phone: this.userInfo.user_phone,
-                user_email: this.userInfo.user_email
+                user_id: this.form.user_id,
+                user_pw: this.form.user_pw,
+                user_name: this.form.name,
+                user_post: this.form.postcode || 0,  // 기본값을 0으로 설정
+                user_address: this.form.address,
+                user_detail_address: this.form.detail_address,
+                user_phone: this.form.tel,
+                user_email: this.form.email
             };
 
             console.log(param);  // 추가된 콘솔 로그
-            const result = (await axios.post(url, param)).data;
-            alert("회원가입에 성공하셨습니다");
+            try {
+                const result = (await axios.post(url, param)).data;
+                console.log(result);
+                alert("회원가입에 성공하셨습니다");
+            } catch (error) {
+                console.error(error);
+                alert("회원가입에 실패하였습니다. 다시 시도해 주세요.");
+            }
+        },
+        showApi() {
+            new window.daum.Postcode({
+                oncomplete: (data) => {
+                    let fullRoadAddr = data.roadAddress;
+                    let extraRoadAddr = '';
+
+                    if (data.bname !== '' && /[동|로|가]$/g.test(data.bname)) {
+                        extraRoadAddr += data.bname;
+                    }
+                    if (data.buildingName !== '' && data.apartment === 'Y') {
+                        extraRoadAddr += (extraRoadAddr !== '' ? ', ' + data.buildingName : data.buildingName);
+                    }
+                    if (extraRoadAddr !== '') {
+                        extraRoadAddr = ' (' + extraRoadAddr + ')';
+                    }
+                    if (fullRoadAddr !== '') {
+                        fullRoadAddr += extraRoadAddr;
+                    }
+
+                    this.form.postcode = data.zonecode; // 5자리 새우편번호 사용
+                    this.form.address = fullRoadAddr;
+                }
+            }).open();
         }
-    },
-        
-
-    showApi() {
-      new window.daum.Postcode({
-        oncomplete: (data) => {
-            // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
-
-            // 도로명 주소의 노출 규칙에 따라 주소를 조합한다.
-            // 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.
-            let fullRoadAddr = data.roadAddress; // 도로명 주소 변수
-            let extraRoadAddr = ''; // 도로명 조합형 주소 변수
-
-            // 법정동명이 있을 경우 추가한다. (법정리는 제외)
-            // 법정동의 경우 마지막 문자가 "동/로/가"로 끝난다.
-            if(data.bname !== '' && /[동|로|가]$/g.test(data.bname)){
-                extraRoadAddr += data.bname;
-            }
-            // 건물명이 있고, 공동주택일 경우 추가한다.
-            if(data.buildingName !== '' && data.apartment === 'Y'){
-              extraRoadAddr += (extraRoadAddr !== '' ? ', ' + data.buildingName : data.buildingName);
-            }
-            // 도로명, 지번 조합형 주소가 있을 경우, 괄호까지 추가한 최종 문자열을 만든다.
-            if(extraRoadAddr !== ''){
-                extraRoadAddr = ' (' + extraRoadAddr + ')';
-            }
-            // 도로명, 지번 주소의 유무에 따라 해당 조합형 주소를 추가한다.
-            if(fullRoadAddr !== ''){
-                fullRoadAddr += extraRoadAddr;
-            }
-
-            // 우편번호와 주소 정보를 해당 필드에 넣는다.
-            this.form.postcode = data.zonecode; //5자리 새우편번호 사용
-            this.form.address = fullRoadAddr;
-        }
-    }).open()
     }
-  }
-
-
+};
 </script>
+
 
 <style>
 .aside-tit {
@@ -158,7 +143,7 @@ export default {
 <!-- // created () {
 //     this.searchNo = this.$route.query.user_id;
 //     if (this.searchNo > 0) {
-//         this.getuserInfo();
+//         this.getform();
 //     }
 // },
 

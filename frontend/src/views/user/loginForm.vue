@@ -46,11 +46,12 @@ export default {
         .then(result => {
           this.$store.commit('user', result.data);
           console.log("성공");
-          alert('로그인 성공');
+          this.$router.push('/user/home');
         })
         .catch(err => {
           console.log(err);
           alert('로그인 실패');
+          this.$router.push('/user/login');
         });
     },
     logoutHandler() {

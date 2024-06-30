@@ -35,9 +35,9 @@ router.post("/logout",(req, res) => {
 // 회원가입
 router.post("/",async (req ,res )=> {
   console.log(req.body , res)
-//   let result =await query("userjoin",	req.body );
-//   console.log('ㅁㄴㅇㄻㄴㄻㄴㅇㄹㄴㅇㅁ',result)
-//   res.send(result);
+  let result =await query("userjoin",	req.body );
+  console.log('ㅁㄴㅇㄻㄴㄻㄴㅇㄹㄴㅇㅁ',result)
+  res.send(result);
 });
 
 
