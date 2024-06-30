@@ -10,7 +10,7 @@ router.post("/login", async(req,res)=>{
 	console.log(userid);
 	console.log(userpw);
 	let result = await query("userlogin",[userid,userpw]);
-	//  res.send(result);
+	 res.send(result); //주석처리돼있었음
 	user = result.find(m=>m.user_id === userid && m.user_pw === userpw)
  	console.log('user:',user);
 	if(user) {

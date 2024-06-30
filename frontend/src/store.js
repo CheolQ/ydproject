@@ -11,12 +11,12 @@ const store = createStore({
     //       return state.cart.length;
     //     },
     //   },
-    // mutations: {
-    //     user(state, data) {
-    //         state.user = data;
-    //     },
-    // },
-    // plugins: [persistedstate({ paths: ['user'] })],
+    mutations: {
+        user(state, data) {
+            state.user = data;
+        },
+    },
+    plugins: [persistedstate({ paths: ['user'] })],
 
 });
 
