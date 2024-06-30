@@ -1,6 +1,6 @@
 <template>
     <div id="mypage">
-        <div class="page-body">
+        <div class="page-body" v-if="orderList.length > 0 && codes.OrderStatus">
             <h5 id="mypage-sub">주문내역</h5>
             <table class="table">
                 <thead>
@@ -100,8 +100,12 @@ export default {
             this.$router.push({ name: 'orderdetailinfo', query: { no: no } })
         },
         getCodeMeaning(code) {
-            console.log(code);
-            return this.codes.OrderStatus[code] || code; // 코드에 맞는 의미 있는 문자열 반환
+            if (this.codes) {
+                console.log("OrderStatus 객체:", this.codes.OrderStatus);
+                return this.codes.OrderStatus[code] || code; // 코드에 맞는 의미 있는 문자열 반환
+            }
+            console.error(`Code meaning not found for code: ${code}`);
+            return code; // 또는 적절한 기본값을 반환
         },
         applyOrderCancel: function (no) {
             axios.patch(`/api/mypage/ordercancel/` + Number(no))
