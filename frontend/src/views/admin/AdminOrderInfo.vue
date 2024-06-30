@@ -1,8 +1,6 @@
 <template>
     <div>
-        <div class="card mb-4">
-            <div class="card-body shadow">주문상세</div>
-        </div>
+        <ContentHeader title="주문 상세"></ContentHeader>
         <div v-for="u in userInfo" :key="u">
             <div class="card mb-4">
                 <div class="card-body shadow">
@@ -55,11 +53,11 @@
                     </thead>
                     <tbody>
                         <tr v-for="p in prodInfo" :key="p">
-                            <th scope="row"><img :src="`/img/prodImages/${p.main_img}`" style="width: 90px; height: 90px;"></th>
+                            <th scope="row"><img :src="`/img/prodImg/${p.main_img}`" style="width: 90px; height: 90px;"></th>
                             <td>{{ p.prod_name }}</td>
-                            <td>{{ p.prod_price }}</td>
+                            <td>{{ getNumberFormat(p.prod_price) }}</td>
                             <td>{{ p.cnt }}</td>
-                            <td>{{ p.prod_price * p.cnt }}</td>
+                            <td>{{ getNumberFormat(p.prod_price * p.cnt) }}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -68,9 +66,14 @@
     </div>
 </template>
 <script>
+import Paging from "../../mixin";
 import axios from 'axios';
-
+import ContentHeader from '@/components/admin/ContentHeader.vue'
 export default{
+    mixins : [Paging],
+    components: {
+            ContentHeader
+        },
     data() {
         return {
             orderNo : {no: 1},
@@ -108,6 +111,9 @@ export default{
                 this.$router.push({path : '/admin/orders'})
             })
             .catch(err=> console.log(err))
+        },
+        getNumberFormat (number ){
+            return this .$numberFormat (number );
         }
     }
 }
