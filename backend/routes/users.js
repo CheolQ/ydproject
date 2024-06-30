@@ -8,7 +8,6 @@ router.post("/login", async(req,res)=>{
 	const userid = req.body.user_id;
 	const userpw = req.body.user_pw;
 	let result = await query("userlogin",[userid,userpw]);
-	 res.send(result); //주석처리돼있었음
 	user = result.find(m=>m.user_id === userid && m.user_pw === userpw)
 	if(user) {
 	  req.session.user_id = userid; // 세션에 사용자 이메일 정보 저장
@@ -19,6 +18,9 @@ router.post("/login", async(req,res)=>{
 			throw err;
 		}
 		res.send(user)
+		console.log('---------------------------------------------------');
+		console.log(req.session);
+		console.log('---------------------------------------------------');
 	  });
 	}
 	else{

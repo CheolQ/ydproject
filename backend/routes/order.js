@@ -19,14 +19,19 @@ router.post('/', async (req, res) => {
     let orderDetail = req.body.products;
     let id ;
     let result = await query("orderInsert", orderData);
-    console.log('result:', JSON.stringify(result)); // 전체 결과를 문자열로 변환하여 출력
+    console.log('result:', JSON.stringify(result)); // 전체 결과를 문자열로 변환하여 출력(object로 나와서 변환시킴)
 
-    // orderDetail.forEach(dtorder => {
-    //     dtorder.order_no = result.insertId;
-    //     console.log(dtorder);
-    //     query("orderDtInsert", dtorder)
-    //     .then(val => console.log(val))
-    // })
+    orderDetail.forEach(async dtorder => {
+        let price = await query("getPrice", dtorder.prod_no);
+        let data = [
+            dtorder.cnt,
+            JSON.stringify(result.insertId),
+            JSON.stringify(price[0].prod_price),
+            dtorder.prod_no
+        ];
+        query("orderDtInsert", data)
+        .then(val => console.log(val))
+    })
     
 
 })
