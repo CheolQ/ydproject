@@ -4,6 +4,9 @@ const query = require("../mysql/index");
 
 //장바구니 리스트
 router.get("/", (req, res) => { 
+    console.log('-------------------------------')
+    console.log(req.session)
+    console.log('-------------------------------')
     //console.log('확인')
     query("cartList")
     .then(result => res.send(result))
@@ -28,7 +31,7 @@ router.put("/updateCnt/", (req, res) => {
 });
 //장바구니 등록
 router.post("/:no", (req, res) => {
-    console.log(req.params, '등록되었나')
+    //console.log(req.params, '등록되었나')
     // query("cartInsert", req.params.no)
     // .then(result => res.send(result))
     // .catch(err => console.log(err))

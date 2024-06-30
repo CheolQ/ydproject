@@ -17,7 +17,11 @@ router.post("/login", async(req,res)=>{
 	  req.session.user_id = userid; // 세션에 사용자 이메일 정보 저장
 	  req.session.is_logined = true; // 세션에 로그인 여부 저장
 	  req.session.save(err => { // 세션 저장
-		if(err) throw err;
+		if(err) {
+		console.log('에러')	
+			throw err;
+		}
+		console.log('세션 저장 완료:', req.session);
 		res.send(user)
 	  });
 	}
