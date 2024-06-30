@@ -13,12 +13,12 @@
                     <div class="top-info ps-2">
                     </div>
                     <div class="top-link pe-2">
-                        <router-link to="/user/login" class="text-white"><small
-                                class="text-white ms-2">Login</small></router-link>
-                        <router-link to="/user/join" class="text-white"><small
-                                class="text-white mx-2">SignUp</small></router-link>
+                        <router-link to="/user/login" class="text-white"><small class="text-white ms-2">Login /
+                            </small></router-link>
+                        <router-link to="/user/join" class="text-white"><small class="text-white ms-2">SignUp /
+                            </small></router-link>
                         <router-link to="notice" class="text-white"><small
-                                class="text-white mx-2">Notice</small></router-link>
+                                class="text-white ms-2">Notice</small></router-link>
                     </div>
                 </div>
             </div>
