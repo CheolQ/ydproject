@@ -16,4 +16,10 @@ module.exports = {
 
     qnaInsert: `insert into qna set ?`,
     qnaUpdate: 'UPDATE qna SET ? WHERE board_no = ?',
+    prodCategory : `select c.category_code, c.category_name, p.prod_name, p.prod_no
+                    from prod as p
+                        left join category as c
+                        on p.category_code = c.category_code
+                    where category_code = ?`
+
 };

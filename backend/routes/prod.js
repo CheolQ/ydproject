@@ -35,6 +35,12 @@ router.post("/qna/:no",	async(req ,	res )	=> {
 	res.send(result);
 
 });
+//카테고리 이름 조회
+router.get("/",	async(req ,	res )	=> {
+	let result =	await query("categoryName");
+	res.send(result);
+});
+
 
 
 //qna작성
@@ -47,6 +53,12 @@ router.post("/qna", async(req ,	res )	=> {
 //qna수정
 router.put("/qna/:no",	async (req ,res )	=> {
 	let result = await query("qnauUpdate",	[req.body,	req.params.no]);
+	res.send(result);
+});
+
+router.get("/:code",	async (req , res )	=> {
+	let result =	await query("prodCategory",	req.params.no );
+   console.log(result);
 	res.send(result);
 });
 
