@@ -4,11 +4,8 @@ const query = require("../mysql/index");
 
 //장바구니 리스트
 router.get("/", (req, res) => { 
-    console.log('-------------------------------')
-    console.log(req.session)
-    console.log('-------------------------------')
     //console.log('확인')
-    query("cartList")
+    query("cartList", req.session.user_no)
     .then(result => res.send(result))
 });
 //장바구니 삭제
