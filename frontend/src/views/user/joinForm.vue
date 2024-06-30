@@ -11,7 +11,7 @@
         </div>
         <div>
             <label for="password2">비밀번호확인</label>
-            <input type="password" id="password2" v-model="form.user_pw2"/>
+            <input type="password" id="password2" v-model="form.user_pw2" />
         </div>
         <div>
             <label for="name">이름</label>
@@ -23,7 +23,7 @@
         </div>
         <div>
             <label for="phone">전화번호</label>
-            <input type="tel" id="tel" v-model="form.tel" placeholder="ex) 010-1111-1111"/>
+            <input type="tel" id="tel" v-model="form.tel" placeholder="ex) 010-1111-1111" />
         </div>
         <div>
             <label for="postcode">우편번호</label>
@@ -36,7 +36,7 @@
         </div>
         <div>
             <label for="detailAddress">상세주소</label>
-            <input type="text" id="detailAddress" v-model="form.detail_address" placeholder="상세주소"/>
+            <input type="text" id="detailAddress" v-model="form.detail_address" placeholder="상세주소" />
         </div>
         <button class="btn btn-primary" @click="joinUser">회원가입</button>
     </div>
@@ -89,6 +89,7 @@ export default {
             };
 
             console.log(param);  // 추가된 콘솔 로그
+
             try {
                 const result = (await axios.post(url, param)).data;
                 console.log(result);
@@ -127,7 +128,10 @@ export default {
 </script>
 
 
-<style>
+
+
+<style scoped>
+
 .aside-tit {
     padding: 65px 0 30px;
     font-size: 24px;

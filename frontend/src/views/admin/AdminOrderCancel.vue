@@ -1,7 +1,9 @@
 <template>
     <div>
         <div class="card mb-4">
-            <div class="card-body shadow">주문취소</div>
+            <div class="card-body shadow">
+                <h3>주문취소</h3>
+            </div>
         </div>
         <div class="card mb-4">
             <div class="card-body shadow">

@@ -1,5 +1,6 @@
 <template>
   <div class="container">
+
       <div class="login-wrapper">
           <h2 class="aside-tit">Login</h2>
           <form id="login-form">
@@ -17,14 +18,18 @@
   </div>
   </template>
 
+
 <script>
 import axios from 'axios';
 
 export default {
   data() {
+
       return {
           form: { user_id: '', user_pw: '' },
       }
+
+
   },
   computed: {
     account() {
@@ -67,7 +72,9 @@ export default {
   }
 };
 </script>
+
 <style>
+
 .aside-tit {
   padding: 65px 0 30px;
   font-size: 24px;
@@ -77,16 +84,20 @@ export default {
   line-height: 24px
 }
 
+
 *{
+
   padding: 0;
   margin: 0;
   border: none;
 }
+
 body{
   font-size: 14px;
   font-family: 'Roboto', sans-serif;
 }
 .login-wrapper{
+
   width: 400px;
   height: 350px;
   padding: 40px;
@@ -94,11 +105,14 @@ body{
 }
 
 .login-wrapper > h2{
+
   font-size: 24px;
   color: #6A24FE;
   margin-bottom: 20px;
 }
+
 #login-form > input{
+
   width: 100%;
   height: 48px;
   padding: 0 10px;
@@ -107,15 +121,18 @@ body{
   border-radius: 6px;
   background-color: #F8F8F8;
 }
+
 #login-form > input::placeholder{
   color: #D2D2D2;
 }
 #login-form > input[type="button"]{
+
   color: #fff;
   font-size: 16px;
   background-color: #6A24FE;
   margin-top: 20px;
 }
+
 #login-form > input[type="checkbox"]{
   display: none;
 }
@@ -123,13 +140,18 @@ body{
   color: #999999;
 }
 #login-form input[type="submit"] + label{
+
+
   cursor: pointer;
   padding-left: 26px;
   /* background-image: url("checkbox.png"); */
   background-repeat: no-repeat;
   background-size: contain;
 }
+
 #login-form input[type="checkbox"]:checked + label{
+
+
   /* background-image: url("checkbox-active.png"); */
   background-repeat: no-repeat;
   background-size: contain;

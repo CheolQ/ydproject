@@ -1,6 +1,6 @@
 <template>
     <div id="mypage">
-        <div class="page-body">
+        <div class="page-body" v-if="orderList.length > 0 && codes.OrderStatus">
             <h5 id="mypage-sub">주문내역</h5>
             <table class="table">
                 <thead>
@@ -20,7 +20,7 @@
                         <td>{{ v.order_date }}</td>
                         <td v-if="v.cnt > 0">{{ v.prod_name }} 외 {{ v.cnt - 1 }}</td>
                         <td v-else>{{ v.prod_name }}</td>
-                        <td>{{ v.pay_price }}원</td>
+                        <td>{{ numberFormat(v.pay_price) }}원</td>
                         <td>{{ getCodeMeaning(v.order_status) }}</td>
                         <td>
                             <button class="btn btn-primary btn-sm" @click="orderInfoHandler(v.order_no)">주문상세</button>
@@ -31,20 +31,31 @@
                         </td>
                     </tr>
                 </tbody>
-
             </table>
+            <paging-component v-bind="page" @go-page="goPage" />
         </div>
+        <form action="/api/mypage/orderinfo/" method="post">
+            <input type="hidden" name="userid" id="userid">
+        </form>
     </div>
 </template>
 
 <script>
 import axios from 'axios';
+import PagingComponent from '@/components/Paging.vue'
+import Paging from "../../mixin";
 export default {
+    mixins: [Paging],
+    components: {
+        PagingComponent
+    },
     data() {
         return {
-            userid: 'user1',
+            userid: 'user15',
             orderList: [],
-            codes: {}
+            codes: {},
+            page: {},
+            pageUnit: 10,
         }
     },
     created() {
@@ -56,16 +67,25 @@ export default {
             .catch(error => {
                 console.error('API 호출 중 오류:', error);
             });
-        axios.get(`/api/mypage/orderinfo/` + this.userid)
-            .then((result) => {
-                console.log(result.data);
-                this.orderList = result.data;
-                for (let v of this.orderList) {
-                    v.pay_price = this.numberFormat(v.pay_price)
-                }
-            })
+        this.goPage(1);
+        // axios.get(`/api/mypage/orderinfo/` + this.userid)
+        //     .then((result) => {
+        //         console.log(result.data);
+        //         this.orderList = result.data;
+        //     })
     },
     methods: {
+        goPage(page) {
+            axios.get(`/api/mypage/orderinfo/${this.userid}?pageUnit=${this.pageUnit}&page=${page}`)
+                .then(result => {
+                    console.log(result)
+                    this.orderList = result.data.result;
+                    this.page = page;
+                    this.page = this.pageCalc(page, result.data.count[0].cnt, 5, this.pageUnit);
+                })
+                .catch(err => console.log(err));
+
+        },
         numberFormat: function (number) {
             if (number == 0)
                 return 0;
@@ -80,8 +100,12 @@ export default {
             this.$router.push({ name: 'orderdetailinfo', query: { no: no } })
         },
         getCodeMeaning(code) {
-            console.log(code);
-            return this.codes.OrderStatus[code] || code; // 코드에 맞는 의미 있는 문자열 반환
+            if (this.codes) {
+                console.log("OrderStatus 객체:", this.codes.OrderStatus);
+                return this.codes.OrderStatus[code] || code; // 코드에 맞는 의미 있는 문자열 반환
+            }
+            console.error(`Code meaning not found for code: ${code}`);
+            return code; // 또는 적절한 기본값을 반환
         },
         applyOrderCancel: function (no) {
             axios.patch(`/api/mypage/ordercancel/` + Number(no))
@@ -92,6 +116,7 @@ export default {
                             console.log(result.data)
                         })
                 })
+                .catch(err => console.log(err))
         }
 
     },
@@ -101,7 +126,7 @@ export default {
 }
 </script>
 <style>
-mypage-sub {
+#mypage-sub {
     width: 100%;
     text-align: left;
     margin-left: 15px;
@@ -148,7 +173,7 @@ table {
 /* 기본 스타일 설정 */
 
 /* 페이지 제목 스타일 */
-#mypage-sub {
+/* #mypage-sub {
     width: 100%;
     text-align: left;
     margin-left: 15px;
@@ -157,7 +182,7 @@ table {
     color: #555;
     padding: 20px 0;
     border-bottom: 2px solid #ddd;
-}
+} */
 
 /* 페이지 컨테이너 스타일 */
 #mypage {

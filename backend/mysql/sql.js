@@ -13,7 +13,7 @@ const userSql = require('./loginSql');
 
 //관리자
 
-
+const adminQna = require('./admin/qnaSql')
 const adminOrder = require('./admin/orderSql')
 const adminMember = require('./admin/memberSql')
 const adminProd = require('./admin/prodSql')
@@ -32,8 +32,11 @@ module.exports = {
     ...userSql,
 
     //관리자
+    ...adminQna,
     ...adminOrder,
     ...adminMember,
+    ...adminProd,
+
 
     ...prodSql,
     ...noticeSql,

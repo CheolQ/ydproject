@@ -24,7 +24,7 @@
                             <td>{{user.name}}</td>
                             <td>{{user.resp}}</td>
                             <td>{{user.point}}</td>
-                            <td>{{user.hiredate}}</td>
+                            <td>{{getDateFormat(user.hiredate)}}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -61,7 +61,10 @@ export default {
                 this.page = this.pageCalc(page, result.data.count[0].cnt, 5, this.pageUnit);
             })
             .catch(err => console.log(err))
-        }
+        },
+        getDateFormat (date ){
+ 	        return this .$dateFormat (date );
+ 	    }
     }
 }
 </script>

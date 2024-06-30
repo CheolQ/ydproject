@@ -5,12 +5,14 @@ const store = createStore({
     state() {
         return {
             user: {},
+            cart: [],
         };
     },
     //     cartCount: (state) => {
     //       return state.cart.length;
     //     },
     //   },
+
     mutations: {
         user(state, data) {
             state.user = data;
@@ -21,5 +23,5 @@ const store = createStore({
 });
 
 
-
 export default store;
+

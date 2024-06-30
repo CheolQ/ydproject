@@ -75,7 +75,7 @@
                         						<h4>{{prod.prod_name }}</h4>
 												<div class="d-flex justify-content-between flex-lg-wrap">
                   									<p class="text-dark fs-5 fw-bold mb-0">{{numberFormat(prod.prod_price) }}</p>
-                    								<button @click="gotoCart(prod.prod_no)" class="btn border border-secondary rounded-pill px-3 text-primary"><i class="fa fa-shopping-bag me-2 text-primary"></i> Add to cart</button>
+                    								<button @click="gotoCart(prod.prod_no,$event)" class="btn border border-secondary rounded-pill px-3 text-primary"><i class="fa fa-shopping-bag me-2 text-primary"></i> Add to cart</button>
                								 	</div>
                    							 </div>
                   						</div>
@@ -124,8 +124,10 @@ export default {
             }
             return nstr;
         },
-        async gotoCart(no){
-            await axios.post(`/api/cart/${no}`, this.prodList.prod_no)
+        gotoCart(no, e){
+            console.log(no);
+            e.stopPropagation();
+            axios.post(`/api/cart/cartInsert/${no}`, this.prodList.prod_no)
                 Swal.fire({ 
                     position: "center",
                     icon: "success",
@@ -133,7 +135,6 @@ export default {
                     showConfirmButton: false,
                     timer: 1500
                 })
-            
         }
   
     }

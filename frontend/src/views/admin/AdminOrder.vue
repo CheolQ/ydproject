@@ -1,8 +1,6 @@
 <template>
     <div>
-        <div class="card mb-4">
-            <div class="card-body shadow">주문조회</div>
-        </div>
+        <ContentHeader title="주문상세"></ContentHeader>
         <div class="card mb-4">
             <div class="card-body shadow">
                 <table class="table">
@@ -20,11 +18,11 @@
                     <tbody>
                         <tr v-for="od in orderList" v-bind:key="od">
                             <th scope="row">{{ od.order_no }}</th>
-                            <td>{{ od.order_date }}</td>
+                            <td>{{ getDateFormat(od.order_date) }}</td>
                             <td>{{ od.user_no }}</td>
                             <td v-if="od.cnt > 1">{{ od.prod_name }} 외 {{ od.cnt -1}} 건</td>
                             <td v-else>{{ od.prod_name}}</td>
-                            <td>{{ od.pay_price }}</td>
+                            <td>{{ getNumberFormat(od.pay_price) }}</td>
                             <td v-if="od.order_status === 'P'">결제완료</td>
                             <td><button type="button" class="btn btn-primary" @click="orderInfo(od.order_no)">조회</button></td>
                         </tr>
@@ -39,10 +37,11 @@
 import Paging from "../../mixin";
 import axios from 'axios';
 import PagingComponent from '@/components/Paging.vue'
+import ContentHeader from '@/components/admin/ContentHeader.vue'
 export default {
     mixins : [Paging],
     components: {
-        PagingComponent
+        PagingComponent, ContentHeader
     },
     data() {
         return {
@@ -70,6 +69,12 @@ export default {
         orderInfo(orderNo){
             console.log(orderNo);
             this.$router.push({path: 'ordersInfo', query: {bno: orderNo}})
+        },
+        getDateFormat (date ){
+ 	        return this .$dateFormat (date );
+ 	    },
+        getNumberFormat (number ){
+            return this .$numberFormat (number );
         }
     }
 }

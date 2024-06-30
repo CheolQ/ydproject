@@ -107,14 +107,14 @@
         created() {
             // const queryCart = this.$route.query.Cart;
             const queryCart = JSON.stringify(this.$store.state.cart);
-        console.log(queryCart)
-        console.log(this.$store.state.cart);
-        console.log(queryCart);
-        if (queryCart) {
-            this.selectedCart = JSON.parse(queryCart);
-            console.log(this.selectedCart, '확인!')
-        }
-    },
+            console.log(queryCart)
+            console.log(this.$store.state.cart);
+            console.log(queryCart);
+            if (queryCart) {
+                this.selectedCart = JSON.parse(queryCart);
+                console.log(this.selectedCart, '확인!')
+            }
+        },
         mounted(){
             this.discount();
         },
