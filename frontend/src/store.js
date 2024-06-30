@@ -13,28 +13,13 @@ const store = createStore({
     //       return state.cart.length;
     //     },
     //   },
-    // mutations: {
+    // mutations: { //로그인부분 주석풀어야됨
     //     user(state, data) {
     //         state.user = data;
     //     },
     // },
     // plugins: [persistedstate({ paths: ['user'] })],
 
-    //         // user: {},
-    //         cart: []
-    //     };
-    // }
-    // //   getters: {
-    //     cartCount: (state) => {
-    //       return state.cart.length;
-    //     },
-    //   },
-    // mutations: {
-    //     user(state, data) {
-    //         state.user = data;
-    //     },
-    // },
-    // plugins: [persistedstate({ paths: ['user'] })],
 });
 
 export default store;
