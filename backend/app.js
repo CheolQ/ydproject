@@ -61,6 +61,24 @@ app.use(express.static(path.join(__dirname, 'public')));
 const cookieParser = require('cookie-parser');
 app.use(cookieParser());
 
+
+app.get("/api/account", (req, res) => {
+  //if (req.cookies && req.cookies.account) {
+  if (req.session.is_logined) {
+    const member = JSON.parse({userid : req.session.userId});
+    return res.send(member);
+  }
+  res.send(401);
+});
+
+app.post('/api/logout', (req, res) => {
+  //res.clearCookie("account");
+  req.session.destroy();
+  res.send(200);
+});
+
+
+
 app.use('/', indexRouter);
 
 //공통
