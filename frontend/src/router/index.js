@@ -9,6 +9,7 @@ import Cart from '@/views/CartView.vue';
 
 //주문
 import Order from '@/views/OrderForm.vue';
+import OrderSuccess from '@/views/OrderSuccess.vue';
 
 //QnA
 import QnaForm from '@/views/QnaFormView.vue';
@@ -134,6 +135,14 @@ const routes = [
                 component: Order,
             },
             {
+
+                path: 'orderSuccess',
+                name: 'orderSuccess',
+                component: OrderSuccess,
+            },
+            {
+                //로그인
+
                 path: 'login',
                 component: login,
             },

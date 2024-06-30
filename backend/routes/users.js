@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 const query = require('../mysql/index');
 
+
 //로그인
 router.post('/login', async (req, res) => {
     const userid = req.body.user_id;
@@ -25,6 +26,7 @@ router.post('/login', async (req, res) => {
     } else {
         res.send(401);
     }
+
 });
 
 //로그아웃
