@@ -197,7 +197,15 @@
                         };
                         console.log(orderData, '체크')
                         axios.post("/api/order", orderData)
-                        .then(result => console.log(result))
+                        .then(result => {
+                            console.log(result);
+                            if(result.data.dtCount.length > 0){
+                                this.$router.push({
+                                    name : 'orderSuccess',
+                                    query : {dtCount : JSON.stringify(result.data.dtCount) }
+                                }); 
+                            }
+                        })
                         .catch(err => console.log(err))
                     } else {
                         // 결제 실패 시 로직

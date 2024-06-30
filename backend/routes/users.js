@@ -18,9 +18,6 @@ router.post("/login", async(req,res)=>{
 			throw err;
 		}
 		res.send(user)
-		console.log('---------------------------------------------------');
-		console.log(req.session);
-		console.log('---------------------------------------------------');
 	  });
 	}
 	else{
