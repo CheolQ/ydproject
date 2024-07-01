@@ -8,7 +8,10 @@ router.post('/login', async (req, res) => {
     const userid = req.body.user_id;
     const userpw = req.body.user_pw;
     let result = await query('userlogin', [userid, userpw]);
-    user = result.find((m) => m.user_id === userid && m.user_pw === userpw);
+    console.log(result);
+    user = result.find((m) => {
+        return m.user_id == userid && m.user_pw == userpw
+      });
     if (user) {
         req.session.user_id = userid; // 세션에 사용자 이메일 정보 저장
         req.session.is_logined = true; // 세션에 로그인 여부 저장
