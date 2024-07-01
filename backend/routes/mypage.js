@@ -76,4 +76,27 @@ router.get('/qnainfo/:no', async (req, res) => {
     res.send(result);
 });
 
+// qna 수정
+router.patch('/updateqna/:no', async (req, res) => {
+    console.log('수정확인')
+    console.log(req.body);
+    let result = await query('mypageUpdateQnA', [req.body, req.params.no]);
+    res.send(result);
+});
+
+// qna 삭제
+router.delete('/deleteqna/:no', async (req, res) => {
+    console.log('삭제확인')
+    let result = await query('mypageDeleteQnA', [req.params.no]);
+    res.send(result);
+});
+
+// // 마이페이지 후기리스트
+router.get('/reviewList', async (req, res) => {
+    let result = await query('mypageReviewList', [req.session.user_no, offset, pageUnit]);
+    console.log(result);
+    res.send(result);
+});
+
+
 module.exports = router;

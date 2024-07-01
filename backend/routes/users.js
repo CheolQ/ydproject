@@ -2,7 +2,6 @@ var express = require('express');
 var router = express.Router();
 const query = require('../mysql/index');
 
-
 //로그인
 router.post('/login', async (req, res) => {
     const userid = req.body.user_id;
@@ -32,22 +31,46 @@ router.post('/login', async (req, res) => {
 
 });
 
-//로그아웃
+// 로그아웃
 router.post('/logout', (req, res) => {
     req.session.destroy();
     res.send(200);
 });
 
 // 회원가입
-router.post('/', async (req, res) => {
-    console.log(req.body, res);
-    let result = await query('userjoin', req.body);
-    console.log('ㅁㄴㅇㄻㄴㄻㄴㅇㄹㄴㅇㅁ', result);
-    res.send(result);
+router.post('/join', async (req, res) => {
+    const { user_id, user_pw, name, email, tel, postcode, addr, detail_addr } = req.body;
+    let result;
+    try {
+        result = await query('userjoin', [user_id, user_pw, name, email, tel, postcode, addr, detail_addr]);
+        res.send(result);
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('회원가입에 실패했습니다.');
+    }
 });
 
-// 회원수정
-// router.put("/:id)",	async (req ,res )=> {
+// 아이디찾기
+router.post('/userfindid', (req, res) => {
+    const { name, tel } = req.body;
+    query('userfindid', [name, tel])
+        .then(result => {
+            if (result.length > 0) {
+                const userId = result[0].user_id;
+                res.send({ user_id: userId });
+            } else {
+                res.status(404).send('해당하는 유저를 찾을 수 없습니다.');
+            }
+        })
+        .catch(err => {
+            console.error(err);
+            res.status(500).send('아이디 찾기에 실패했습니다.');
+        });
+    });
+
+
+//회원수정
+// router.put("/)",	async (req ,res )=> {
 //  	let result =await query("userUpdate",[req.body,	req.params.id]);
 //  	res.send(result);
 // });

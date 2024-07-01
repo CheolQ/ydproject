@@ -7,12 +7,21 @@ router.get('/', async (req, res) => {
     res.send(result);
 });
 
-//상품단건조회
+//상품단건조회 - /shop/A11
 router.get('/:no', async (req, res) => {
     let result = await query('prodInfo', req.params.no);
     console.log(result);
     res.send(result);
 });
+
+//카테고리별 상품 조회 - /shop/A11
+router.get('/code/:code', async (req, res) => {
+    console.log('카테dd');
+    let result = await query('prodCategory', req.params.code);
+    console.log('카테',result);
+    res.send(result);
+});
+
 //리뷰조회
 router.get('/review/:no', async (req, res) => {
     let result = await query('reviewList', req.params.no);
@@ -33,11 +42,6 @@ router.post('/qna/:no', async (req, res) => {
     let result = await query('qnaInfo', [prodno, boardno]);
     console.log(result);
     res.send(result);
-});
-//카테고리 이름 조회
-router.get("/",	async(req ,	res )	=> {
-	let result =	await query("categoryName");
-	res.send(result);
 });
 
 
