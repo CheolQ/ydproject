@@ -50,7 +50,9 @@ import NoticeInfoView from '@/views/notice/NoticeInfoView.vue';
 // 로그인, 회원가입
 import login from '../views/user/loginForm.vue';
 import join from '../views/user/joinForm.vue';
-import findidpw from '../views/user/findidpw.vue';
+import UserFind from '../views/user/UserFind.vue';
+// import UserModify from '../views/user/UserModify.vue';
+// import UserDrop from '../views/user/userdrop.vue';
 
 const routes = [
     {
@@ -151,9 +153,17 @@ const routes = [
                 component: join,
             },
             {
-                path: 'findidpw',
-                component: findidpw,
+                path: 'UserFind',
+                component: UserFind,
             },
+            // {
+            //     path: 'UserModify',
+            //     component: UserModify,
+            // },
+            // {
+            //     path: 'UserDrop',
+            //     component: UserDrop,
+            // },
         ],
     },
     {
