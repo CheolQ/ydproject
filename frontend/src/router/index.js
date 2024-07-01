@@ -30,6 +30,7 @@ import AdminNoticeForm from '../views/admin/AdminNoticeForm.vue'
 import AdminNoticeInfo from '../views/admin/AdminNoticeInfo';
 import AdminNoticeModify from '../views/admin/AdminNoticeModify.vue';
 import Qna from '../views/admin/AdminQna.vue';
+import AdminQnaInfo from '../views/admin/AdminQnaInfo.vue'
 import ProdList from '../views/admin/AdminProdList.vue';
 import AdminProdInfo from '../views/admin/AdminProdInfo.vue';
 import ProdForm from '../views/admin/AdminProdForm.vue';
@@ -185,6 +186,10 @@ const routes = [
             {
                 path: 'qna',
                 component: Qna,
+            },
+            {
+                path: 'qnaInfo',
+                component: AdminQnaInfo,
             },
             {
                 path: 'prodList',
