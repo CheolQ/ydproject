@@ -67,7 +67,7 @@ export	default {
         return {
                 searchNo:"",
                 prodInfo: {},
-                number: 1
+                number: 1,
         };
  	},
  	created(){
@@ -109,7 +109,7 @@ export	default {
             return nstr;
             },
         gotoWish(no){
-            axios.post(`/api/cart/insert/${no}`,this.prodInfo.prod_no)
+            axios.post(`/api/wish/insert/${no}`, this.prodInfo.prod_no)
             //.then(()=> alert('관심상품에 등록되었습니다.'))
             .then(
                 Swal.fire({
@@ -120,9 +120,18 @@ export	default {
                     timer: 1500
                 })
             )
+            .catch(err => {
+                Swal.fire({
+                    position: "center",
+                    icon: "error",
+                    title: "관심상품 등록에 실패했습니다.",
+                    showConfirmButton: true,
+                    timer: 1000
+                });
+            });
         },
         gotoCart(no){
-            axios.post(`/api/cart/cartInsert/${no}`, this.prodInfo.prod_no)
+            axios.post(`/api/cart/insertCart/${no}`, this.prodInfo.prod_no)
             .then(
                 Swal.fire({
                 title: "장바구니로 이동하겠습니까?",

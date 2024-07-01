@@ -7,7 +7,7 @@ module.exports = {
                             prod.main_img
                 from        likes join prod 
                 on          likes.prod_no = prod.prod_no 
-                where       likes.user_no = 1
+                where       likes.user_no = ?
                 order by    like_no desc limit ?, ?`,
 
     wishListCount : `select count(*) cnt 
@@ -20,8 +20,9 @@ module.exports = {
     wishAllDelete : `delete 
                         from  likes 
                         where user_no = ?`,
+                        
     wishInsert : `insert into likes (prod_no, user_no)
-                    values (?, 1)`,
+                    values (?, ?)`,
            
                 
 }; 

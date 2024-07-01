@@ -7,25 +7,29 @@
                 <div class="row g-5">
                     <div class="col-md-12 col-lg-6 col-xl-7">
                         <div class="form-item">
-                            <label class="form-label my-3">Name<sup>*</sup></label>
+                            <label class="form-label my-3">이름<sup>*</sup></label>
                             <input type="text" class="form-control" id="name" v-model="name">
                         </div>
                         <div class="form-item">
-                            <label class="form-label my-3">Phone<sup>*</sup></label>
+                            <label class="form-label my-3">연락처<sup>*</sup></label>
                             <input type="tel" class="form-control" id="phone" v-model="phone">
                         </div>
                         <div class="form-item">
-                            <label class="form-label my-3">Email<sup>*</sup></label>
+                            <label class="form-label my-3">이메일<sup>*</sup></label>
                             <input type="email" class="form-control" id="email" v-model="email">
                         </div>
                         <div class="form-item">
-                            <label class="form-label my-3">Address<sup>*</sup></label>
-                            <input type="text" class="form-control" v-model="address"
-                                placeholder="House Number Street Name">
+                            <label class="form-label my-3">우편번호<sup>*</sup></label>
+                            <input type="button" @click="execDaumPostcode()" value="우편번호 찾기">
+                            <input type="text" id="pCode" v-model="pCode" class="form-control" placeholder="우편번호" readonly><br>
                         </div>
                         <div class="form-item">
-                            <label class="form-label my-3">Postcode/Zip<sup>*</sup></label>
-                            <input type="text" v-model="pCode" class="form-control">
+                            <label class="form-label my-3">주소<sup>*</sup></label>
+                            <input type="text" id="address" v-model="address" class="form-control" placeholder="주소" readonly><br>
+                        </div>
+                        <div class="form-item">
+                            <label class="form-label my-3">상세주소<sup>*</sup></label>
+                            <input type="text" id="detailAddress" v-model="detailAddr" class="form-control" placeholder="상세주소">
                         </div>
                     </div>
                     <div class="col-md-12 col-lg-6 col-xl-5">
@@ -101,8 +105,12 @@
 import PortOne from '@portone/browser-sdk/v2';
 import axios from 'axios';
 import { mapGetters } from 'vuex';
+//import Address from '@/components/Address.vue';
 
 export default {
+    // components: {
+    //         Address,
+    //     },
     data() {
         return {
             selectedCart: [],
@@ -111,7 +119,8 @@ export default {
             phone: '',
             email: '',
             address: '',
-            pCode: ''
+            pCode: '',
+            detailAddr: '',
         };
     },
     computed: {
@@ -132,9 +141,19 @@ export default {
         this.discount();
     },
     methods: {
+        execDaumPostcode(){
+            new window.daum.Postcode({
+                oncomplete: (data) => {
+                    //console.log(data,'data는 뭐야')
+                    this.address = data.address;
+                    this.pCode = data.zonecode;
+                    this.detailAddr = data.detailAddr;
+                },
+            }).open();
+        },
         payments() {
             const IMP = window.IMP;
-            IMP.init(''); // 'your-imp-key'를 실제 포트원 키로 변경
+            IMP.init('imp81886801'); // 'your-imp-key'를 실제 포트원 키로 변경
 
             // 주문번호 생성
             const today = new Date();
@@ -167,8 +186,8 @@ export default {
                 buyer_name: this.name,
                 buyer_tel: this.phone,
                 buyer_email: this.email,
-                buyer_addr: '서울특별시 강남구 삼성동',
-                buyer_postcode: '123-456'
+                buyer_addr: this.address,
+                buyer_postcode: this.pCode
             };
 
             // 결제 요청
@@ -193,7 +212,7 @@ export default {
                         buyerTel: buyerTel,
                         buyerAdd: buyerAdd,
                         buyerPost: data.buyer_postcode,
-                        detail_addr: '상세주소',
+                        detail_addr: this.detailAddr, //
                         paidAmount: paidAmount,
                         merchantUid: merchantUid,
                         products: prodNo.map((no, index) => ({
@@ -201,7 +220,7 @@ export default {
                             cnt: cnt[index]
                         }))
                     };
-                    console.log(orderData, '체크')
+                    //console.log(orderData, '주소값가져오는지 체크')
                     axios.post("/api/order", orderData)
                         .then(result => {
                             console.log(result);

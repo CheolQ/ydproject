@@ -1,7 +1,7 @@
 <template>
     <div>
         <ContentHeader title="상품 조회"></ContentHeader>
-        <SearchForm title1="검색어" title2="유통기한" title3="카테고리" :Categorys="Categorys" @obj="searchfrom"></SearchForm>
+        <SearchForm title1="검색어" title2="유통기한" title3="카테고리" :Categorys="Categorys" @obj="searchfrom" ref="reset_com"></SearchForm>
         <div class="d-grid gap-2 d-md-flex justify-content-md-center">
             <button @click="prodSearchBtn" class="btn btn-primary">검색</button>        
             <button @click="resetBtn" class="btn btn-secondary">초기화</button>
@@ -85,6 +85,7 @@ export default {
             this.goPage(1);
         },
         resetBtn(){
+            this.$refs.reset_com.test2();
             this.goPage(1);
         },
         searchfrom(name, date1, date2, category){

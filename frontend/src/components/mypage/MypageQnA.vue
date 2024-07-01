@@ -50,8 +50,6 @@ export default {
         //         this.qnaList = result.data;
         //     })
         this.goPage(1);
-        console.log('aaa')
-        console.log(this.$store.state.user.user_id)
     },
     computed: {
         loggedInUserId() {

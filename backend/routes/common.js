@@ -12,8 +12,6 @@ router.get('/codes', (req,res) => {
 router.get('/categories', async (req, res) => {
     try {
         let result = await query('categoryList');
-        console.log('sdfsdf')
-        console.log(result);
         const categoryList = [];
     let catMap = null;
     let catList = null;

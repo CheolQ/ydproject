@@ -37,8 +37,12 @@
                             <div v-for="v in categories" class="nav-item dropdown">
                                 <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">{{ v.parent
                                     }}</a>
-                                <div class="dropdown-menu m-0 bg-secondary rounded-0">
-                                    <a v-for="c in v.child" href="404.html" class="dropdown-item">{{ c }}</a>
+                                  
+                                   <div class="dropdown-menu m-0 bg-secondary rounded-0">
+                                    
+                                    <a v-for="c in v.childCode" @click="gotoProd(c)" class="dropdown-item">{{ getCodeMeaning(c) }}
+                                    
+                                    </a>
                                 </div>
                             </div>
                         </div>
@@ -95,11 +99,13 @@ export default {
     data() {
         return {
             modalCheck: false,
-            categories: []
+            categories: [],
+            codes: {}
         }
     },
     created() {
         this.fetchCategories();
+        this.getCodes(); 
     },
     methods: {
         fetchCategories() {
@@ -115,12 +121,33 @@ export default {
                     console.error('Error fetching categories:', error);
                 });
         },
+        getCodes(){
+            axios.get(`/api/common/codes`)
+            .then(result => {
+                this.codes = result.data;
+                console.log(result.data);
+            })
+            .catch(err => {
+                console.log('호출중 오류', err);
+            })
+        },
         modalOpen() {
             this.modalCheck = !this.modalCheck
         },
         searchHandler() {
             this.$router.push('shop');
             this.modalOpen();
+        },
+        gotoProd(code){
+            this.$router.push({   name:"prodcategory",   query: { code:code }   });
+        },
+        getCodeMeaning: function(code){
+            if (this.codes) {
+                console.log('dddd: ' , this.codes.Category.Minor);
+                return this.codes.Category.Minor[code] || code; // 코드에 맞는 의미있는 문자열 반환
+            }
+            console.error(`해당 코드없음 : ${code}`)
+            return code;
         }
     }
 }

@@ -8,8 +8,6 @@
   },
   "dependencies": {
     "@portone/browser-sdk": "^0.0.7",
-    "vuetify": "^3.6.9",
-    "vuex": "^4.0.2",
     "autoprefixer": "10.4.5",
     "axios": "^1.7.2",
     "chart.js": "^3.0.0",
@@ -19,6 +17,8 @@
     "vue": "^3.2.13",
     "vue-router": "^4.0.3",
     "vue-sweetalert2": "^5.0.11",
+    "vuetify": "^3.6.9",
+    "vuex": "^4.0.2",
     "vuex-persistedstate": "^4.1.0"
   },
   "devDependencies": {

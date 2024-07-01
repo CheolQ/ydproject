@@ -19,7 +19,7 @@
         </div>
         <div class="d-grid gap-2 d-md-flex justify-content-md-end">
             <button @click="prodModify" class="btn btn-primary btn-lg">수정</button>        
-            <button class="btn btn-secondary btn-lg">취소</button>
+            <button class="btn btn-secondary btn-lg" @click="$router.go(-1)">취소</button>
         </div>
     </div>        
 </template>

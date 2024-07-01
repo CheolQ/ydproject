@@ -129,4 +129,29 @@ module.exports = {
                     left join reply r
                     on q.board_no = r.board_no
                     where q.board_no = ?`,
+                    
+    mypageUpdateQnA: `update qna set ? where board_no = ?`,
+    mypageDeleteQnA: `delete from qna where board_no = ?`,
+
+    mypageReviewList: `SELECT 
+                            p.main_img,
+                            p.prod_name,
+                            p.prod_price,
+                            o.order_date,
+                            count(r.review_no) AS review_cnt
+                        FROM 
+                            prod p
+                        JOIN 
+                            order_detail od ON p.prod_no = od.prod_no
+                        JOIN 
+                            orders o ON od.order_no = o.order_no
+                        LEFT JOIN 
+                            review r ON p.prod_no = r.prod_no AND od.order_detail_no = r.order_detail_no
+                        WHERE 
+                            o.user_no = ?
+                        GROUP BY 
+                            p.main_img, p.prod_name, p.prod_price, o.order_date
+                        ORDER BY 
+                            o.order_date DESC
+                            limit ? , ?`
 };

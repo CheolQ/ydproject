@@ -47,6 +47,13 @@ export default {
     methods : {
         test(){
             this.$emit('obj', this.name, this.date1, this.date2, this.category);
+        },
+        test2(){
+            this.name = "";
+            this.date1 = '';
+            this.date2 = '';
+            this.category = "";
+            this.$emit('obj', this.name, this.date1, this.date2, this.category);
         }
     },
 }

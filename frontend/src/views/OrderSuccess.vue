@@ -1,6 +1,7 @@
 <template>
-    <div>주문성공페이지</div>
-    <p></p>
+    <h2 class="aside-tit">ORDER COMPLETE!</h2>
+    <p>주문이 완료되었습니다. 주문 내역은 My Page에서 확인 가능합니다.</p>
+    <router-link to="/user/mypage/orderhistory/">My Page로 이동</router-link>
 </template>
 <script>
     import axios from 'axios';
@@ -10,8 +11,8 @@
             return{};
         },
         created(){
-            let dtCount = JSON.parse(this.$route.query.dtCount);
-            getProd(dtCount);
+            //let dtCount = JSON.parse(this.$route.query.dtCount);
+            //getProd(dtCount);
         },
         methods : {
             //상품이름가져오려고 상품넘버 이용

@@ -21,11 +21,11 @@
                     <tbody>
                         <tr v-for="od in orderList" v-bind:key="od">
                             <th scope="row">{{ od.order_no }}</th>
-                            <td>{{ od.order_date }}</td>
+                            <td>{{ getDateFormat(od.order_date) }}</td>
                             <td>{{ od.user_no }}</td>
                             <td v-if="od.cnt > 1">{{ od.prod_name }} 외 {{ od.cnt -1}} 건</td>
                             <td v-else>{{ od.prod_name}}</td>
-                            <td>{{ od.pay_price }}</td>
+                            <td>{{ getNumberFormat(od.pay_price) }}</td>
                             <td v-if="od.order_status === 'D2'">주문취소 요청</td>
                         </tr>
                     </tbody>
@@ -66,6 +66,12 @@ export default {
                 this.page = this.pageCalc(page, result.data.count[0].cnt, 5, this.pageUnit);
             })
             .catch(err => console.log(err))
+        },
+        getDateFormat (date ){
+ 	        return this .$dateFormat (date );
+ 	    },
+        getNumberFormat (number ){
+            return this .$numberFormat (number );
         },
     }
 }

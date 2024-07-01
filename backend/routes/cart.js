@@ -5,44 +5,46 @@ const query = require('../mysql/index');
 //장바구니 리스트
 router.get('/', (req, res) => {
     //console.log('확인')
-    query('cartList', req.session.user_no).then((result) => res.send(result));
+    query('cartList', req.session.user_no)
+    .then((result) => res.send(result));
 });
 //장바구니 삭제
 router.delete('/:no', (req, res) => {
     query('cartDelete', req.params.no)
-        //console.log(req.params, '확인')
-        .then((result) => res.send(result));
+    //console.log(req.params, '확인')
+    .then((result) => res.send(result));
 });
 //전체 장바구니 삭제
 router.delete('/', (req, res) => {
-    query('cartAllDelete', 1) //유저 no로 받아오는 값을 넣어줘야해
-        .then((result) => res.send(result));
+    query('cartAllDelete', req.session.user_no)
+    .then((result) => res.send(result));
 });
 //장바구니 수량 변경
 router.put('/updateCnt/', (req, res) => {
     let newPrice = req.query.price * req.query.cnt;
     query('cartCntUpdate', [req.query.cnt, newPrice, req.query.no])
-        .then((result) => res.send(result))
-        .catch((err) => console.log(err));
+    .then((result) => res.send(result))
+    .catch((err) => console.log(err));
 });
-//장바구니 등록
-router.post('/cartInsert/:no', (req, res) => {
+//장바구니 등록(메인/상세에서 add to cart)
+router.post('/insertCart/:no', (req, res) => {
     //console.log(req.params, '등록되었나')
     // query("cartInsert", req.params.no)
     // .then(result => res.send(result))
     // .catch(err => console.log(err))
     // console.log(req.params.no);
-    query('cartSearch', req.params.no).then((result) => {
+    query('cartSearch', [req.params.no, req.session.user_no])
+    .then((result) => {
         if (result.length != 0) {
-            query('cartUpdate', req.params.no);
+            query('cartUpdate', [req.session.user_no, req.params.no]);
         } else {
-            query('cartInsert', req.params.no);
+            query('cartInsert', [req.params.no, req.session.user_no]);
         }
     });
 });
 
-//관심상품에서 장바구니로 insert
-router.post('/updateCart', async (req, res) => {
+//관심상품에서 장바구니로 insert(담기)
+router.post('/', async (req, res) => {
     let result = req.body;
     let userNo = req.session.user_no;
     let cartList = await query('cartList', userNo);
