@@ -76,4 +76,12 @@ router.get('/qnainfo/:no', async (req, res) => {
     res.send(result);
 });
 
+// qna 수정
+router.patch('/updateqna/:no', async (req, res) => {
+    console.log('수정확인')
+    console.log(req.body);
+    let result = await query('mypageUpdateQnA', [req.body, req.params.no]);
+    res.send(result);
+});
+
 module.exports = router;
