@@ -84,4 +84,12 @@ router.patch('/updateqna/:no', async (req, res) => {
     res.send(result);
 });
 
+// qna 삭제
+router.delete('/deleteqna/:no', async (req, res) => {
+    console.log('삭제확인')
+    let result = await query('mypageDeleteQnA', [req.params.no]);
+    res.send(result);
+});
+
+
 module.exports = router;

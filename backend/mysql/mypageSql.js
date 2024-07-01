@@ -130,5 +130,6 @@ module.exports = {
                     on q.board_no = r.board_no
                     where q.board_no = ?`,
                     
-    mypageUpdateQnA: `update qna set ? where board_no = ?`
+    mypageUpdateQnA: `update qna set ? where board_no = ?`,
+    mypageDeleteQnA: `delete from qna where board_no = ?`
 };
