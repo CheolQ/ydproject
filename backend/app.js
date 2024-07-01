@@ -37,6 +37,7 @@ const wishRouter = require('./routes/wish.js');
 
 //관리자
 
+
 const adminMemberRouter = require('./routes/admin/adminMember.js')
 const adminNoticeRouter = require('./routes/admin/adminNotice.js')
 const adminOrderRouter = require('./routes/admin/adminOrder.js')
@@ -119,6 +120,7 @@ app.use("/adminQna", adminQnaRouter)
 app.use("/adminMember", adminMemberRouter)
 app.use("/adminOrder", adminOrderRouter)
 app.use("/adminProd", adminProdRouter)
+
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

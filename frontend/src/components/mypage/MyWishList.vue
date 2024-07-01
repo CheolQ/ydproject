@@ -1,7 +1,6 @@
 <template>
-    <div>
-        <h2 class="aside-tit">WISH LIST</h2>
-    </div>
+    <div id="mypage">
+        <h5 id="mypage-sub">관심상품</h5>
         <!-- Wish Page Start -->
         <div class="container-fluid py-5">
             <div class="container py-5">
@@ -59,6 +58,7 @@
         </div>
         <!-- Wish Page End -->
         <Paging v-bind="page" @go-page="goPage" />
+    </div>
 </template>
 <script>
     import PageMixins from '@/mixin';
@@ -108,7 +108,7 @@
             //     })
             //     .catch(err => console.log(err))
             // },
-            gotoCart(no){
+            async gotoCart(no){
                 let selectedWish = [];
                 this.wish.forEach(a => {
                     if(a.selected){
@@ -118,13 +118,12 @@
                         })
                     }
                 });
-                axios.post(`/api/cart/updateCart`, selectedWish)
-                .then(result => result.data.count);
-                //.then(this.$router.push('/cart'));
-                // this.$router.push({
-                //     path : 'cart',
-                //     query: { MyWishList: JSON.stringify(selectedWish) }
-                // })
+                await axios.post(`/api/cart`, selectedWish)
+                .then(result => result.data.count); //result.data.count는 몇개가 장바구니 insert되었는지
+                //this.$router.push('../../cart');
+                this.$router.push({
+                    path : '../../cart'
+                })
             },
             formatPrice(price){
                     return price.numberFormat();
@@ -146,12 +145,12 @@
     }
 </script>
 <style>
-.aside-tit {
+/* .aside-tit {
     padding: 65px 0 30px;
     font-size: 24px;
     color: #000;
     font-weight: bold;
     text-align: center;
     line-height: 24px
-}
+} */
 </style>

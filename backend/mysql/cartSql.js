@@ -14,16 +14,17 @@ module.exports = {
                         set cnt = ?, price = ?
                         where cart_no = ?`,
     cartInsert : `insert into cart 
-                        set prod_no = ?,
-                            cnt = 1,
-                            user_no = 1`,
+                        set cnt = 1,
+                            prod_no = ?,
+                            user_no = ?`,
     cartSearch : `select *
                     from cart
                     where prod_no = ? 
-                    and user_no = 1`,
+                    and user_no = ?`,
     cartUpdate : `update cart set 
-	                            cnt = cnt + 1
-                    where user_no = 1 and prod_no = ?`,
+	                cnt = cnt + 1
+                    where user_no = ? 
+                    and prod_no = ?`,
     wishToCartInsert : `insert into cart 
                             set prod_no = ?,
                                 price = ?,

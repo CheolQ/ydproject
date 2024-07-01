@@ -193,8 +193,9 @@ export default {
             this.orderDetailList.forEach(a => {
                 selectedCart.push(a);
             });
-            this.$store.state.cart = selectedCart;
-            console.log(this.$store.state.cart)
+            this.$store.commit('setCart', selectedCart);
+            // this.$store.state.cart = selectedCart;
+            // console.log(this.$store.state.cart)
             this.$router.push({
                 name: 'orderForm',
             });

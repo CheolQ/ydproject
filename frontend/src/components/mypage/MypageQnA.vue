@@ -1,13 +1,14 @@
 <template>
     <div id="mypage">
         <h5 id="mypage-sub">문의내역</h5>
-        <div class="user-message">{{ userid }}님께서 작성하신 게시글 내역입니다.</div>
+        <div class="user-message">{{ loggedInUserId }}님께서 작성하신 게시글 내역입니다.</div>
         <table class="table">
             <thead>
                 <tr>
                     <th>번호</th>
                     <th>제목</th>
                     <th>작성일</th>
+                    <th>답변상태</th>
                 </tr>
             </thead>
             <tbody>
@@ -15,6 +16,8 @@
                     <td>{{ v.board_no }}</td>
                     <td>{{ v.title }}</td>
                     <td>{{ v.create_date }}</td>
+                    <td v-if="v.reply_no != null">답변 완료</td>
+                    <td v-else>답변 대기중</td>
                 </tr>
             </tbody>
         </table>
@@ -33,7 +36,7 @@ export default {
     },
     data() {
         return {
-            userid: 'john_doe',
+            // userid: this.$store.state.user[0].user_id,
             qnaList: [],
             page: {},
             pageUnit: 10,
@@ -48,9 +51,14 @@ export default {
         //     })
         this.goPage(1);
     },
+    computed: {
+        loggedInUserId() {
+            return this.$store.getters.loggedInUserId;
+        }
+    },
     methods: {
         goPage(page) {
-            axios.get(`/api/mypage/qnalist/${this.userid}?pageUnit=${this.pageUnit}&page=${page}`)
+            axios.get(`/api/mypage/qnalist?pageUnit=${this.pageUnit}&page=${page}`)
                 .then(result => {
                     console.log(result)
                     this.qnaList = result.data.result;

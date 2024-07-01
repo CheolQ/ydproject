@@ -6,17 +6,22 @@
                 <img :src="qna.main_img" alt="Product Image" class="product-img">
                 <div class="product-details">
                     <p>상품명: {{ qna.prod_name }}</p>
-                    <p>상품가격: {{ qna.prod_price }}원</p>
+                    <p>상품가격: {{ numberFormat(qna.prod_price) }}원</p>
                 </div>
             </div>
             <div class="question-details">
-                <h4>궁금해요</h4>
+                <h4>{{ qna.title }}</h4>
                 <p>Date: {{ new Date(qna.create_date).toLocaleDateString() }}</p>
                 <p>{{ qna.content }}</p>
             </div>
+            <div v-if="qna.reply_create_date != null" class="question-details">
+                <h4>답변</h4>
+                <p>Date: {{ new Date(qna.reply_create_date).toLocaleDateString() }}</p>
+                <p>{{ qna.reply_content }}</p>
+            </div>
             <div class="buttons">
-                <button @click="editQna">수정</button>
-                <button @click="deleteQna">삭제</button>
+                <button v-if="qna.reply_create_date == null" @click="editQna">수정</button>
+                <button v-if="qna.reply_create_date == null" @click="deleteQna">삭제</button>
                 <button @click="goBack">돌아가기</button>
             </div>
         </div>
@@ -25,6 +30,8 @@
 
 <script>
 import axios from 'axios';
+import Swal from "sweetalert2";
+
 export default {
     data() {
         return {
@@ -36,12 +43,56 @@ export default {
         this.no = this.$route.query.no;
         axios.get(`/api/mypage/qnainfo/${this.no}`)
             .then(result => {
-                console.log(result);
-                this.qna = result.data[0]
+                this.qna = result.data[0];
             })
     },
     methods: {
+        numberFormat(number) {
+            if (number == 0)
+                return 0;
+            let regex = /(^[+-]?\d+)(\d{3})/;
+            let nstr = (number + '');
+            while (regex.test(nstr)) {
+                nstr = nstr.replace(regex, '$1' + ',' + '$2');
+            }
+            return nstr;
+        },
+        editQna() {
+            this.$router.push({
+                name: 'qna',
+                query: { no: this.qna.prod_no, qna: JSON.stringify(this.qna) }
+            });
+        },
+        deleteQna() {
+            // 삭제 로직 구현
+            Swal.fire({
+                title: "Are you sure?",
+                text: "You won't be able to revert this!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes, delete it!"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    axios.delete(`/api/mypage/deleteqna/${this.no}`)
+                        .then(result => {
+                            console.log('삭제완료');
+                            Swal.fire({
+                                title: "Deleted!",
+                                text: "Your file has been deleted.",
+                                icon: "success"
+                            });
+                            this.$router.go(-1);
+                        })
+                        .catch(err => console.log(err));
+                }
+            });
 
+        },
+        goBack() {
+            this.$router.go(-1);
+        }
     }
 }
 </script>

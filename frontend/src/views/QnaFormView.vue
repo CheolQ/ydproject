@@ -1,99 +1,142 @@
 <template>
-            <!-- Checkout Page Start -->
-            <div class="container-fluid py-5">
-            <div class="container py-5">
-                <h1 class="mb-4">QnA</h1>
-                <form action="#">
-                    <div class="row g-5">
-                        <div class="col-md-12 col-lg-6 col-xl-7">
-                            <div class="row">
-                                <img :src="`/img/prodImg/${prodInfo.main_img}`" class="img-fluid rounded" alt="Image">
-                            </div>
-                            <div class="form-item">
-                                <label class="form-label my-3" for="prod_no">상품번호</label>
-                                <input type="text" class="form-control" id="prod_no" v-model=this.searchNo >
-                            </div>
-                            <div class="form-item">
-                                <label class="form-label my-3" for="user_id">Id</label>
-                                <input type="text" class="form-control" id="user_id" v-model="qna.user_id">
-                            </div>
-                            <div class="form-item">
-                                <label class="form-label my-3" for="title">Title</label>
-                                <input type="text" class="form-control" id="title" v-model="qna.title">
-                            </div>
-                            <div class="form-item">
-                                <label class="form-label my-3" for="content">Content</label>
-                                <textarea name="text" class="form-control" id="content" spellcheck="false" cols="30" rows="11"  v-model="qna.content" placeholder="Oreder Notes (Optional)"></textarea>
-                            </div>
-                            <div class="form-item">
-                                <label class="form-label my-3" for="board_pw">PW</label>
-                                <input type="text" class="form-control" id="boarad_pw" v-model="qna.board_pw">
-                            </div>
-        
-                            <hr>
-                            
-                            <div class="col-md-12 col-lg-6 col-xl-5">
+    <div class="container-fluid py-5">
+        <div class="container py-5">
+            <h1 class="mb-4">{{ isEdit ? 'QnA 수정' : 'QnA 등록' }}</h1>
+            <form @submit.prevent="isEdit ? updateQna() : saveQna()">
+                <div class="row g-5">
+                    <div class="col-md-12 col-lg-6 col-xl-7">
+                        <div class="row">
+                            <img :src="`/img/prodImg/${prodInfo.main_img}`" class="img-fluid rounded" alt="Image">
+                        </div>
+                        <div class="form-item" v-if="isEdit">
+                            <label class="form-label my-3" for="board_no">QnA 번호</label>
+                            <input type="text" class="form-control" id="board_no" v-model="qna.board_no" readonly>
+                        </div>
+                        <div class="form-item">
+                            <label class="form-label my-3" for="prod_no">상품번호</label>
+                            <input type="text" class="form-control" id="prod_no" v-model="qna.prod_no" readonly>
+                        </div>
+                        <div class="form-item">
+                            <label class="form-label my-3" for="user_id">Id</label>
+                            <input type="text" class="form-control" id="user_id" v-model="loggedInUserId" readonly>
+                        </div>
+                        <div class="form-item">
+                            <label class="form-label my-3" for="title">Title</label>
+                            <input type="text" class="form-control" id="title" v-model="qna.title">
+                        </div>
+                        <div class="form-item">
+                            <label class="form-label my-3" for="content">Content</label>
+                            <textarea name="text" class="form-control" id="content" spellcheck="false" cols="30"
+                                rows="11" v-model="qna.content"></textarea>
+                        </div>
+                        <div class="form-item">
+                            <label class="form-label my-3" for="board_pw">PW</label>
+                            <input type="text" class="form-control" id="board_pw" v-model="qna.board_pw">
+                        </div>
+
+                        <hr>
+
+                        <div class="col-md-12 col-lg-6 col-xl-5">
                             <div class="row g-3 text-center align-items-center justify-content-center pt-4">
-                                <button type="button" class="btn border-secondary py-3 px-4 text-uppercase w-100 text-primary"
-                                @click="saveQna(searchNo)">
-                                    등록</button>
+                                <button type="submit"
+                                    class="btn border-secondary py-3 px-4 text-uppercase w-100 text-primary">
+                                    {{ isEdit ? '수정' : '등록' }}
+                                </button>
                             </div>
                             <div class="row g-3 text-center align-items-center justify-content-center pt-4">
-                                <button type="button" class="btn border-secondary py-3 px-4 text-uppercase w-100 text-primary">목록</button>
+                                <button type="button"
+                                    class="btn border-secondary py-3 px-4 text-uppercase w-100 text-primary"
+                                    @click="goToList">목록</button>
                             </div>
-                           </div>
                         </div>
                     </div>
-                </form>
-            </div>
+                </div>
+            </form>
         </div>
-        <!-- Checkout Page End -->
+    </div>
 </template>
 
-<script	>
+<script>
 import axios from "axios";
 
-export	default {
-    props:{
-        qnadata:{type:Object}
+export default {
+    props: {
+        qnadata: { type: Object, default: () => ({}) }
     },
- 	data ()	{
- 	 return {
-        searchNo:"",
-        qna: { ...this.qnadata
+    data() {
+        return {
+            qna: {
+                ...this.qnadata
+            },
+            prodInfo: {},
+            isEdit: false
+        };
+    },
+    created() {
+        const queryNo = this.$route.query.no;
+        if (queryNo) {
+            this.qna.prod_no = queryNo;
+            this.searchNo = queryNo;
+            this.getProdInfo();
+        }
+
+        if (this.qna.board_no) {
+            this.isEdit = true;
+        } else {
+            this.qna.prod_no = this.$route.query.no;
+        }
+    },
+    computed: {
+        loggedInUserId() {
+            return this.$store.getters.loggedInUserId;
+        }
+    },
+    methods: {
+        async getProdInfo() {
+            this.prodInfo = (await axios.get(`/api/shop/${this.qna.prod_no}`)).data[0];
         },
-        prodInfo: {},   
- 	 };
- 	},
- 	created()	{
-        this.qna.prod_no = this.$route.query.no
-        this.searchNo = this.qna.prod_no;   
-        this.getProdInfo();     
- 	},
+        async saveQna() {
+            this.qna.user_id = this.loggedInUserId;
+            let userNo = await axios.get(`/api/shop/getuserno/${this.loggedInUserId}`);
+            this.qna.user_no = userNo.data[0].user_no;
+            await axios.post("/api/shop/qna", this.qna);
+            this.$router.push({ name: "shopinfo", query: { no: this.qna.prod_no } });
+        },
+        async updateQna() {
+            let userNo = await axios.get(`/api/shop/getuserno/${this.loggedInUserId}`);
+            console.log(this.qna);
+            let modqna = { ...this.qna };
+            console.log("확인")
+            console.log(modqna)
+            console.log(this.qna.prod_name);
+            delete modqna.prod_name;
+            delete modqna.prod_price;
+            delete modqna.main_img;
+            delete modqna.reply_content;
+            delete modqna.reply_create_date;
+            delete modqna.create_date;
+            modqna.user_no = userNo.data[0].user_no;
+            modqna.update_date = new Date().toISOString().slice(0, 19).replace('T', ' ');;
 
- 	methods: {
-        async getProdInfo()	{
- 	        this.prodInfo = 
-            (await axios.get(`/api/shop/${this.searchNo}`)).data[0];
- 	    },
-        async saveQna(no)	{
-             let test = this.qna
-            console.log(test);
-            await axios.post("/api/shop/qna",test);
-            this.$router.push({	name:"shopinfo", query: { no:no } });
-         	        }
- 	    },
-
+            await axios.patch(`/api/mypage/updateqna/${this.qna.board_no}`, modqna);
+            this.$router.push({ name: "shopinfo", query: { no: this.qna.prod_no } });
+        },
+        goToList() {
+            this.$router.push({ name: "shopinfo", query: { no: this.qna.prod_no } });
+        }
+    }
 };
 </script>
 <style>
-.thw{
+.thw {
     width: 70%;
 }
-.thwidth{
+
+.thwidth {
     width: 10%;
 }
-.dd{
-   text-align: left;
+
+.dd {
+    text-align: left;
 }
 </style>

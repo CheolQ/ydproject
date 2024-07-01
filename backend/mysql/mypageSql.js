@@ -90,18 +90,21 @@ module.exports = {
     applyOrderCancel2: `insert into order_cancel(order_no)
                         values(?)`,
 
-    mypageQnaList: `select board_no,
+    mypageQnaList: `select q.board_no,
                         title, 
                         create_date, 
-                        u.name 
+                        u.name,
+                        r.reply_no
                 from qna q
                 join user u
                 on q.user_no = u.user_no
+                left join reply r
+                on q.board_no = r.board_no
                 where q.user_no = (
                     select user_no
                     from user
                     where user_id = ? limit ? , ?
-                )`,
+                );`,
 
     countUserQna: `select count(*) as cnt 
                     from qna
@@ -111,13 +114,44 @@ module.exports = {
                         where user_id = ?
                     )`,
     userQnAInfo: `select p.prod_name,
+                        q.prod_no,
                         p.prod_price, 
-                        p.main_img, 
+                        p.main_img,
+                        q.board_no,
                         q.title,  
                         q.content, 
-                        q.create_date
+                        q.create_date,
+                        r.reply_content,
+                        r.reply_create_date
                     from qna q
                     join prod p
                     on q.prod_no = p.prod_no
-                    where board_no = ? `,
+                    left join reply r
+                    on q.board_no = r.board_no
+                    where q.board_no = ?`,
+                    
+    mypageUpdateQnA: `update qna set ? where board_no = ?`,
+    mypageDeleteQnA: `delete from qna where board_no = ?`,
+
+    mypageReviewList: `SELECT 
+                            p.main_img,
+                            p.prod_name,
+                            p.prod_price,
+                            o.order_date,
+                            count(r.review_no) AS review_cnt
+                        FROM 
+                            prod p
+                        JOIN 
+                            order_detail od ON p.prod_no = od.prod_no
+                        JOIN 
+                            orders o ON od.order_no = o.order_no
+                        LEFT JOIN 
+                            review r ON p.prod_no = r.prod_no AND od.order_detail_no = r.order_detail_no
+                        WHERE 
+                            o.user_no = ?
+                        GROUP BY 
+                            p.main_img, p.prod_name, p.prod_price, o.order_date
+                        ORDER BY 
+                            o.order_date DESC
+                            limit ? , ?`
 };

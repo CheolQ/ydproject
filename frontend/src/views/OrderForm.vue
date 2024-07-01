@@ -7,24 +7,29 @@
                 <div class="row g-5">
                     <div class="col-md-12 col-lg-6 col-xl-7">
                         <div class="form-item">
-                            <label class="form-label my-3">Name<sup>*</sup></label>
+                            <label class="form-label my-3">이름<sup>*</sup></label>
                             <input type="text" class="form-control" id="name" v-model="name">
                         </div>
                         <div class="form-item">
-                            <label class="form-label my-3">Phone<sup>*</sup></label>
+                            <label class="form-label my-3">연락처<sup>*</sup></label>
                             <input type="tel" class="form-control" id="phone" v-model="phone">
                         </div>
                         <div class="form-item">
-                            <label class="form-label my-3">Email<sup>*</sup></label>
+                            <label class="form-label my-3">이메일<sup>*</sup></label>
                             <input type="email" class="form-control" id="email" v-model="email">
                         </div>
                         <div class="form-item">
-                            <label class="form-label my-3">Address<sup>*</sup></label>
-                            <input type="text" class="form-control" v-model="address" placeholder="House Number Street Name">
+                            <label class="form-label my-3">우편번호<sup>*</sup></label>
+                            <input type="button" @click="execDaumPostcode()" value="우편번호 찾기">
+                            <input type="text" id="pCode" v-model="pCode" class="form-control" placeholder="우편번호" readonly><br>
                         </div>
                         <div class="form-item">
-                            <label class="form-label my-3">Postcode/Zip<sup>*</sup></label>
-                            <input type="text" v-model="pCode" class="form-control">
+                            <label class="form-label my-3">주소<sup>*</sup></label>
+                            <input type="text" id="address" v-model="address" class="form-control" placeholder="주소" readonly><br>
+                        </div>
+                        <div class="form-item">
+                            <label class="form-label my-3">상세주소<sup>*</sup></label>
+                            <input type="text" id="detailAddress" v-model="detailAddr" class="form-control" placeholder="상세주소">
                         </div>
                     </div>
                     <div class="col-md-12 col-lg-6 col-xl-5">
@@ -97,128 +102,169 @@
     <!-- Checkout Page End -->
 </template>
 <script>
-    import PortOne from '@portone/browser-sdk/v2';
-    import axios from 'axios';
+import PortOne from '@portone/browser-sdk/v2';
+import axios from 'axios';
+import { mapGetters } from 'vuex';
+//import Address from '@/components/Address.vue';
 
-    export default {
-        data(){
-            return{
-                selectedCart : [],
-                totalPrice : 0,
-                name : '',
-                phone : '',
-                email : '',
-                address : '',
-                pCode : ''
-            };
-        },
-        created() {
-            // const queryCart = this.$route.query.Cart;
-            const queryCart = JSON.stringify(this.$store.state.cart);
-            console.log(queryCart)
-            console.log(this.$store.state.cart);
-            console.log(queryCart);
-            if (queryCart) {
-                this.selectedCart = JSON.parse(queryCart);
-            }
-        },
-        mounted(){
-            this.discount();
-        },
-        methods : {
-            payments(){
-                const IMP = window.IMP; 
-                IMP.init('imp81886801'); // 'your-imp-key'를 실제 포트원 키로 변경
-    
-                // 주문번호 생성
-                const today = new Date();
-                const hours = today.getHours(); 
-                const minutes = today.getMinutes();  
-                const seconds = today.getSeconds();  
-                const milliseconds = today.getMilliseconds();
-                const makeMerchantUid = `${hours}${minutes}${seconds}${milliseconds}`;
-                console.log(this.selectedCart, '확인!');
-                let prodname = '';
-                let prodno = '';
-                let count = [];
-                this.selectedCart.forEach(function(a, index) {
-                    count.push(a.cnt);
-                    if (index > 0) {
-                        prodname += ','; // 첫 번째 항목이 아닌 경우에만 구분자 추가
-                        prodno += ',';
-                    }
-                    prodname += a.prod_name;
-                    prodno += a.prod_no;
-                });
-
-                 // 결제 요청 데이터 설정
-                const data = {
-                    pg: 'kakaopay.TC0ONETIME', 
-                    pay_method: 'card',
-                    merchant_uid: `merchant_${makeMerchantUid}`, 
-                    amount: this.totalPrice,
-                    name: prodname,
-                    buyer_name: this.name,
-                    buyer_tel: this.phone,
-                    buyer_email: this.email,
-                    buyer_addr: '서울특별시 강남구 삼성동',
-                    buyer_postcode: '123-456'
-                };
-
-                    // 결제 요청
-                    IMP.request_pay(data, rsp => {
-                    if (rsp.success) {
-                        // 결제 성공 시 로직
-                        alert('결제가 완료되었습니다.');
-                        console.log(rsp)
-                        //order table
-                        let buyerName = rsp.buyer_name;
-                        let buyerTel = rsp.buyer_tel;
-                        let buyerAdd = rsp.buyer_addr;
-                        let paidAmount = rsp.paid_amount;
-                        let merchantUid = rsp.merchant_uid;
-                        //orderDatail table
-                        let prodNo = prodno.split(',');
-                        let cnt = count;
-                        //let price = [5000,6000,7000]
-                        
-                        let orderData = {
-                            buyerName: buyerName,
-                            buyerTel: buyerTel,
-                            buyerAdd: buyerAdd,
-                            buyerPost: data.buyer_postcode,
-                            detail_addr: '상세주소',
-                            paidAmount: paidAmount,
-                            merchantUid: merchantUid,
-                            products: prodNo.map((no, index) => ({
-                                prod_no: no,
-                                cnt: cnt[index]
-                            }))
-                        };
-                        console.log(orderData, '체크')
-                        axios.post("/api/order", orderData)
-                        .then(result => console.log(result))
-                        .catch(err => console.log(err))
-                    } else {
-                        // 결제 실패 시 로직
-                        alert(`결제에 실패하였습니다. 에러 내용: ${rsp.error_msg}`);
-                    }
-                });
-            },
-            discount() {
-                this.selectedCart.forEach(a => {
-                    this.totalPrice += Number(a.prod_price * a.cnt);
-                });
-            },
-            points() {
-                let point = 100
-                this.totalPrice -= point;
-            },
-            formatPrice(price) {
-                return price.numberFormat();
-            },
-            }
+export default {
+    // components: {
+    //         Address,
+    //     },
+    data() {
+        return {
+            selectedCart: [],
+            totalPrice: 0,
+            name: '',
+            phone: '',
+            email: '',
+            address: '',
+            pCode: '',
+            detailAddr: '',
+        };
+    },
+    computed: {
+        ...mapGetters(['getCartInfo']), // Vuex 게터를 컴포넌트에 매핑
+    },
+    created() {
+        // const queryCart = this.$route.query.Cart;
+        const queryCart = JSON.stringify(this.getCartInfo);
+        console.log(queryCart)
+        console.log(this.getCartInfo);
+        // console.log(this.$store.state.cart);
+        console.log(queryCart);
+        if (queryCart) {
+            this.selectedCart = JSON.parse(queryCart);
         }
+    },
+    mounted() {
+        this.discount();
+    },
+    methods: {
+        execDaumPostcode(){
+            new window.daum.Postcode({
+                oncomplete: (data) => {
+                    //console.log(data,'data는 뭐야')
+                    this.address = data.address;
+                    this.pCode = data.zonecode;
+                    this.detailAddr = data.detailAddr;
+                },
+            }).open();
+        },
+        payments() {
+            const IMP = window.IMP;
+            IMP.init('imp81886801'); // 'your-imp-key'를 실제 포트원 키로 변경
+
+            // 주문번호 생성
+            const today = new Date();
+            const hours = today.getHours();
+            const minutes = today.getMinutes();
+            const seconds = today.getSeconds();
+            const milliseconds = today.getMilliseconds();
+            const makeMerchantUid = `${hours}${minutes}${seconds}${milliseconds}`;
+            console.log(this.selectedCart, '확인!');
+            let prodname = '';
+            let prodno = '';
+            let count = [];
+            this.selectedCart.forEach(function (a, index) {
+                count.push(a.cnt);
+                if (index > 0) {
+                    prodname += ','; // 첫 번째 항목이 아닌 경우에만 구분자 추가
+                    prodno += ',';
+                }
+                prodname += a.prod_name;
+                prodno += a.prod_no;
+            });
+
+            // 결제 요청 데이터 설정
+            const data = {
+                pg: 'kakaopay.TC0ONETIME',
+                pay_method: 'card',
+                merchant_uid: `merchant_${makeMerchantUid}`,
+                amount: this.totalPrice,
+                name: prodname,
+                buyer_name: this.name,
+                buyer_tel: this.phone,
+                buyer_email: this.email,
+                buyer_addr: this.address,
+                buyer_postcode: this.pCode
+            };
+
+            // 결제 요청
+            IMP.request_pay(data, rsp => {
+                if (rsp.success) {
+                    // 결제 성공 시 로직
+                    alert('결제가 완료되었습니다.');
+                    console.log(rsp)
+                    //order table
+                    let buyerName = rsp.buyer_name;
+                    let buyerTel = rsp.buyer_tel;
+                    let buyerAdd = rsp.buyer_addr;
+                    let paidAmount = rsp.paid_amount;
+                    let merchantUid = rsp.merchant_uid;
+                    //orderDatail table
+                    let prodNo = prodno.split(',');
+                    let cnt = count;
+                    //let price = [5000,6000,7000]
+
+                    let orderData = {
+                        buyerName: buyerName,
+                        buyerTel: buyerTel,
+                        buyerAdd: buyerAdd,
+                        buyerPost: data.buyer_postcode,
+                        detail_addr: this.detailAddr, //
+                        paidAmount: paidAmount,
+                        merchantUid: merchantUid,
+                        products: prodNo.map((no, index) => ({
+                            prod_no: no,
+                            cnt: cnt[index]
+                        }))
+                    };
+                    //console.log(orderData, '주소값가져오는지 체크')
+                    axios.post("/api/order", orderData)
+                        .then(result => {
+                            console.log(result);
+                            if (result.data.dtCount.length > 0) {
+                                this.$router.push({
+                                    name: 'orderSuccess',
+                                    query: { dtCount: JSON.stringify(result.data.dtCount) }
+                                });
+                            }
+                        })
+                        .catch(err => console.log(err))
+                } else {
+                    // 결제 실패 시 로직
+                    alert(`결제에 실패하였습니다. 에러 내용: ${rsp.error_msg}`);
+                }
+            });
+        },
+        discount() {
+            this.selectedCart.forEach(a => {
+                this.totalPrice += Number(a.prod_price * a.cnt);
+            });
+        },
+        points() {
+            let point = 100
+            this.totalPrice -= point;
+        },
+        formatPrice(price) {
+            return price.numberFormat();
+        },
+    },
+    created() {
+        // const queryCart = this.$route.query.Cart;
+        const queryCart = JSON.stringify(this.$store.state.cart);
+        console.log(queryCart)
+        console.log(this.$store.state.cart);
+        console.log(queryCart);
+        if (queryCart) {
+            this.selectedCart = JSON.parse(queryCart);
+        }
+    },
+    mounted() {
+        this.discount();
+    }
+}
 </script>
 <style>
 .aside-tit {

@@ -9,6 +9,7 @@ import Cart from '@/views/CartView.vue';
 
 //주문
 import Order from '@/views/OrderForm.vue';
+import OrderSuccess from '@/views/OrderSuccess.vue';
 
 //QnA
 import QnaForm from '@/views/QnaFormView.vue';
@@ -21,6 +22,7 @@ import OrderDetailInfo from '@/components/mypage/OrderDetailInfo.vue';
 import MyPageQnA from '@/components/mypage/MypageQnA.vue';
 import MyPageQnAInfo from '@/components/mypage/MypageQnAInfo.vue';
 import MyWishList from '@/components/mypage/MyWishList.vue';
+import MyPageReview from '@/components/mypage/MypageReview.vue';
 
 //관리자
 import AdminLayout from '../layouts/AdminLayout.vue';
@@ -34,7 +36,7 @@ import AdminQnaInfo from '../views/admin/AdminQnaInfo.vue'
 import ProdList from '../views/admin/AdminProdList.vue';
 import AdminProdInfo from '../views/admin/AdminProdInfo.vue';
 import ProdForm from '../views/admin/AdminProdForm.vue';
-import AdminProdModify from '../views/admin/AdminProdModify.vue'
+import AdminProdModify from '../views/admin/AdminProdModify.vue';
 import Orders from '../views/admin/AdminOrder.vue';
 import OrderInfo from '../views/admin/AdminOrderInfo.vue';
 import AdminOrderDelivery from '../views/admin/AdminOrderDelivery.vue';
@@ -44,6 +46,7 @@ import Members from '../views/admin/AdminMember.vue';
 //상품
 import ProdListView from '@/views/product/ProdListView.vue';
 import ProdInfoView from '@/views/product/ProdInfoView.vue';
+import ProdCategoryView from '@/views/product/ProdCategoryView.vue';
 
 //공지
 
@@ -53,7 +56,9 @@ import NoticeInfoView from '@/views/notice/NoticeInfoView.vue';
 // 로그인, 회원가입
 import login from '../views/user/loginForm.vue';
 import join from '../views/user/joinForm.vue';
-import findidpw from '../views/user/findidpw.vue';
+import UserFind from '../views/user/UserFind.vue';
+// import UserModify from '../views/user/UserModify.vue';
+// import UserDrop from '../views/user/userdrop.vue';
 
 const routes = [
     {
@@ -64,9 +69,6 @@ const routes = [
         path: '/user',
         name: 'user',
         component: DefaultLayout,
-        meta: {
-            template: 'home', // Home 템플릿
-        },
         children: [
             {
                 path: 'home',
@@ -76,6 +78,11 @@ const routes = [
                 path: 'shop',
                 name: 'shop',
                 component: ProdListView,
+            },
+            {
+                path: 'prodcategory',
+                name: 'prodcategory',
+                component: ProdCategoryView,
             },
             {
                 path: 'shopinfo',
@@ -88,7 +95,7 @@ const routes = [
                 component: NoticeListView,
             },
             {
-                path: '/noticeinfo',
+                path: 'noticeinfo',
                 name: 'noticeinfo',
                 component: NoticeInfoView,
             },
@@ -96,6 +103,7 @@ const routes = [
                 path: 'qna',
                 name: 'qna',
                 component: QnaForm,
+                props: (route) => ({ qnadata: route.query.qna ? JSON.parse(route.query.qna) : {} }),
             },
             {
                 path: 'mypage',
@@ -125,6 +133,11 @@ const routes = [
                         component: MyPageQnAInfo,
                     },
                     {
+                        path: 'mypagereview',
+                        name: 'mypagereview',
+                        component: MyPageReview,
+                    },
+                    {
                         path: 'mywishlist',
                         component: MyWishList,
                     },
@@ -140,28 +153,38 @@ const routes = [
                 component: Order,
             },
             {
+
+                path: 'orderSuccess',
+                name: 'orderSuccess',
+                component: OrderSuccess,
+            },
+            {
                 //로그인
+
                 path: 'login',
                 component: login,
             },
             {
-                //회원가입
                 path: 'join',
                 component: join,
             },
             {
-                //아이디,비밀번호찾기
-                path: 'findidpw',
-                component: findidpw,
+                path: 'UserFind',
+                component: UserFind,
             },
+            // {
+            //     path: 'UserModify',
+            //     component: UserModify,
+            // },
+            // {
+            //     path: 'UserDrop',
+            //     component: UserDrop,
+            // },
         ],
     },
     {
         path: '/admin',
         component: AdminLayout,
-        meta: {
-            template: 'admin', // Admin 템플릿
-        },
         children: [
             {
                 path: '',
