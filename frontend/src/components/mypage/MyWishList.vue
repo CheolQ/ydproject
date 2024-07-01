@@ -47,11 +47,9 @@
                             </tr>
                         </tbody>
                     </table>
-                    <div>
-                        <button @click="delAll" class="btn btn-warning">전체삭제</button>
-                    </div>
-                    <div>
-                        <button @click="gotoCart" class="btn btn-primary">장바구니에 담기</button>
+                    <div class="button-container">
+                        <button @click="gotoCart" class="btn btn-warning">장바구니에 담기</button>
+                        <button @click="delAll" class="btn btn-danger">전체삭제</button>
                     </div>
                 </div>
             </div>
@@ -153,4 +151,22 @@
     text-align: center;
     line-height: 24px
 } */
+
+/* .button-container-left {
+  display: flex;
+  justify-content: flex-start;
+  margin-top: 10px; 
+}
+
+.button-container-right {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 10px; 
+} */
+.button-container {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px; /* 필요에 따라 간격 조정 */
+  align-items: center; /* 버튼을 수직으로 중앙에 정렬 */
+}
 </style>
