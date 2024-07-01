@@ -129,4 +129,6 @@ module.exports = {
                     left join reply r
                     on q.board_no = r.board_no
                     where q.board_no = ?`,
+                    
+    mypageUpdateQnA: `update qna set ? where board_no = ?`
 };
