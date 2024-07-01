@@ -22,6 +22,7 @@ import OrderDetailInfo from '@/components/mypage/OrderDetailInfo.vue';
 import MyPageQnA from '@/components/mypage/MypageQnA.vue';
 import MyPageQnAInfo from '@/components/mypage/MypageQnAInfo.vue';
 import MyWishList from '@/components/mypage/MyWishList.vue';
+import MyPageReview from '@/components/mypage/MypageReview.vue';
 
 //관리자
 import AdminLayout from '../layouts/AdminLayout.vue';
@@ -126,6 +127,11 @@ const routes = [
                         path: 'mypageqnainfo',
                         name: 'mypageqnainfo',
                         component: MyPageQnAInfo,
+                    },
+                    {
+                        path: 'mypagereview',
+                        name: 'mypagereview',
+                        component: MyPageReview,
                     },
                     {
                         path: 'mywishlist',

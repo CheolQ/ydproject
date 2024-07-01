@@ -23,7 +23,9 @@
                             <li class="first">
                                 <router-link to="/user/mypage/mypageqna/">문의내역</router-link>
                             </li>
-                            <li><a href="/shop/mypage.html?mypage_type=myemail">리뷰관리</a></li>
+                            <li>
+                                <router-link to="/user/mypage/mypagereview/">후기관리</router-link>
+                            </li>
                         </ul>
                     </div>
                 </div>
