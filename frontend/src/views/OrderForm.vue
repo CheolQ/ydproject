@@ -134,7 +134,7 @@ export default {
     methods: {
         payments() {
             const IMP = window.IMP;
-            IMP.init(''); // 'your-imp-key'를 실제 포트원 키로 변경
+            IMP.init('imp81886801'); // 'your-imp-key'를 실제 포트원 키로 변경
 
             // 주문번호 생성
             const today = new Date();

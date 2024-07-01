@@ -1,6 +1,5 @@
 <template>
-    <div>주문성공페이지</div>
-    <p></p>
+    <h2 class="aside-tit">ORDER COMPLETE!</h2>
 </template>
 <script>
     import axios from 'axios';
@@ -10,8 +9,8 @@
             return{};
         },
         created(){
-            let dtCount = JSON.parse(this.$route.query.dtCount);
-            getProd(dtCount);
+            //let dtCount = JSON.parse(this.$route.query.dtCount);
+            //getProd(dtCount);
         },
         methods : {
             //상품이름가져오려고 상품넘버 이용
