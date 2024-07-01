@@ -161,5 +161,6 @@ async goToDetail(no)   {
 }
 </script>
 
-<style></style>
-<style></style>
+<style>
+
+</style>
