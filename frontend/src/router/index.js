@@ -42,6 +42,7 @@ import Members from '../views/admin/AdminMember.vue';
 //상품
 import ProdListView from '@/views/product/ProdListView.vue';
 import ProdInfoView from '@/views/product/ProdInfoView.vue';
+import ProdCategoryView from '@/views/product/ProdCategoryView.vue';
 
 //공지
 
@@ -51,7 +52,9 @@ import NoticeInfoView from '@/views/notice/NoticeInfoView.vue';
 // 로그인, 회원가입
 import login from '../views/user/loginForm.vue';
 import join from '../views/user/joinForm.vue';
-import findidpw from '../views/user/findidpw.vue';
+import UserFind from '../views/user/UserFind.vue';
+// import UserModify from '../views/user/UserModify.vue';
+// import UserDrop from '../views/user/userdrop.vue';
 
 const routes = [
     {
@@ -71,6 +74,11 @@ const routes = [
                 path: 'shop',
                 name: 'shop',
                 component: ProdListView,
+            },
+            {
+                path: 'prodcategory',
+                name: 'prodcategory',
+                component: ProdCategoryView,
             },
             {
                 path: 'shopinfo',
@@ -157,9 +165,17 @@ const routes = [
                 component: join,
             },
             {
-                path: 'findidpw',
-                component: findidpw,
+                path: 'UserFind',
+                component: UserFind,
             },
+            // {
+            //     path: 'UserModify',
+            //     component: UserModify,
+            // },
+            // {
+            //     path: 'UserDrop',
+            //     component: UserDrop,
+            // },
         ],
     },
     {

@@ -3,7 +3,7 @@
         <h2 class="aside-tit">회원가입</h2>
         <div>
             <label for="id">아이디</label>
-            <input v-model="form.user_id" type="text" id="username" required />
+            <input type="text" id="username" v-model="form.user_id" required />
         </div>
         <div>
             <label for="password">비밀번호</label>
@@ -28,7 +28,7 @@
         <div>
             <label for="postcode">우편번호</label>
             <input type="text" id="postcode" v-model="form.postcode" ref="postcode" />
-            <input type="button" @click="showApi()" value="검색"><br>
+            <input type="button" @click="showApi" value="검색"><br>
         </div>
         <div>
             <label for="address">주소</label>
@@ -38,7 +38,10 @@
             <label for="detailAddress">상세주소</label>
             <input type="text" id="detailAddress" v-model="form.detail_address" placeholder="상세주소" />
         </div>
-        <button class="btn btn-primary" @click="joinUser">회원가입</button>
+        <button class="btn btn-success" @click="joinUser">회원가입</button>
+        <router-link to="/user/home">
+            <button class="btn btn-warning">취소</button>
+        </router-link>
     </div>
 </template>
 
@@ -61,11 +64,8 @@ export default {
             }
         };
     },
-    computed: {},
-    created() {},
     methods: {
         confirmPassword() {
-            // 비밀번호 확인 메서드
             if (this.form.user_pw !== this.form.user_pw2) {
                 alert('비밀번호가 일치하지 않습니다.');
                 return false;
@@ -76,27 +76,28 @@ export default {
             if (!this.confirmPassword()) {
                 return;
             }
-            const url = "/api/users";
-            let param = {
+            const url = '/api/users/join';
+            const param = {
                 user_id: this.form.user_id,
                 user_pw: this.form.user_pw,
-                user_name: this.form.name,
-                user_post: this.form.postcode || 0,  // 기본값을 0으로 설정
-                user_address: this.form.address,
-                user_detail_address: this.form.detail_address,
-                user_phone: this.form.tel,
-                user_email: this.form.email
+                name: this.form.name,
+                email: this.form.email,
+                tel: this.form.tel,
+                postcode: this.form.postcode,
+                addr: this.form.address,
+                detail_addr: this.form.detail_address
             };
 
-            console.log(param);  // 추가된 콘솔 로그
+            console.log(param);
 
             try {
-                const result = (await axios.post(url, param)).data;
+                const result = await axios.post(url, param);
                 console.log(result);
-                alert("회원가입에 성공하셨습니다");
+                alert('회원가입에 성공하셨습니다');
+                this.$router.push('/user/login');
             } catch (error) {
                 console.error(error);
-                alert("회원가입에 실패하였습니다. 다시 시도해 주세요.");
+                alert('회원가입에 실패하였습니다. 다시 시도해 주세요.');
             }
         },
         showApi() {
@@ -109,7 +110,7 @@ export default {
                         extraRoadAddr += data.bname;
                     }
                     if (data.buildingName !== '' && data.apartment === 'Y') {
-                        extraRoadAddr += (extraRoadAddr !== '' ? ', ' + data.buildingName : data.buildingName);
+                        extraRoadAddr += extraRoadAddr !== '' ? ', ' + data.buildingName : data.buildingName;
                     }
                     if (extraRoadAddr !== '') {
                         extraRoadAddr = ' (' + extraRoadAddr + ')';
@@ -118,20 +119,26 @@ export default {
                         fullRoadAddr += extraRoadAddr;
                     }
 
-                    this.form.postcode = data.zonecode; // 5자리 새우편번호 사용
+                    this.form.postcode = data.zonecode;
                     this.form.address = fullRoadAddr;
                 }
             }).open();
+        }
+    },
+    mounted() {
+        if (typeof window.daum === 'undefined') {
+            const script = document.createElement('script');
+            script.src = 'https://ssl.daumcdn.net/dmaps/map_js_init/postcode.v2.js';
+            script.onload = () => {
+                console.log('Daum Postcode script loaded');
+            };
+            document.head.appendChild(script);
         }
     }
 };
 </script>
 
-
-
-
 <style scoped>
-
 .aside-tit {
     padding: 65px 0 30px;
     font-size: 24px;
@@ -141,25 +148,3 @@ export default {
     line-height: 24px;
 }
 </style>
-
-
-
-<!-- // created () {
-//     this.searchNo = this.$route.query.user_id;
-//     if (this.searchNo > 0) {
-//         this.getform();
-//     }
-// },
-
-// methods : {
-//     signUp() {
-//         axios.post("/api/users", this.form)
-//         .then((result) => {
-//             console.log("회원가입");
-//         })
-//         .catch((err) => {
-//                 console.error('회원가입 실패:', err);
-//                 alert('회원가입 실패');
-//         })
-//     }
-// }, -->
