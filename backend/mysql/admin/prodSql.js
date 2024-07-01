@@ -35,6 +35,8 @@ module.exports = {
                         from category
                         where pre_category = ?
                         order by seqs`,
-    AdminProdInsert: `insert into prod set ?`                                                         
+    AdminProdInsert: `insert into prod set ?`,
+    AdminProdDelete: `delete from prod
+                      where prod_no = ?`,                                                         
 
 }
