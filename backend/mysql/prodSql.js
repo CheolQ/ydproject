@@ -18,10 +18,15 @@ module.exports = {
     qnaUpdate: 'UPDATE qna SET ? WHERE board_no = ?',
 
     selectuserno: `select user_no from user where user_id = ?`,
-    prodCategory : `select c.category_code, c.category_name, p.prod_name, p.prod_no
-                    from prod as p
-                        left join category as c
-                        on p.category_code = c.category_code
-                    where category_code = ?`
+
+    prodCategory: `SELECT prod_no, prod_name, category_code, prod_price, prod_explain, main_img, detail_img, maker, origin, exp_date
+    FROM prod
+    WHERE category_code = ?`,
+    
+//     prodCategory : `select c.category_code, c.category_name, p.prod_name, p.prod_no
+//                     from prod as p
+//                         left join category as c
+//                         on p.category_code = c.category_code
+//                     where p.category_code = ?`
 
 };

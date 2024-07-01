@@ -46,6 +46,7 @@ export default {
  	  		this.noticeList =	result.data ;
  	 	},
 	 	goToDetail(no)	{
+			console.log('번호',no);
  	  		this.$router.push({	path:"/noticeinfo",	query: {no:no }	});
  	 	},
 		getDateFormat(val )	{

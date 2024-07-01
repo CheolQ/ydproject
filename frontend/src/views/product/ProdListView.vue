@@ -102,7 +102,7 @@ export default {
     data() { 
         return {
 			prodList: [],
-            categories: []
+            categories: [],
         }
     },
 
@@ -112,8 +112,8 @@ export default {
     },
     methods: {
 		async getProdList()	{
- 	  	let result =	await axios.get(`/api/shop`);
- 	  	this.prodList =	result.data ;
+ 	    	let result =	await axios.get(`/api/shop`);
+ 	  	    this.prodList =	result.data ;
  	 	},
           fetchCategories() {
             // Axios를 사용하여 서버의 API를 호출하여 카테고리 데이터를 가져옵니다.
