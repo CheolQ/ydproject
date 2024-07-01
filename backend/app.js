@@ -37,10 +37,13 @@ const wishRouter = require('./routes/wish.js');
 
 //관리자
 
-const adminMemberRouter = require('./routes/admin/adminMember.js');
-const adminOrderRouter = require('./routes/admin/adminOrder.js');
-const adminProdRouter = require('./routes/admin/adminProd.js');
-const adminQnaRouter = require('./routes/admin/adminQna.js');
+
+const adminMemberRouter = require('./routes/admin/adminMember.js')
+const adminNoticeRouter = require('./routes/admin/adminNotice.js')
+const adminOrderRouter = require('./routes/admin/adminOrder.js')
+const adminProdRouter = require('./routes/admin/adminProd.js')
+const adminQnaRouter = require('./routes/admin/adminQna.js')
+
 
 const prodRouter = require('./routes/prod.js');
 const noticeRouter = require('./routes/notice.js');
@@ -112,10 +115,12 @@ app.use('/mypage', mypageRouter);
 
 //관리자
 
-app.use('/adminQna', adminQnaRouter);
-app.use('/adminMember', adminMemberRouter);
-app.use('/adminOrder', adminOrderRouter);
-app.use('/adminProd', adminProdRouter);
+app.use("/adminNotice", adminNoticeRouter)
+app.use("/adminQna", adminQnaRouter)
+app.use("/adminMember", adminMemberRouter)
+app.use("/adminOrder", adminOrderRouter)
+app.use("/adminProd", adminProdRouter)
+
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

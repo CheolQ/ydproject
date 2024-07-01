@@ -25,7 +25,7 @@
                             <td>{{ od.user_no }}</td>
                             <td v-if="od.cnt > 1">{{ od.prod_name }} 외 {{ od.cnt -1}} 건</td>
                             <td v-else>{{ od.prod_name}}</td>
-                            <td>{{ od.pay_price }}</td>
+                            <td>{{ getNumberFormat(od.pay_price) }}</td>
                             <td v-if="od.order_status === 'D5'">배송중</td>
                         </tr>
                     </tbody>
