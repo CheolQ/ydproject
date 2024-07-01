@@ -1,7 +1,7 @@
 <template>
     <!-- Fruits Shop Start-->
     <div class="container-fluid fruite py-5">
-    <div class="container py-5">
+    <div class="container py-5" :key ="i" v-for ="(cate, i) in prodCategory" >
         <h1 class="mb-4">Fresh fruits shop</h1>
         <div class="row g-4">
             <div class="col-lg-12">
@@ -67,7 +67,7 @@
                             </div>
                        
                             <div class="col-md-6 col-lg-6 col-xl-4" 
-                            :key ="i" v-for ="(cate, i) in prodCategory" @click ="goToDetail(cate.prod_no)">
+                            @click ="goToDetail(cate.prod_no)">
                                 <div class="rounded position-relative fruite-item" >
                                     <div class="fruite-img">
                                         <img :src="`/img/prodImg/${cate.main_img}`" class="img-fluid w-100 rounded-top" alt="">
@@ -121,6 +121,8 @@ export	default {
             //     });
             this.prodCategory = 
             (await axios.get(`/api/shop/code/${this.searchCode}`)).data;
+            console.log('aaaaa');
+            console.log(this.prodCategory);
         },
    
         getDateFormat(val )	{

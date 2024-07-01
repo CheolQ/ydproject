@@ -1,10 +1,9 @@
 
 module.exports = {
     noticeList: `SELECT notice_no, user_id, title, content,	create_date, user_no 
-                 FROM notice`,
-    // noticeInfo: `SELECT notice_no, user_id, title, content,	create_date, user_no 
-    //              FROM notice 
-    //              WHERE notice_no = ?`,
+                 FROM notice
+                 order by notice_no desc limit ? , ?`,
+    noticeCount : 'select count(*) cnt from notice',
     noticeInfo: `select notice_no, user_id, title, content, create_date,
                     (select file_name
                     from file

@@ -2,7 +2,7 @@
     <!-- Fruits Shop Start-->
   <div class="container-fluid fruite py-5">
      <div class="container py-5">
-         <h1 class="mb-4">Fresh fruits shop</h1>
+         <h1 class="mb-4">전체 상품</h1>
          <div class="row g-4">
              <div class="col-lg-12">
                  <div class="row g-4">
@@ -72,7 +72,7 @@
                                <div class="fruite-img">
                                          <img :src="`/img/prodImg/${prod.main_img}`" class="img-fluid w-100 rounded-top" alt="">
                                 </div>
-                                   <div class="text-white bg-secondary px-3 py-1 rounded position-absolute" style="top: 10px; left: 10px;">Fruits</div>
+                                 
                                <div class="p-4 border border-secondary border-top-0 rounded-bottom">
                                    <h4>{{prod.prod_name }}</h4>
                              <div class="d-flex justify-content-between flex-lg-wrap">
@@ -101,8 +101,9 @@ import { computed } from "vue";
 export default { 
 data() { 
  return {
-  prodList: [],
-     categories: [],
+    prodList: [],
+    categories: [],
+    pordCnt:''
  }
 },
 

@@ -2,6 +2,12 @@
 	<div class="container-fluid fruite py-5">
         <div class="container py-5">
             <h1 class="mb-4">Notice</h1>
+			<div class="col-xl-3">
+                         <div class="input-group w-100 mx-auto d-flex">
+                             <input type="search" class="form-control p-3" placeholder="keywords" aria-describedby="search-icon-1">
+                             <span id="search-icon-1" class="input-group-text p-3"><i class="fa fa-search"></i></span>
+                         </div>
+                     </div>
  			<table class ="table	table-hover">
  	  	 		<thead>
  	      			<tr>
@@ -20,27 +26,43 @@
  	   				</tr>
  	  			</tbody>
  	 		</table>
+
 			<div class ="wrbtn">
 			  <a href="#" class="btn border border-secondary rounded-pill px-4 py-2 mb-4 text-primary">
 				Write</a>
 			</div>
-
+			<paging v-bind="page" @go-page="goPage"/>
  		</div>
 	</div>
 </template>
 
 <script>
+import PageMixin from '../../mixin';
 import axios from "axios";
+import paging from "@/components/Paging.vue"
 export default { 
+	mixins : [PageMixin],
+	components:{paging},
     data() { 
         return {
 			noticeList: [],
+			page:{},
+			pageUnit:5
         }
     },
     created() {
 		this.getNoticeList();
+		this.goPage(1)    
     },
     methods: {
+		async goPage(page){
+                let pageUnit = this.pageUnit;
+                let result = await axios.get(`/api/notice?pageUnit=${pageUnit}&page=${page}`)
+                this.noticeList = result.data.list;
+                console.log(this.page)
+                this.page = this.pageCalc(page, result.data.count,5,pageUnit)
+        
+            },
 		async getNoticeList()	{
  	  		let result =	await axios.get(`/api/notice`);
  	  		this.noticeList =	result.data ;
