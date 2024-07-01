@@ -16,7 +16,6 @@ router.get('/:no', async (req, res) => {
 
 //카테고리별 상품 조회 - /shop/A11
 router.get('/code/:code', async (req, res) => {
-    console.log('카테dd');
     let result = await query('prodCategory', req.params.code);
     console.log('카테',result);
     res.send(result);

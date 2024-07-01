@@ -16,7 +16,7 @@
                             </div>
                             <div class="col-lg-6">
                                 <h4 class="fw-bold mb-3">{{prodInfo.prod_name }}</h4>
-                                <h5 class="fw-bold mb-3">{{numberFormat(prodInfo.prod_price) }}</h5>
+                                <h5 class="fw-bold mb-3">{{numberFormat(prodInfo.prod_price) }}원</h5>
                                 <p class="mb-3">원산지   {{prodInfo.origin }}</p>
                                 <p class="mb-3">제조사   {{prodInfo.maker }}</p>
                                 <p class="mb-3">유통기한   {{getDateFormat(prodInfo.exp_date) }}</p>

@@ -143,7 +143,7 @@ export default {
         },
         getCodeMeaning: function(code){
             if (this.codes) {
-                console.log('dddd: ' , this.codes.Category.Minor);
+                // console.log('dddd: ' , this.codes.Category.Minor);
                 return this.codes.Category.Minor[code] || code; // 코드에 맞는 의미있는 문자열 반환
             }
             console.error(`해당 코드없음 : ${code}`)

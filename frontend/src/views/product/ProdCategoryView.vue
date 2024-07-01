@@ -76,7 +76,7 @@
                                     <div class="p-4 border border-secondary border-top-0 rounded-bottom">
                                         <h4>{{cate.prod_name }}</h4>
                                         <div class="d-flex justify-content-between flex-lg-wrap">
-                                              <p class="text-dark fs-5 fw-bold mb-0">{{numberFormat(cate.prod_price) }}</p>
+                                              <p class="text-dark fs-5 fw-bold mb-0">{{numberFormat(cate.prod_price) }}원</p>
                                             <button @click="gotoCart(cate.prod_no,$event)" class="btn border border-secondary rounded-pill px-3 text-primary"><i class="fa fa-shopping-bag me-2 text-primary"></i> Add to cart</button>
                                             </div>
                                         </div>
@@ -111,20 +111,13 @@ export	default {
  	},
  	methods: {
         async getProdCategory()	{
-            // axios.get(`/api/shop/${this.searchCode}`)
-            //     .then(response => {
-            //         console.log('상품',this.prodCategory)
-            //         this.prodCategory = response.data; // 서버에서 받은 카테고리 데이터를 설정합니다.
-            //     })
-            //     .catch(error => {
-            //         console.log(error);
-            //     });
             this.prodCategory = 
-            (await axios.get(`/api/shop/code/${this.searchCode}`)).data;
-            console.log('aaaaa');
-            console.log(this.prodCategory);
+                (await axios.get(`/api/shop/code/${this.searchCode}`)).data;
+                console.log(this.prodCategory);
         },
-   
+        async goToDetail(no)	{
+ 	  	await this.$router.push({	name:"shopinfo",	query: { no:no }	});
+ 	 	},
         getDateFormat(val )	{
             let date = val == '' ? new Date() : new Date(val);
             let year = date.getFullYear();
@@ -132,10 +125,7 @@ export	default {
             let day = ('0' + date.getDate()).slice(-2);
             return `${year}-${month}-${day}`;
         },
-        goToList( ){
-        this.$router.push({ path:"/shop"});
-        },
-       
+     
         numberFormat: function (number) {
             if (number == 0)
             return 0;
@@ -146,19 +136,6 @@ export	default {
             }
             return nstr;
             },
-        gotoWish(no){
-            axios.post(`/api/cart/insert/${no}`,this.prodInfo.prod_no)
-            //.then(()=> alert('관심상품에 등록되었습니다.'))
-            .then(
-                Swal.fire({
-                    position: "center",
-                    icon: "success",
-                    title: "관심상품에 등록되었습니다.",
-                    showConfirmButton: false,
-                    timer: 1500
-                })
-            )
-        },
         gotoCart(no){
             axios.post(`/api/cart/cartInsert/${no}`, this.prodInfo.prod_no)
             .then(
@@ -175,9 +152,6 @@ export	default {
                 })
             )
         },
-        gotoPayments(){
-            
-        }
  	},
  	
 };
