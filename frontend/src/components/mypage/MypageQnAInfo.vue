@@ -30,6 +30,7 @@
 
 <script>
 import axios from 'axios';
+import Swal from "sweetalert2";
 
 export default {
     data() {
@@ -64,6 +65,30 @@ export default {
         },
         deleteQna() {
             // 삭제 로직 구현
+            Swal.fire({
+                title: "Are you sure?",
+                text: "You won't be able to revert this!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes, delete it!"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    axios.delete(`/api/mypage/deleteqna/${this.no}`)
+                        .then(result => {
+                            console.log('삭제완료');
+                            Swal.fire({
+                                title: "Deleted!",
+                                text: "Your file has been deleted.",
+                                icon: "success"
+                            });
+                            this.$router.go(-1);
+                        })
+                        .catch(err => console.log(err));
+                }
+            });
+
         },
         goBack() {
             this.$router.go(-1);
