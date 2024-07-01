@@ -20,6 +20,11 @@
                     <tr>
                         <td scope ="col"class ="text-center"  colspan="7">{{noticeInfo.content }}</td>
                     </tr>
+                    <tr>
+                        <td scope ="col"class ="text-center"  colspan="7">
+                            <img :src="`/img/prodImg/${prodInfo.user_no}`" class="img-fluid rounded" alt="Image">
+                        </td>
+                    </tr>
                 </tbody>               
             </table>
         </div>
