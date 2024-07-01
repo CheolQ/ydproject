@@ -38,8 +38,11 @@
                                         <h4>Categories</h4>
                                         <ul class="list-unstyled fruite-categorie">
                                             <li>
-                                                <div class="d-flex justify-content-between fruite-name">
-                                                    <a href="#"><i class="fas fa-apple-alt me-2"></i>Apples</a>
+                                                <div class="d-flex justify-content-between fruite-name"
+                                                    v-for="v in categories">
+
+                                                    <a href="#"><i class="fas fa-apple-alt me-2"></i>{{ v.parent }}</a>
+
                                                     <span>(3)</span>
                                                 </div>
                                             </li>
@@ -115,17 +118,34 @@ export default {
     data() {
         return {
             prodList: [],
+            categories: [],
         }
     },
 
     created() {
         this.getProdList();
+        this.fetchCategories();
     },
     methods: {
         async getProdList() {
             let result = await axios.get(`/api/shop`);
             this.prodList = result.data;
         },
+        fetchCategories() {
+            // Axios를 사용하여 서버의 API를 호출하여 카테고리 데이터를 가져옵니다.
+            // API 엔드포인트는 실제 서버 설정에 따라 수정해야 합니다.
+            const apiUrl = '/api/common/categories'; // 예시 API URL
+            axios.get(apiUrl)
+                .then(response => {
+                    this.categories = response.data; // 서버에서 받은 카테고리 데이터를 설정합니다.
+                    console.log(this.categories)
+                })
+                .catch(error => {
+                    console.error('Error fetching categories:', error);
+                });
+        },
+
+
         async goToDetail(no) {
             await this.$router.push({ name: "shopinfo", query: { no: no } });
         },
