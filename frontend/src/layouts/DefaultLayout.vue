@@ -1,7 +1,7 @@
 <template>
     <MainHeader />
     <div class="contentmargin">
-        <router-view />
+        <router-view :key="$route.fullPath"/>
     </div>
     <MainFooter></MainFooter>
 

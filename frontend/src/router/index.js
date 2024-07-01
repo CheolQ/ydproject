@@ -41,6 +41,7 @@ import Members from '../views/admin/AdminMember.vue';
 //상품
 import ProdListView from '@/views/product/ProdListView.vue';
 import ProdInfoView from '@/views/product/ProdInfoView.vue';
+import ProdCategoryView from '@/views/product/ProdCategoryView.vue';
 
 //공지
 
@@ -72,6 +73,11 @@ const routes = [
                 path: 'shop',
                 name: 'shop',
                 component: ProdListView,
+            },
+            {
+                path: 'prodcategory',
+                name: 'prodcategory',
+                component: ProdCategoryView,
             },
             {
                 path: 'shopinfo',
