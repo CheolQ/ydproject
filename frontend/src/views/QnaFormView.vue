@@ -18,7 +18,7 @@
                         </div>
                         <div class="form-item">
                             <label class="form-label my-3" for="user_id">Id</label>
-                            <input type="text" class="form-control" id="user_id" v-model="qna.user_id">
+                            <input type="text" class="form-control" id="user_id" v-model="loggedInUserId" readonly>
                         </div>
                         <div class="form-item">
                             <label class="form-label my-3" for="title">Title</label>
@@ -86,18 +86,39 @@ export default {
             this.qna.prod_no = this.$route.query.no;
         }
     },
+    computed: {
+        loggedInUserId() {
+            return this.$store.getters.loggedInUserId;
+        }
+    },
     methods: {
         async getProdInfo() {
             this.prodInfo = (await axios.get(`/api/shop/${this.qna.prod_no}`)).data[0];
         },
         async saveQna() {
-            let userNo = await axios.get(`/api/shop/getuserno/${this.qna.user_id}`);
+            this.qna.user_id = this.loggedInUserId;
+            let userNo = await axios.get(`/api/shop/getuserno/${this.loggedInUserId}`);
             this.qna.user_no = userNo.data[0].user_no;
             await axios.post("/api/shop/qna", this.qna);
             this.$router.push({ name: "shopinfo", query: { no: this.qna.prod_no } });
         },
         async updateQna() {
-            await axios.put(`/api/shop/qna/${this.qna.board_no}`, this.qna);
+            let userNo = await axios.get(`/api/shop/getuserno/${this.loggedInUserId}`);
+            console.log(this.qna);
+            let modqna = { ...this.qna };
+            console.log("확인")
+            console.log(modqna)
+            console.log(this.qna.prod_name);
+            delete modqna.prod_name;
+            delete modqna.prod_price;
+            delete modqna.main_img;
+            delete modqna.reply_content;
+            delete modqna.reply_create_date;
+            delete modqna.create_date;
+            modqna.user_no = userNo.data[0].user_no;
+            modqna.update_date = new Date().toISOString().slice(0, 19).replace('T', ' ');;
+
+            await axios.patch(`/api/mypage/updateqna/${this.qna.board_no}`, modqna);
             this.$router.push({ name: "shopinfo", query: { no: this.qna.prod_no } });
         },
         goToList() {
