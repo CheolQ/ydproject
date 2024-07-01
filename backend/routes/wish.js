@@ -13,13 +13,14 @@ const query = require("../mysql/index");
 router.get("/", async (req, res) => {
     let page = Number(req.query.page);
     let pageUnit = Number(req.query.pageUnit);
-
+    let userNo = req.session.user_no;
+    //console.log(userNo,'유저넘버가져오는지 확인')
     if(!page){ page = 1; }
     if(!pageUnit){ pageUnit = 2; }
 
     let offset = (page - 1) * pageUnit;
 
-    let list = await query("wishList", [offset, pageUnit]);
+    let list = await query("wishList", [userNo, offset, pageUnit]);
     let count = await query("wishListCount");
     count = count[0].cnt; //0번째의 컬럼명
     //.then(result => res.send(result))
@@ -34,14 +35,17 @@ router.delete("/:no", (req, res) => {
 
 //관심상품 전체 삭제
 router.delete("/", (req, res) => {
-    query("wishAllDelete", 1)
+    query("wishAllDelete", req.session.user_no)
     .then(result => res.send(result))
 })
 
 //관심상품 등록
 router.post("/insert/:no", (req, res) => {
-    query("wishInsert", req.params.no)
+    //console.log('넘어오는지만 확인')
+    query("wishInsert", [req.params.no, req.session.user_no]) 
+    //유저넘버는 백에서 세션으로 받아오기때문에 프론트에서 따로 보내줄 필요x
     .then(result => res.send(result))
+    .catch(err => res.status(500).send(err));
 })
 
 

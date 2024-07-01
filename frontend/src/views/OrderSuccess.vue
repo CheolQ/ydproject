@@ -1,5 +1,7 @@
 <template>
     <h2 class="aside-tit">ORDER COMPLETE!</h2>
+    <p>주문이 완료되었습니다. 주문 내역은 My Page에서 확인 가능합니다.</p>
+    <router-link to="/user/mypage/orderhistory/">My Page로 이동</router-link>
 </template>
 <script>
     import axios from 'axios';

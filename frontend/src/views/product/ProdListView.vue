@@ -146,7 +146,7 @@ export default {
         gotoCart(no, e){
             console.log(no);
             e.stopPropagation();
-            axios.post(`/api/cart/cartInsert/${no}`, this.prodList.prod_no)
+            axios.post(`/api/cart/insertCart/${no}`, this.prodList.prod_no)
                 Swal.fire({ 
                     position: "center",
                     icon: "success",
