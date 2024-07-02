@@ -28,15 +28,42 @@ router.post('/login', async (req, res) => {
     } else {
         res.send(401);
     }
-
 });
+
+//카카오 로그인
+router.post('/kakao-login', (req, res) => {
+    const { accessToken, kakaoAccount } = req.body;
+  
+    console.log('Received accessToken:', accessToken);
+    console.log('Received kakaoAccount:', kakaoAccount);
+  
+    // 사용자 정보를 처리하고 로그인 로직을 구현합니다.
+    // 예: 데이터베이스에 사용자 정보를 저장하거나 확인합니다.
+  
+    res.status(200).json({
+      message: '카카오 로그인 성공',
+      user: kakaoAccount
+    });
+  });
+
+//네이버 로그인
+router.post('/naverlogin', (req, res) => {
+    const { accessToken, email } = req.body;
+    console.log('Received accessToken:', accessToken);
+    console.log('Received email:', email);
+    // 사용자 정보를 처리하고 로그인 로직을 구현합니다.
+    // 예: 데이터베이스에 사용자 정보를 저장하거나 확인합니다.
+    res.status(200).json({
+        message: '네이버 로그인 성공',
+        user: { email }
+    });
+});  
 
 // 로그아웃
 router.post('/logout', async (req, res) => {
     req.session.destroy();
     res.send(200);
 });
-
 
 // 회원가입
 router.post('/join', async (req, res) => {
@@ -86,19 +113,6 @@ router.put('/usermodify', async (req, res) => {
     }
 });
 
-// 회원탈퇴
-// router.post("/userdelete", async (req, res) => {
-//     const user_no = req.session.user_no;
-//     const { user_pw } = req.body;
-//     try {
-//         let result =await query("userdelete", [user_pw, user_no]);
-//         res.send(result);
-//         console.log(result);
-//     } catch (err) {
-//         console.error(err);
-//         res.status(500).send('회원탈퇴를 실패하였습니다.');
-//     }
-// });
 router.post('/userdelete', async (req, res) => {
     const user_no = req.session.user_no;
     const { user_pw } = req.body;
