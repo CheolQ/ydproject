@@ -18,8 +18,9 @@
             </div>
         </div>
         <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-            <button @click="prodModify" class="btn btn-primary btn-lg">수정</button>        
-            <button class="btn btn-secondary btn-lg" @click="$router.go(-1)">취소</button>
+            <button @click="prodModify" class="btn btn-primary btn-lg">수정</button>
+            <button class="btn btn btn-danger btn-lg" @click="prodDel">삭제</button>        
+            <button class="btn btn-secondary btn-lg" @click="$router.go(-1)">목록</button>
         </div>
     </div>        
 </template>
@@ -45,6 +46,21 @@ import ContentHeader from '@/components/admin/ContentHeader.vue'
             async getProdInfo()	{
                 this.prodInfo = 
                 (await axios.get(`/api/shop/${this.searchNo}`)).data[0];
+            },
+            prodDel(){
+                console.log(this.prodInfo.main_img);
+                console.log(this.prodInfo.detail_img);
+                console.log(this.searchNo)
+                axios.delete(`/api/adminProd/${this.searchNo}`,{
+                    data: {
+                        main: this.prodInfo.main_img,
+                        detail: this.prodInfo.detail_img
+                    }
+                })
+                .then(() => {
+                    this.$router.push({path: 'prodList'})
+                })
+                .catch(err=> console.log(err))
             },
             prodModify(){
                 this.$router.push({path: 'ProdModify' , query: this.searchNo})

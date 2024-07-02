@@ -4,8 +4,8 @@
             <h1 class="mb-4">Notice</h1>
 			<div class="col-xl-3">
                          <div class="input-group w-100 mx-auto d-flex">
-                             <input type="search" class="form-control p-3" placeholder="keywords" aria-describedby="search-icon-1">
-                             <span id="search-icon-1" class="input-group-text p-3"><i class="fa fa-search"></i></span>
+                             <input type="search" v-model="search" class="form-control p-3" placeholder="keywords" aria-describedby="search-icon-1">
+                             <span id="search-icon-1" class="input-group-text p-3" @click="searchBtn"><i class="fa fa-search"></i></span>
                          </div>
                      </div>
  			<table class ="table	table-hover">
@@ -47,7 +47,8 @@ export default {
         return {
 			noticeList: [],
 			page:{},
-			pageUnit:5
+			pageUnit:5,
+			search: '',
         }
     },
     created() {
@@ -57,7 +58,7 @@ export default {
     methods: {
 		async goPage(page){
                 let pageUnit = this.pageUnit;
-                let result = await axios.get(`/api/notice?pageUnit=${pageUnit}&page=${page}`)
+                let result = await axios.get(`/api/notice?pageUnit=${pageUnit}&page=${page}&search=${this.search}`)
                 this.noticeList = result.data.list;
                 console.log(this.page)
                 this.page = this.pageCalc(page, result.data.count,5,pageUnit)
@@ -77,7 +78,10 @@ export default {
             let month = ('0' + (date.getMonth() + 1)).slice(-2);
             let day = ('0' + date.getDate()).slice(-2);
             return `${year}-${month}-${day}`;
- 	 },
+ 	 	},
+		searchBtn(){
+			this.goPage(1);
+		}
     }
 }
 </script>

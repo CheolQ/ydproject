@@ -2,6 +2,8 @@ const express = require('express');
 const router = express.Router()
 const query = require("../../mysql/index")
 const multer  = require('multer')
+const fs = require("fs");
+
 
 router.get("/", async (req, res) => {
     let page = Number(req.query.page);
@@ -41,7 +43,7 @@ router.post("/category", async (req, res) => {
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) { //파일이 저장 될 위치 지정
-    cb(null, 'd:/upload'); 
+    cb(null, '../frontend/public/img/prodImg'); 
   },
   filename: function (req, file, cb) {
     const originalname = Buffer.from(file.originalname, 'latin1').toString('utf8'); // 파일 utf-8로 변환
@@ -61,6 +63,23 @@ router.post("/prod", cpUpload, async (req,res) =>{
   console.log(file1[0].filename);
   console.log(file2[0].filename);
   await query("AdminProdInsert", data)
+  res.send("ok")
+})
+
+router.delete("/:no", async (req,res) => {
+  console.log(req.body.main);
+  console.log(req.body.detail);
+  console.log(req.params.no);
+  if (fs.statSync(`../frontend/public/img/prodImg/${req.body.main}`)) {
+    console.log('확인');
+    try{
+      fs.unlinkSync(`../frontend/public/img/prodImg/${req.body.main}`)
+      fs.unlinkSync(`../frontend/public/img/prodImg/${req.body.detail}`)
+      await query('AdminProdDelete', req.params.no);
+    } catch (err){
+      console.log(err)
+    }
+  }
   res.send("ok")
 })
 
