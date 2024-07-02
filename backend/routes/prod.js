@@ -3,6 +3,9 @@ const router = express.Router();
 const query = require('../mysql/index.js');
 //상품목록
 router.get('/', async (req, res) => {
+    // let order = req.query.order;
+    // console.log('ff',order);
+    // let result = await query('prodList',order);
     let result = await query('prodList');
     res.send(result);
 });

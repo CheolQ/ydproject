@@ -65,7 +65,7 @@ export default {
  	 	},
 	 	goToDetail(no)	{
 			console.log('번호',no);
- 	  		this.$router.push({	path:"/noticeinfo",	query: {no:no }	});
+ 	  		this.$router.push({	path:"noticeinfo",	query: {no:no }	});
  	 	},
 		getDateFormat(val )	{
     		let date = val == '' ? new Date() : new Date(val);

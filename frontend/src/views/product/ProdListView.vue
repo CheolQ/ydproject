@@ -17,11 +17,11 @@
                          <div class="bg-light ps-3 py-3 rounded d-flex justify-content-between mb-4">
                              <label for="fruits">Default Sorting:</label>
                              <select id="fruits" name="fruitlist" class="border-0 form-select-sm bg-light me-3" form="fruitform">
-                                 <option value="volvo">신상품</option>
-                                 <option value="saab">상품명</option>
-                                 <option value="opel">베스트</option>
-                                 <option value="audi">높은가격</option>
-                                 <option value="audi">낮은가격</option>
+                                 <option value="sin">신상품</option>
+                                 <option value="sang">상품명</option>
+                                 <option value="be">베스트</option>
+                                 <option value="hprice">높은가격</option>
+                                 <option value="rprice">낮은가격</option>
 
                              </select>
                          </div>
