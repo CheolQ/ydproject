@@ -41,8 +41,9 @@
                                 </td> -->
                             <td scope="row">
                                 <div class="align-items-center">
-                                    <img :src="`/api/upload/${cart.main_img}`" class="img-fluid rounded-circle"
-                                        style="width: 90px; height: 90px;">
+                                    <!-- <a href="/user/prodInfo"></a> -->
+                                        <img :src="`/api/upload/${cart.main_img}`" class="img-fluid rounded-circle"
+                                            style="width: 90px; height: 90px;">
                                 </div>
                             </td>
                             <td>
@@ -80,7 +81,7 @@
                 </table>
                 <div class="text-end">
                     <ul>
-                        <li>총 결제 금액 <span>{{ formatPrice(totalPrice) }}원</span></li>
+                        <li>주문 금액 <span>{{ formatPrice(totalPrice) }}원</span></li>
                     </ul>
                 </div>
                 <div class="button-container">
@@ -151,6 +152,8 @@ export default {
         },
         orderAll() {
             // 전체 주문 처리 로직
+            this.$store.commit('setCart', this.cartList);
+            this.$router.push('orderForm', this.cartList);
         },
         checkedAll(checked) {
             this.cartList.forEach(a => a.selected = checked);
@@ -187,7 +190,7 @@ export default {
                 cart.cnt--;
             }
             axios.put(`/api/cart/updateCnt?no=${cart.cart_no}&cnt=${cart.cnt}&price=${cart.prod_price}`);
-        }
+        },
     }
 }
 </script>

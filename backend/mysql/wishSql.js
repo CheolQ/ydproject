@@ -23,6 +23,10 @@ module.exports = {
                         
     wishInsert : `insert into likes (prod_no, user_no)
                     values (?, ?)`,
+
+    wishSearch : `select *
+                    from likes
+                    where prod_no = ?
+                    and user_no = ?`,
            
-                
 }; 

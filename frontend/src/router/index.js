@@ -9,6 +9,7 @@ import Cart from '@/views/CartView.vue';
 
 //주문
 import Order from '@/views/OrderForm.vue';
+import DirectOrder from '@/views/DirectOrderForm.vue';
 import OrderSuccess from '@/views/OrderSuccess.vue';
 
 //QnA
@@ -23,6 +24,8 @@ import MyPageQnA from '@/components/mypage/MypageQnA.vue';
 import MyPageQnAInfo from '@/components/mypage/MypageQnAInfo.vue';
 import MyWishList from '@/components/mypage/MyWishList.vue';
 import MyPageReview from '@/components/mypage/MypageReview.vue';
+import MyPageReviewInfo from '@/components/mypage/MypageReviewInfo.vue';
+import MyPageReviewForm from '@/components/mypage/MypageReviewForm.vue';
 
 //관리자
 import AdminLayout from '../layouts/AdminLayout.vue';
@@ -138,6 +141,16 @@ const routes = [
                         component: MyPageReview,
                     },
                     {
+                        path: 'mypagereviewinfo',
+                        name: 'mypagereviewinfo',
+                        component: MyPageReviewInfo,
+                    },
+                    {
+                        path: 'mypagereviewform',
+                        name: 'mypagereviewform',
+                        component: MyPageReviewForm,
+                    },
+                    {
                         path: 'mywishlist',
                         component: MyWishList,
                     },
@@ -151,6 +164,11 @@ const routes = [
                 path: 'orderForm',
                 name: 'orderForm',
                 component: Order,
+            },
+            {
+                path: 'directorderForm',
+                name: 'directorderForm',
+                component: DirectOrder,
             },
             {
 

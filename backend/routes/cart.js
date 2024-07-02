@@ -28,6 +28,8 @@ router.put('/updateCnt/', (req, res) => {
 });
 //장바구니 등록(메인/상세에서 add to cart)
 router.post('/insertCart/:no', (req, res) => {
+    // console.log(req.query.cnt,'cnt 찍히는지 ㅜㅜ')
+    // console.log(req.body)
     //console.log(req.params, '등록되었나')
     // query("cartInsert", req.params.no)
     // .then(result => res.send(result))
@@ -36,13 +38,14 @@ router.post('/insertCart/:no', (req, res) => {
     query('cartSearch', [req.params.no, req.session.user_no])
     .then((result) => {
         if (result.length != 0) {
+            //console.log(result,'결과값')
             query('cartUpdate', [req.session.user_no, req.params.no]);
+            //res.send('ok')
         } else {
-            query('cartInsert', [req.params.no, req.session.user_no]);
+            query('cartInsert', [req.body.cnt, req.params.no, req.session.user_no]);
         }
     });
 });
-
 //관심상품에서 장바구니로 insert(담기)
 router.post('/', async (req, res) => {
     let result = req.body;

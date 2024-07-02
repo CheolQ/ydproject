@@ -93,6 +93,9 @@ const store = createStore({
         getCartInfo(state) {
             return state.cart || ''; // 장바구니 정보 반환 (없으면 빈 문자열 반환)
         },
+        // getDirectPay(state){
+        //     return state.user.user_id || '';
+        // },
         isAuthenticated: state => !!state.user.user_id,
     },
     plugins: [persistedstate({ paths: ['user'] })],

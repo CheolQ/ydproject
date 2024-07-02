@@ -34,13 +34,11 @@
 
 <script>
 import axios from 'axios';
-
 export default {
   data() {
     return {
       form: {
-        user_id: '',
-        user_pw: ''
+        user_id: '', user_pw: ''
       }
     };
   },
@@ -84,7 +82,6 @@ export default {
   }
 };
 </script>
-
 <style scoped>
 .container {
   display: flex;
@@ -226,6 +223,7 @@ export default {
   color: #fff;
   border: none;
 }
+
 
 .btn-success:hover {
   background-color: #5b1fe3;
