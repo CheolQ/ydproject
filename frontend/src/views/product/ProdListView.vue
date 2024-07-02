@@ -35,11 +35,11 @@
                                      <h4>Categories</h4>
                                      <ul class="list-unstyled fruite-categorie">
                                          <li>
-                                             <div class="d-flex justify-content-between fruite-name" v-for="v in categories"  >
+                                             <div class="d-flex justify-content-between fruite-name" v-for="v in prodCategoryCnt"  >
 
-                                                 <a href="#"><i class="fas fa-apple-alt me-2"></i>{{v.parent }}</a>
+                                                 <a href="#"><i class="fas fa-apple-alt me-2"></i>{{v.category_name }}</a>
                                              
-                                                 <span>(3)</span>
+                                                 <span>({{ v.prodcnt }})</span>
                                              </div>
                                          </li>                                            
                                      </ul>
@@ -72,7 +72,6 @@
                                <div class="fruite-img">
                                          <img :src="`/img/prodImg/${prod.main_img}`" class="img-fluid w-100 rounded-top" alt="">
                                 </div>
-                                 
                                <div class="p-4 border border-secondary border-top-0 rounded-bottom">
                                    <h4>{{prod.prod_name }}</h4>
                              <div class="d-flex justify-content-between flex-lg-wrap">
@@ -96,66 +95,58 @@
 <script>
 import axios from "axios";
 import Swal from "sweetalert2";
-import { computed } from "vue";
+// import { computed } from "vue";
 
 export default { 
 data() { 
  return {
     prodList: [],
-    categories: [],
-    pordCnt:''
+    prodCategoryCnt : []
+
  }
 },
 
 created() {
-this.getProdList();
- this.fetchCategories();
+    this.getProdList();
+    this.getProdCategoryCnt();
 },
 methods: {
-async getProdList()   {
-    let result =   await axios.get(`/api/shop`);
-      this.prodList =   result.data ;
- },
-   fetchCategories() {
-     // Axios를 사용하여 서버의 API를 호출하여 카테고리 데이터를 가져옵니다.
-     // API 엔드포인트는 실제 서버 설정에 따라 수정해야 합니다.
-     const apiUrl = '/api/common/categories'; // 예시 API URL
-     axios.get(apiUrl)
-         .then(response => {
-             this.categories = response.data; // 서버에서 받은 카테고리 데이터를 설정합니다.
-             console.log(this.categories)
-         })
-         .catch(error => {
-             console.error('Error fetching categories:', error);
-         });
- },
-	 	async goToDetail(no)	{
+    async getProdList()   {
+        let result =   await axios.get(`/api/shop`);
+        this.prodList =   result.data ;
+    },
+    async getProdCategoryCnt()   {
+        let result = await axios.get(`/api/shop/cnt`);
+        console.log('갯수',result.data[0]);
+        this.prodCategoryCnt = result.data ;
+    },
+	async goToDetail(no)	{
  	  	await this.$router.push({	name:"shopinfo",	query: { no:no }	});
- 	 	},
-        numberFormat: function (number) {
-            if (number == 0)
-            return 0;
-            let regex = /(^[+-]?\d+)(\d{3})/;
-            let nstr = (number + '');
-            while (regex.test(nstr)) {
-                nstr = nstr.replace(regex, '$1' + ',' + '$2');
-            }
-            return nstr;
-        },
-        gotoCart(no, e){
-            console.log(no);
-            e.stopPropagation();
-            axios.post(`/api/cart/insertCart/${no}`, this.prodList.prod_no)
-                Swal.fire({ 
-                    position: "center",
-                    icon: "success",
-                    title: "장바구니에 등록되었습니다.",
-                    showConfirmButton: false,
-                    timer: 1500
-                })
+ 	},
+    numberFormat: function (number) {
+        if (number == 0)
+        return 0;
+        let regex = /(^[+-]?\d+)(\d{3})/;
+        let nstr = (number + '');
+        while (regex.test(nstr)) {
+            nstr = nstr.replace(regex, '$1' + ',' + '$2');
         }
-  
+        return nstr;
+    },
+    gotoCart(no, e){
+        console.log(no);
+        e.stopPropagation();
+        axios.post(`/api/cart/insertCart/${no}`, this.prodList.prod_no)
+        Swal.fire({ 
+            position: "center",
+            icon: "success",
+            title: "장바구니에 등록되었습니다.",
+            showConfirmButton: false,
+            timer: 1500
+        })
     }
+  
+}
 
 }
 </script>

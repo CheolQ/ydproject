@@ -1,8 +1,9 @@
 <template>
     <!-- Fruits Shop Start-->
     <div class="container-fluid fruite py-5">
-    <div class="container py-5" :key ="i" v-for ="(cate, i) in prodCategory" >
-        <h1 class="mb-4">Fresh fruits shop</h1>
+    <div class="container py-5" >
+        <!-- <h1 class="mb-4">{{ Object.keys(prodCategory)[0].codename }}</h1> -->
+        <h1 class="mb-4">{{ this.codename }}</h1>
         <div class="row g-4">
             <div class="col-lg-12">
                 <div class="row g-4">
@@ -35,13 +36,11 @@
                                     <h4>Categories</h4>
                                     <ul class="list-unstyled fruite-categorie">
                                         <li>
-                                            <!-- <div class="d-flex justify-content-between fruite-name" v-for="v in categories"  >
-
-                                                <a href="#"><i class="fas fa-apple-alt me-2"></i>{{v.parent }}</a> -->
-<!--                                             
-                                                <span>(3)</span>
-                                            </div> -->
-                                        </li>                                            
+                                            <div class="d-flex justify-content-between fruite-name" v-for="v in prodCategoryCnt"  >
+                                                <a href="#"><i class="fas fa-apple-alt me-2"></i>{{v.category_name }}</a>
+                                                <span>({{ v.prodcnt }})</span>
+                                            </div>
+                                        </li>                                           
                                     </ul>
                                 </div>
                             </div>
@@ -67,12 +66,11 @@
                             </div>
                        
                             <div class="col-md-6 col-lg-6 col-xl-4" 
-                            @click ="goToDetail(cate.prod_no)">
+                            :key ="i" v-for ="(cate, i) in prodCategory" @click ="goToDetail(cate.prod_no)">
                                 <div class="rounded position-relative fruite-item" >
                                     <div class="fruite-img">
                                         <img :src="`/img/prodImg/${cate.main_img}`" class="img-fluid w-100 rounded-top" alt="">
                                       </div>
-                                         <div class="text-white bg-secondary px-3 py-1 rounded position-absolute" style="top: 10px; left: 10px;">Fruits</div>
                                     <div class="p-4 border border-secondary border-top-0 rounded-bottom">
                                         <h4>{{cate.prod_name }}</h4>
                                         <div class="d-flex justify-content-between flex-lg-wrap">
@@ -102,18 +100,28 @@ export	default {
         return {
                 searchCode:"",
                 prodCategory: {},
+                prodCategoryCnt : [],
+                codename: ''
                 
         };
  	},
  	created(){
         this.searchCode = this.$route.query.code ;
         this.getProdCategory();
+        this.getProdCategoryCnt();
  	},
  	methods: {
         async getProdCategory()	{
             this.prodCategory = 
                 (await axios.get(`/api/shop/code/${this.searchCode}`)).data;
                 console.log(this.prodCategory);
+                console.log(this.prodCategory[0].codename);
+                this.codename = this.prodCategory[0].codename;
+        },
+        async getProdCategoryCnt()   {
+        let result = await axios.get(`/api/shop/cnt`);
+        console.log('갯수',result.data[0]);
+        this.prodCategoryCnt = result.data ;
         },
         async goToDetail(no)	{
  	  	await this.$router.push({	name:"shopinfo",	query: { no:no }	});

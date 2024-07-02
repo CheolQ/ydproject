@@ -7,17 +7,25 @@ router.get('/', async (req, res) => {
     res.send(result);
 });
 
-//상품단건조회 - /shop/A11
-router.get('/:no', async (req, res) => {
-    let result = await query('prodInfo', req.params.no);
-    console.log(result);
-    res.send(result);
-});
-
-//카테고리별 상품 조회 - /shop/A11
+//카테고리별 상품 조회 - /shop/code/A11
 router.get('/code/:code', async (req, res) => {
     let result = await query('prodCategory', req.params.code);
     console.log('카테',result);
+    res.send(result);
+});
+
+//카테고리별 갯수 조회 
+router.get('/cnt', async (req, res) => {
+    console.log('dfsdf')
+    let result = await query('prodCategoryCnt');
+    console.log('카테숫자',result);
+    res.send(result);
+});
+
+//상품 평점 조회
+router.get('/star/:no', async (req, res) => {
+    let result = await query('prodRating', req.params.no);
+    console.log('평점',result);
     res.send(result);
 });
 
@@ -27,12 +35,14 @@ router.get('/review/:no', async (req, res) => {
     // console.log('aaaa'+ result[0].review_no);
     res.send(result);
 });
+
 //qna조회
 router.get('/qna/:no', async (req, res) => {
     let result = await query('qnaList', req.params.no);
     // console.log('aaaa'+ result[0].review_no);
     res.send(result);
 });
+
 //qna 단건조회
 router.post('/qna/:no', async (req, res) => {
     console.log(req.body);
@@ -42,8 +52,6 @@ router.post('/qna/:no', async (req, res) => {
     console.log(result);
     res.send(result);
 });
-
-
 
 //qna작성
 router.post('/qna', async (req, res) => {
@@ -58,16 +66,18 @@ router.put("/qna/:no",	async (req ,res )	=> {
 	res.send(result);
 });
 
-router.get("/:code",	async (req , res )	=> {
-	let result =	await query("prodCategory",	req.params.no );
-   console.log(result);
-	res.send(result);
-});
-
 // qna user_no 값 구하기
 router.get('/getuserno/:id', async (req, res) => {
     let result = await query('selectuserno', req.params.id);
     console.log(result);
     res.send(result);
 });
+
+//상품단건조회 - /shop/A11
+router.get('/:no', async (req, res) => {
+    let result = await query('prodInfo', req.params.no);
+    console.log(result);
+    res.send(result);
+});
+
 module.exports = router;

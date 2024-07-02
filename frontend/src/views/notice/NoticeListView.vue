@@ -26,11 +26,6 @@
  	   				</tr>
  	  			</tbody>
  	 		</table>
-
-			<div class ="wrbtn">
-			  <a href="#" class="btn border border-secondary rounded-pill px-4 py-2 mb-4 text-primary">
-				Write</a>
-			</div>
 			<paging v-bind="page" @go-page="goPage"/>
  		</div>
 	</div>

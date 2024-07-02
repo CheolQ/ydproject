@@ -21,12 +21,13 @@
             </div>
             <div class="tab-pane" id="nav-mission" role="tabpanel" aria-labelledby="nav-mission-tab">
 				<div class ="container">
-					<caption>Review</caption>
+					<div class="col-lg-6">
+					<h4 class="fw-bold mb-3">Review</h4>
+					</div>
 					 <table class ="table table-hover">
 						<thead>
 					   <tr>
-						<th>NO.</th>
-						<th>CONTENT</th>
+						<th style="width:60%">TITLE</th>
 						<th>NAME</th>
 						<th>DATE</th>
 						<th>Rating</th>
@@ -34,14 +35,12 @@
 					  </thead>
 					  <tbody>
 					<tr :key ="i" v-for ="(review, i) in reviewList">
-					 <td>{{review.review_no}}</td>
-					 <td>{{review.review_content }}</td>
+					 <td>{{review.review_title }}</td>
 					 <td>{{review.user_id }}</td>
 					 <td>{{getDateFormat(review.create_date) }}</td>
 					 <td>
-						<i class="fa fa-star text-secondary"></i>                                    
-						<i class="fa fa-star text-secondary"></i>                                    
-						<i class="fa fa-star"></i>
+						<i :key = "i" v-for="(i) in Number(review.rating)" class="fa fa-star text-secondary"></i>
+                        <i :key = "i" v-for="(i) in 5- Number(review.rating)"class="fa fa-star"></i>
 					 </td>
 					</tr>
 				   </tbody>
@@ -50,22 +49,26 @@
             </div>
 			<div class="tab-pane" id="nav-qna" role="tabpanel" aria-labelledby="nav-qna-tab">
 				<div class ="container">
-					<caption>QnA</caption>
+					<div class="col-lg-6">
+					<h4 class="fw-bold mb-3">QnA</h4>
+					</div>
 					 <table class ="table table-hover">
 						<thead>
 					   <tr>
-						<th>NO.</th>
-						<th>TITLE</th>
+						<th style="width:60%">TITLE</th>
 						<th>NAME</th>
 						<th>DATE</th>
+						<th>UPDATE DATE</th>
 					   </tr>
 					  </thead>
 					  <tbody :key ="i" v-for ="(qna, i) in qnaList">
-					<tr @click= "qnaOnOff(qna.board_no)"  >
-					 <td>{{qna.board_no }}</td>
+					<tr @click= "qnaOnOff(qna.board_title)"  >
 					 <td>{{qna.title }}</td>
 					 <td>{{qna.user_id }}</td>
 					 <td>{{getDateFormat(qna.create_date) }}</td>
+
+					 <td v-if="qna.create_date != qna.update_date">{{getDateFormat(qna.update_date) }}</td>
+					 <td v-else> - </td>
 					</tr>
 					<tr v-if="qnaInfo">
 						<td>{{ qna.content }}</td>
@@ -94,7 +97,7 @@ export default {
 			prodList: [],
 			qnaInfo: false,
 			qnacon: {},
-			qnacontent:{ prodno: 1 , qnano: 1}
+			qnacontent:{ prodno: 1 , qnano: 1},
         }
     },
     created() {
@@ -102,7 +105,6 @@ export default {
         this.getReviewList();
         this.getQnaList();
 		this.getProdList();
-
     },
     methods: {
 		async getProdList()	{
@@ -111,41 +113,41 @@ export default {
  	 	},
         async getReviewList()	{
  	  	this.reviewList = (await axios.get(`/api/shop/review/${this.searchNo}`)).data ;	 	
-    },
+  		},
 		async getQnaList()	{
  	  		this.qnaList = (await axios.get(`/api/shop/qna/${this.searchNo}`)).data ;	
-    },
-	goToInsert( ){
- 	  this.$router.push({ name:"qna", query:{no : this.searchNo}});
- 	 },
-	getDateFormat(val )	{
-        let date = val == '' ? new Date() : new Date(val);
-        let year = date.getFullYear();
-        let month = ('0' + (date.getMonth() + 1)).slice(-2);
-        let day = ('0' + date.getDate()).slice(-2);
-        return `${year}-${month}-${day}`;
- 	 },
-	  qnaOnOff:function(no){
-		this.qnacontent.prodno = this.searchNo;
-		this.qnacontent.qnano = no;
-		console.log('제품번호',this.qnacontent.prodno);
-		console.log('qna번호',this.qnacontent.qnano);
-		console.log('보드번호',this.qnaList[0].board_no);
-		
-		// if(this.qnaList[{no}].board_no == no){
-		// this.qnacon
+    	},
+		goToInsert( ){
+ 		  this.$router.push({ name:"qna", query:{no : this.searchNo}});
+ 		 },
+		getDateFormat(val )	{
+    	    let date = val == '' ? new Date() : new Date(val);
+    	    let year = date.getFullYear();
+    	    let month = ('0' + (date.getMonth() + 1)).slice(-2);
+    	    let day = ('0' + date.getDate()).slice(-2);
+    	    return `${year}-${month}-${day}`;
+ 		 },
+		  qnaOnOff:function(no){
+			this.qnacontent.prodno = this.searchNo;
+			this.qnacontent.qnano = no;
+			console.log('제품번호',this.qnacontent.prodno);
+			console.log('qna번호',this.qnacontent.qnano);
+			console.log('보드번호',this.qnaList[0].board_no);
 
-		axios.post(`/api/shop/qna/${no}`)
-		.then(result => {
-			// this.qnaList = result.data;
-			this.qnaInfo = !this.qnaInfo;
-			console.log('버튼',no);
-			this.qnacon = result.data[0]
-			})
-		},
-	}
-    // }
-}
+			// if(this.qnaList[{no}].board_no == no){
+			// this.qnacon
+
+			axios.post(`/api/shop/qna/${no}`)
+			.then(result => {
+				// this.qnaList = result.data;
+				this.qnaInfo = !this.qnaInfo;
+				console.log('버튼',no);
+				this.qnacon = result.data[0]
+				})
+			},
+		}
+    	// }
+}	
 
 </script>
 
