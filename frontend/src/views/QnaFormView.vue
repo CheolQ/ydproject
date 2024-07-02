@@ -1,57 +1,56 @@
 <template>
     <div class="container-fluid py-5">
         <div class="container py-5">
-            <h1 class="mb-4">{{ isEdit ? 'QnA 수정' : 'QnA 등록' }}</h1>
-            <form @submit.prevent="isEdit ? updateQna() : saveQna()">
-                <div class="row g-5">
-                    <div class="col-md-12 col-lg-6 col-xl-7">
-                        <div class="row">
-                            <img :src="`/img/prodImg/${prodInfo.main_img}`" class="img-fluid rounded" alt="Image">
-                        </div>
-                        <div class="form-item" v-if="isEdit">
-                            <label class="form-label my-3" for="board_no">QnA 번호</label>
-                            <input type="text" class="form-control" id="board_no" v-model="qna.board_no" readonly>
-                        </div>
-                        <div class="form-item">
-                            <label class="form-label my-3" for="prod_no">상품번호</label>
-                            <input type="text" class="form-control" id="prod_no" v-model="qna.prod_no" readonly>
-                        </div>
-                        <div class="form-item">
-                            <label class="form-label my-3" for="user_id">Id</label>
-                            <input type="text" class="form-control" id="user_id" v-model="loggedInUserId" readonly>
-                        </div>
-                        <div class="form-item">
-                            <label class="form-label my-3" for="title">Title</label>
-                            <input type="text" class="form-control" id="title" v-model="qna.title">
-                        </div>
-                        <div class="form-item">
-                            <label class="form-label my-3" for="content">Content</label>
-                            <textarea name="text" class="form-control" id="content" spellcheck="false" cols="30"
-                                rows="11" v-model="qna.content"></textarea>
-                        </div>
-                        <div class="form-item">
-                            <label class="form-label my-3" for="board_pw">PW</label>
-                            <input type="text" class="form-control" id="board_pw" v-model="qna.board_pw">
-                        </div>
-
-                        <hr>
-
-                        <div class="col-md-12 col-lg-6 col-xl-5">
-                            <div class="row g-3 text-center align-items-center justify-content-center pt-4">
-                                <button type="submit"
-                                    class="btn border-secondary py-3 px-4 text-uppercase w-100 text-primary">
-                                    {{ isEdit ? '수정' : '등록' }}
-                                </button>
+            <div class="p-5 bg-light rounded">
+                    <div class="row g-4">
+                        <div class="col-12">
+                        <h1 class="mb-4">{{ isEdit ? 'QnA 수정' : 'QnA 등록' }}</h1>
+                        <form @submit.prevent="isEdit ? updateQna() : saveQna()">
+                            <div class="col-md-12 col-lg-6 col-xl-7">
+                                <div class="d-flex align-items-center flex-nowrap">
+                                    <div class="bg-secondary rounded">
+                                        <img :src="`/img/prodImg/${prodInfo.main_img}`" class="img-fluid rounded" style="width: 120px; height: 120px;" alt="">
+                                    </div>
+                                    <div class="ms-4 d-block">
+                                        <h6 class="text-dark"> 상품 번호 : {{ qna.prod_no }}</h6>
+                                        <h6 class="text-dark">상품 명 : {{ prodInfo.prod_name }}</h6>
+                                        <h6 class="text-dark">금액 :  {{ numberFormat(prodInfo.prod_price) }}원</h6>
+                                        <div class="d-flex pe-5">
+                                        <i class="fas fa-star text-primary"></i>
+                                         </div>
+                                     </div>
+                                 </div>
+                                  <div class="form-item" v-if="isEdit">
+                                      <label class="form-label my-3" for="board_no">QnA 번호</label>
+                                      <input type="text" class="form-control" id="board_no" v-model="qna.board_no" readonly>
+                                  </div>                        
+                                  <div class="form-item">
+                                      <label class="form-label my-3" for="user_id">Id</label>
+                                      <input type="text" class="form-control" id="user_id" v-model="loggedInUserId" readonly>
+                                  </div>
+                                  <div class="form-item">
+                                      <label class="form-label my-3" for="title">Title</label>
+                                      <input type="text" class="form-control" id="title" v-model="qna.title">
+                                  </div>
+                                  <div class="form-item">
+                                      <label class="form-label my-3" for="content">Content</label>
+                                      <textarea name="text" class="form-control" id="content" spellcheck="false" cols="30"
+                                      rows="11" v-model="qna.content"></textarea>
+                                  </div>
+                                  <div class="form-item">
+                                      <label class="form-label my-3" for="board_pw">PW</label>
+                                      <input type="text" class="form-control" id="board_pw" v-model="qna.board_pw">
+                                  </div>
+                                  <hr>
+                                  <div class="qnbtn">
+                                  <button class="btn border-secondary px-4 py-3 text-uppercase text-primary marinleftjh" type="submit"> {{ isEdit ? '수정' : '등록' }}</button>
+                                  <button class="btn border-secondary px-4 py-3 text-uppercase text-primary marinleftjh" type="button"  @click="goToList">목록</button>
+                                </div>
                             </div>
-                            <div class="row g-3 text-center align-items-center justify-content-center pt-4">
-                                <button type="button"
-                                    class="btn border-secondary py-3 px-4 text-uppercase w-100 text-primary"
-                                    @click="goToList">목록</button>
-                            </div>
+                        </form>
                         </div>
                     </div>
-                </div>
-            </form>
+            </div>
         </div>
     </div>
 </template>
@@ -123,7 +122,18 @@ export default {
         },
         goToList() {
             this.$router.push({ name: "shopinfo", query: { no: this.qna.prod_no } });
-        }
+        },
+        numberFormat: function (number) {
+            if (number == 0)
+            return 0;
+            let regex = /(^[+-]?\d+)(\d{3})/;
+            let nstr = (number + '');
+            while (regex.test(nstr)) {
+                nstr = nstr.replace(regex, '$1' + ',' + '$2');
+            }
+            return nstr;
+        },
+
     }
 };
 </script>
@@ -138,5 +148,19 @@ export default {
 
 .dd {
     text-align: left;
+}
+.primg-fluid {
+    width :120px;
+     height:100px;
+}
+.form{
+    text-align: center;
+}
+.marinleftjh{
+    margin-right: 10px;
+    display: inline-block;
+}
+.qnbtn{
+    text-align: center;
 }
 </style>

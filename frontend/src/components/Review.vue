@@ -84,6 +84,7 @@
 
 <script>
 import axios from "axios";
+
 export default { 
     data() { 
         return {
@@ -112,7 +113,7 @@ export default {
  	  	this.reviewList = (await axios.get(`/api/shop/review/${this.searchNo}`)).data ;	 	
     },
 		async getQnaList()	{
- 	  		this.qnaList = (await axios.get(`/api/shop/qna/${this.searchNo}`)).data ;	 	
+ 	  		this.qnaList = (await axios.get(`/api/shop/qna/${this.searchNo}`)).data ;	
     },
 	goToInsert( ){
  	  this.$router.push({ name:"qna", query:{no : this.searchNo}});
@@ -134,7 +135,6 @@ export default {
 		// if(this.qnaList[{no}].board_no == no){
 		// this.qnacon
 
-
 		axios.post(`/api/shop/qna/${no}`)
 		.then(result => {
 			// this.qnaList = result.data;
@@ -142,7 +142,7 @@ export default {
 			console.log('버튼',no);
 			this.qnacon = result.data[0]
 			})
-		}
+		},
 	}
     // }
 }

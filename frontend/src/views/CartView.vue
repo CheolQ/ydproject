@@ -5,6 +5,15 @@
         <div class="container py-5">
             <div class="table-responsive">
                 <table class="table">
+                    <colgroup>
+                        <col width="50">
+                        <col width="50">
+                        <col width="150">
+                        <col width="150">
+                        <col width="65">
+                        <col width="80">
+                        <col width="80">
+                    </colgroup>
                     <thead>
                         <tr>
                             <th scope="col">번호</th>
@@ -40,7 +49,7 @@
                                 <p class="mb-0 mt-4">{{ cart.prod_name }}</p>
                             </td>
                             <td>
-                                <div class="input-group quantity mt-4" style="width: 100px;">
+                                <div class="input-group quantity mt-4">
                                     <div class="input-group-btn">
                                         <button @click="minusBtn(cart)"
                                             class="btn btn-sm btn-minus rounded-circle bg-light border">
@@ -69,12 +78,19 @@
                         </tr>
                     </tbody>
                 </table>
-                <div>
-                    <button @click="delAll" class="btn btn-warning">전체삭제</button>
+                <div class="text-end">
+                    <ul>
+                        <li>총 결제 금액 <span>{{ formatPrice(totalPrice) }}원</span></li>
+                    </ul>
                 </div>
-                <div>
-                    <button @click="orderSel" class="btn btn-primary">선택주문</button>
-                    <button @click="orderAll" class="btn btn-primary">전체주문</button>
+                <div class="button-container">
+                    <div class="left-buttons">
+                        <button @click="orderSel" class="btn btn-warning">선택주문</button>
+                        <button @click="orderAll" class="btn btn-warning">전체주문</button>
+                    </div>
+                    <div class="right-button">
+                        <button @click="delAll" class="btn btn-danger">전체삭제</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -92,6 +108,13 @@ export default {
     },
     created() {
         this.getCart();
+    },
+    computed: {
+        totalPrice() {
+            return this.cartList.reduce((sum, item) => {
+                return sum + (item.prod_price * item.cnt);
+            }, 0);
+        }
     },
     methods: {
         getCart() {
@@ -176,5 +199,26 @@ export default {
     font-weight: bold;
     text-align: center;
     line-height: 24px
+}
+ul {
+  list-style: none;
+}
+.text-end ul li {
+  font-weight: bold;
+  margin: 10px 0;
+}
+.button-container {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px; 
+  align-items: center; 
+}
+.left-buttons {
+  display: flex;
+  gap: 10px; 
+}
+.right-button {
+  display: flex;
+  align-items: center;
 }
 </style>
