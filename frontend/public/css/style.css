@@ -155,10 +155,10 @@
     }
 }
 
-.dropdown .dropdown-menu a:hover {
+/* .dropdown .dropdown-menu a:hover {
     background: var(--bs-secondary);
     color: var(--bs-primary);
-}
+} */
 
 .navbar .nav-item:hover .dropdown-menu {
     transform: rotateX(0deg);

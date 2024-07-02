@@ -32,7 +32,7 @@ router.post('/login', async (req, res) => {
 });
 
 // 로그아웃
-router.post('/logout', (req, res) => {
+router.post('/logout', async (req, res) => {
     req.session.destroy();
     res.send(200);
 });

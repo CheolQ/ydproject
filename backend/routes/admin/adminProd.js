@@ -70,12 +70,12 @@ router.delete("/:no", async (req,res) => {
   console.log(req.body.main);
   console.log(req.body.detail);
   console.log(req.params.no);
+  await query('AdminProdDelete', req.params.no);
   if (fs.statSync(`../frontend/public/img/prodImg/${req.body.main}`)) {
     console.log('확인');
     try{
       fs.unlinkSync(`../frontend/public/img/prodImg/${req.body.main}`)
       fs.unlinkSync(`../frontend/public/img/prodImg/${req.body.detail}`)
-      await query('AdminProdDelete', req.params.no);
     } catch (err){
       console.log(err)
     }
@@ -83,5 +83,9 @@ router.delete("/:no", async (req,res) => {
   res.send("ok")
 })
 
+router.post("/ps/:no", async (req,res) => {
+  let result = await query('AdminProdInfo', req.params.no);
+  res.send(result);
+})
 
 module.exports = router;

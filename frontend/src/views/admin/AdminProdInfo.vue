@@ -63,7 +63,7 @@ import ContentHeader from '@/components/admin/ContentHeader.vue'
                 .catch(err=> console.log(err))
             },
             prodModify(){
-                this.$router.push({path: 'ProdModify' , query: this.searchNo})
+                this.$router.push({path: 'ProdModify' , query: {bno: this.searchNo}})
             },
             getDateFormat (date ){
  	            return this .$dateFormat (date );
