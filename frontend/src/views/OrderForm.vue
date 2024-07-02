@@ -5,7 +5,7 @@
             <h2 class="aside-tit">ORDER FORM</h2>
             <form action="#">
                 <div class="row g-5">
-                    <div class="col-md-12 col-lg-6 col-xl-7">
+                    <div class="col-md-12 col-lg-6 col-xl-6">
                         <div class="form-item">
                             <label class="form-label my-3">이름<sup>*</sup></label>
                             <input type="text" class="form-control" id="name" v-model="name">
@@ -20,8 +20,10 @@
                         </div>
                         <div class="form-item">
                             <label class="form-label my-3">우편번호<sup>*</sup></label>
-                            <input type="button" @click="execDaumPostcode()" value="우편번호 찾기">
-                            <input type="text" id="pCode" v-model="pCode" class="form-control" placeholder="우편번호" readonly><br>
+                            <div class="pCode-container">
+                                <input type="text" id="pCode" v-model="pCode" class="form-control" placeholder="우편번호" readonly>
+                                <input type="button" @click="execDaumPostcode()" value="우편번호 찾기" class="pCode-button">
+                            </div>
                         </div>
                         <div class="form-item">
                             <label class="form-label my-3">주소<sup>*</sup></label>
@@ -77,7 +79,7 @@
                             </div>
                             <div>
                                 <div class="text-end mt-5">잔여 포인트
-                                    <input type="text" readonly v-model="this.point" class="border-0 border-bottom rounded me-5 py-3 mb-4">
+                                    <input type="text-end" readonly v-model="this.point" class="border-0 border-bottom rounded me-5 py-3 mb-4 text-end">
                                     <button @click="points" class="btn border-secondary rounded-pill px-4 py-3 text-primary"
                                         type="button">전액 사용</button>
                                 </div>
@@ -123,7 +125,6 @@ export default {
     data() {
         return {
             selectedCart: [],
-            directOrder: [],
             totalPrice: 0,
             resultPrice: 0,
             point : 1,
@@ -140,6 +141,7 @@ export default {
     },
     created() {
         // const queryCart = this.$route.query.Cart;
+        getUser(); //유저정보
         const queryCart = JSON.stringify(this.getCartInfo);
         console.log(queryCart)
         console.log(this.getCartInfo);
@@ -153,6 +155,9 @@ export default {
         this.discount();
     },
     methods: {
+        getUser(){
+            //유저정보 알려줘 이름,연락처,이메일,포인트 등 가져왔어 axios.get().then()//this.result.name
+        },
         execDaumPostcode(){
             new window.daum.Postcode({
                 oncomplete: (data) => {
@@ -281,5 +286,17 @@ ul {
 .text-end ul li {
   font-weight: bold;
   margin: 10px 0;
+}
+.pCode-container {
+    display: flex;
+    align-items: center;
+}
+.pCode-container .form-control {
+    flex: 1;
+    margin-right: 10px; 
+}
+.pCode-container .pCode-button {
+    padding: 8px 12px; 
+    cursor: pointer;
 }
 </style>

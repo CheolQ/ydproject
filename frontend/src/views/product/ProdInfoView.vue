@@ -66,8 +66,9 @@ export	default {
         return {
                 searchNo:"",
                 prodInfo: {},
+                product: [],
                 number: 1,
-                prodRating: 0
+                prodRating: 0,
         };
  	},
  	created(){
@@ -168,14 +169,27 @@ export	default {
                 denyButtonText: `취소`
             }).then((result) => {
                 if (result.isConfirmed) {
+                    let getProduct = [];
+                    //console.log(this.prodInfo);
+                    getProduct.push({prod_no : this.prodInfo.prod_no, prod_name : this.prodInfo.prod_name, main_img : this.prodInfo.main_img, prod_price : this.prodInfo.prod_price, cnt : this.number})
+                    //console.log(getProduct)
+                    this.$store.commit('setCart', getProduct);
                     this.$router.push({
-                        path : 'orderForm', query : {no : this.prodInfo.prod_no, cnt : this.number}
+                        name : 'orderForm'
                     })
                 } else if (result.isDenied) {
                     Swal.fire("취소되었습니다.", "", "확인");
                 }
             })
-        }
+        },
+        // getProductInfo(){
+        //     let prodNo = this.$route.query.prodNo;
+        //     axios.get(`/api/product/${prodNo}`)
+        //         .then(res => {
+        //             this.product = res.data;
+        //         })
+        //         .catch(err => { console.error(err)} );
+        // }
  	},
  	
 };

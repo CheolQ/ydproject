@@ -28,21 +28,23 @@ router.put('/updateCnt/', (req, res) => {
 });
 //장바구니 등록(메인/상세에서 add to cart)
 router.post('/insertCart/:no', (req, res) => {
-    // console.log(req.query.cnt,'cnt 찍히는지 ㅜㅜ')
-    // console.log(req.body)
-    //console.log(req.params, '등록되었나')
     // query("cartInsert", req.params.no)
     // .then(result => res.send(result))
     // .catch(err => console.log(err))
-    // console.log(req.params.no);
+    let cnt = 0;
+    if (isNaN(Number(req.body.cnt))) { //메인에서 상품 수량은 undefined인데 그걸 Number타입으로 바꿨을때 NaN인지? 그럼 cnt을 1로
+        cnt = 1;
+    } else {
+        cnt = Number(req.body.cnt); //상세에서의 변경될수있는 수량값에 따라 cnt를 넣어서줌
+    }
     query('cartSearch', [req.params.no, req.session.user_no])
     .then((result) => {
         if (result.length != 0) {
-            //console.log(result,'결과값')
-            query('cartUpdate', [req.session.user_no, req.params.no]);
+            cnt = Number(result[0].cnt) + cnt;
+            query('cartUpdate', [cnt, req.session.user_no, req.params.no]);//메인일떄와 상세일때의 수량값에 따라 update됨
             //res.send('ok')
         } else {
-            query('cartInsert', [req.body.cnt, req.params.no, req.session.user_no]);
+            query('cartInsert', [cnt, req.params.no, req.session.user_no]);
         }
     });
 });
