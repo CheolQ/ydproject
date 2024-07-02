@@ -32,13 +32,13 @@
                     <div class="col">
                         <div class="input-group mb-3">
                             <span class="input-group-text" id="basic-addon1">제품이름</span>
-                            <input type="text" v-model="prodInfo.name" class="form-control" aria-label="Username" aria-describedby="basic-addon1">
+                            <input type="text" v-model="prodInfo.prod_name" class="form-control" aria-label="Username" aria-describedby="basic-addon1">
                         </div>
                     </div>
                     <div class="col">
                         <div class="input-group mb-3">
                             <span class="input-group-text" id="basic-addon1">가격</span>
-                            <input type="number" v-model="prodInfo.price" class="form-control"  aria-label="Username" aria-describedby="basic-addon1">
+                            <input type="number" v-model="prodInfo.prod_price" class="form-control"  aria-label="Username" aria-describedby="basic-addon1">
                         </div>
                     </div>
                     <div class="col">
@@ -85,25 +85,40 @@ import axios from 'axios';
 export default{
     data() {
         return {
+            prodNo: 1,
+
             parentCategory: [],
             childCategory: [],
             parentSelect: '0',
             childSelect: '0',
 
-            prodInfo: {category: ''},
+            prodInfo: {},
             file1: [],
             file2: [],
         }
     },
     created() {
+        this.prodNo = this.$route.query.bno
         axios.get(`/api/adminProd/category`)
         .then(result => {
             console.log(result.data)
             this.parentCategory = result.data;
         })
         .catch(err => console.log(err))
+
+        console.log(this.prodNo)
+        this.getProd();
     },
     methods:{
+        async getProd(){
+            await axios.post(`/api/adminProd/ps/${this.prodNo}`)
+            .then(result => {
+                console.log(result.data[0]);
+                this.prodInfo = result.data[0];
+                this.parentSelect = this.prodInfo.category_code1;
+            })
+            .catch(err => console.log(err))
+        },
         childView(){
             axios.post(`/api/adminProd/category`, {parentView : this.parentSelect})
             .then(result => {

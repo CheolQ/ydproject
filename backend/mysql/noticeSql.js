@@ -8,11 +8,7 @@ module.exports = {
     noticeCount : `select count(*) cnt 
                    from notice
                    where title like ?`,
-    noticeInfo: `select notice_no, user_id, title, content, create_date,
-                    (select file_name
-                    from file
-                    where table_no = notice_no
-                    and division = 'E1') as file_name 
+    noticeInfo: `select notice_no, user_id, title, content, create_date
                 from notice
                 where notice_no = ?`
   

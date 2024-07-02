@@ -18,7 +18,8 @@ module.exports = {
                     order by prod_no
                     limit ? , ?`,
     AdminProdInfo: `select prod_no, 
-	                       (select category_name from category where category_code = prod.category_code) as category_code,
+	                       (select pre_category from category where category_code = prod.category_code) as category_code1,
+                           category_code,
                            prod_name, 
                            prod_price, 
                            main_img,
@@ -26,7 +27,8 @@ module.exports = {
                            maker,
                            origin,
                            exp_date
-                    from prod`,
+                    from prod
+                    where prod_no = ?`,               
     AdminProdCategory1:`select category_code, category_name, seqs
                         from category
                         where pre_category is null

@@ -32,17 +32,9 @@ router.post('/login', async (req, res) => {
 });
 
 // 로그아웃
-// router.post('/logout', (req, res) => {
-//     req.session.destroy();
-//     res.send(200);
-// });
-router.post('/logout', (req, res) => {
-    req.session.destroy((err) => {
-        if (err) {
-            return res.status(500).send('로그아웃 중 오류가 발생했습니다.');
-        }
-        res.sendStatus(200);
-    });
+router.post('/logout', async (req, res) => {
+    req.session.destroy();
+    res.send(200);
 });
 
 

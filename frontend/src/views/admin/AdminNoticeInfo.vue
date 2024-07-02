@@ -60,14 +60,14 @@ export default {
             this.$router.push({path: 'noticeModify', query: {bno: this.bno}})
         },
         noticeDelete(){
-            axios.delete(`/api/adminNotice/${this.bno}`)
-            .then(()=> {
-                if(confirm("삭제하시겠습니까?")){
+            if(confirm("삭제하시겠습니까?")){
+                axios.delete(`/api/adminNotice/${this.bno}`)
+                .then(()=> {
                     alert("정상적으로 삭제되었습니다")
                     this.$router.push({path: 'notice'})
-                }
-            })
-            .catch(err=> console.log(err))
+                })
+                .catch(err=> console.log(err))
+            }
         },
         getDateFormat (date ){
             return this .$dateFormat (date );
