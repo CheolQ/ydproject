@@ -12,7 +12,7 @@ router.post('/login', async (req, res) => {
         return m.user_id == userid && m.user_pw == userpw
       });
     if (user) {
-        req.session.user_id = userid; // 세션에 사용자 이메일 정보 저장
+        req.session.user_id = userid; // 세션에 사용자  정보 저장
         req.session.is_logined = true; // 세션에 로그인 여부 저장
         req.session.user_no = user.user_no;
         req.session.save((err) => {
@@ -32,10 +32,19 @@ router.post('/login', async (req, res) => {
 });
 
 // 로그아웃
+// router.post('/logout', (req, res) => {
+//     req.session.destroy();
+//     res.send(200);
+// });
 router.post('/logout', (req, res) => {
-    req.session.destroy();
-    res.send(200);
+    req.session.destroy((err) => {
+        if (err) {
+            return res.status(500).send('로그아웃 중 오류가 발생했습니다.');
+        }
+        res.sendStatus(200);
+    });
 });
+
 
 // 회원가입
 router.post('/join', async (req, res) => {
@@ -68,17 +77,56 @@ router.post('/userfindid', (req, res) => {
         });
     });
 
-
-//회원수정
-// router.put("/)",	async (req ,res )=> {
-//  	let result =await query("userUpdate",[req.body,	req.params.id]);
-//  	res.send(result);
-// });
+// 회원정보변경
+router.put('/usermodify', async (req, res) => {
+    const user_no = req.session.user_no;
+    const { user_id, user_pw, name, email, tel, postcode, addr, detail_addr } = req.body;
+    try {
+        let result = await query('usermodify', [user_pw, name, email, tel, postcode, addr, detail_addr, user_no]);
+        res.send(result);
+        console.log('@@@@@@@@@@@@@@@@@@@@@@@');
+        console.log(result);
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('회원정보 변경에 실패했습니다.');
+        console.log('@@@@@@@@@@@@@@@@@@@@@@@');
+        console.log(err);
+    }
+});
 
 // 회원탈퇴
-// router.delete("/:id)",	async (req ,	res )	=> {
-//  	let result =	await query("userDelete",	req.params.id );
-//  	res.send(result);
+// router.post("/userdelete", async (req, res) => {
+//     const user_no = req.session.user_no;
+//     const { user_pw } = req.body;
+//     try {
+//         let result =await query("userdelete", [user_pw, user_no]);
+//         res.send(result);
+//         console.log(result);
+//     } catch (err) {
+//         console.error(err);
+//         res.status(500).send('회원탈퇴를 실패하였습니다.');
+//     }
 // });
+router.post('/userdelete', async (req, res) => {
+    const user_no = req.session.user_no;
+    const { user_pw } = req.body;
+    try {
+      const result = await query('userdelete', [user_no, user_pw]);
+      if (result.affectedRows > 0) {
+        req.session.destroy((err) => {
+          if (err) {
+            return res.status(500).send('회원 탈퇴 중 오류가 발생했습니다.');
+          }
+          res.clearCookie('connect.sid'); // Optional: clear cookie
+          res.status(200).send('회원 탈퇴 완료');
+        });
+      } else {
+        res.status(401).send('비밀번호가 일치하지 않습니다.');
+      }
+    } catch (err) {
+      console.error(err);
+      res.status(500).send('회원 탈퇴를 실패하였습니다.');
+    }
+  });
 
 module.exports = router;

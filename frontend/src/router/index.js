@@ -57,8 +57,8 @@ import NoticeInfoView from '@/views/notice/NoticeInfoView.vue';
 import login from '../views/user/loginForm.vue';
 import join from '../views/user/joinForm.vue';
 import UserFind from '../views/user/UserFind.vue';
-// import UserModify from '../views/user/UserModify.vue';
-// import UserDrop from '../views/user/userdrop.vue';
+import UserModify from '../views/user/UserModify.vue';
+import UserDelete from '../views/user/UserDelete.vue';
 
 const routes = [
     {
@@ -172,14 +172,14 @@ const routes = [
                 path: 'UserFind',
                 component: UserFind,
             },
-            // {
-            //     path: 'UserModify',
-            //     component: UserModify,
-            // },
-            // {
-            //     path: 'UserDrop',
-            //     component: UserDrop,
-            // },
+            {
+                path: 'UserModify',
+                component: UserModify,
+            },
+            {
+                path: 'UserDelete',
+                component: UserDelete,
+            },
         ],
     },
     {

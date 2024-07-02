@@ -19,18 +19,28 @@ module .exports = {
     //                 where user_id = user_id
     //                 and tel = tel`,
 
-    //회원정보수정
-    // usermodify: `update user
-    //                     set  user_pw = ?
-    //                     name = ?
-    //                     email = ?
-    //                     tel = ?
-    //                     postcode = ?
-    //                     addr = ?
-    //                     detail_addr = ?
-    //                     where user_id = user_id`
+    // 회원정보수정
+    usermodify: `update user
+                        set  user_pw = ?,
+                        name = ?,
+                        email = ?,
+                        tel = ?,
+                        postcode = ?,
+                        addr = ?,
+                        detail_addr = ?
+                        where user_no = ?`,
                         
     //간편로그인회원 정보수정
 
-    //회원탈퇴
+
+    // 회원탈퇴
+    userdelete:    `delete from user 
+                        where user_no = ? 
+                        and user_pw = ?`
+    
+    
+    // `delete from user 
+    //                     where user_pw = ?
+    //                     and user_no = ?`
+
 };
