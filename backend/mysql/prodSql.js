@@ -1,7 +1,12 @@
 module.exports = {
         prodList: `SELECT prod_no, prod_name, category_code, prod_price, prod_explain, main_img, detail_img, maker, origin, exp_date
-                    FROM prod`,
+                    FROM prod
+                    where prod_name like ? 
+                    limit ?,?`,
                 //     order by ??`,
+        prodCount : `select count(*) cnt 
+                     from prod
+                     where prod_name like ?`,
 
         prodInfo: `SELECT prod_no, prod_name, category_code, prod_price, prod_explain, main_img, detail_img, maker, origin, exp_date
                    FROM prod

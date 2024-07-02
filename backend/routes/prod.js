@@ -6,8 +6,20 @@ router.get('/', async (req, res) => {
     // let order = req.query.order;
     // console.log('ff',order);
     // let result = await query('prodList',order);
-    let result = await query('prodList');
-    res.send(result);
+    // let result = await query('prodList');
+    // res.send(result);
+    let page = Number(req.query.page);
+    let pageUnit = Number(req.query.pageUnit);
+    let search = '%'+req.query.search+'%'
+    console.log('r검색어',search)
+    if(!page){  page = 1;   }
+    if(!pageUnit){  pageUnit = 10;  }
+    let offset = (page -1)*pageUnit ;
+
+    let list = await query("prodList",[search, offset,pageUnit]);
+    let count = await query("prodCount", search)
+    count = count[0].cnt;
+    res.send({list,count})
 });
 
 //카테고리별 상품 조회 - /shop/code/A11

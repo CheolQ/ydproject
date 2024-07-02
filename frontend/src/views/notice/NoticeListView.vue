@@ -42,7 +42,7 @@ export default {
         return {
 			noticeList: [],
 			page:{},
-			pageUnit:5,
+			pageUnit:9,
 			search: '',
         }
     },
