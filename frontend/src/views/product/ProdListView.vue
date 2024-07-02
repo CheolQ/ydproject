@@ -8,8 +8,8 @@
                  <div class="row g-4">
                      <div class="col-xl-3">
                          <div class="input-group w-100 mx-auto d-flex">
-                             <input type="search" class="form-control p-3" placeholder="keywords" aria-describedby="search-icon-1">
-                             <span id="search-icon-1" class="input-group-text p-3"><i class="fa fa-search"></i></span>
+                             <input type="search" v-model="search" class="form-control p-3" placeholder="keywords" aria-describedby="search-icon-1">
+                             <span id="search-icon-1" class="input-group-text p-3" @click="searchBtn"><i class="fa fa-search"></i></span>
                          </div>
                      </div>
                      <div class="col-6"></div>
@@ -49,43 +49,27 @@
                      </div>
                      <div class="col-lg-9">
                          <div class="row g-4 justify-content-center">
-                             <div class="col-md-6 col-lg-6 col-xl-4">
-                                 <div class="rounded position-relative fruite-item">
-                                     <div class="fruite-img">
-                                         <img src="../../../public/img/prodImg/칸쵸.jpg" class="img-fluid w-100 rounded-top" alt="">
-                                     </div>
-                                     <div class="text-white bg-secondary px-3 py-1 rounded position-absolute" style="top: 10px; left: 10px;">Fruits</div>
-                                     <div class="p-4 border border-secondary border-top-0 rounded-bottom">
-                                         <h4>Grapes</h4>
-                                         <p>Lorem ipsum dolor sit amet consectetur adipisicing elit sed do eiusmod te incididunt</p>
-                                         <div class="d-flex justify-content-between flex-lg-wrap">
-                                             <p class="text-dark fs-5 fw-bold mb-0">$4.99 / kg</p>
-                                             <a href="#" class="btn border border-secondary rounded-pill px-3 text-primary"><i class="fa fa-shopping-bag me-2 text-primary"></i> Add to cart</a>
-                                         </div>
-                                     </div>
-                                 </div>
-                             </div>
-                        
-                    <div class="col-md-6 col-lg-6 col-xl-4" 
-                    :key ="i" v-for ="(prod, i) in prodList" @click ="goToDetail(prod.prod_no)">
-                       <div class="rounded position-relative fruite-item" >
-                               <div class="fruite-img">
-                                         <img :src="`/img/prodImg/${prod.main_img}`" class="img-fluid w-100 rounded-top" alt="">
-                                </div>
-                               <div class="p-4 border border-secondary border-top-0 rounded-bottom">
-                                   <h4>{{prod.prod_name }}</h4>
-                             <div class="d-flex justify-content-between flex-lg-wrap">
-                                      <p class="text-dark fs-5 fw-bold mb-0">{{numberFormat(prod.prod_price) }}원</p>
-                                     <button @click="gotoCart(prod.prod_no,$event)" class="btn border border-secondary rounded-pill px-3 text-primary"><i class="fa fa-shopping-bag me-2 text-primary"></i> Add to cart</button>
+                             <div class="col-md-6 col-lg-6 col-xl-4" 
+                             :key ="i" v-for ="(prod, i) in prodList" @click ="goToDetail(prod.prod_no)">
+                                <div class="rounded position-relative fruite-item" >
+                                    <div class="fruite-img">
+                                        <img :src="`/img/prodImg/${prod.main_img}`" class="img-fluid w-100 rounded-top" alt="">
                                     </div>
-                                  </div>
-                             </div>
-                       </div>           
+                                    <div class="p-4 border border-secondary border-top-0 rounded-bottom">
+                                        <h4>{{prod.prod_name }}</h4>
+                                        <div class="d-flex justify-content-between flex-lg-wrap">
+                                          <p class="text-dark fs-5 fw-bold mb-0">{{numberFormat(prod.prod_price) }}원</p>
+                                            <button @click="gotoCart(prod.prod_no,$event)" class="btn border border-secondary rounded-pill px-3 text-primary"><i class="fa fa-shopping-bag me-2 text-primary"></i> Add to cart</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>           
                          </div>
                      </div>
                  </div>
              </div>
          </div>
+         <paging v-bind="page" @go-page="goPage"/>
      </div>
  </div>
  <!-- Fruits Shop End-->
@@ -93,15 +77,22 @@
 </template>
 
 <script>
+import PageMixin from '../../mixin';
 import axios from "axios";
 import Swal from "sweetalert2";
+import paging from "@/components/Paging.vue"
 // import { computed } from "vue";
 
 export default { 
+    mixins : [PageMixin],
+	components:{paging},
 data() { 
  return {
     prodList: [],
-    prodCategoryCnt : []
+    prodCategoryCnt : [],
+    page:{},
+	pageUnit:9,
+	search: '',
 
  }
 },
@@ -109,8 +100,17 @@ data() {
 created() {
     this.getProdList();
     this.getProdCategoryCnt();
+    this.goPage(1);
 },
 methods: {
+    async goPage(page){
+        let pageUnit = this.pageUnit;
+        let result = await axios.get(`/api/shop?pageUnit=${pageUnit}&page=${page}&search=${this.search}`)
+        this.prodList = result.data.list;
+        console.log(this.page)
+        this.page = this.pageCalc(page, result.data.count,5,pageUnit)
+        
+    },
     async getProdList()   {
         let result =   await axios.get(`/api/shop`);
         this.prodList =   result.data ;
@@ -144,7 +144,10 @@ methods: {
             showConfirmButton: false,
             timer: 1500
         })
-    }
+    },
+    searchBtn(){
+			this.goPage(1);
+		}
   
 }
 
