@@ -130,28 +130,48 @@ module.exports = {
                     on q.board_no = r.board_no
                     where q.board_no = ?`,
                     
-    mypageUpdateQnA: `update qna set ? where board_no = ?`,
-    mypageDeleteQnA: `delete from qna where board_no = ?`,
+    mypageUpdateQnA: `update qna 
+                        set ? 
+                        where board_no = ?`,
+    mypageDeleteQnA: `delete 
+                        from qna 
+                        where board_no = ?`,
 
-    mypageReviewList: `SELECT 
+    mypageReviewList: `select 
                             p.main_img,
                             p.prod_name,
                             p.prod_price,
                             o.order_date,
-                            count(r.review_no) AS review_cnt
-                        FROM 
+                            count(r.review_no) as cnt,
+                            group_concat(r.review_no) as review_no
+                        from 
                             prod p
-                        JOIN 
-                            order_detail od ON p.prod_no = od.prod_no
-                        JOIN 
-                            orders o ON od.order_no = o.order_no
-                        LEFT JOIN 
-                            review r ON p.prod_no = r.prod_no AND od.order_detail_no = r.order_detail_no
-                        WHERE 
+                        join 
+                            order_detail od on p.prod_no = od.prod_no
+                        join 
+                            orders o on od.order_no = o.order_no
+                        left join 
+                            review r on p.prod_no = r.prod_no and od.order_detail_no = r.order_detail_no
+                        where 
                             o.user_no = ?
-                        GROUP BY 
+                        group by 
                             p.main_img, p.prod_name, p.prod_price, o.order_date
-                        ORDER BY 
-                            o.order_date DESC
-                            limit ? , ?`
+                        order by 
+                            o.order_date desc
+                        limit ? , ?`,
+
+    mypageReviewCount: `select count(*) as cnt from review where user_id = ?`,
+
+    mypageReviewInfo: `select p.prod_name,
+                                r.prod_no,
+                                p.prod_price, 
+                                p.main_img,
+                                r.review_no,
+                                r.review_title,  
+                                r.review_content, 
+                                r.create_date
+                        from review r
+                        join prod p
+                        on r.prod_no = p.prod_no
+                        where r.review_no = ?`,
 };
