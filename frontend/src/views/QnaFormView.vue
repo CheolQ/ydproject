@@ -5,7 +5,9 @@
                     <div class="row g-4">
                         <div class="col-12">
                         <h1 class="mb-4">{{ isEdit ? 'QnA 수정' : 'QnA 등록' }}</h1>
+                        
                         <form @submit.prevent="isEdit ? updateQna() : saveQna()">
+                            <div class="centeralign">
                             <div class="col-md-12 col-lg-6 col-xl-7">
                                 <div class="d-flex align-items-center flex-nowrap">
                                     <div class="bg-secondary rounded">
@@ -16,8 +18,9 @@
                                         <h6 class="text-dark">상품 명 : {{ prodInfo.prod_name }}</h6>
                                         <h6 class="text-dark">금액 :  {{ numberFormat(prodInfo.prod_price) }}원</h6>
                                         <div class="d-flex pe-5">
-                                        <i class="fas fa-star text-primary"></i>
-                                         </div>
+                                            <i :key = "i" v-for="(i) in Number(prodRating)" class="fa fa-star text-secondary"></i>
+                                            <i :key = "i" v-for="(i) in 5- Number(prodRating)"class="fa fa-star"></i>
+                                        </div>
                                      </div>
                                  </div>
                                   <div class="form-item" v-if="isEdit">
@@ -47,6 +50,7 @@
                                   <button class="btn border-secondary px-4 py-3 text-uppercase text-primary marinleftjh" type="button"  @click="goToList">목록</button>
                                 </div>
                             </div>
+                        </div>
                         </form>
                         </div>
                     </div>
@@ -68,7 +72,8 @@ export default {
                 ...this.qnadata
             },
             prodInfo: {},
-            isEdit: false
+            isEdit: false,
+            prodRating: 0
         };
     },
     created() {
@@ -77,6 +82,7 @@ export default {
             this.qna.prod_no = queryNo;
             this.searchNo = queryNo;
             this.getProdInfo();
+            this.getProdRating();
         }
 
         if (this.qna.board_no) {
@@ -93,6 +99,10 @@ export default {
     methods: {
         async getProdInfo() {
             this.prodInfo = (await axios.get(`/api/shop/${this.qna.prod_no}`)).data[0];
+        },
+        async getProdRating()	{
+            this.prodRating = 
+            (await axios.get(`/api/shop/star/${this.searchNo}`)).data[0].stars;
         },
         async saveQna() {
             this.qna.user_id = this.loggedInUserId;
@@ -153,8 +163,9 @@ export default {
     width :120px;
      height:100px;
 }
-.form{
-    text-align: center;
+.centeralign{
+    display: flex;
+  justify-content: center;
 }
 .marinleftjh{
     margin-right: 10px;

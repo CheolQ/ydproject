@@ -1,28 +1,16 @@
 <template>
     <div id="mypage">
         <h5 id="mypage-sub">후기 작성 상품</h5>
-        <div class="review-card">
-            <img src="path/to/your/image.jpg" alt="Product Image" class="product-image">
+        <div v-for="v in reviews" class="review-card">
+            <img :src="`/img/prodImg/${v.main_img}`" alt="Product Image" class="product-image">
             <div class="product-info">
-                <p>상품명: 동결건조 캔디 50g</p>
-                <p>상품가: 3,000원</p>
-                <p>구매일: 2024-06-11</p>
+                <p>상품명: {{ v.prod_name }}</p>
+                <p>상품가: {{ numberFormat(v.prod_price) }}원</p>
+                <p>구매일: {{ getDateFormat(v.order_date) }}</p>
             </div>
             <div class="review-buttons">
-                <button class="btn btn-primary btn-sm">후기작성</button>
-            </div>
-        </div>
-        <div class="review-card">
-            <img src="path/to/your/image.jpg" alt="Product Image" class="product-image">
-            <div class="product-info">
-                <p>상품명: 동결건조 캔디 50g</p>
-                <p>상품가: 3,000원</p>
-                <p>구매일: 2024-06-11</p>
-            </div>
-            <div class="review-buttons">
-                <button class="btn btn-primary btn-sm">후기조회</button>
-                <button class="btn btn-primary btn-sm">후기수정</button>
-                <button class="btn btn-primary btn-sm">후기삭제</button>
+                <button v-if="v.cnt == 0" @click="reviewInsertHandler" class="btn btn-primary btn-sm">후기작성</button>
+                <button v-else @click="reviewInfoHandler(v.review_no)" class="btn btn-primary btn-sm">후기조회</button>
             </div>
         </div>
         <paging-component v-bind="page" @go-page="goPage" />
@@ -34,9 +22,15 @@ import axios from 'axios';
 import PagingComponent from '@/components/Paging.vue'
 import Paging from "../../mixin";
 export default {
+    mixins: [Paging],
+    components: {
+        PagingComponent
+    },
     data() {
         return {
-            reviews: []
+            reviews: [],
+            page: {},
+            pageUnit: 10,
         }
     },
     created() {
@@ -46,12 +40,38 @@ export default {
         goPage(page) {
             axios.get(`/api/mypage/reviewlist?pageUnit=${this.pageUnit}&page=${page}`)
                 .then(result => {
-                    console.log(result)
-                    this.qnaList = result.data.result;
+                    console.l
+                    console.log('결과', result)
+                    this.reviews = result.data.result;
                     this.page = page;
                     this.page = this.pageCalc(page, result.data.count[0].cnt, 5, this.pageUnit);
                 })
                 .catch(err => console.log(err));
+        },
+        numberFormat: function (number) {
+            if (number == 0)
+                return 0;
+            let regex = /(^[+-]?\d+)(\d{3})/;
+            let nstr = (number + '');
+            while (regex.test(nstr)) {
+                nstr = nstr.replace(regex, '$1' + ',' + '$2');
+            }
+            return nstr;
+        },
+        getDateFormat(val) {
+            let date = val == '' ? new Date() : new Date(val);
+            let year = date.getFullYear();
+            let month = ('0' + (date.getMonth() + 1)).slice(-2);
+            let day = ('0' + date.getDate()).slice(-2);
+            return `${year}-${month}-${day}`;
+        },
+        reviewInfoHandler: function (no) {
+            // no: review_no
+            this.$router.push({ name: 'mypagereviewinfo', query: { no: no } })
+        },
+        reviewInsertHandler: function () {
+            // no: review_no
+            this.$router.push({ name: 'mypagereviewform' })
         }
     }
 }
