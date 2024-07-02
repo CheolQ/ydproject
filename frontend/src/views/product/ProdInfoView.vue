@@ -2,7 +2,7 @@
         <!-- Single Product Start -->
         <div class="container-fluid py-5 mt-5">
             <div class="container py-5">
-                <div class="row g-4 mb-5">
+                <div class="centeralign">
                     <div class="col-lg-8 col-xl-9">
                         <div class="row g-4">
                             <div class="col-lg-6">
@@ -20,13 +20,12 @@
                                 <p class="mb-3">원산지   {{prodInfo.origin }}</p>
                                 <p class="mb-3">제조사   {{prodInfo.maker }}</p>
                                 <p class="mb-3">유통기한   {{getDateFormat(prodInfo.exp_date) }}</p>
-                                <div class="d-flex mb-4">
-                                    <i class="fa fa-star text-secondary"></i>
-                                    <i class="fa fa-star text-secondary"></i>
-                                    <i class="fa fa-star text-secondary"></i>
-                                    <i class="fa fa-star text-secondary"></i>
-                                    <i class="fa fa-star"></i>
+                               
+                                <div class="d-flex mb-4" >
+                                    <i :key = "i" v-for="(i) in Number(prodRating)" class="fa fa-star text-secondary"></i>
+                                    <i :key = "i" v-for="(i) in 5- Number(prodRating)"class="fa fa-star"></i>
                                 </div>
+    
                                 <div class="input-group quantity mb-5" style="width: 100px;">
                                     <div class="input-group-btn">
                                         <button class="btn btn-sm btn-minus rounded-circle bg-light border"
@@ -68,20 +67,23 @@ export	default {
                 searchNo:"",
                 prodInfo: {},
                 number: 1,
+                prodRating: 0
         };
  	},
  	created(){
         this.searchNo = this.$route.query.no ;
         this.getProdInfo();
+        this.getProdRating();
  	},
  	methods: {
         async getProdInfo()	{
             this.prodInfo = 
             (await axios.get(`/api/shop/${this.searchNo}`)).data[0];
         },
-        //  getDateFormat(date )	{
-        //   return this .$dateFormat(date );
-        //  },
+        async getProdRating()	{
+            this.prodRating = 
+            (await axios.get(`/api/shop/star/${this.searchNo}`)).data[0].stars;
+        },
         getDateFormat(val )	{
             let date = val == '' ? new Date() : new Date(val);
             let year = date.getFullYear();
@@ -162,5 +164,9 @@ export	default {
 
 .marinleftjh{
     margin-right: 10px;
+}
+.centeralign{
+    display: flex;
+  justify-content: center;
 }
 </style>
