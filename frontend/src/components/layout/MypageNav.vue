@@ -33,8 +33,12 @@
                     <h2 class="txt txt3">CUSTOMER INFO</h2>
                     <div class="lnb">
                         <ul>
-                            <li class="first"><a href="https://www.helinoxstore.co.kr/shop/idinfo.html">회원정보변경</a></li>
-                            <li><a href="javascript:userexit();">회원탈퇴</a></li>
+                            <li class="first">
+                                <router-link to="/user/UserModify/">회원정보변경</router-link>
+                            </li>
+                            <li>
+                                <router-link to="/user/UserDelete/">회원탈퇴</router-link>
+                            </li>
                         </ul>
                     </div>
                 </div>

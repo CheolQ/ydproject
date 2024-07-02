@@ -70,23 +70,14 @@
                                     </tbody>
                                 </table>
                             </div>
-                            <div class="text-end">
-                                <ul>
-                                    <li>주문 금액 <span>{{ formatPrice(totalPrice) }}원</span></li>
-                                </ul>
+                            <div id="discount">주문금액
+                                <input readonly v-model="totalPrice">
                             </div>
-                            <div>
-                                <div class="text-end mt-5">잔여 포인트
-                                    <input type="text" readonly v-model="this.point" class="border-0 border-bottom rounded me-5 py-3 mb-4">
-                                    <button @click="points" class="btn border-secondary rounded-pill px-4 py-3 text-primary"
-                                        type="button">전액 사용</button>
-                                </div>
-                                <div id="discount" class="text-end">
-                                    <ul>
-                                        <li>총 결제 금액 <span>{{ formatPrice(resultPrice) }}원</span></li>
-                                    </ul>
-                                    <!-- <input readonly v-model="totalPrice"> -->
-                                </div>
+                            <div class="mt-5">
+                                <input type="text" class="border-0 border-bottom rounded me-5 py-3 mb-4"
+                                    placeholder="사용할 적립금">
+                                <button @click="points" class="btn border-secondary rounded-pill px-4 py-3 text-primary"
+                                    type="button">POINT</button>
                             </div>
                         </div>
                         <div class="row g-4 text-center align-items-center justify-content-center border-bottom py-3">
@@ -114,18 +105,13 @@
 import PortOne from '@portone/browser-sdk/v2';
 import axios from 'axios';
 import { mapGetters } from 'vuex';
-//import Address from '@/components/Address.vue';
 
 export default {
-    // components: {
-    //         Address,
-    //     },
     data() {
         return {
-            selectedCart: [],
-            directOrder: [],
+            //selectedCart: [],
+            prodInfo : [],
             totalPrice: 0,
-            resultPrice: 0,
             point : 1,
             name: '',
             phone: '',
@@ -136,18 +122,10 @@ export default {
         };
     },
     computed: {
-        ...mapGetters(['getCartInfo']), // Vuex 게터를 컴포넌트에 매핑
+
     },
     created() {
-        // const queryCart = this.$route.query.Cart;
-        const queryCart = JSON.stringify(this.getCartInfo);
-        console.log(queryCart)
-        console.log(this.getCartInfo);
-        // console.log(this.$store.state.cart);
-        console.log(queryCart);
-        if (queryCart) {
-            this.selectedCart = JSON.parse(queryCart);
-        }
+
     },
     mounted() {
         this.discount();
@@ -193,7 +171,7 @@ export default {
                 pg: 'kakaopay.TC0ONETIME',
                 pay_method: 'card',
                 merchant_uid: `merchant_${makeMerchantUid}`,
-                amount: this.resultPrice,
+                amount: this.totalPrice,
                 name: prodname,
                 buyer_name: this.name,
                 buyer_tel: this.phone,
@@ -239,7 +217,7 @@ export default {
                             if (result.data.dtCount.length > 0) {
                                 this.$router.push({
                                     name: 'orderSuccess',
-                                    query: { dtCount: JSON.stringify(result.data.dtCount) }
+                                    query: { dtCount: JSON.stringify(result.data.dtCount)}
                                 });
                             }
                         })
@@ -251,14 +229,13 @@ export default {
             });
         },
         discount() {
-            this.selectedCart.forEach(a => {
-                this.totalPrice += Number(a.prod_price * a.cnt);
-            });
+            // this.selectedCart.forEach(a => {
+            //     this.totalPrice += Number(a.prod_price * a.cnt);
+            // });
         },
         points() {
-            let point = this.point;
-            //this.totalPrice -= point;
-            this.resultPrice = this.totalPrice - point;
+            let point = 100
+            this.totalPrice -= point;
         },
         formatPrice(price) {
             return price.numberFormat();
@@ -274,12 +251,5 @@ export default {
     font-weight: bold;
     text-align: center;
     line-height: 24px
-}
-ul {
-  list-style: none;
-}
-.text-end ul li {
-  font-weight: bold;
-  margin: 10px 0;
 }
 </style>

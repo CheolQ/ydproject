@@ -39,14 +39,21 @@ router.delete("/", (req, res) => {
     .then(result => res.send(result))
 })
 
-//관심상품 등록
+//관심상품 등록(상세에서 like버튼 눌렀을때)
 router.post("/insert/:no", (req, res) => {
     //console.log('넘어오는지만 확인')
-    query("wishInsert", [req.params.no, req.session.user_no]) 
-    //유저넘버는 백에서 세션으로 받아오기때문에 프론트에서 따로 보내줄 필요x
-    .then(result => res.send(result))
-    .catch(err => res.status(500).send(err));
+    // query("wishInsert", [req.params.no, req.session.user_no]) 
+    // //유저넘버는 백에서 세션으로 받아오기때문에 프론트에서 따로 보내줄 필요x
+    // .then(result => res.send(result))
+    // .catch(err => res.status(500).send(err));
+    query('wishSearch', [req.params.no, req.session.user_no])
+    .then((result) => {
+        if (result.length == 0) {
+            query('wishInsert', [req.params.no, req.session.user_no]);
+        } else {
+            console.log('이미 들어있는 제품입니다.');
+        }
+    });
 })
-
 
 module.exports = router;

@@ -101,7 +101,7 @@ app.use('/order', orderRouter);
 app.use('/upload', express.static('D:/images/prodImages'));
 
 //로그인
-app.use('/users', usersRouter);
+// app.use('/users', usersRouter);      //공통에 중복있음
 
 app.get('/', (req, res) => {
     res.send('Hello World!~~');

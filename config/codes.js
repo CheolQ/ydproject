@@ -39,8 +39,7 @@ const Codes = {
     },
     AttachmentType: {
       E1: '공지사항',
-      E2: 'QnA',
-      E3: '리뷰'
+      E2: '리뷰'
     }
   };
   

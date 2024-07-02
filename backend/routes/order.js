@@ -6,13 +6,13 @@ router.post('/', async (req, res) => {
     let orderData = [ //쿼리 물음표 순서대로 물음표 여러개니까 배열안에 순서대로 넣음
         req.body.buyerName,
         req.body.paidAmount,
-        'P', //주문 상태인데 default로 우리는 박아뒀음
+        'P', //주문 상태인데 default로 박아뒀음
         req.body.buyerTel,
         req.body.buyerAdd,
         req.body.buyerPost,
         req.body.detail_addr,
         req.session.user_no,
-        req.body.paidAmount / 10,
+        req.body.paidAmount /10,
         req.body.merchantUid //결제번호(코드)int였는데 varchar로 타입바꿈 
     ];
 

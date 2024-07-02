@@ -1,163 +1,235 @@
-  <template>
-    <div class="container">
-
-      <div class="login-wrapper">
-        <h2 class="aside-tit">Login</h2>
-        <div v-if="account" class="">
-          <p>{{ account.user_id }}</p>
-          <button class="btn" @click="logoutHandler">로그아웃</button>
-        </div>
+<template>
+  <div class="container">
+    <div class="login-wrapper">
+      <div class="login-left">
+        <h2 class="aside-tit">로그인</h2>
+        <p class="login-description">가입하신 아이디와 비밀번호를 입력해주세요.<br>비밀번호는 대소문자를 구분합니다.</p>
         <form id="login-form">
-          <input v-model="form.user_id" type="text" placeholder="ID" name="userName">
-          <input v-model="form.user_pw" type="password" placeholder="PassWord" name="userPassword">
-          <!-- <label for="remember-check">
-                    <input type="checkbox" id="remember-check">아이디 저장하기
-                </label> -->
-          <input type="button" @click="loginHandler" value="로그인" />
+          <div class="form-group">
+            <input v-model="form.user_id" type="text" placeholder="ID" name="userName">
+          </div>
+          <div class="form-group">
+            <input v-model="form.user_pw" type="password" placeholder="Password" name="userPassword">
+          </div>
+          <input type="button" @click="loginHandler" value="로그인" class="btn-primary" />
         </form>
+        <button class="btn-naver">네이버로 로그인</button>
+        <button class="btn-kakao">카카오로 로그인</button>
+      </div>
+      <div class="divider"></div>
+      <div class="login-right">
+        <h2 class="aside-tit">회원가입</h2>
+        <p class="login-description">회원가입을 하시면 다양한 혜택을 편하게 이용하실 수 있습니다</p>
         <router-link to="/user/join">
           <button class="btn btn-success">회원가입</button>
         </router-link>
+        <p class="login-description spaced">간편한 정보를 입력 후 아이디와 비밀번호 정보를 찾으실 수 있습니다</p>
+        <router-link to="/user/UserFind">
+          <button class="btn">아이디/비밀번호 찾기</button>
+        </router-link>
       </div>
     </div>
-  </template>
+  </div>
+</template>
 
-  <script>
-  import axios from 'axios';
-  export default {
-    data() {
-      return {
-        form: { user_id: '', user_pw: '' },
+<script>
+import axios from 'axios';
+export default {
+  data() {
+    return {
+      form: {
+        user_id: '', user_pw: ''
       }
-    },
-    computed: {
-      account() {
-        return this.$store.state.user.user_id;
-      }
-    },
-    created() {
-      axios.get("/api/user/account")
+    };
+  },
+  computed: {
+    account() {
+      return this.$store.state.user.user_id;
+    }
+  },
+  created() {
+    axios.get("/api/user/account")
+      .then(result => {
+        this.$store.commit('user', result.data);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  },
+  methods: {
+    loginHandler() {
+      axios.post("/api/users/login", this.form)
         .then(result => {
           this.$store.commit('user', result.data);
+          this.$router.push('/user/home');
+        })
+        .catch(err => {
+          console.log(err);
+          alert('로그인 실패');
+          this.$router.push('/user/login');
+        });
+    },
+    logoutHandler() {
+      axios.post("/api/users/logout")
+        .then(() => {
+          this.$store.commit('user', {});
+          alert('로그아웃');
         })
         .catch(err => {
           console.log(err);
         });
-    },
-    methods: {
-      loginHandler() {
-        axios.post("/api/users/login", this.form)
-          .then(result => {
-            console.log(result.data)
-            this.$store.commit('user', result.data); // mytation 호출
-            console.log("로그인 성공");
-            console.log(this.$store.state.user)
-            this.$router.push('/user/home');
-          })
-          .catch(err => {
-            console.log(err);
-            alert('로그인 실패');
-            this.$router.push('/user/login');
-          });
-      },
-      logoutHandler() {
-        axios.post("/api/users/logout")
-          .then(() => {
-            this.$store.commit('user', {});
-            alert('로그아웃');
-          })
-          .catch(err => {
-            console.log(err);
-          });
-      }
     }
-  };
-  </script>
-
-  <style scoped>
-  .aside-tit {
-    padding: 65px 0 30px;
-    font-size: 24px;
-    color: #000;
-    font-weight: bold;
-    text-align: center;
-    line-height: 24px
   }
+};
+</script>
+<style scoped>
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #f9f9f9;
+}
+
+.login-wrapper {
+  display: flex;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.login-left, .login-right {
+  padding: 40px;
+  width: 400px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.aside-tit {
+  font-size: 24px;
+  color: #000;
+  font-weight: bold;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.login-description {
+  font-size: 14px;
+  color: #666;
+  text-align: left;
+  margin-bottom: 20px;
+}
+
+.login-description.spaced {
+  margin-top: 40px; /* 간격 조정 */
+  margin-bottom: 20px;
+}
+
+#login-form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group {
+  margin-bottom: 16px;
+}
+
+#login-form > .form-group > input {
+  width: 100%;
+  height: 48px;
+  padding: 0 10px;
+  border-radius: 6px;
+  border: 1px solid #ddd;
+  background-color: #f8f8f8;
+}
+
+#login-form > .form-group > input::placeholder {
+  color: #d2d2d2;
+}
+
+#login-form > .btn-primary {
+  color: #fff;
+  font-size: 16px;
+  background-color: #6a24fe;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  margin-top: 20px;
+  width: 100%;
+  height: 48px;
+  border-radius: 6px;
+}
+
+#login-form > .btn-primary:hover {
+  background-color: #5b1fe3;
+}
+
+.btn-naver, .btn-kakao {
+  width: 100%;
+  height: 48px;
+  border-radius: 6px;
+  font-size: 16px;
+  font-weight: bold;
+  margin-top: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.btn-naver {
+  background-color: #1ec800;
+  color: #fff;
+}
+
+.btn-naver:hover {
+  background-color: #18b200;
+}
+
+.btn-kakao {
+  background-color: #ffeb00;
+  color: #3c1e1e;
+}
+
+.btn-kakao:hover {
+  background-color: #e8d600;
+}
+
+.divider {
+  width: 1px;
+  background-color: #ddd;
+  height: auto;
+  margin: 0 40px; /* 간격 조정 */
+}
+
+.btn {
+  width: 100%;
+  height: 48px;
+  padding: 10px;
+  background-color: #fff;
+  color: #000;
+  text-align: center;
+  font-size: 16px;
+  font-weight: bold;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 20px;
+  transition: background-color 0.3s;
+}
+
+.btn-success {
+  background-color: #6a24fe;
+  color: #fff;
+  border: none;
+}
 
 
-  * {
+.btn-success:hover {
+  background-color: #5b1fe3;
+}
 
-    padding: 0;
-    margin: 0;
-    border: none;
-  }
-
-  body {
-    font-size: 14px;
-    font-family: 'Roboto', sans-serif;
-  }
-
-  .login-wrapper {
-
-    width: 400px;
-    height: 350px;
-    padding: 40px;
-    box-sizing: border-box;
-  }
-
-  .login-wrapper>h2 {
-
-    font-size: 24px;
-    color: #6A24FE;
-    margin-bottom: 20px;
-  }
-
-  #login-form>input {
-
-    width: 100%;
-    height: 48px;
-    padding: 0 10px;
-    box-sizing: border-box;
-    margin-bottom: 16px;
-    border-radius: 6px;
-    background-color: #F8F8F8;
-  }
-
-  #login-form>input::placeholder {
-    color: #D2D2D2;
-  }
-
-  #login-form>input[type="button"] {
-
-    color: #fff;
-    font-size: 16px;
-    background-color: #6A24FE;
-    margin-top: 20px;
-  }
-
-  #login-form>input[type="checkbox"] {
-    display: none;
-  }
-
-  #login-form>label {
-    color: #999999;
-  }
-
-  #login-form input[type="submit"]+label {
-
-
-    cursor: pointer;
-    padding-left: 26px;
-    /* background-image: url("checkbox.png"); */
-    background-repeat: no-repeat;
-    background-size: contain;
-  }
-
-  #login-form input[type="checkbox"]:checked+label {
-
-
-    /* background-image: url("checkbox-active.png"); */
-    background-repeat: no-repeat;
-    background-size: contain;
-  }
-  </style>
+.btn:hover {
+  background-color: #f0f0f0;
+}
+</style>

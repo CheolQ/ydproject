@@ -2,7 +2,7 @@
         <!-- Single Product Start -->
         <div class="container-fluid py-5 mt-5">
             <div class="container py-5">
-                <div class="row g-4 mb-5">
+                <div class="centeralign">
                     <div class="col-lg-8 col-xl-9">
                         <div class="row g-4">
                             <div class="col-lg-6">
@@ -20,24 +20,23 @@
                                 <p class="mb-3">원산지   {{prodInfo.origin }}</p>
                                 <p class="mb-3">제조사   {{prodInfo.maker }}</p>
                                 <p class="mb-3">유통기한   {{getDateFormat(prodInfo.exp_date) }}</p>
-                                <div class="d-flex mb-4">
-                                    <i class="fa fa-star text-secondary"></i>
-                                    <i class="fa fa-star text-secondary"></i>
-                                    <i class="fa fa-star text-secondary"></i>
-                                    <i class="fa fa-star text-secondary"></i>
-                                    <i class="fa fa-star"></i>
+                               
+                                <div class="d-flex mb-4" >
+                                    <i :key = "i" v-for="(i) in Number(prodRating)" class="fa fa-star text-secondary"></i>
+                                    <i :key = "i" v-for="(i) in 5- Number(prodRating)"class="fa fa-star"></i>
                                 </div>
+    
                                 <div class="input-group quantity mb-5" style="width: 100px;">
                                     <div class="input-group-btn">
                                         <button class="btn btn-sm btn-minus rounded-circle bg-light border"
-                                        v-on:click="decrease" >
+                                        @click="minusBtn(number)" >
                                             <i class="fa fa-minus"></i>
                                         </button>
                                     </div>
                                     <input type="number" readonly class="form-control form-control-sm text-center border-0"  v-model="number">
                                     <div class="input-group-btn">
                                         <button class="btn btn-sm btn-plus rounded-circle bg-light border"
-                                        v-on:click="increase" >
+                                        @click="plusBtn(number)" >
                                             <i class="fa fa-plus"></i>
                                         </button>
                                     </div>
@@ -45,7 +44,7 @@
                                 <!-- <a href="/user/mypage/mywishlist/" class="btn border border-secondary rounded-pill px-4 py-2 mb-4 text-primary marinleftjh"><i class="fa fa-shopping-bag me-2 text-primary"></i> Like</a> -->
                                 <button @click="gotoWish(prodInfo.prod_no)" class="btn border border-secondary rounded-pill px-4 py-2 mb-4 text-primary marinleftjh"><i class="fa fa-shopping-bag me-2 text-primary"></i> Like</button>
                                 <button @click="gotoCart(prodInfo.prod_no)" class="btn border border-secondary rounded-pill px-4 py-2 mb-4 text-primary marinleftjh"><i class="fa fa-shopping-bag me-2 text-primary"></i> Add to cart</button>
-                                <button @click="gotoPayments" class="btn border border-secondary rounded-pill px-4 py-2 mb-4 text-primary"><i class="fa fa-shopping-bag me-2 text-primary"></i> Buy Now</button>
+                                <button @click="gotoPayments(prodInfo.prod_no)" class="btn border border-secondary rounded-pill px-4 py-2 mb-4 text-primary"><i class="fa fa-shopping-bag me-2 text-primary"></i> Buy Now</button>
                              </div>
                             <review />
                         </div>
@@ -68,20 +67,23 @@ export	default {
                 searchNo:"",
                 prodInfo: {},
                 number: 1,
+                prodRating: 0
         };
  	},
  	created(){
         this.searchNo = this.$route.query.no ;
         this.getProdInfo();
+        this.getProdRating();
  	},
  	methods: {
         async getProdInfo()	{
             this.prodInfo = 
             (await axios.get(`/api/shop/${this.searchNo}`)).data[0];
         },
-        //  getDateFormat(date )	{
-        //   return this .$dateFormat(date );
-        //  },
+        async getProdRating()	{
+            this.prodRating = 
+            (await axios.get(`/api/shop/star/${this.searchNo}`)).data[0].stars;
+        },
         getDateFormat(val )	{
             let date = val == '' ? new Date() : new Date(val);
             let year = date.getFullYear();
@@ -92,11 +94,16 @@ export	default {
         goToList( ){
         this.$router.push({ path:"/shop"});
         },
-        increase(){
+        plusBtn(number){
             this.number++;
         },
-        decrease(){
-            this.number--;
+        minusBtn(number){
+            if(number < 2){
+                alert('1개 이상 담을 수 있습니다.');
+                return;
+            }else{
+                this.number--;
+            }
         },
         numberFormat: function (number) {
             if (number == 0)
@@ -131,13 +138,13 @@ export	default {
             });
         },
         gotoCart(no){
-            axios.post(`/api/cart/insertCart/${no}`, this.prodInfo.prod_no)
+            axios.post(`/api/cart/insertCart/${no}`, {no: this.prodInfo.prod_no, cnt: this.number})
             .then(
                 Swal.fire({
-                title: "장바구니로 이동하겠습니까?",
-                showDenyButton: true,
-				confirmButtonText: "이동",
-				denyButtonText: `계속 쇼핑`
+                    title: "장바구니로 이동하겠습니까?",
+                    showDenyButton: true,
+                    confirmButtonText: "이동",
+                    denyButtonText: `계속 쇼핑`
                 }).then((result) => {
                     if (result.isConfirmed) {
                         this.$router.push('cart')
@@ -145,9 +152,29 @@ export	default {
                     }
                 })
             )
+            // .then(result => {
+            //     console.log(result)
+            //     if(result.data === 'ok'){
+            //         alert("이미 등록되어있는 상품입니다.");
+            //     }
+            // })
+            .catch(err => console.log(err))
         },
-        gotoPayments(){
-            
+        gotoPayments(no){
+            Swal.fire({
+                title: "바로 주문하시겠습니까?",
+                showDenyButton: true,
+                confirmButtonText: "주문",
+                denyButtonText: `취소`
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    this.$router.push({
+                        path : 'orderForm', query : {no : this.prodInfo.prod_no, cnt : this.number}
+                    })
+                } else if (result.isDenied) {
+                    Swal.fire("취소되었습니다.", "", "확인");
+                }
+            })
         }
  	},
  	
@@ -162,5 +189,9 @@ export	default {
 
 .marinleftjh{
     margin-right: 10px;
+}
+.centeralign{
+    display: flex;
+  justify-content: center;
 }
 </style>

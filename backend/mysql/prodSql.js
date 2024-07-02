@@ -1,6 +1,12 @@
 module.exports = {
         prodList: `SELECT prod_no, prod_name, category_code, prod_price, prod_explain, main_img, detail_img, maker, origin, exp_date
-                    FROM prod`,
+                    FROM prod
+                    where prod_name like ? 
+                    limit ?,?`,
+                //     order by ??`,
+        prodCount : `select count(*) cnt 
+                     from prod
+                     where prod_name like ?`,
 
         prodInfo: `SELECT prod_no, prod_name, category_code, prod_price, prod_explain, main_img, detail_img, maker, origin, exp_date
                    FROM prod
@@ -24,19 +30,29 @@ module.exports = {
 
         selectuserno: `select user_no from user where user_id = ?`,
 
-        prodCategory: `SELECT prod_no, prod_name, category_code, prod_price, prod_explain, main_img, detail_img, maker, origin, exp_date
-                         FROM prod
-                         WHERE category_code = ?`,
+        prodCategory: `SELECT prod_no, prod_name, p.category_code, prod_price, main_img, c.category_name as codename
+                        FROM prod p
+                                left join category c
+                                on p.category_code = c.category_code
+                        WHERE p.category_code = ?`,
 
         prodCnt : ` select category_code, count(*) 
                         from prod
-                        GROUP BY category_code;`
-                  
-    
-//     prodCategory : `select c.category_code, c.category_name, p.prod_name, p.prod_no
-//                     from prod as p
-//                         left join category as c
-//                         on p.category_code = c.category_code
-//                     where p.category_code = ?`
+                        GROUP BY category_code`,
+        
+        prodRating : ` select prod_no, round(avg(rating)) as stars
+                        from review
+                        where prod_no =?
+                        group by prod_no`,
+                
+        prodCategoryCnt : ` select category_code, category_name, prodcnt
+                            from category c1 left join (select c.pre_category, count(p.prod_no) as prodcnt
+							from prod as p
+							left join category as c
+							        on p.category_code = c.category_code
+                                                        group by c.pre_category) c2
+                                                  on c2.pre_category = c1.category_code
+                            where c2.pre_category like 'A_'`
+
 
 };
