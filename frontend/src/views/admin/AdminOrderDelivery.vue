@@ -16,6 +16,7 @@
                             <th scope="col">상품</th>
                             <th scope="col">결제금액</th>
                             <th scope="col">주문상태</th>
+                            <th scope="col">상세보기</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -27,6 +28,7 @@
                             <td v-else>{{ od.prod_name}}</td>
                             <td>{{ getNumberFormat(od.pay_price) }}</td>
                             <td v-if="od.order_status === 'D5'">배송중</td>
+                            <td><button type="button" class="btn btn-primary" @click="orderInfo(od.order_no)">조회</button></td>
                         </tr>
                     </tbody>
                 </table>
@@ -67,6 +69,10 @@ export default {
                 this.page = this.pageCalc(page, result.data.count[0].cnt, 5, this.pageUnit);
             })
             .catch(err => console.log(err))
+        },
+        orderInfo(orderNo){
+            console.log(orderNo);
+            this.$router.push({path: 'ordersInfo', query: {bno: orderNo}})
         },
         getDateFormat (date ){
  	        return this .$dateFormat (date );
