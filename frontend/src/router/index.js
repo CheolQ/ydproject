@@ -9,6 +9,7 @@ import Cart from '@/views/CartView.vue';
 
 //주문
 import Order from '@/views/OrderForm.vue';
+import DirectOrder from '@/views/DirectOrderForm.vue';
 import OrderSuccess from '@/views/OrderSuccess.vue';
 
 //QnA
@@ -151,6 +152,11 @@ const routes = [
                 path: 'orderForm',
                 name: 'orderForm',
                 component: Order,
+            },
+            {
+                path: 'directorderForm',
+                name: 'directorderForm',
+                component: DirectOrder,
             },
             {
 
