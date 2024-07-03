@@ -155,7 +155,7 @@ export default {
 
 #aside .lnb-wrap .lnb ul li a {
     padding: 0 35px;
-    font-size: 12px;
+    font-size: 16px;
     color: #8d8d8d;
     color: #000 !important;
 }

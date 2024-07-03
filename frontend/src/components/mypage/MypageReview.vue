@@ -9,7 +9,7 @@
                 <p>구매일: {{ getDateFormat(v.order_date) }}</p>
             </div>
             <div class="review-buttons">
-                <button v-if="v.cnt == 0" @click="reviewInsertHandler" class="btn btn-primary btn-sm">후기작성</button>
+                <button v-if="v.cnt == 0" @click="reviewInsertHandler(v)" class="btn btn-primary btn-sm">후기작성</button>
                 <button v-else @click="reviewInfoHandler(v.review_no)" class="btn btn-primary btn-sm">후기조회</button>
             </div>
         </div>
@@ -69,9 +69,17 @@ export default {
             // no: review_no
             this.$router.push({ name: 'mypagereviewinfo', query: { no: no } })
         },
-        reviewInsertHandler: function () {
-            // no: review_no
-            this.$router.push({ name: 'mypagereviewform' })
+        reviewInsertHandler: function (v) {
+            console.log('ddd', v);
+            console.log(v.order_no)
+            this.$router.push({
+                name: 'mypagereviewform', query: {
+                    orderno: v.order_no,
+                    orderdetailno: v.order_detail_no,
+                    prodno: v.prod_no,
+                    id: v.user_id
+                }
+            })
         }
     }
 }

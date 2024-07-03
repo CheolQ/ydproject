@@ -11,15 +11,15 @@
                 <div class="form-group">
                     <label for="rating">평점</label>
                     <div class="rating">
-                        <input type="radio" id="star5" name="rating" value="5" v-model="review.rating"><label
+                        <input type="radio" id="star5" name="rating" value="5" v-model.number="review.rating"><label
                             for="star5">★</label>
-                        <input type="radio" id="star4" name="rating" value="4" v-model="review.rating"><label
+                        <input type="radio" id="star4" name="rating" value="4" v-model.number="review.rating"><label
                             for="star4">★</label>
-                        <input type="radio" id="star3" name="rating" value="3" v-model="review.rating"><label
+                        <input type="radio" id="star3" name="rating" value="3" v-model.number="review.rating"><label
                             for="star3">★</label>
-                        <input type="radio" id="star2" name="rating" value="2" v-model="review.rating"><label
+                        <input type="radio" id="star2" name="rating" value="2" v-model.number="review.rating"><label
                             for="star2">★</label>
-                        <input type="radio" id="star1" name="rating" value="1" v-model="review.rating"><label
+                        <input type="radio" id="star1" name="rating" value="1" v-model.number="review.rating"><label
                             for="star1">★</label>
                     </div>
                 </div>
@@ -28,15 +28,11 @@
                     <textarea id="content" name="content" rows="5" v-model="review.review_content"></textarea>
                 </div>
                 <div class="form-group">
-                    <label for="file1">첨부파일1</label>
-                    <input type="file" id="file1" name="file1" @change="fileHandler(1)">
-                </div>
-                <div class="form-group">
-                    <label for="file2">첨부파일2</label>
-                    <input type="file" id="file2" name="file2" @change="fileHandler(2)">
+                    <label for="files">첨부파일</label>
+                    <input type="file" id="files" @change="handleFileUpload">
                 </div>
                 <div class="form-actions">
-                    <button type="submit">등록</button>
+                    <button type="button" @click="insertReviewHandler">등록</button>
                     <button type="reset">취소</button>
                 </div>
             </form>
@@ -45,19 +41,84 @@
 </template>
 
 <script>
+import axios from 'axios';
 export default {
     data() {
         return {
             // isEdit: false // 나중에 입력 수정 같이 쓸때 이용
-            review: {},
+            review: {
+                rating: 0
+            },
             files: [],
 
         }
     },
     created() {
-
+        // order_no
+        console.log(this.$route.query.orderno);
+        // order_detail_no
+        console.log(this.$route.query.orderdetailno);
+        this.review.order_no = Number(this.$route.query.orderno);
+        this.review.order_detail_no = Number(this.$route.query.orderdetailno);
+        this.review.prod_no = Number(this.$route.query.prodno);
+        this.review.user_id = this.$route.query.id;
     },
     methods: {
+        insertReviewHandler: function () {
+            this.review.rating = Number(this.review.rating);
+            let temp = { ...this.review }
+            axios.post(`/api/mypage/insertreview`, temp)
+                .then(result => {
+                    console.log(result);
+                    console.log('나오나?', result.data.id);
+
+                    // 파일 데이터가 있는 경우 파일 데이터를 전송
+                    console.log(this.files)
+                    if (this.files.length > 0) {
+                        let formData = new FormData();
+                        this.files.forEach((file, idx) => {
+                            formData.append(`files`, file);
+                            console.log(`file${idx + 1}`, file);
+                        });
+
+                        console.log(formData)
+
+                        axios.post('/api/mypage/review/uploadfiles', formData, {
+                            params: { table_no: result.data.id, division: 'E2' }
+                        })
+                            .then(result => {
+                                alert('파일 업로드 성공');
+                                this.resetForm();
+                            })
+                            .catch(err => {
+                                console.log(err);
+                                alert('파일 업로드 실패')
+                            });
+                    } else {
+                        this.resetForm();
+                    }
+                    // this.$router.go(-1);
+                })
+                .catch(err => { console.log(err) })
+        },
+
+        handleFileUpload(e) {
+            Array.from(e.target.files).forEach(file => {
+                this.files.push(file);
+            })
+        },
+        resetForm() {
+            this.review = {
+                review_title: '',
+                rating: '',
+                review_content: ''
+            };
+            this.files = [];
+        },
+        confirm: function () {
+            this.review.rating = Number(this.review.rating);
+            console.log(this.review)
+        }
 
     }
 }
