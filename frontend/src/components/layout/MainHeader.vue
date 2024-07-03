@@ -12,7 +12,10 @@
                 <div class="d-flex justify-content-between">
                     <div class="top-info ps-2">
                     </div>
-                    <div class="top-link pe-2">
+                    <div class="top-link pe-2" v-if="loggedInUserId">
+                        <a><small class="text-white ms-2" @click="logoutHandler">Logout</small></a>
+                    </div>
+                    <div class="top-link pe-2" v-else>
                         <router-link to="/user/login" class="text-white"><small class="text-white ms-2">Login /
                             </small></router-link>
                         <router-link to="/user/join" class="text-white"><small class="text-white ms-2">SignUp /
@@ -103,6 +106,11 @@ export default {
             codes: {}
         }
     },
+    computed: {
+        loggedInUserId() {
+            return this.$store.getters.loggedInUserId;
+        }
+    },
     created() {
         this.fetchCategories();
         this.getCodes(); 
@@ -148,6 +156,15 @@ export default {
             }
             console.error(`해당 코드없음 : ${code}`)
             return code;
+        },
+        logoutHandler() {
+            this.$store.dispatch('logout')
+                .then(() => {
+                    this.$router.push('/user/login');
+                })
+                .catch(err => {
+                    console.error('Logout failed', err);
+                });
         }
     }
 }
