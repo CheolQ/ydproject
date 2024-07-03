@@ -111,12 +111,58 @@ router.get('/reviewList', async (req, res) => {
     res.send({ result, count });
 });
 
+// 후기 상세
 router.get('/reviewinfo/:no', async (req, res) => {
     // let result = await query('mypageReviewInfo', req.params.no);
     let result = await query('mypageReviewInfo', [req.params.no]);
     console.log(result);
     res.send(result);
 });
+
+// 후기 등록
+router.post('/insertreview', async (req, res) => {
+    let result = await query('mypageReviewInsert', [req.body]);
+    console.log('이게뭐야',result);
+    const reviewId  = result.insertId;
+    res.send({id: reviewId});
+});
+const multer = require('multer');
+
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) { //파일이 저장 될 위치 지정
+        cb(null, './uploads/review'); 
+    },
+    filename: function (req, file, cb) {
+        const originalname = Buffer.from(file.originalname, 'latin1').toString('utf8'); // 파일 utf-8로 변환
+        cb(null, Date.now() + '-' + originalname);
+    },
+});
+
+
+const path = require('path');
+// const upload = multer({ dest: './uploads/review' });
+const upload = multer({ storage: storage });
+// 후기 등록(파일업로드)
+router.post('/review/uploadfiles', upload.array('files'), async (req, res) => {
+    console.log('sdfsdfdfsd');
+    console.log('sdfsdf',req.files);
+    const files = req.files;
+    const {table_no, division} = req.query;
+
+    const fileData = files.map((file, index) => [
+        file.filename,
+        // file.origialname,
+        file.path,
+        path.extname(file.originalname),
+        table_no,
+        division,
+        index + 1
+    ]);
+
+    await query(`mypageReviewFileUpload`, [fileData]);
+    res.send(files);
+});
+
 
 
 module.exports = router;

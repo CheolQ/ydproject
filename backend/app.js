@@ -97,7 +97,7 @@ app.use('/order', orderRouter);
 
 //app.use('/upload', express.static('C:/Users/ekdms/Desktop/images/prodImages'));
 
-app.use('/upload', express.static('D:/images/prodImages'));
+app.use('/upload', express.static('uploads'));
 
 //로그인
 // app.use('/users', usersRouter);      //공통에 중복있음
