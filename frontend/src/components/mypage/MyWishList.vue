@@ -30,7 +30,7 @@
                                 </td> -->
                                 <td scope="row">
                                     <div class="align-items-center">
-                                        <img :src="`/api/upload/${w.main_img}`" class="img-fluid rounded-circle" style="width: 80px; height: 80px;">
+                                        <img :src="`/api/upload/${w.main_img}`" @click="gotoProdInfo(w.prod_no)" class="img-fluid rounded-circle" style="width: 80px; height: 80px;">
                                     </div>
                                 </td>
                                 <td>
@@ -138,6 +138,9 @@
             },
             checkedAll(checked){
                 this.wish.forEach(a => a.selected = checked);
+            },
+            gotoProdInfo(prodNo){
+                this.$router.push({ name : 'shopinfo', query : { no : prodNo } })
             }
         }
     }
@@ -151,13 +154,11 @@
     text-align: center;
     line-height: 24px
 } */
-
 /* .button-container-left {
   display: flex;
   justify-content: flex-start;
   margin-top: 10px; 
 }
-
 .button-container-right {
   display: flex;
   justify-content: flex-end;

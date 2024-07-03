@@ -36,6 +36,7 @@ router.post('/', async (req, res) => {
         //promise배열 끝날때까지 기다려
         let dtCount = await Promise.all(promises);
         console.log(dtCount); //dtCount배열 출력(오더디테일에 있는 오더넘버 하나하나가 오더디테일넘버..)
+        //유저의 포인트를 업데이트 시켜주는 쿼리문 .. 위치....정환씨한테 물어보기
         res.send({
             dtCount: dtCount
         });

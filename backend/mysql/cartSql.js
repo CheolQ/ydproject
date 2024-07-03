@@ -28,7 +28,7 @@ module.exports = {
                     and user_no = ?`,
 
     cartUpdate : `update cart 
-                    set cnt = cnt + 1
+                    set cnt = ?
                     where user_no = ? 
                     and prod_no = ?`,
 

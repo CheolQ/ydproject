@@ -1,3 +1,4 @@
+
 <template>
     <div class="container">
         <div class="signup-wrapper">
@@ -216,3 +217,4 @@ export default {
     background-color: #5b1fe3;
   }
   </style>
+

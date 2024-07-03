@@ -8,5 +8,7 @@ module.exports = {
                 
     orderDtInsert : `insert into order_detail 
                         set cnt = ?, order_no = ?, price = ?, prod_no = ?`,
+
+    //
     //getProdNo : `select prod_no from order_detail where order_detail_no = ?`
 }

@@ -41,9 +41,8 @@
                                 </td> -->
                             <td scope="row">
                                 <div class="align-items-center">
-                                    <!-- <a href="/user/prodInfo"></a> -->
-                                        <img :src="`/api/upload/${cart.main_img}`" class="img-fluid rounded-circle"
-                                            style="width: 90px; height: 90px;">
+                                    <img :src="`/api/upload/${cart.main_img}`" @click="gotoProdInfo(cart.prod_no)" class="img-fluid rounded-circle"
+                                        style="width: 90px; height: 90px;">
                                 </div>
                             </td>
                             <td>
@@ -143,6 +142,7 @@ export default {
                     selectedCart.push(a);
                 }
             });
+            console.log(selectedCart,'장바구니')
             // this.$store.state.cart = selectedCart;
             // console.log(this.$store.state.cart)
             this.$store.commit('setCart', selectedCart);
@@ -191,6 +191,9 @@ export default {
             }
             axios.put(`/api/cart/updateCnt?no=${cart.cart_no}&cnt=${cart.cnt}&price=${cart.prod_price}`);
         },
+        gotoProdInfo(prodNo){
+            this.$router.push({ name : 'shopinfo', query : { no : prodNo } })
+        }
     }
 }
 </script>
