@@ -141,7 +141,7 @@ export default {
     },
     created() {
         // const queryCart = this.$route.query.Cart;
-        getUser(); //유저정보
+        //getUser(); //유저정보
         const queryCart = JSON.stringify(this.getCartInfo);
         console.log(queryCart)
         console.log(this.getCartInfo);

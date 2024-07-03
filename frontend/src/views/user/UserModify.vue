@@ -101,8 +101,7 @@ export default {
             const result = await axios.put(url, param);
             console.log(result);
                 alert('회원정보가 수정되었습니다.');
-                this.$router.push('/user/home');
-                console.log(response);
+                this.$router.push('/user/home');               
             } catch (error) {
                 console.error(error);
                 alert('회원정보 수정에 실패했습니다.');
