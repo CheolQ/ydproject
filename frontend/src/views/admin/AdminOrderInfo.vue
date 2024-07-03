@@ -30,14 +30,14 @@
             </div>
             <div class="card mb-4" v-if="Status === 'D5' || Status === 'D6'">
                 <div class="card-body shadow">
-                    <p class="text-start" v-if="Status === 'D5'">출발날짜 : {{ u.deli_date }}</p>
-                    <p class="text-start" v-if="Status === 'D6'">도착날짜 : {{ u.deli_date }}</p>
+                    <p class="text-start" v-if="Status === 'D5'">출발날짜 : {{ formatDate(u.deli_date) }}</p>
+                    <p class="text-start" v-if="Status === 'D6'">도착날짜 : {{ formatDate(u.deli_date) }}</p>
                 </div>
             </div>
             <div class="card mb-4" v-if="Status === 'D2' || Status === 'D3'">
                 <div class="card-body shadow">
-                    <p>주문취소 등록일 : {{ cancel.cal_up }}</p>
-                    <p>주문취소 신청일 : {{ cancel.cal_at }}</p>
+                    <p>주문취소 등록일 : {{ formatDate(cancel.cal_up) }}</p>
+                    <p>주문취소 신청일 : {{ formatDate(cancel.cal_at) }}</p>
                 </div>
             </div>          
             <div class="card mb-4" v-if="Status === 'D4'  || Status === 'D5' || Status === 'D6'">
@@ -132,7 +132,18 @@ export default{
         },
         getNumberFormat (number ){
             return this .$numberFormat (number );
+        },
+        formatDate(dateStr) {
+            const date = new Date(dateStr);
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+            const hours = String(date.getHours()).padStart(2, '0');
+            const minutes = String(date.getMinutes()).padStart(2, '0');
+            const seconds = String(date.getSeconds()).padStart(2, '0');
+            return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
         }
+
     }
 }
 </script>               

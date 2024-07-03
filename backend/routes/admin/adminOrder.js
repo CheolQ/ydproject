@@ -4,9 +4,23 @@ const query = require("../../mysql/index")
 
 router.get("/", async (req, res) => {
     let page = Number(req.query.page);
-    let pageUnit = Number(req.query.pageUnit);
-    let orderStauts = req.query.orderStatus;
 
+    let pageUnit = Number(req.query.pageUnit);
+    console.log(req.query.name);
+
+    let name = '%'+req.query.name+'%';
+    let date1 = req.query.date1;
+    let date2 = req.query.date2;
+    let category = '%'+req.query.category+'%';
+
+    if(!date2) {
+        date2 = await query("AdminOrderDate");
+        date2 = date2[0].date;
+    }
+
+    if(!category){ 'D1'+','+'D4' }
+    
+    
     if(!page){ page = 1; }
     if(!pageUnit){ pageUnit = 10;}
     let offset = (page-1) * pageUnit;

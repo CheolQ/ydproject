@@ -31,7 +31,7 @@ router.get("/:no", async (req, res) => {
 })
 
 router.post("/:no", async (req, res) => {
-    let result = await query("AdminReplyInsert",[req.params.no, req.body.replys, 1])
+    let result = await query("AdminReplyInsert",[req.params.no, req.body.replys, req.session.user_no])
     res.send(result);
 })
 

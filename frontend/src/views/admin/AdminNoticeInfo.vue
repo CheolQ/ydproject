@@ -14,6 +14,10 @@
                         <tr>
                             <th>작성자</th>
                             <td scope ="col" class="dd" colspan="6">{{noticeInfo.user_id }}</td>  
+                        </tr>
+                        <tr>
+                            <th>첨부파일</th>
+                            <td><a href="/api/upload/notice/1719975784160-dsfsdfer.webp" download="가나.webp">다운로드</a></td>
                         </tr>        
                     </thead>
                     <tbody>
@@ -90,6 +94,12 @@ export default {
                 .catch(err=> console.log(err))
             }
         },
+        // getImagePath(image) {
+        //     return `/api/upload/${image.path}/${image.file_name}`;
+        // },
+        // getFilePath(file) {
+        //     return `/api/upload/${file.path}/${file.file_name}`;
+        // },
         getDateFormat (date ){
             return this .$dateFormat (date );
         },

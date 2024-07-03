@@ -1,6 +1,12 @@
 <template>
     <div>
         <ContentHeader title="주문상세"></ContentHeader>
+        <SearchForm title1="검색어" title2="주문기한" title3="주문상태" :Categorys="Categorys" @obj="searchfrom" ref="reset_com"></SearchForm>
+        <div class="d-grid gap-2 d-md-flex justify-content-md-center">
+            <button @click="prodSearchBtn" class="btn btn-primary">검색</button>        
+            <button @click="resetBtn" class="btn btn-secondary">초기화</button>
+        </div>
+        <br>
         <div class="card mb-4">
             <div class="card-body shadow">
                 <table class="table">
@@ -39,10 +45,11 @@ import Paging from "../../mixin";
 import axios from 'axios';
 import PagingComponent from '@/components/Paging.vue'
 import ContentHeader from '@/components/admin/ContentHeader.vue'
+import SearchForm from '@/components/admin/SearchForm.vue'
 export default {
     mixins : [Paging],
     components: {
-        PagingComponent, ContentHeader
+        PagingComponent, ContentHeader, SearchForm
     },
     data() {
         return {
@@ -50,6 +57,15 @@ export default {
             page: {},
             pageUnit: 5,
             order_status: 'D1',
+
+            Categorys: [
+                {category_code: 'D1', category_name: '결제완료', seqs: 1},
+                {category_code: 'D4', category_name: '상품준비중', seqs: 2}
+            ],
+            name: '',
+            date1: '',
+            date2: '',
+            category: '',
         }
     },
     created() {
@@ -58,7 +74,7 @@ export default {
     },
     methods: {
         goPage(page){
-            axios.get(`/api/adminOrder?pageUnit=${this.pageUnit}&page=${page}&orderStatus=${this.order_status}`)
+            axios.get(`/api/adminOrder?pageUnit=${this.pageUnit}&page=${page}&name=${this.name}&date1=${this.date1}&date2=${this.date2}&category=${this.category}`)
             .then(result => {
                 console.log(result.data)
                 this.orderList = result.data.list;
@@ -66,6 +82,13 @@ export default {
                 this.page = this.pageCalc(page, result.data.count[0].cnt, 5, this.pageUnit);
             })
             .catch(err => console.log(err))
+        },
+        prodSearchBtn(){
+            this.goPage(1);
+        },
+        resetBtn(){
+            this.$refs.reset_com.test2();
+            this.goPage(1);
         },
         statusBtn(no){
             axios.post(`/api/adminOrder/Preparing/${no}`)

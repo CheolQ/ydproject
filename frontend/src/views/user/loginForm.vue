@@ -99,7 +99,11 @@ export default {
       axios.post("/api/users/login", this.form)
         .then(result => {
           this.$store.commit('setUser', result.data);
-          this.$router.push('/user/home');
+          if(result.data.user_id === 'admin'){
+            this.$router.push('../../admin')
+          }else{
+            this.$router.push('/user/home');
+          }
         })
         .catch(err => {
           console.log(err);

@@ -1,4 +1,6 @@
 module.exports = {
+    AdminOrderDate: `select DATE_FORMAT(MAX(order_date), '%Y.%m.%d') as date
+                     FROM orders`,
     AdminOrderCount: `select count(*) as cnt
                       from orders
                       where order_status = 'D1' or order_status = 'D4'`,
