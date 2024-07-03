@@ -17,6 +17,13 @@
                 </div>
             </div>
         </div>
+        <div class="card mb-4">
+            <div class="card-body shadow">
+                <div class="fruite-img">
+                    <img :src="`/img/prodImg/${prodInfo.detail_img}`"  class="img-fluid w-100 rounded-top" alt="Image">
+                </div>
+            </div>
+        </div>    
         <div class="d-grid gap-2 d-md-flex justify-content-md-end">
             <button @click="prodModify" class="btn btn-primary btn-lg">수정</button>
             <button class="btn btn btn-danger btn-lg" @click="prodDel">삭제</button>        
