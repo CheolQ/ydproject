@@ -97,6 +97,12 @@ export default {
             })
             .catch(err => console.log(err))
         },
+        searchfrom(name, date1, date2, category){
+            this.name = name;
+            this.date1 = date1;
+            this.date2 = date2;
+            this.category = category;
+        },
         orderInfo(orderNo, state){
             console.log(orderNo);
             this.$router.push({path: 'ordersInfo', query: {bno: orderNo, orderStatus: state}})

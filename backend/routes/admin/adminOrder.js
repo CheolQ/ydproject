@@ -11,22 +11,29 @@ router.get("/", async (req, res) => {
     let name = '%'+req.query.name+'%';
     let date1 = req.query.date1;
     let date2 = req.query.date2;
-    let category = '%'+req.query.category+'%';
+    let category = req.query.category;
 
     if(!date2) {
         date2 = await query("AdminOrderDate");
         date2 = date2[0].date;
     }
 
-    if(!category){ 'D1'+','+'D4' }
-    
     
     if(!page){ page = 1; }
     if(!pageUnit){ pageUnit = 10;}
     let offset = (page-1) * pageUnit;
 
-    let list = await query("AdminOrderList", [offset, pageUnit]);
-    let count = await query('AdminOrderCount');
+    let list = null;
+    let count = null;
+    
+    if(!category){
+        list = await query("AdminOrderList", [date1, date2, 'D1', 'D4', name, offset, pageUnit]);
+        count = await query('AdminOrderCount', [name, date1, date2, 'D1', 'D4']);
+    }else{
+        list = await query("AdminOrderList", [date1, date2, category, category, name, offset, pageUnit]);
+        count = await query('AdminOrderCount', [name. date1, date2, category, category]);
+    }
+    console.log(category, 'check');
     console.log(count);
     res.send({list,count}); 
 })
