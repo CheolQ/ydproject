@@ -20,15 +20,12 @@ module .exports = {
     userfindpw: `select user_id from user
                         where user_id = ?
                         and tel = ?`,
-
-    // 비밀번호 초기화 토큰 업데이트
-    updatePasswordToken: `update user set reset_token = ? where user_id = ?`,
-
-    // 비밀번호 업데이트를 위한 토큰으로 사용자 검색
-    findUserByToken: `select user_id from user where reset_token = ?`,
-
+                        
     // 비밀번호 업데이트
     updatePassword: `update user set user_pw = ? where user_id = ?`,
+
+     // 비밀번호 업데이트
+    //  updatePassword: `UPDATE user SET user_pw = ? WHERE user_id = ? AND tel = ?`,
 
     // 회원정보변경
     usermodify: `update user
@@ -41,10 +38,9 @@ module .exports = {
                         detail_addr = ?
                         where user_no = ?`,
              
-   // 회원정보변경 기존데이터 가져오기
-usermodifyinfo: `select user_id, user_pw, name, email, tel, postcode, addr, detail_addr from user where user_no = ?`,
+    // 회원정보변경 기존데이터 가져오기
+    usermodifyinfo: `select user_id, user_pw, name, email, tel, postcode, addr, detail_addr from user where user_no = ?`,
            
-
     //간편로그인회원 정보수정
 
     // 회원탈퇴

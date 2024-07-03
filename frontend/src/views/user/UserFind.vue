@@ -12,9 +12,9 @@
     </div>
     <div class="login-wrapper">
       <h2>비밀번호 찾기</h2>
-      <p>입력 후 새로운 비밀번호 발급이 가능합니다.</p>
+      <p>간단한 정보를 입력 후 비밀번호 재설정이 가능합니다.</p>
       <input type="text" name="userId" placeholder="ID" v-model="user_id" required>
-      <input type="text" name="userTel" placeholder="PHONE" v-model="tel" required>
+      <input type="text" name="userTel" placeholder="PHONE" v-model="telPw" required>
       <button class="btn btn-primary" @click="findPassword">비밀번호 찾기</button>
       <router-link to="/user/login">
         <button class="btn btn-secondary">로그인</button>
@@ -32,6 +32,7 @@ export default {
       name: '',
       tel: '',
       user_id: '',
+      telPw: ''
     };
   },
   methods: {
@@ -52,10 +53,9 @@ export default {
     },
     async findPassword() {
       try {
-        const result = await axios.post('/api/users/userfindpw', { user_id: this.user_id, tel: this.tel });
-        const token = result.data.token;
-        if (token) {
-          this.$router.push({ name: 'NewPwInsert', query: { token } });
+        const result = await axios.post('/api/users/userfindpw', { user_id: this.user_id, tel: this.telPw });
+        if (result.data.success) {
+          this.$router.push({ name: 'NewPwInsert', query: { user_id: this.user_id, tel: this.telPw } });
         } else {
           alert('비밀번호를 초기화할 수 없습니다. 다시 시도해 주세요.');
         }
