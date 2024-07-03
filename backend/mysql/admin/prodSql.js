@@ -39,6 +39,10 @@ module.exports = {
                         order by seqs`,
     AdminProdInsert: `insert into prod set ?`,
     AdminProdDelete: `delete from prod
-                      where prod_no = ?`,                                                         
-
+                      where prod_no = ?`,
+    AdminProdGet: `select main_img, detail_img
+                   from prod
+                   where prod_no = ?`,                                                                           
+    AdminProdUpdate: `update prod set ?
+                      where prod_no =?`
 }

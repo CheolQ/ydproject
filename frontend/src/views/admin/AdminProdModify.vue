@@ -76,7 +76,7 @@
         </div>
         <div class="d-grid gap-2 d-md-flex justify-content-md-end">
             <button @click="prodReg" class="btn btn-primary btn-lg">수정</button>        
-            <button class="btn btn-secondary btn-lg">취소</button>
+            <button @click="$router.go(-1)" class="btn btn-secondary btn-lg">취소</button>
         </div>
     </div>
 </template>
@@ -116,6 +116,8 @@ export default{
                 console.log(result.data[0]);
                 this.prodInfo = result.data[0];
                 this.parentSelect = this.prodInfo.category_code1;
+                this.childView();
+                this.childSelect = this.prodInfo.category_code;
             })
             .catch(err => console.log(err))
         },
@@ -141,11 +143,11 @@ export default{
                 alert('카테고리를 입력하세요')
                 return;
             }
-            if(!this.prodInfo.name){
+            if(!this.prodInfo.prod_name){
                 alert('제품이름을 입력하세요')
                 return;
             }
-            if(!this.prodInfo.price){
+            if(!this.prodInfo.prod_price){
                 alert('가격을 입력하세요')
                 return;
             }
@@ -161,15 +163,15 @@ export default{
             console.log(this.file1)
             console.log(this.file2)
             data.append('category_code', this.prodInfo.category);
-            data.append('prod_name', this.prodInfo.name);
-            data.append('prod_price', this.prodInfo.price);
+            data.append('prod_name', this.prodInfo.prod_name);
+            data.append('prod_price', this.prodInfo.prod_price);
             data.append('maker', this.prodInfo.maker);
             data.append('origin', this.prodInfo.origin);
             
-            data.append("image1", this.file1);
-            data.append("image2", this.file2);
+            data.append("main_img", this.file1);
+            data.append("detail_img", this.file2);
 
-            await axios.post('/api/adminProd/prod',data,
+            await axios.post(`/api/adminProd/prod/${this.prodNo}`,data,
             { headers:{'Content-Type':'multipart/form-data'}})
             .then(result => {
                 if(result.data === 'ok'){
