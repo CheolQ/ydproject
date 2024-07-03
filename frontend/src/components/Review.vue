@@ -62,16 +62,13 @@
 					   </tr>
 					  </thead>
 					  <tbody :key ="i" v-for ="(qna, i) in qnaList">
-					<tr @click= "qnaOnOff(qna.board_title)"  >
+					<tr @click= "goToQna(qna.board_no)"  >
 					 <td>{{qna.title }}</td>
 					 <td>{{qna.user_id }}</td>
 					 <td>{{getDateFormat(qna.create_date) }}</td>
 
 					 <td v-if="qna.create_date != qna.update_date">{{getDateFormat(qna.update_date) }}</td>
 					 <td v-else> - </td>
-					</tr>
-					<tr v-if="qnaInfo">
-						<td>{{ qna.content }}</td>
 					</tr>
 				</tbody>
 				  </table>
@@ -95,9 +92,6 @@ export default {
 			reviewList: [],
 			qnaList:[],
 			prodList: [],
-			qnaInfo: false,
-			qnacon: {},
-			qnacontent:{ prodno: 1 , qnano: 1},
         }
     },
     created() {
@@ -127,26 +121,10 @@ export default {
     	    let day = ('0' + date.getDate()).slice(-2);
     	    return `${year}-${month}-${day}`;
  		 },
-		  qnaOnOff:function(no){
-			this.qnacontent.prodno = this.searchNo;
-			this.qnacontent.qnano = no;
-			console.log('제품번호',this.qnacontent.prodno);
-			console.log('qna번호',this.qnacontent.qnano);
-			console.log('보드번호',this.qnaList[0].board_no);
-
-			// if(this.qnaList[{no}].board_no == no){
-			// this.qnacon
-
-			axios.post(`/api/shop/qna/${no}`)
-			.then(result => {
-				// this.qnaList = result.data;
-				this.qnaInfo = !this.qnaInfo;
-				console.log('버튼',no);
-				this.qnacon = result.data[0]
-				})
-			},
-		}
-    	// }
+		async goToQna(no)	{
+ 	  		await this.$router.push({	name:"prodqnainfo",	query: { no : this.searchNo }	});
+ 		},
+	}
 }	
 
 </script>
