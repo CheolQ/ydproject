@@ -71,7 +71,7 @@ router.delete("/:no", async (req,res) => {
   console.log(req.body.detail);
   console.log(req.params.no);
   await query('AdminProdDelete', req.params.no);
-  if (fs.statSync(`../frontend/public/img/prodImg/${req.body.main}`)) {
+  if (fs.existsSync(`../frontend/public/img/prodImg/${req.body.main}`)) {
     console.log('확인');
     try{
       fs.unlinkSync(`../frontend/public/img/prodImg/${req.body.main}`)
@@ -86,6 +86,39 @@ router.delete("/:no", async (req,res) => {
 router.post("/ps/:no", async (req,res) => {
   let result = await query('AdminProdInfo', req.params.no);
   res.send(result);
+})
+
+const pUpload= upload.fields([
+              { name: 'main_img', maxCount: 1}, { name: 'detail_img', maxCount: 1}, 
+              {name: 'category_code'}, {name: 'prod_name'}, {name: 'prod_price'},
+              {name: 'maker'}, {name: 'origin'}])
+
+router.post("/prod/:no", pUpload, async (req,res) => {
+  let data = { ...req.body}
+  let result = await query('AdminProdGet', req.params.no)
+  if(req.files.main_img){
+    let file1 = { ...req.files.main_img};
+    if (fs.existsSync(`../frontend/public/img/prodImg/${result[0].main_img}`)) {
+      fs.unlinkSync(`../frontend/public/img/prodImg/${result[0].main_img}`)
+    }
+    data.main_img  = file1[0].filename;
+  }
+  else{
+    data.main_img = result[0].main_img;
+  }
+  if(req.files.detail_img){
+    let file2 = { ...req.files.detail_img};
+    if (fs.existsSync(`../frontend/public/img/prodImg/${result[0].detail_img}`)) {
+      fs.unlinkSync(`../frontend/public/img/prodImg/${result[0].detail_img}`)
+    }
+    data.detail_img = file2[0].filename;
+  }
+  else{
+    data.detail_img = result[0].detail_img;
+  }
+  console.log(data);
+  await query('AdminProdUpdate', [data, req.params.no])
+  res.send("ok")
 })
 
 module.exports = router;

@@ -9,12 +9,11 @@
                 </div> -->
                 <div class="form-group">
                     <label for="password">비밀번호 *</label>
-                    <input type="password" id="password" v-model="form.user_pw" placeholder="PassWord" required />
+                    <input type="password" id="password" v-model="form.user_pw" placeholder="Password" required />
                 </div>
                 <div class="form-group">
                     <label for="password2">비밀번호 확인 *</label>
-                    <input type="password" id="password2" v-model="form.user_pw2" placeholder="비밀번호를 다시 입력하세요"
-                        required />
+                    <input type="password" id="password2" v-model="form.user_pw2" placeholder="비밀번호를 다시 입력하세요" required />
                 </div>
                 <div class="form-group">
                     <label for="name">이름 *</label>
@@ -31,8 +30,8 @@
                 <div class="form-group">
                     <label for="postcode">우편번호 *</label>
                     <div class="postcode-wrapper">
-                        <input type="text" id="postcode" v-model="form.postcode" ref="postcode"
-                            placeholder="우편번호를 입력하세요" required />
+                        <input type="text" id="postcode" v-model="form.postcode" ref="postcode" 
+                        placeholder="우편번호를 입력하세요" required />
                         <button type="button" @click="showApi">검색</button>
                     </div>
                 </div>
@@ -73,6 +72,27 @@ export default {
             }
         };
     },
+    async created() {
+        try {
+            const response = await axios.get('/api/users/usermodifyinfo');
+            if (response.status === 200) {
+                this.form = {
+                    user_id: response.data.user_id,
+                    user_pw: response.data.user_pw,
+                    user_pw2: response.data.user_pw,
+                    name: response.data.name,
+                    email: response.data.email,
+                    tel: response.data.tel,
+                    postcode: response.data.postcode,
+                    address: response.data.addr,
+                    detail_address: response.data.detail_addr
+                };
+            }
+        } catch (error) {
+            console.error('회원정보를 불러오는데 실패했습니다.', error);
+            alert('회원정보를 불러오는데 실패했습니다.');
+        }
+    },
     methods: {
         confirmPassword() {
             if (this.form.user_pw !== this.form.user_pw2) {
@@ -86,22 +106,21 @@ export default {
                 return;
             }
             const url = '/api/users/usermodify';
-        const param = {
-          user_id: this.form.user_id,
-          user_pw: this.form.user_pw,
-          name: this.form.name,
-          email: this.form.email,
-          tel: this.form.tel,
-          postcode: this.form.postcode,
-          addr: this.form.address,
-          detail_addr: this.form.detail_address,
-        };
-        try {
-            const result = await axios.put(url, param);
-            console.log(result);
+            const param = {
+                user_id: this.form.user_id,
+                user_pw: this.form.user_pw,
+                name: this.form.name,
+                email: this.form.email,
+                tel: this.form.tel,
+                postcode: this.form.postcode,
+                addr: this.form.address,
+                detail_addr: this.form.detail_address,
+            };
+            try {
+                const result = await axios.put(url, param);
+                console.log(result);
                 alert('회원정보가 수정되었습니다.');
                 this.$router.push('/user/home');
-                console.log(response);
             } catch (error) {
                 console.error(error);
                 alert('회원정보 수정에 실패했습니다.');
@@ -146,15 +165,15 @@ export default {
 </script>
 
 <style scoped>
-  .container {
+.container {
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
     background-color: #f9f9f9;
-  }
-  
-  .signup-wrapper {
+}
+
+.signup-wrapper {
     background: #fff;
     border: 1px solid #ddd;
     border-radius: 10px;
@@ -163,46 +182,46 @@ export default {
     width: 500px;
     box-sizing: border-box;
     margin-top: 50px;
-    
-  }
-  
-  .aside-tit {
+
+}
+
+.aside-tit {
     font-size: 24px;
     color: #000;
     font-weight: bold;
     text-align: center;
-  }
-  
-  .form-group {
+}
+
+.form-group {
     margin-bottom: 20px;
     text-align: left;
-  }
-  
-  .form-group label {
+}
+
+.form-group label {
     display: block;
     margin-bottom: 5px;
     font-weight: bold;
-  }
-  
-  .form-group input {
+}
+
+.form-group input {
     width: 100%;
     padding: 10px;
     border-radius: 5px;
     border: 1px solid #ddd;
     box-sizing: border-box;
-  }
-  
-  .form-group .postcode-wrapper {
+}
+
+.form-group .postcode-wrapper {
     display: flex;
     align-items: center;
-  }
-  
-  .form-group .postcode-wrapper input {
+}
+
+.form-group .postcode-wrapper input {
     flex: 1;
     margin-right: 10px;
-  }
-  
-  .form-group button {
+}
+
+.form-group button {
     background-color: #6a24fe;
     color: white;
     border: none;
@@ -210,9 +229,9 @@ export default {
     transition: background-color 0.3s;
     padding: 10px 20px;
     border-radius: 5px;
-  }
-  
-  .form-group button:hover {
+}
+
+.form-group button:hover {
     background-color: #5b1fe3;
-  }
-  </style>
+}
+</style>

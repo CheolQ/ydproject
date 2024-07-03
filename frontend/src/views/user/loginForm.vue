@@ -45,7 +45,7 @@ export default {
   },
   computed: {
     account() {
-      return this.$store.state.user.user_id;
+      return this.$store.loggedInUserId.user_id;
     }
   },
   created() {
@@ -56,7 +56,7 @@ export default {
 
     axios.get("/api/user/account")
       .then(result => {
-        this.$store.commit('user', result.data);
+        this.$store.commit('setUser', result.data);
       })
       .catch(err => {
         console.log(err);
@@ -94,12 +94,11 @@ export default {
       //   });
       // });
   },
-  
   methods: {
     loginHandler() {
       axios.post("/api/users/login", this.form)
         .then(result => {
-          this.$store.commit('user', result.data);
+          this.$store.commit('setUser', result.data);
           this.$router.push('/user/home');
         })
         .catch(err => {
@@ -120,7 +119,7 @@ export default {
                 accessToken: authObj.access_token,
                 kakaoAccount
               }).then(result => {
-                this.$store.commit('user', result.data);
+                this.$store.commit('setUser', result.data);
                 this.$router.push('/user/home');
               }).catch(err => {
                 console.log(err);
@@ -142,7 +141,7 @@ export default {
     logoutHandler() {
       axios.post("/api/users/logout")
         .then(() => {
-          this.$store.commit('user', {});
+          this.$store.commit('setUser', {});
           alert('로그아웃');
         })
         .catch(err => {
@@ -152,10 +151,6 @@ export default {
   }
 };
 </script>
-
-<style scoped>
-/* 기존 스타일 유지 */
-</style>
 
 <style scoped>
 .container {

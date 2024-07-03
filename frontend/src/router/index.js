@@ -61,6 +61,7 @@ import NoticeInfoView from '@/views/notice/NoticeInfoView.vue';
 import login from '../views/user/loginForm.vue';
 import join from '../views/user/joinForm.vue';
 import UserFind from '../views/user/UserFind.vue';
+import NewPwInsert from '../views/user/NewPwInsert.vue';
 import UserModify from '../views/user/UserModify.vue';
 import UserDelete from '../views/user/UserDelete.vue';
 
@@ -190,6 +191,10 @@ const routes = [
             {
                 path: 'UserFind',
                 component: UserFind,
+            },
+            {
+                path: 'NewPwInsert',
+                component: NewPwInsert,
             },
             {
                 path: 'UserModify',

@@ -49,7 +49,6 @@ export default {
             console.log(result);
                 alert('회원탈퇴 완료');
                 this.$router.push('/user/home');
-                console.log(response);
             } catch (error) {
                 console.error(error);
                 alert('회원탈퇴 실패');

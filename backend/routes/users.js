@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 const query = require('../mysql/index');
+const crypto = require('crypto');
 
 //로그인
 router.post('/login', async (req, res) => {
@@ -23,7 +24,6 @@ router.post('/login', async (req, res) => {
             res.send(user);
             console.log('---------------------------------------------------');
             console.log(req.session);
-            console.log('---------------------------------------------------');
         });
     } else {
         res.send(401);
@@ -33,13 +33,10 @@ router.post('/login', async (req, res) => {
 //카카오 로그인
 router.post('/kakao-login', (req, res) => {
     const { accessToken, kakaoAccount } = req.body;
-  
     console.log('Received accessToken:', accessToken);
     console.log('Received kakaoAccount:', kakaoAccount);
-  
     // 사용자 정보를 처리하고 로그인 로직을 구현합니다.
     // 예: 데이터베이스에 사용자 정보를 저장하거나 확인합니다.
-  
     res.status(200).json({
       message: '카카오 로그인 성공',
       user: kakaoAccount
@@ -47,17 +44,17 @@ router.post('/kakao-login', (req, res) => {
   });
 
 //네이버 로그인
-router.post('/naverlogin', (req, res) => {
-    const { accessToken, email } = req.body;
-    console.log('Received accessToken:', accessToken);
-    console.log('Received email:', email);
-    // 사용자 정보를 처리하고 로그인 로직을 구현합니다.
-    // 예: 데이터베이스에 사용자 정보를 저장하거나 확인합니다.
-    res.status(200).json({
-        message: '네이버 로그인 성공',
-        user: { email }
-    });
-});  
+// router.post('/naverlogin', (req, res) => {
+//     const { accessToken, email } = req.body;
+//     console.log('Received accessToken:', accessToken);
+//     console.log('Received email:', email);
+//     // 사용자 정보를 처리하고 로그인 로직을 구현합니다.
+//     // 예: 데이터베이스에 사용자 정보를 저장하거나 확인합니다.
+//     res.status(200).json({
+//         message: '네이버 로그인 성공',
+//         user: { email }
+//     });
+// });  
 
 // 로그아웃
 router.post('/logout', async (req, res) => {
@@ -78,6 +75,19 @@ router.post('/join', async (req, res) => {
     }
 });
 
+// 아이디 중복 체크
+router.post('/checkId', async (req, res) => {
+	const { user_id } = req.body;
+	try {
+	  let result = await query('checkId', [user_id]);
+	  const exists = result[0].count > 0;
+	  res.send({ exists });
+	} catch (error) {
+	  console.error('아이디 중복 체크 실패:', error);
+	  res.status(500).send('아이디 중복 체크 중 오류가 발생했습니다.');
+	}
+  });
+
 // 아이디찾기
 router.post('/userfindid', (req, res) => {
     const { name, tel } = req.body;
@@ -96,23 +106,74 @@ router.post('/userfindid', (req, res) => {
         });
     });
 
+// 비밀번호 초기화 요청
+router.post('/userfindpw', async (req, res) => {
+  const { user_id, tel } = req.body;
+  try {
+      let result = await query('userfindpw', [user_id, tel]);
+      if (result.length > 0) {
+          const token = crypto.randomBytes(20).toString('hex');
+          await query('updatePasswordToken', [token, user_id]);
+          res.send({ token });
+      } else {
+          res.status(404).send('해당하는 유저를 찾을 수 없습니다.');
+      }
+  } catch (err) {
+      console.error(err);
+      res.status(500).send('비밀번호 찾기에 실패했습니다.');
+  }
+});
+
+// 비밀번호 업데이트
+router.post('/updatepassword', async (req, res) => {
+  const { token, newPassword } = req.body;
+  try {
+      let result = await query('findUserByToken', [token]);
+      if (result.length > 0) {
+          const user_id = result[0].user_id;
+          await query('updatePassword', [newPassword, user_id]);
+          res.send('비밀번호가 성공적으로 변경되었습니다.');
+      } else {
+          res.status(400).send('잘못된 토큰입니다.');
+      }
+  } catch (err) {
+      console.error(err);
+      res.status(500).send('비밀번호 업데이트에 실패했습니다.');
+  }
+});
+
 // 회원정보변경
 router.put('/usermodify', async (req, res) => {
     const user_no = req.session.user_no;
-    const { user_id, user_pw, name, email, tel, postcode, addr, detail_addr } = req.body;
+    const { user_pw, name, email, tel, postcode, addr, detail_addr } = req.body;
     try {
         let result = await query('usermodify', [user_pw, name, email, tel, postcode, addr, detail_addr, user_no]);
         res.send(result);
-        console.log('@@@@@@@@@@@@@@@@@@@@@@@');
-        console.log(result);
     } catch (err) {
         console.error(err);
         res.status(500).send('회원정보 변경에 실패했습니다.');
-        console.log('@@@@@@@@@@@@@@@@@@@@@@@');
         console.log(err);
     }
 });
 
+// 회원정보변경 기존 값 가져오기
+router.get('/usermodifyinfo', async (req, res) => {
+  const user_no = req.session.user_no;
+  try {
+      let result = await query('usermodifyinfo', [user_no]);
+      if (result.length > 0) {
+          res.send(result[0]);
+      } else {
+          res.status(404).send('사용자를 찾을 수 없습니다.');
+      }
+  } catch (err) {
+      console.error(err);
+      res.status(500).send('회원정보를 가져오는데 실패했습니다.');
+  }
+});
+
+
+//회원탈퇴
 router.post('/userdelete', async (req, res) => {
     const user_no = req.session.user_no;
     const { user_pw } = req.body;

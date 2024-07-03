@@ -11,17 +11,65 @@ router.get("/", async (req, res) => {
     if(!pageUnit){ pageUnit = 10;}
     let offset = (page-1) * pageUnit;
 
-    let list = await query("AdminOrderList", [orderStauts, offset, pageUnit]);
-    let count = await query('AdminOrderCount', orderStauts);
+    let list = await query("AdminOrderList", [offset, pageUnit]);
+    let count = await query('AdminOrderCount');
     console.log(count);
     res.send({list,count}); 
+})
+
+router.post("/Preparing/:no", async (req, res) => {
+    console.log(req.params.no);
+    await query("AdminOrderPrepare", req.params.no);
+    res.send("ok");
+})
+
+router.get("/delivery", async (req, res) => {
+    let page = Number(req.query.page);
+    let pageUnit = Number(req.query.pageUnit);
+    let orderStauts = req.query.orderStatus;
+
+    if(!page){ page = 1; }
+    if(!pageUnit){ pageUnit = 10;}
+    let offset = (page-1) * pageUnit;
+
+    let list = await query("AdminOrderDelList", [offset, pageUnit]);
+    let count = await query('AdminOrderDelCount');
+    console.log(count);
+    res.send({list,count})
+})
+
+router.post("/delivery/:no", async (req, res)=>{
+    await query("AdminOrderDel", req.params.no);
+    res.send("ok");
+})
+
+router.get("/cancel", async (req, res) => {
+    let page = Number(req.query.page);
+    let pageUnit = Number(req.query.pageUnit);
+    let orderStauts = req.query.orderStatus;
+
+    if(!page){ page = 1; }
+    if(!pageUnit){ pageUnit = 10;}
+    let offset = (page-1) * pageUnit;
+
+    let list = await query("AdminOrderCancelList", [offset, pageUnit]);
+    let count = await query('AdminOrderCancelCount');
+    console.log(count);
+    res.send({list,count})
+})
+
+router.post("/cancel/:no", async (req, res)=>{
+    await query("AdminOrderCancel1", req.params.no);
+    await query("AdminOrderCancel2", req.params.no);
+    res.send("ok");
 })
 
 router.post("/", async (req, res) => {
     console.log(req.body);
     let list1 = await query('AdminOrderInfo1', req.body.no);
     let list2 = await query('AdminOrderInfo2', req.body.no);
-    res.send({list1,list2})
+    let list3 = await query('AdminOrderCancelDate', req.body.no)
+    res.send({list1,list2,list3})
 })
 
 router.put("/", async (req, res) => {

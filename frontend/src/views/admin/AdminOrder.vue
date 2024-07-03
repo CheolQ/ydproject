@@ -23,14 +23,15 @@
                             <td v-if="od.cnt > 1">{{ od.prod_name }} 외 {{ od.cnt -1}} 건</td>
                             <td v-else>{{ od.prod_name}}</td>
                             <td>{{ getNumberFormat(od.pay_price) }}</td>
-                            <td v-if="od.order_status === 'P'">결제완료</td>
-                            <td><button type="button" class="btn btn-primary" @click="orderInfo(od.order_no)">조회</button></td>
+                            <td v-if="od.order_status === 'D1'" @click="statusBtn(od.order_no)"><button>결제완료</button></td>
+                            <td v-else-if="od.order_status === 'D4'">상품준비중</td>
+                            <td><button type="button" class="btn btn-primary" @click="orderInfo(od.order_no, od.order_status)">조회</button></td>
                         </tr>
                     </tbody>
                 </table>
-                <paging-component v-bind="page" @go-page="goPage"/>
             </div>
         </div>
+        <paging-component v-bind="page" @go-page="goPage"/>
     </div>
 </template>
 <script>
@@ -48,7 +49,7 @@ export default {
             orderList: [],
             page: {},
             pageUnit: 5,
-            order_status: 'P',
+            order_status: 'D1',
         }
     },
     created() {
@@ -66,9 +67,16 @@ export default {
             })
             .catch(err => console.log(err))
         },
-        orderInfo(orderNo){
+        statusBtn(no){
+            axios.post(`/api/adminOrder/Preparing/${no}`)
+            .then(() =>{
+                this.goPage(1);
+            })
+            .catch(err => console.log(err))
+        },
+        orderInfo(orderNo, state){
             console.log(orderNo);
-            this.$router.push({path: 'ordersInfo', query: {bno: orderNo}})
+            this.$router.push({path: 'ordersInfo', query: {bno: orderNo, orderStatus: state}})
         },
         getDateFormat (date ){
  	        return this .$dateFormat (date );
