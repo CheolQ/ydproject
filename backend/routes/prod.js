@@ -8,10 +8,11 @@ router.get('/', async (req, res) => {
     // let result = await query('prodList',order);
     // let result = await query('prodList');
     // res.send(result);
+    
     let page = Number(req.query.page);
     let pageUnit = Number(req.query.pageUnit);
     let search = '%'+req.query.search+'%'
-    console.log('r검색어',search)
+    console.log('검색어',search)
     if(!page){  page = 1;   }
     if(!pageUnit){  pageUnit = 10;  }
     let offset = (page -1)*pageUnit ;
@@ -22,12 +23,51 @@ router.get('/', async (req, res) => {
     res.send({list,count})
 });
 
-//카테고리별 상품 조회 - /shop/code/A11
+//소카테고리별 상품 조회 - /shop/code/A11
 router.get('/code/:code', async (req, res) => {
-    let result = await query('prodCategory', req.params.code);
-    console.log('카테',result);
-    res.send(result);
+    // let result = await query('prodCategory', req.params.code);
+    // console.log('카테',result);
+    // res.send(result);
+    console.log('req.params.code',req.params.code)
+    let page = Number(req.query.page);
+    let pageUnit = Number(req.query.pageUnit);
+    let search = '%'+req.query.search+'%'
+    
+    console.log('r검색어',search)
+    if(!page){  page = 1;   }
+    if(!pageUnit){  pageUnit = 10;  }
+    let offset = (page -1)*pageUnit ;
+
+    let list = await query("smallCategory",[req.params.code,search, offset,pageUnit]);
+    let count = await query("prodCnt",[req.params.code, search])
+    console.log(list,'lkist',count,'sdsa')
+    count = count[0].cnt;
+    res.send({list,count})
 });
+
+//대카테고리별 상품 조회 - /shop/code/A11
+router.get('/bigcode/:code', async (req, res) => {
+    // let result = await query('bigCategory', req.params.code);
+    // console.log('req.params.code',req.params.code);
+    // console.log('빅카테',result);
+    // res.send(result);
+    console.log('req.params.code',req.params.code)
+    let page = Number(req.query.page);
+    let pageUnit = Number(req.query.pageUnit);
+    let search = '%'+req.query.search+'%'
+    
+    console.log('b검색어',search)
+    if(!page){  page = 1;   }
+    if(!pageUnit){  pageUnit = 10;  }
+    let offset = (page -1)*pageUnit ;
+
+    let list = await query("bigCategory",[req.params.code,search, offset,pageUnit]);
+    let count = await query("bigcateCnt",[req.params.code, search])
+    console.log(list,'lkist',count,'sdsa')
+    count = count[0].cnt;
+    res.send({list,count})
+});
+
 
 //카테고리별 갯수 조회 
 router.get('/cnt', async (req, res) => {

@@ -49,6 +49,8 @@ import Members from '../views/admin/AdminMember.vue';
 import ProdListView from '@/views/product/ProdListView.vue';
 import ProdInfoView from '@/views/product/ProdInfoView.vue';
 import ProdCategoryView from '@/views/product/ProdCategoryView.vue';
+import ProdBigCategoryView from '@/views/product/ProdBigCategoryView.vue';
+
 
 //공지
 
@@ -59,6 +61,7 @@ import NoticeInfoView from '@/views/notice/NoticeInfoView.vue';
 import login from '../views/user/loginForm.vue';
 import join from '../views/user/joinForm.vue';
 import UserFind from '../views/user/UserFind.vue';
+import NewPwInsert from '../views/user/NewPwInsert.vue';
 import UserModify from '../views/user/UserModify.vue';
 import UserDelete from '../views/user/UserDelete.vue';
 
@@ -85,6 +88,11 @@ const routes = [
                 path: 'prodcategory',
                 name: 'prodcategory',
                 component: ProdCategoryView,
+            },
+            {
+                path: 'prodBigcategory',
+                name: 'prodBigcategory',
+                component: ProdBigCategoryView,
             },
             {
                 path: 'shopinfo',
@@ -183,6 +191,10 @@ const routes = [
             {
                 path: 'UserFind',
                 component: UserFind,
+            },
+            {
+                path: 'NewPwInsert',
+                component: NewPwInsert,
             },
             {
                 path: 'UserModify',

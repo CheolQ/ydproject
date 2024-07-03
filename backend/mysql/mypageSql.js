@@ -137,27 +137,33 @@ module.exports = {
                         from qna 
                         where board_no = ?`,
 
-    mypageReviewList: `select 
+    mypageReviewList: `SELECT 
                             p.main_img,
                             p.prod_name,
                             p.prod_price,
                             o.order_date,
-                            count(r.review_no) as cnt,
-                            group_concat(r.review_no) as review_no
-                        from 
+                            o.order_no,
+                            od.order_detail_no,
+                            p.prod_no,
+                            u.user_id,
+                            COUNT(r.review_no) AS cnt,
+                            GROUP_CONCAT(r.review_no) AS review_no
+                        FROM 
                             prod p
-                        join 
-                            order_detail od on p.prod_no = od.prod_no
-                        join 
-                            orders o on od.order_no = o.order_no
-                        left join 
-                            review r on p.prod_no = r.prod_no and od.order_detail_no = r.order_detail_no
-                        where 
+                        JOIN 
+                            order_detail od ON p.prod_no = od.prod_no
+                        JOIN 
+                            orders o ON od.order_no = o.order_no
+                        LEFT JOIN 
+                            review r ON p.prod_no = r.prod_no AND od.order_detail_no = r.order_detail_no
+                        join
+                            user u on u.user_no = o.user_no
+                        WHERE 
                             o.user_no = ?
-                        group by 
-                            p.main_img, p.prod_name, p.prod_price, o.order_date
-                        order by 
-                            o.order_date desc
+                        GROUP BY 
+                            p.main_img, p.prod_name, p.prod_price, o.order_date, u.user_id, o.order_no, od.order_detail_no, p.prod_no
+                        ORDER BY 
+                            o.order_date DESC
                         limit ? , ?`,
 
     mypageReviewCount: `select count(*) as cnt from review where user_id = ?`,
@@ -174,4 +180,7 @@ module.exports = {
                         join prod p
                         on r.prod_no = p.prod_no
                         where r.review_no = ?`,
+
+    mypageReviewInsert: `insert into review set ?`,
+    mypageReviewFileUpload: `INSERT INTO file (file_name, file_path, file_ext, table_no, division, seqs) VALUES ?`
 };

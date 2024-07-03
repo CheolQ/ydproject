@@ -87,8 +87,7 @@ app.use('/', indexRouter);
 app.use('/common', commonRouter);
 app.use('/users', usersRouter);
 
-//유저
-
+//장바구니
 app.use('/cart', cartRouter);
 
 //주문
@@ -99,6 +98,7 @@ app.use('/order', orderRouter);
 //app.use('/upload', express.static('C:/Users/ekdms/Desktop/images/prodImages'));
 
 app.use('/upload', express.static('uploads'));
+
 //로그인
 // app.use('/users', usersRouter);      //공통에 중복있음
 

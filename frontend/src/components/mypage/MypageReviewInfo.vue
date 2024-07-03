@@ -13,6 +13,9 @@
                 <div class="question-details">
                     <h4>{{ review.review_title }}</h4>
                     <p>Date: {{ getDateFormat(review.create_date) }}</p>
+                    <div>
+                        <img :src="`/api/upload/review/1719987707642-말티즈.jpg`" alt="">
+                    </div>
                     <p>{{ review.review_content }}</p>
                 </div>
                 <div class="buttons">
@@ -41,6 +44,7 @@ export default {
                 this.review = result.data[0];
                 console.log(this.review)
             })
+        axios.get(`/api/mypage/`)
     },
     methods: {
         numberFormat: function (number) {

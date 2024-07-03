@@ -10,6 +10,7 @@
                         <col width="50">
                         <col width="150">
                         <col width="150">
+                        <col width="80">
                         <col width="65">
                         <col width="80">
                         <col width="80">
@@ -22,8 +23,9 @@
                             <!-- <th scope="col">상품번호</th> -->
                             <th scope="col">이미지</th>
                             <th scope="col">상품명</th>
-                            <th scope="col">개수</th>
                             <th scope="col">금액</th>
+                            <th scope="col">개수</th>
+                            <th scope="col">합계</th>
                             <th scope="col">삭제</th>
                         </tr>
                     </thead>
@@ -47,6 +49,9 @@
                             </td>
                             <td>
                                 <p class="mb-0 mt-4">{{ cart.prod_name }}</p>
+                            </td>
+                            <td>
+                                <p class="mb-0 mt-4">{{ formatPrice(cart.prod_price) }}원</p>
                             </td>
                             <td>
                                 <div class="input-group quantity mt-4">

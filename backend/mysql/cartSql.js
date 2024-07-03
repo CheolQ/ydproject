@@ -14,7 +14,8 @@ module.exports = {
                         where user_no = ?`,
 
     cartCntUpdate : `update cart 
-                        set cnt = ?, price = ?
+                        set cnt = ?, 
+                            price = ?
                         where cart_no = ?`,
 
     cartInsert : `insert into cart 

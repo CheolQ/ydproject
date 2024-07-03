@@ -13,15 +13,19 @@
                     <div class="top-info ps-2">
                     </div>
                     <div class="top-link pe-2" v-if="loggedInUserId">
-                        <a><small class="text-white ms-2" @click="logoutHandler">Logout</small></a>
+                        <a><small class="text-white ms-2" @click="logoutHandler">Logout　|</small></a>
+                        <router-link to="notice" class="text-white">
+                            <small class="text-white ms-2">　Notice</small></router-link>
                     </div>
                     <div class="top-link pe-2" v-else>
-                        <router-link to="/user/login" class="text-white"><small class="text-white ms-2">Login /
-                            </small></router-link>
-                        <router-link to="/user/join" class="text-white"><small class="text-white ms-2">SignUp /
-                            </small></router-link>
-                        <router-link to="notice" class="text-white"><small
-                                class="text-white ms-2">Notice</small></router-link>
+                        <router-link to="/user/login" class="text-white">
+                            <small class="text-white ms-2">Login　|</small>
+                        </router-link>
+                        <router-link to="/user/join" class="text-white">
+                            <small class="text-white ms-2">　SignUp　|</small>
+                        </router-link>
+                        <router-link to="notice" class="text-white">
+                            <small class="text-white ms-2">　Notice</small></router-link>
                     </div>
                 </div>
             </div>
@@ -40,11 +44,12 @@
                             <div v-for="v in categories" class="nav-item dropdown">
                                 <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">{{ v.parent
                                     }}</a>
-                                  
-                                   <div class="dropdown-menu m-0 bg-secondary rounded-0">
-                                    
-                                    <a v-for="c in v.childCode" @click="gotoProd(c)" class="dropdown-item">{{ getCodeMeaning(c) }}
-                                    
+
+                                <div class="dropdown-menu m-0 bg-secondary rounded-0">
+
+                                    <a v-for="c in v.childCode" @click="gotoProd(c)" class="dropdown-item">{{
+                                        getCodeMeaning(c) }}
+
                                     </a>
                                 </div>
                             </div>
@@ -113,7 +118,7 @@ export default {
     },
     created() {
         this.fetchCategories();
-        this.getCodes(); 
+        this.getCodes();
     },
     methods: {
         fetchCategories() {
@@ -129,15 +134,15 @@ export default {
                     console.error('Error fetching categories:', error);
                 });
         },
-        getCodes(){
+        getCodes() {
             axios.get(`/api/common/codes`)
-            .then(result => {
-                this.codes = result.data;
-                console.log(result.data);
-            })
-            .catch(err => {
-                console.log('호출중 오류', err);
-            })
+                .then(result => {
+                    this.codes = result.data;
+                    console.log(result.data);
+                })
+                .catch(err => {
+                    console.log('호출중 오류', err);
+                })
         },
         modalOpen() {
             this.modalCheck = !this.modalCheck
@@ -146,10 +151,10 @@ export default {
             this.$router.push('shop');
             this.modalOpen();
         },
-        gotoProd(code){
-            this.$router.push({   name:"prodcategory",   query: { code:code }   });
+        gotoProd(code) {
+            this.$router.push({ name: "prodcategory", query: { code: code } });
         },
-        getCodeMeaning: function(code){
+        getCodeMeaning: function (code) {
             if (this.codes) {
                 // console.log('dddd: ' , this.codes.Category.Minor);
                 return this.codes.Category.Minor[code] || code; // 코드에 맞는 의미있는 문자열 반환

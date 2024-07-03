@@ -21,11 +21,13 @@
                                 <p class="mb-3">제조사   {{prodInfo.maker }}</p>
                                 <p class="mb-3">유통기한   {{getDateFormat(prodInfo.exp_date) }}</p>
                                
-                                <div class="d-flex mb-4" >
-                                    <i :key = "i" v-for="(i) in Number(prodRating)" class="fa fa-star text-secondary"></i>
-                                    <i :key = "i" v-for="(i) in 5- Number(prodRating)"class="fa fa-star"></i>
+                                <div class="d-flex mb-4" v-if="prodRating == 0" >
+                                    <i :key = "i" v-for="(i) in 5" class="fa fa-star"></i>
                                 </div>
-    
+                                <div class="d-flex mb-4" v-else>
+                                    <i :key = "i" v-for="(i) in this.stars" class="fa fa-star text-secondary"></i>
+                                    <i :key = "i" v-for="(i) in 5- this.stars"class="fa fa-star"></i>
+                                    </div>
                                 <div class="input-group quantity mb-5" style="width: 100px;">
                                     <div class="input-group-btn">
                                         <button class="btn btn-sm btn-minus rounded-circle bg-light border"
@@ -68,7 +70,10 @@ export	default {
                 prodInfo: {},
                 product: [],
                 number: 1,
-                prodRating: 0,
+                // prodRating: 0,
+                prodRating: [],
+                stars: 0,
+
         };
  	},
  	created(){
@@ -82,8 +87,21 @@ export	default {
             (await axios.get(`/api/shop/${this.searchNo}`)).data[0];
         },
         async getProdRating()	{
+            
+            // this.prodRating = 
+            // (await axios.get(`/api/shop/star/${this.searchNo}`)).data[0].stars;
             this.prodRating = 
-            (await axios.get(`/api/shop/star/${this.searchNo}`)).data[0].stars;
+            (await axios.get(`/api/shop/star/${this.searchNo}`)).data[0];
+                console.log(this.prodRating);
+                if(this.prodRating == undefined){
+                    console.log('별0');
+                    this.prodRating = 0
+                }else{
+                    console.log('별4');
+                    this.stars = Number(this.prodRating.stars)
+                }
+            
+            console.log(this.prodRating,'나d나');
         },
         getDateFormat(val )	{
             let date = val == '' ? new Date() : new Date(val);
