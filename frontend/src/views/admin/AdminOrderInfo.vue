@@ -18,23 +18,36 @@
                     <div>받는 주소 : {{ u.address }}</div>
                 </div>
             </div>
-            <div class="card mb-4">
+            <div class="card mb-4" v-if="Status === 'D4'">
                 <div class="card-body shadow">
                     <div>주문상태</div>
                     <br> 
                     <select v-model="orderStatus" class="form-select" aria-label="Default select example">
-                        <option value="P">결제완료</option>
+                        <option value="D4">상품준비중</option>
                         <option value="D5">배송중</option>
                     </select>
                 </div>
-            </div>    
-            <div class="card mb-4">
+            </div>
+            <div class="card mb-4" v-if="Status === 'D5' || Status === 'D6'">
+                <div class="card-body shadow">
+                    <p class="text-start" v-if="Status === 'D5'">출발날짜 : {{ u.deli_date }}</p>
+                    <p class="text-start" v-if="Status === 'D6'">도착날짜 : {{ u.deli_date }}</p>
+                </div>
+            </div>
+            <div class="card mb-4" v-if="Status === 'D2' || Status === 'D3'">
+                <div class="card-body shadow">
+                    <p>주문취소 등록일 : {{ cancel.cal_up }}</p>
+                    <p>주문취소 신청일 : {{ cancel.cal_at }}</p>
+                </div>
+            </div>          
+            <div class="card mb-4" v-if="Status === 'D4'  || Status === 'D5' || Status === 'D6'">
                 <div class="card-body shadow">              
                     <div class="input-group mb-3">
+                        
                         <span class="input-group-text" id="basic-addon1">운송장 번호</span>
                         <input type="text" v-model="u.deli_code" class="form-control" placeholder="number" aria-label="Username" aria-describedby="basic-addon1">
                     </div>
-                    <button type="button" class="btn btn-primary" @click="addCode">입력</button>
+                    <button type="button" v-if="Status === 'D4'" class="btn btn-primary" @click="addCode">입력</button>
                 </div>
             </div>
         </div>
@@ -79,11 +92,14 @@ export default{
             orderNo : {no: 1},
             userInfo : [],
             prodInfo : [],
-            orderStatus: 'P',
+            orderStatus: 'D4',
+            Status: '',
+            cancel: {}, 
         }
     },
     created(){
         this.orderNo.no = this.$route.query.bno;
+        this.Status = this.$route.query.orderStatus;
         axios.post('/api/adminOrder',this.orderNo)
         .then(result => {
             console.log(result.data.list1)
@@ -91,6 +107,8 @@ export default{
             console.log(result.data.list2)
             this.prodInfo = result.data.list2;
             this.order_status = result.data.list1[0].order_status;
+            this.cancel = result.data.list3[0];
+            console.log(this.cancel);
         })
         .catch(err => console.log(err))
     },
