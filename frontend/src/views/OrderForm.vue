@@ -7,30 +7,30 @@
                 <div class="row g-5">
                     <div class="col-md-12 col-lg-6 col-xl-6">
                         <div class="form-item">
-                            <label class="form-label my-3">이름<sup>*</sup></label>
+                            <label class="form-label my-3">이름<sup style="color: red;">*</sup></label>
                             <input type="text" class="form-control" id="name" v-model="name">
                         </div>
                         <div class="form-item">
-                            <label class="form-label my-3">연락처<sup>*</sup></label>
+                            <label class="form-label my-3">연락처<sup style="color: red;">*</sup></label>
                             <input type="tel" class="form-control" id="phone" v-model="phone">
                         </div>
                         <div class="form-item">
-                            <label class="form-label my-3">이메일<sup>*</sup></label>
+                            <label class="form-label my-3">이메일<sup style="color: red;">*</sup></label>
                             <input type="email" class="form-control" id="email" v-model="email">
                         </div>
                         <div class="form-item">
-                            <label class="form-label my-3">우편번호<sup>*</sup></label>
+                            <label class="form-label my-3">우편번호<sup style="color: red;">*</sup></label>
                             <div class="pCode-container">
                                 <input type="text" id="pCode" v-model="pCode" class="form-control" placeholder="우편번호" readonly>
                                 <input type="button" @click="execDaumPostcode()" value="우편번호 찾기" class="pCode-button">
                             </div>
                         </div>
                         <div class="form-item">
-                            <label class="form-label my-3">주소<sup>*</sup></label>
+                            <label class="form-label my-3">주소<sup style="color: red;">*</sup></label>
                             <input type="text" id="address" v-model="address" class="form-control" placeholder="주소" readonly><br>
                         </div>
                         <div class="form-item">
-                            <label class="form-label my-3">상세주소<sup>*</sup></label>
+                            <label class="form-label my-3">상세주소<sup style="color: red;">*</sup></label>
                             <input type="text" id="detailAddress" v-model="detailAddr" class="form-control" placeholder="상세주소">
                         </div>
                     </div>
@@ -79,7 +79,7 @@
                             </div>
                             <div>
                                 <div class="text-end mt-5">잔여 포인트
-                                    <input type="text-end" readonly v-model="this.point" class="border-0 border-bottom rounded me-5 py-3 mb-4 text-end">
+                                    <input type="text-end" readonly v-model="point" class="border-0 border-bottom rounded me-5 py-3 mb-4 text-end">
                                     <button @click="points" class="btn border-secondary rounded-pill px-4 py-3 text-primary"
                                         type="button">전액 사용</button>
                                 </div>
@@ -127,14 +127,14 @@ export default {
             selectedCart: [],
             totalPrice: 0,
             resultPrice: 0,
-            point : 1,
+            point : '',
+            //usePoint : '',
             name: '',
             phone: '',
             email: '',
             address: '',
             pCode: '',
             detailAddr: '',
-            user_no : ''
         };
     },
     computed: {
@@ -142,14 +142,7 @@ export default {
     },
     created() {
         // const queryCart = this.$route.query.Cart;
-        //getUser(); //유저정보 가져오기
-        // //유저정보 알려줘 이름,연락처,이메일,포인트 등 가져왔어 axios.get().then()//this.result.name
-        this.user_no = this.$store.state;
-        console.log(this.user_no, '유저넘버');
-        // axios.get(`/api/orderForm/`)
-        // .then(result => {
-        //     console.log(result,'결과는는')
-        // })
+        this.getUser(); //유저정보 오더폼에 뿌려주기
         const queryCart = JSON.stringify(this.getCartInfo);
         console.log(queryCart)
         console.log(this.getCartInfo);
@@ -163,15 +156,19 @@ export default {
         this.discount();
     },
     methods: {
-        // getUser(){
-        //     this.user_no = req.session.user_no;
-        //     console.log(this.user_no, '유저넘버');
-        //     //유저정보 알려줘 이름,연락처,이메일,포인트 등 가져왔어 axios.get().then()//this.result.name
-        //     axios.get('/api/orderForm')
-        //     .then(result => {
-        //         console.log(result,'결과는는')
-        //     })
-        // },
+        getUser(){
+            axios.get(`/api/order`) //유저정보 알려줘 이름,연락처,이메일,포인트 등 가져왔어 axios.get().then()//this.result.name
+            .then(result => {
+                this.name = result.data[0].name;
+                this.phone = result.data[0].tel;
+                this.email = result.data[0].email;
+                this.pCode = result.data[0].postcode;
+                this.address = result.data[0].addr;
+                this.detailAddr = result.data[0].detail_addr;
+                this.point = result.data[0].point;
+            })
+            .catch(err => console.log(err));
+        },
         execDaumPostcode(){
             new window.daum.Postcode({
                 oncomplete: (data) => {
@@ -212,6 +209,7 @@ export default {
                 pg: 'kakaopay.TC0ONETIME',
                 pay_method: 'card',
                 merchant_uid: `merchant_${makeMerchantUid}`,
+                //beforeAmount: this.totalPrice,
                 amount: this.resultPrice,
                 name: prodname,
                 buyer_name: this.name,
@@ -220,13 +218,14 @@ export default {
                 buyer_addr: this.address,
                 buyer_postcode: this.pCode
             };
+            console.log(data,'데이터에 뭐가있는지 확인')
 
             // 결제 요청
             IMP.request_pay(data, rsp => {
                 if (rsp.success) {
                     // 결제 성공 시 로직
                     alert('결제가 완료되었습니다.');
-                    console.log(rsp)
+                    console.log(rsp,'rsp가 뭐가있는지')
                     //order table
                     let buyerName = rsp.buyer_name;
                     let buyerTel = rsp.buyer_tel;
@@ -244,6 +243,7 @@ export default {
                         buyerAdd: buyerAdd,
                         buyerPost: data.buyer_postcode,
                         detail_addr: this.detailAddr, //
+                        beforeAmount: this.totalPrice,
                         paidAmount: paidAmount,
                         merchantUid: merchantUid,
                         products: prodNo.map((no, index) => ({
@@ -251,6 +251,7 @@ export default {
                             cnt: cnt[index]
                         }))
                     };
+                    console.log('프론트에서 확인', orderData)
                     //console.log(orderData, '주소값가져오는지 체크')
                     axios.post("/api/order", orderData)
                         .then(result => {

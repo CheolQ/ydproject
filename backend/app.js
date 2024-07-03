@@ -87,8 +87,7 @@ app.use('/', indexRouter);
 app.use('/common', commonRouter);
 app.use('/users', usersRouter);
 
-//유저
-
+//장바구니
 app.use('/cart', cartRouter);
 
 //주문

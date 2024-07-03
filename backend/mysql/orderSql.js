@@ -1,7 +1,7 @@
 module.exports = {
     orderInsert : `insert into orders 
                     set name = ?, 
-                        order_total_price = ?, 
+                        pay_price = ?, 
                         order_status = ?, 
                         tel = ?, 
                         addr = ?, 
@@ -9,7 +9,8 @@ module.exports = {
                         detail_addr = ?, 
                         user_no = ?, 
                         point = ?, 
-                        pay_no = ?`,
+                        pay_no = ?,
+                        order_total_price = ?`,
 
     getPrice : `select prod_price 
                 from prod 
@@ -21,7 +22,7 @@ module.exports = {
                             price = ?, 
                             prod_no = ?`,
 
-    getUsers : `select name, tel, email, addr, postcode, datail_addr, point
+    getUsers : `select name, tel, email, addr, postcode, detail_addr, point
                 from user
                 where user_no = ?`,
 
