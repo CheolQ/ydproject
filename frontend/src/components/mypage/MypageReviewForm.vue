@@ -50,6 +50,7 @@ export default {
                 rating: 0
             },
             files: [],
+            no: 0
 
         }
     },
@@ -82,18 +83,23 @@ export default {
                         });
 
                         console.log(formData)
-
-                        axios.post('/api/mypage/review/uploadfiles', formData, {
-                            params: { table_no: result.data.id, division: 'E2' }
-                        })
+                        axios.get(`/api/mypage/getreviewno/${this.review.order_detail_no}`)
                             .then(result => {
-                                alert('파일 업로드 성공');
-                                this.resetForm();
+                                console.log('ddda', result.data[0].review_no)
+                                axios.post('/api/mypage/review/uploadfiles', formData, {
+                                    params: { table_no: result.data[0].review_no, division: 'E2' }
+                                })
+                                    .then(result => {
+                                        alert('파일 업로드 성공');
+                                        this.resetForm();
+                                        this.$router.go(-1);
+                                    })
+                                    .catch(err => {
+                                        console.log(err);
+                                        alert('파일 업로드 실패')
+                                    });
                             })
-                            .catch(err => {
-                                console.log(err);
-                                alert('파일 업로드 실패')
-                            });
+
                     } else {
                         this.resetForm();
                     }
