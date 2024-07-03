@@ -66,7 +66,8 @@
                                         style="top: -5px; left: 15px; height: 20px; min-width: 20px;">3</span> -->
                                 </a>
                             </router-link>
-                            <router-link to="/user/mypage" class="my-auto">
+                            <!-- <router-link to="/user/mypage" class="my-auto"> -->
+                            <router-link @click.prevent="gotoMypage" to="#" class="my-auto">
                                 <i class="fas fa-user fa-2x"></i>
                             </router-link>
                         </div>
@@ -88,7 +89,7 @@
                     </div>
                     <div class="modal-body d-flex align-items-center">
                         <div class="input-group w-75 mx-auto d-flex">
-                            <input type="search" class="form-control p-3" placeholder="keywords"
+                            <input type="search" class="form-control p-3" placeholder="keywords" v-model="searchKeyword"
                                 aria-describedby="search-icon-1">
                             <span id="search-icon-1" class="input-group-text p-3" @click="searchHandler"><i
                                     class="fa fa-search"></i></span>
@@ -102,13 +103,15 @@
 </template>
 
 <script>
+import Swal from 'sweetalert2';
 import axios from 'axios';
 export default {
     data() {
         return {
             modalCheck: false,
             categories: [],
-            codes: {}
+            codes: {},
+            searchKeyword: ''
         }
     },
     computed: {
@@ -148,14 +151,16 @@ export default {
             this.modalCheck = !this.modalCheck
         },
         searchHandler() {
-            this.$router.push('shop');
+            this.$router.push({ name: 'shop', query: { search: this.searchKeyword } });
             this.modalOpen();
         },
         gotoProd(code) {
             this.$router.push({ name: "prodcategory", query: { code: code } });
         },
         getCodeMeaning: function (code) {
-            if (this.codes) {
+            if (this.codes == undefined) {
+                console.log('this.code 지연 에러')
+            } else if (this.codes) {
                 // console.log('dddd: ' , this.codes.Category.Minor);
                 return this.codes.Category.Minor[code] || code; // 코드에 맞는 의미있는 문자열 반환
             }
@@ -164,12 +169,26 @@ export default {
         },
         logoutHandler() {
             this.$store.dispatch('logout')
-            .then(() => {
-                this.$router.push('/user/login');
-            })
-            .catch(err => {
-                console.error('Logout failed', err);
-            });
+                .then(() => {
+                    this.$router.push('/user/login');
+                })
+                .catch(err => {
+                    console.error('Logout failed', err);
+                });
+        },
+        gotoMypage() {
+            if (this.loggedInUserId) {
+                this.$router.push('/user/mypage');
+            } else {
+                Swal.fire({
+                    title: '로그인이 필요합니다.',
+                    text: "로그인 페이지로 이동합니다.",
+                    icon: 'warning',
+                    confirmButtonText: '확인'
+                }).then(() => {
+                    this.$router.push('/user/login');
+                });
+            }
         }
     }
 }

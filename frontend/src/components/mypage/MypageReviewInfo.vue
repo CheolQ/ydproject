@@ -13,8 +13,8 @@
                 <div class="question-details">
                     <h4>{{ review.review_title }}</h4>
                     <p>Date: {{ getDateFormat(review.create_date) }}</p>
-                    <div>
-                        <img :src="`/api/upload/review/1719987707642-말티즈.jpg`" alt="">
+                    <div v-for="v in files">
+                        <img :src="`/api/upload/review/${v.file_name}`" alt="">
                     </div>
                     <p>{{ review.review_content }}</p>
                 </div>
@@ -34,7 +34,8 @@ export default {
     data() {
         return {
             review: {},
-            no: 0
+            no: 0,
+            files: [],
         }
     },
     created() {
@@ -44,7 +45,11 @@ export default {
                 this.review = result.data[0];
                 console.log(this.review)
             })
-        axios.get(`/api/mypage/`)
+        axios.get(`/api/mypage/getreviewimg/${this.no}`)
+            .then(result => {
+                this.files = result.data
+                console.log(this.files)
+            })
     },
     methods: {
         numberFormat: function (number) {

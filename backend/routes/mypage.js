@@ -78,7 +78,7 @@ router.get('/qnainfo/:no', async (req, res) => {
 
 // qna 수정
 router.patch('/updateqna/:no', async (req, res) => {
-    console.log('수정확인')
+    console.log('수정확인');
     console.log(req.body);
     let result = await query('mypageUpdateQnA', [req.body, req.params.no]);
     res.send(result);
@@ -86,7 +86,7 @@ router.patch('/updateqna/:no', async (req, res) => {
 
 // qna 삭제
 router.delete('/deleteqna/:no', async (req, res) => {
-    console.log('삭제확인')
+    console.log('삭제확인');
     let result = await query('mypageDeleteQnA', [req.params.no]);
     res.send(result);
 });
@@ -95,8 +95,8 @@ router.delete('/deleteqna/:no', async (req, res) => {
 router.get('/reviewList', async (req, res) => {
     let page = Number(req.query.page);
     let pageUnit = Number(req.query.pageUnit);
-    console.log('page',page);
-    console.log('page',pageUnit);
+    console.log('page', page);
+    console.log('page', pageUnit);
 
     if (!page) {
         page = 1;
@@ -118,19 +118,25 @@ router.get('/reviewinfo/:no', async (req, res) => {
     console.log(result);
     res.send(result);
 });
+router.get('/getreviewimg/:no', async (req, res) => {
+    let result = await query('mypageGetImg', [req.params.no]);
+    console.log(result);
+    res.send(result);
+});
 
 // 후기 등록
 router.post('/insertreview', async (req, res) => {
     let result = await query('mypageReviewInsert', [req.body]);
-    console.log('이게뭐야',result);
-    const reviewId  = result.insertId;
-    res.send({id: reviewId});
+    console.log('이게뭐야', result);
+    const reviewId = result.insertId;
+    res.send({ id: reviewId });
 });
 const multer = require('multer');
 
 const storage = multer.diskStorage({
-    destination: function (req, file, cb) { //파일이 저장 될 위치 지정
-        cb(null, './uploads/review'); 
+    destination: function (req, file, cb) {
+        //파일이 저장 될 위치 지정
+        cb(null, './uploads/review');
     },
     filename: function (req, file, cb) {
         const originalname = Buffer.from(file.originalname, 'latin1').toString('utf8'); // 파일 utf-8로 변환
@@ -138,6 +144,10 @@ const storage = multer.diskStorage({
     },
 });
 
+router.get('/getreviewno/:no', async (req, res) => {
+    let result = await query('mypageselectReviewNo', [req.params.no]);
+    res.send(result);
+});
 
 const path = require('path');
 // const upload = multer({ dest: './uploads/review' });
@@ -145,9 +155,9 @@ const upload = multer({ storage: storage });
 // 후기 등록(파일업로드)
 router.post('/review/uploadfiles', upload.array('files'), async (req, res) => {
     console.log('sdfsdfdfsd');
-    console.log('sdfsdf',req.files);
+    console.log('sdfsdf', req.files);
     const files = req.files;
-    const {table_no, division} = req.query;
+    const { table_no, division } = req.query;
 
     const fileData = files.map((file, index) => [
         file.filename,
@@ -156,13 +166,11 @@ router.post('/review/uploadfiles', upload.array('files'), async (req, res) => {
         path.extname(file.originalname),
         table_no,
         division,
-        index + 1
+        index + 1,
     ]);
 
     await query(`mypageReviewFileUpload`, [fileData]);
     res.send(files);
 });
-
-
 
 module.exports = router;
