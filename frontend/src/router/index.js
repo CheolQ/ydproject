@@ -194,6 +194,7 @@ const routes = [
             },
             {
                 path: 'NewPwInsert',
+                name: 'NewPwInsert',
                 component: NewPwInsert,
             },
             {
