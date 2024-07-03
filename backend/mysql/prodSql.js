@@ -30,15 +30,18 @@ module.exports = {
 
         selectuserno: `select user_no from user where user_id = ?`,
 
-        prodCategory: `SELECT prod_no, prod_name, p.category_code, prod_price, main_img, c.category_name as codename
+        smallCategory: `SELECT prod_no, prod_name, p.category_code, prod_price, main_img, c.category_name as codename
                         FROM prod p
                                 left join category c
                                 on p.category_code = c.category_code
-                        WHERE p.category_code = ?`,
+                        WHERE p.category_code = ? and prod_name like ?
+                        limit ?,?`,
 
-        prodCnt : ` select category_code, count(*) 
-                        from prod
-                        GROUP BY category_code`,
+        prodCnt : ` SELECT count(*) cnt
+                    FROM prod p
+                        left join category c
+                                on p.category_code = c.category_code
+                    WHERE p.category_code = ? and prod_name like ?`,
         
         prodRating : ` select prod_no, round(avg(rating)) as stars
                         from review
@@ -52,7 +55,20 @@ module.exports = {
 							        on p.category_code = c.category_code
                                                         group by c.pre_category) c2
                                                   on c2.pre_category = c1.category_code
-                            where c2.pre_category like 'A_'`
+                            where c2.pre_category like 'A_'`,
+        bigCategory : `SELECT prod_no, prod_name, p.category_code, prod_price, main_img, c.pre_category
+                        FROM prod p
+                        left join category c
+                        on p.category_code = c.category_code
+                        where pre_category = ? and prod_name like ?
+                        limit ?,?`,
+                
+        bigcateCnt : ` SELECT count(*) cnt
+                        FROM prod p
+                        left join category c
+                        on p.category_code = c.category_code
+                        where pre_category = ? and prod_name like ?`,
+        
 
 
 };

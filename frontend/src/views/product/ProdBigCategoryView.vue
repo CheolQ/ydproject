@@ -2,15 +2,16 @@
     <!-- Fruits Shop Start-->
     <div class="container-fluid fruite py-5">
     <div class="container py-5" >
+        <p>대분류</p>
         <!-- <h1 class="mb-4">{{ Object.keys(prodCategory)[0].codename }}</h1> -->
-        <h1 class="mb-4">{{ codename }}</h1>
+        <!-- <h1 class="mb-4">{{ codename }}</h1> -->
         <div class="row g-4">
             <div class="col-lg-12">
                 <div class="row g-4">
                     <div class="col-xl-3">
                         <div class="input-group w-100 mx-auto d-flex">
-                            <input type="search"  v-model="search" class="form-control p-3" placeholder="keywords" aria-describedby="search-icon-1">
-                            <span id="search-icon-1" class="input-group-text p-3"  @click="searchBtn"><i class="fa fa-search"></i></span>
+                            <input type="search" class="form-control p-3" placeholder="keywords" aria-describedby="search-icon-1">
+                            <span id="search-icon-1" class="input-group-text p-3"><i class="fa fa-search"></i></span>
                         </div>
                     </div>
                     <div class="col-6"></div>
@@ -49,7 +50,7 @@
                     <div class="col-lg-9">
                         <div class="row g-4 justify-content-center">
                             <div class="col-md-6 col-lg-6 col-xl-4" 
-                            :key ="i" v-for ="(cate, i) in smallCategory" @click ="goToDetail(cate.prod_no)">
+                            :key ="i" v-for ="(cate, i) in bigCategory" @click ="goToDetail(cate.prod_no)">
                                 <div class="rounded position-relative fruite-item" >
                                     <div class="fruite-img">
                                         <img :src="`/img/prodImg/${cate.main_img}`" class="img-fluid w-100 rounded-top" alt="">
@@ -86,41 +87,42 @@ export	default {
 	components:{paging},
  	data ()	{
         return {
-                searchCode:"",
-                smallCategory: [],
+                searchBigCode:"",
+                bigCategory: [],
                 prodCategoryCnt : [],
-                codename: '',
+                // codename: '',
                 page:{},
 	            pageUnit:9,
 	            search: '',
         };
  	},
  	created(){
-        this.searchCode = this.$route.query.code ;
-        this.getSmallCategory();
+        this.searchBigCode = this.$route.query.code ;
+        this.getBigCategory();
         this.getProdCategoryCnt();
         this.goPage(1);
  	},
  	methods: {
         async goPage(page){
         let pageUnit = this.pageUnit;
-        let result = await axios.get(`/api/shop/code/${this.searchCode}?pageUnit=${pageUnit}&page=${page}&search=${this.search}`)
-        this.smallCategory = result.data.list;
+        let result = await axios.get(`/api/shop/bigcode/${this.searchCode}?pageUnit=${pageUnit}&page=${page}&search=${this.search}`)
+        this.bigCategory = result.data.list;
     
-        console.log(this.smallCategory[0],'daas');
-        console.log(this.smallCategory[0],'daas');
+        console.log(this.bigCategory[0],'daas');
+        console.log(this.bigCategory[0],'daas');
 
-        this.codename=result.data.list[0].codename;
-        console.log(this.codename,'codename')
-        console.log(result.data.list[0].codename,'1111111',result.data.list)
+        // this.codename=result.data.list[0].codename;
+        // console.log(this.codename,'codename')
+        // console.log(result.data.list[0].codename,'1111111',result.data.list)
         console.log(this.page)
         this.page = this.pageCalc(page, result.data.count,5,pageUnit)
     },
-        async getSmallCategory()	{
-            console.log('searchCode',this.searchCode)
-            this.smallCategory = 
-                (await axios.get(`/api/shop/code/${this.searchCode}`))
+        async getBigCategory()	{
+            console.log('searchCode',this.searchBigCode)
+            this.bigCategory = 
+                (await axios.get(`/api/shop/bigcode/${this.searchBigCode}`)).data
             // .then(result=>console.log('sadas',result.list)))
+            console.log('dd',this.bigCategory);
         },
         async getProdCategoryCnt()   {
         let result = await axios.get(`/api/shop/cnt`);

@@ -37,7 +37,7 @@
                                          <li>
                                              <div class="d-flex justify-content-between fruite-name" v-for="v in prodCategoryCnt"  >
 
-                                                 <a href="#"><i class="fas fa-apple-alt me-2"></i>{{v.category_name }}</a>
+                                                 <a @click="gotoProd(v.category_code)"><i class="fas fa-apple-alt me-2"></i>{{v.category_name }}</a>
                                              
                                                  <span>({{ v.prodcnt }})</span>
                                              </div>
@@ -123,6 +123,9 @@ methods: {
 	async goToDetail(no)	{
  	  	await this.$router.push({	name:"shopinfo",	query: { no:no }	});
  	},
+     gotoProd(code){
+            this.$router.push({   name:"prodBigcategory" , query: {code : code}});
+        },
     numberFormat: function (number) {
         if (number == 0)
         return 0;
