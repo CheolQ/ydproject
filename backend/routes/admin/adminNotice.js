@@ -19,7 +19,7 @@ router.get("/", async (req, res) => {
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) { //파일이 저장 될 위치 지정
-        cb(null, 'd:/uploads'); 
+        cb(null, './uploads/notice'); 
     },
     filename: function (req, file, cb) {
         const originalname = Buffer.from(file.originalname, 'latin1').toString('utf8'); // 파일 utf-8로 변환
@@ -34,7 +34,7 @@ router.post("/",upload.array("files"), async (req, res) => {
     console.log(data)
     console.log(req.files)
     console.log(req.files.length);
-    await query("AdminNoticeInsert", ['user01',data.title, data.content, 1])
+    await query("AdminNoticeInsert", [req.session.user_id ,data.title, data.content, req.session.user_no])
     .then(result=>console.log(result))
     .catch(err => console.log(err))
     let table = await query("AdminNoticeLastNo");

@@ -164,12 +164,12 @@ export default {
         },
         logoutHandler() {
             this.$store.dispatch('logout')
-                .then(() => {
-                    this.$router.push('/user/login');
-                })
-                .catch(err => {
-                    console.error('Logout failed', err);
-                });
+            .then(() => {
+                this.$router.push('/user/login');
+            })
+            .catch(err => {
+                console.error('Logout failed', err);
+            });
         }
     }
 }

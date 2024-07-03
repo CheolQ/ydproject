@@ -19,10 +19,10 @@
                 </div>
             </div>
         </form> -->
-
+        
         <!-- Topbar Navbar -->
         <ul class="navbar-nav ml-auto">
-
+            
             <!-- Nav Item - Search Dropdown (Visible Only XS) -->
             <li class="nav-item dropdown no-arrow d-sm-none">
                 <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button"
@@ -66,14 +66,10 @@
                     </a>
                     <a class="dropdown-item" href="#">
                         <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
-                        Settings
-                    </a>
-                    <a class="dropdown-item" href="#">
-                        <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
-                        Activity Log
+                        ShopMall
                     </a>
                     <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
+                    <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal" @click="logoutHandler">
                         <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                         Logout
                     </a>
@@ -94,11 +90,24 @@ export default {
 
         }
     },
+    computed: {
+        loggedInUserId() {
+            return this.$store.getters.loggedInUserId;
+        }
+    },
     created() {
-
+        
     },
     methods: {
-
+        logoutHandler() {
+            this.$store.dispatch('logout')
+            .then(() => {
+                this.$router.push('../user/login');
+            })
+            .catch(err => {
+                console.error('Logout failed', err);
+            });
+        }
     }
 }
 </script>
