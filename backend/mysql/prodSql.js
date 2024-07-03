@@ -63,7 +63,7 @@ module.exports = {
                         where pre_category = ? and prod_name like ?
                         limit ?,?`,
                 
-        bigcateCnt : ` SELECT count(*) cnt
+        bigCateCnt : ` SELECT count(*) cnt
                         FROM prod p
                         left join category c
                         on p.category_code = c.category_code

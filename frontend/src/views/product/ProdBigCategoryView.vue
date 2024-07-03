@@ -2,16 +2,15 @@
     <!-- Fruits Shop Start-->
     <div class="container-fluid fruite py-5">
     <div class="container py-5" >
-        <p>대분류</p>
         <!-- <h1 class="mb-4">{{ Object.keys(prodCategory)[0].codename }}</h1> -->
-        <!-- <h1 class="mb-4">{{ codename }}</h1> -->
+        <h1 class="mb-4">{{ catename }}</h1>
         <div class="row g-4">
             <div class="col-lg-12">
                 <div class="row g-4">
                     <div class="col-xl-3">
                         <div class="input-group w-100 mx-auto d-flex">
-                            <input type="search" class="form-control p-3" placeholder="keywords" aria-describedby="search-icon-1">
-                            <span id="search-icon-1" class="input-group-text p-3"><i class="fa fa-search"></i></span>
+                            <input type="search"  v-model="search" class="form-control p-3" placeholder="keywords" aria-describedby="search-icon-1">
+                            <span id="search-icon-1" class="input-group-text p-3"  @click="searchBtn"><i class="fa fa-search"></i></span>
                         </div>
                     </div>
                     <div class="col-6"></div>
@@ -90,7 +89,7 @@ export	default {
                 searchBigCode:"",
                 bigCategory: [],
                 prodCategoryCnt : [],
-                // codename: '',
+                codename: '',
                 page:{},
 	            pageUnit:9,
 	            search: '',
@@ -105,15 +104,13 @@ export	default {
  	methods: {
         async goPage(page){
         let pageUnit = this.pageUnit;
-        let result = await axios.get(`/api/shop/bigcode/${this.searchCode}?pageUnit=${pageUnit}&page=${page}&search=${this.search}`)
+        let result = await axios.get(`/api/shop/bigcode/${this.searchBigCode}?pageUnit=${pageUnit}&page=${page}&search=${this.search}`)
         this.bigCategory = result.data.list;
     
         console.log(this.bigCategory[0],'daas');
         console.log(this.bigCategory[0],'daas');
 
-        // this.codename=result.data.list[0].codename;
-        // console.log(this.codename,'codename')
-        // console.log(result.data.list[0].codename,'1111111',result.data.list)
+       
         console.log(this.page)
         this.page = this.pageCalc(page, result.data.count,5,pageUnit)
     },
@@ -126,8 +123,12 @@ export	default {
         },
         async getProdCategoryCnt()   {
         let result = await axios.get(`/api/shop/cnt`);
-        console.log('갯수',result.data[0]);
+        console.log('갯수',result.data);
         this.prodCategoryCnt = result.data ;
+        this.catename=result.data[0].category_name;
+        console.log(this.catename,'catename')
+        // console.log(result.data.catename,'1111111',result.data.list)
+
         },
         async goToDetail(no)	{
  	  	await this.$router.push({	name:"shopinfo",	query: { no:no }	});

@@ -129,7 +129,7 @@ module.exports = {
                     left join reply r
                     on q.board_no = r.board_no
                     where q.board_no = ?`,
-                    
+
     mypageUpdateQnA: `update qna 
                         set ? 
                         where board_no = ?`,
@@ -181,6 +181,11 @@ module.exports = {
                         on r.prod_no = p.prod_no
                         where r.review_no = ?`,
 
+    mypageGetImg: `select file_name from file where division = 'E2' and table_no = ?`,
+
     mypageReviewInsert: `insert into review set ?`,
-    mypageReviewFileUpload: `INSERT INTO file (file_name, file_path, file_ext, table_no, division, seqs) VALUES ?`
+
+    mypageselectReviewNo: `select review_no from review where order_detail_no = ?`,
+
+    mypageReviewFileUpload: `INSERT INTO file (file_name, file_path, file_ext, table_no, division, seqs) VALUES ?`,
 };
