@@ -62,7 +62,7 @@ router.get('/bigcode/:code', async (req, res) => {
     let offset = (page -1)*pageUnit ;
 
     let list = await query("bigCategory",[req.params.code,search, offset,pageUnit]);
-    let count = await query("bigcateCnt",[req.params.code, search])
+    let count = await query("bigCateCnt",[req.params.code, search])
     console.log(list,'lkist',count,'sdsa')
     count = count[0].cnt;
     res.send({list,count})
@@ -99,10 +99,13 @@ router.get('/qna/:no', async (req, res) => {
 });
 
 //qna 단건조회
-router.post('/qna/:no', async (req, res) => {
-    console.log(req.body);
-    let prodno = req.body.prodno;
-    let boardno = req.body.qnano;
+router.post('/qnalist/:no', async (req, res) => {
+    // console.log(req.body);
+    let prodno = req.params.prodno;
+    console.log(prodno,'제품번호')
+    let boardno = req.params.no;
+    console.log(boardno,'보드번호')
+
     let result = await query('qnaInfo', [prodno, boardno]);
     console.log(result);
     res.send(result);

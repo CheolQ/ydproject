@@ -17,7 +17,7 @@
                 <tbody>
                     <tr v-for="(v, i) in orderList">
                         <td>{{ v.order_no }}</td>
-                        <td>{{ v.order_date }}</td>
+                        <td>{{ formatDate(v.order_date) }}</td>
                         <td v-if="v.cnt > 0">{{ v.prod_name }} 외 {{ v.cnt - 1 }}</td>
                         <td v-else>{{ v.prod_name }}</td>
                         <td>{{ numberFormat(v.pay_price) }}원</td>
@@ -95,6 +95,17 @@ export default {
                 nstr = nstr.replace(regex, '$1' + ',' + '$2');
             }
             return nstr;
+        },
+        formatDate(dateString) {
+            const date = new Date(dateString);
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0'); // 월은 0부터 시작하므로 1을 더해줌
+            const day = String(date.getDate()).padStart(2, '0');
+            const hours = String(date.getHours()).padStart(2, '0');
+            const minutes = String(date.getMinutes()).padStart(2, '0');
+            const seconds = String(date.getSeconds()).padStart(2, '0');
+
+            return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
         },
         orderInfoHandler: function (no) {
             this.$router.push({ name: 'orderdetailinfo', query: { no: no } })

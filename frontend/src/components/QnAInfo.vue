@@ -1,28 +1,28 @@
 <template>
-    <div>
-        <div id="mypage">
-            <h3 id="mypage-sub">후기상세</h3>
-            <div id="review-detail">
-                <div class="product-info">
-                    <img :src="`/img/prodImg/${review.main_img}`" alt="Product Image" class="product-img">
-                    <div class="product-details">
-                        <p>상품명: {{ review.prod_name }}</p>
-                        <p>상품가격: {{ numberFormat(review.prod_price) }}원</p>
-                    </div>
+    <div id="mypage">
+        <h3 id="mypage-sub">문의상세</h3>
+        <div id="qna-detail">
+            <div class="product-info">
+                <img :src="qna.main_img" alt="Product Image" class="product-img">
+                <div class="product-details">
+                    <p>상품명: {{ qna.prod_name }}</p>
+                    <p>상품가격: {{ numberFormat(qna.prod_price) }}원</p>
                 </div>
-                <div class="question-details">
-                    <h4>{{ review.review_title }}</h4>
-                    <p>Date: {{ getDateFormat(review.create_date) }}</p>
-                    <div v-for="v in files">
-                        <img :src="`/api/upload/review/${v.file_name}`" alt="">
-                    </div>
-                    <p>{{ review.review_content }}</p>
-                </div>
-                <div class="buttons">
-                    <button @click="editReview">수정</button>
-                    <button @click="deleteReview">삭제</button>
-                    <button @click="goBack">돌아가기</button>
-                </div>
+            </div>
+            <div class="question-details">
+                <h4>{{ qna.title }}</h4>
+                <p>Date: {{ new Date(qna.create_date).toLocaleDateString() }}</p>
+                <p>{{ qna.content }}</p>
+            </div>
+            <div v-if="qna.reply_create_date != null" class="question-details">
+                <h4>답변</h4>
+                <p>Date: {{ new Date(qna.reply_create_date).toLocaleDateString() }}</p>
+                <p>{{ qna.reply_content }}</p>
+            </div>
+            <div class="buttons">
+                <button v-if="qna.reply_create_date == null" @click="editQna">수정</button>
+                <button v-if="qna.reply_create_date == null" @click="deleteQna">삭제</button>
+                <button @click="goBack">돌아가기</button>
             </div>
         </div>
     </div>
@@ -30,29 +30,29 @@
 
 <script>
 import axios from 'axios';
+import Swal from "sweetalert2";
+
 export default {
     data() {
         return {
-            review: {},
+            searchCode:"",
             no: 0,
-            files: [],
+            qna: {}
         }
     },
     created() {
-        this.no = this.$route.query.no;
-        axios.get(`/api/mypage/reviewinfo/${this.no}`)
+        this.searchCode = this.$route.query.no;
+        console.log(this.no,'제품번ㅊㅊ호')
+
+        this.no = this.$route.query.bordno;
+        console.log(this.no,'보드ㅊㅊ번호')
+        axios.get(`/api/shop/qna/${this.searchNo}?bordno=${this.no}`)
             .then(result => {
-                this.review = result.data[0];
-                console.log(this.review)
-            })
-        axios.get(`/api/mypage/getreviewimg/${this.no}`)
-            .then(result => {
-                this.files = result.data
-                console.log(this.files)
+                this.qna = result.data[0];
             })
     },
     methods: {
-        numberFormat: function (number) {
+        numberFormat(number) {
             if (number == 0)
                 return 0;
             let regex = /(^[+-]?\d+)(\d{3})/;
@@ -62,18 +62,8 @@ export default {
             }
             return nstr;
         },
-        getDateFormat(val) {
-            let date = val == '' ? new Date() : new Date(val);
-            let year = date.getFullYear();
-            let month = ('0' + (date.getMonth() + 1)).slice(-2);
-            let day = ('0' + date.getDate()).slice(-2);
-            return `${year}-${month}-${day}`;
-        },
         goBack() {
             this.$router.go(-1);
-        },
-        editReview() {
-            this.$router.push({ name: 'mypagereviewform' })
         }
     }
 }
@@ -92,7 +82,7 @@ export default {
     border-bottom: 2px solid #ddd;
 }
 
-#review-detail {
+#qna-detail {
     padding: 20px;
     border: 1px solid #ddd;
     border-radius: 8px;
@@ -100,7 +90,7 @@ export default {
     font-family: 'Noto Sans KR', sans-serif;
 }
 
-#review-detail {
+#qna-detail {
     padding: 20px;
     border: 1px solid #ddd;
     border-radius: 8px;

@@ -106,17 +106,15 @@ router.post('/userfindid', (req, res) => {
         });
     });
 
-// 비밀번호 초기화 요청
+// 비밀번호 찾기
 router.post('/userfindpw', async (req, res) => {
   const { user_id, tel } = req.body;
   try {
       let result = await query('userfindpw', [user_id, tel]);
       if (result.length > 0) {
-          const token = crypto.randomBytes(20).toString('hex');
-          await query('updatePasswordToken', [token, user_id]);
-          res.send({ token });
+          res.send({ success: true });
       } else {
-          res.status(404).send('해당하는 유저를 찾을 수 없습니다.');
+          res.status(404).send('사용자를 찾을 수 없습니다.');
       }
   } catch (err) {
       console.error(err);
@@ -125,16 +123,14 @@ router.post('/userfindpw', async (req, res) => {
 });
 
 // 비밀번호 업데이트
-router.post('/updatepassword', async (req, res) => {
-  const { token, newPassword } = req.body;
+router.post('/updatePassword', async (req, res) => {
+  const { user_id, tel, new_password } = req.body;
   try {
-      let result = await query('findUserByToken', [token]);
-      if (result.length > 0) {
-          const user_id = result[0].user_id;
-          await query('updatePassword', [newPassword, user_id]);
-          res.send('비밀번호가 성공적으로 변경되었습니다.');
+      let result = await query('updatePassword', [new_password, user_id, tel]);
+      if (result.affectedRows > 0) {
+          res.send({ success: true });
       } else {
-          res.status(400).send('잘못된 토큰입니다.');
+          res.status(404).send('비밀번호를 업데이트할 수 없습니다.');
       }
   } catch (err) {
       console.error(err);

@@ -70,7 +70,6 @@ export	default {
                 prodInfo: {},
                 product: [],
                 number: 1,
-                // prodRating: 0,
                 prodRating: [],
                 stars: 0,
 
