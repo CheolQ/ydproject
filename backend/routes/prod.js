@@ -62,7 +62,7 @@ router.get('/bigcode/:code', async (req, res) => {
     let offset = (page -1)*pageUnit ;
 
     let list = await query("bigCategory",[req.params.code,search, offset,pageUnit]);
-    let count = await query("bigcateCnt",[req.params.code, search])
+    let count = await query("bigCateCnt",[req.params.code, search])
     console.log(list,'lkist',count,'sdsa')
     count = count[0].cnt;
     res.send({list,count})
