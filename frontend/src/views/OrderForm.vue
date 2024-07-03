@@ -134,6 +134,7 @@ export default {
             address: '',
             pCode: '',
             detailAddr: '',
+            user_no : ''
         };
     },
     computed: {
@@ -141,7 +142,14 @@ export default {
     },
     created() {
         // const queryCart = this.$route.query.Cart;
-        //getUser(); //유저정보
+        //getUser(); //유저정보 가져오기
+        // //유저정보 알려줘 이름,연락처,이메일,포인트 등 가져왔어 axios.get().then()//this.result.name
+        this.user_no = this.$store.state;
+        console.log(this.user_no, '유저넘버');
+        // axios.get(`/api/orderForm/`)
+        // .then(result => {
+        //     console.log(result,'결과는는')
+        // })
         const queryCart = JSON.stringify(this.getCartInfo);
         console.log(queryCart)
         console.log(this.getCartInfo);
@@ -155,9 +163,15 @@ export default {
         this.discount();
     },
     methods: {
-        getUser(){
-            //유저정보 알려줘 이름,연락처,이메일,포인트 등 가져왔어 axios.get().then()//this.result.name
-        },
+        // getUser(){
+        //     this.user_no = req.session.user_no;
+        //     console.log(this.user_no, '유저넘버');
+        //     //유저정보 알려줘 이름,연락처,이메일,포인트 등 가져왔어 axios.get().then()//this.result.name
+        //     axios.get('/api/orderForm')
+        //     .then(result => {
+        //         console.log(result,'결과는는')
+        //     })
+        // },
         execDaumPostcode(){
             new window.daum.Postcode({
                 oncomplete: (data) => {
