@@ -49,6 +49,8 @@ import Members from '../views/admin/AdminMember.vue';
 import ProdListView from '@/views/product/ProdListView.vue';
 import ProdInfoView from '@/views/product/ProdInfoView.vue';
 import ProdCategoryView from '@/views/product/ProdCategoryView.vue';
+import ProdBigCategoryView from '@/views/product/ProdBigCategoryView.vue';
+
 
 //공지
 
@@ -85,6 +87,11 @@ const routes = [
                 path: 'prodcategory',
                 name: 'prodcategory',
                 component: ProdCategoryView,
+            },
+            {
+                path: 'prodBigcategory',
+                name: 'prodBigcategory',
+                component: ProdBigCategoryView,
             },
             {
                 path: 'shopinfo',
