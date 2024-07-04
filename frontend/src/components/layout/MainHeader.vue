@@ -58,7 +58,7 @@
                             <button
                                 class="btn-search btn border border-secondary btn-md-square rounded-circle bg-white me-4"
                                 @click="modalOpen"><i class="fas fa-search text-primary"></i></button>
-                            <router-link to="/user/cart">
+                            <router-link @click.prevent="gotoCart" to="#" class="my-auto">
                                 <a href="#" class="position-relative me-4 my-5">
                                     <i class="fa fa-shopping-bag fa-2x"></i>
                                     <!-- <span
@@ -68,7 +68,9 @@
                             </router-link>
                             <!-- <router-link to="/user/mypage" class="my-auto"> -->
                             <router-link @click.prevent="gotoMypage" to="#" class="my-auto">
-                                <i class="fas fa-user fa-2x"></i>
+                                <a href="#" class="position-relative me-4 my-5">
+                                    <i class="fas fa-user fa-2x"></i>
+                                </a>
                             </router-link>
                         </div>
                     </div>
@@ -180,6 +182,20 @@ export default {
             if (this.loggedInUserId) {
                 this.$router.push('/user/mypage');
             } else {
+                Swal.fire({
+                    title: '로그인이 필요합니다.',
+                    text: "로그인 페이지로 이동합니다.",
+                    icon: 'warning',
+                    confirmButtonText: '확인'
+                }).then(() => {
+                    this.$router.push('/user/login');
+                });
+            }
+        },
+        gotoCart(){
+            if(this.loggedInUserId){
+                this.$router.push('/user/cart');
+            }else{
                 Swal.fire({
                     title: '로그인이 필요합니다.',
                     text: "로그인 페이지로 이동합니다.",
