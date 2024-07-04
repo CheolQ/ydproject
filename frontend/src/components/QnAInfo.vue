@@ -3,25 +3,25 @@
         <h3 id="mypage-sub">문의상세</h3>
         <div id="qna-detail">
             <div class="product-info">
-                <img :src="qna.main_img" alt="Product Image" class="product-img">
+                <img :src="`/img/prodImg/${prodInfo.main_img}`" class="product-img" alt="Product Image">
                 <div class="product-details">
-                    <p>상품명: {{ qna.prod_name }}</p>
-                    <p>상품가격: {{ numberFormat(qna.prod_price) }}원</p>
+                    <p>상품명: {{ prodInfo.prod_name }}</p>
+                    <p>상품가격: {{ numberFormat(prodInfo.prod_price) }}원</p>
                 </div>
             </div>
             <div class="question-details">
-                <h4>{{ qna.title }}</h4>
-                <p>Date: {{ new Date(qna.create_date).toLocaleDateString() }}</p>
-                <p>{{ qna.content }}</p>
+                <h4>{{ qnaInfo.title }}</h4>
+                <p>Date: {{ new Date(qnaInfo.create_date).toLocaleDateString() }}</p>
+                <p>{{ qnaInfo.content }}</p>
             </div>
-            <div v-if="qna.reply_create_date != null" class="question-details">
+            <div v-if="qnaInfo.reply_create_date != null" class="question-details">
                 <h4>답변</h4>
-                <p>Date: {{ new Date(qna.reply_create_date).toLocaleDateString() }}</p>
-                <p>{{ qna.reply_content }}</p>
+                <p>Date: {{ new Date(qnaInfo.reply_create_date).toLocaleDateString() }}</p>
+                <p>{{ qnaInfo.reply_content }}</p>
             </div>
             <div class="buttons">
-                <button v-if="qna.reply_create_date == null" @click="editQna">수정</button>
-                <button v-if="qna.reply_create_date == null" @click="deleteQna">삭제</button>
+                <button v-if="qnaInfo.reply_create_date == null" @click="editQna">수정</button>
+                <button v-if="qnaInfo.reply_create_date == null" @click="deleteQna">삭제</button>
                 <button @click="goBack">돌아가기</button>
             </div>
         </div>
@@ -35,23 +35,29 @@ import Swal from "sweetalert2";
 export default {
     data() {
         return {
-            searchCode:"",
-            no: 0,
-            qna: {}
+            no: '',
+            qnaInfo: {},
+            prodNo : '',
+            prodInfo: {},
         }
     },
     created() {
-        this.searchCode = this.$route.query.no;
-        console.log(this.no,'제품번ㅊㅊ호')
-
-        this.no = this.$route.query.bordno;
-        console.log(this.no,'보드ㅊㅊ번호')
-        axios.get(`/api/shop/qna/${this.searchNo}?bordno=${this.no}`)
-            .then(result => {
-                this.qna = result.data[0];
-            })
+        this.no = this.$route.query.no;
+        this.prodNo = this.$route.query.prodNo;
+        this.getQnaInfo();
+        this.getProdInfo();
     },
     methods: {
+        async getQnaInfo()	{
+            console.log('aaa')
+            this.qnaInfo = 
+            (await axios.get(`/api/shop/qnainfo/${this.no}`)).data[0];
+            console.log(this.qnaInfo,'qnainfo')
+        },
+        async getProdInfo()	{
+            this.prodInfo = 
+            (await axios.get(`/api/shop/${this.prodNo}`)).data[0];
+        },
         numberFormat(number) {
             if (number == 0)
                 return 0;

@@ -53,7 +53,6 @@ export default {
     if (!window.Kakao.isInitialized()) {
       window.Kakao.init('8f90883ee7aceafe1ce44fb81519b379'); // YOUR_APP_KEY를 실제 앱 키로 교체
     }
-
     axios.get("/api/user/account")
       .then(result => {
         this.$store.commit('setUser', result.data);
@@ -61,47 +60,47 @@ export default {
       .catch(err => {
         console.log(err);
       });
-      // 네이버 SDK 초기화
-      // const naverLogin = new window.naver.LoginWithNaverId({
-      //   clientId: "YOUR_NAVER_CLIENT_ID",
-      //   callbackUrl: "http://localhost:8080/user/naver-callback", // 실제 콜백 URL로 교체
-      //   isPopup: false,
-      //   loginButton: { color: "green", type: 3, height: 48 }
-      // });
-      // naverLogin.init();
-  
-      // window.addEventListener('load', () => {
-      //   naverLogin.getLoginStatus(status => {
-      //     if (status) {
-      //       const email = naverLogin.user.getEmail();
-      //       if (!email) {
-      //         alert("이메일은 필수 정보입니다. 정보제공을 동의해주세요.");
-      //         naverLogin.reprompt();
-      //         return;
-      //       }
-  
-      //       axios.post('/api/users/naver-login', {
-      //         accessToken: naverLogin.accessToken.accessToken,
-      //         email
-      //       }).then(result => {
-      //         this.$store.commit('user', result.data);
-      //         this.$router.push('/user/home');
-      //       }).catch(err => {
-      //         console.log('Login error:', err);
-      //         alert('네이버 로그인 실패');
-      //       });
-      //     }
-      //   });
-      // });
+    // 네이버 SDK 초기화
+    // const naverLogin = new window.naver.LoginWithNaverId({
+    //   clientId: "YOUR_NAVER_CLIENT_ID",
+    //   callbackUrl: "http://localhost:8080/user/naver-callback", // 실제 콜백 URL로 교체
+    //   isPopup: false,
+    //   loginButton: { color: "green", type: 3, height: 48 }
+    // });
+    // naverLogin.init();
+
+    // window.addEventListener('load', () => {
+    //   naverLogin.getLoginStatus(status => {
+    //     if (status) {
+    //       const email = naverLogin.user.getEmail();
+    //       if (!email) {
+    //         alert("이메일은 필수 정보입니다. 정보제공을 동의해주세요.");
+    //         naverLogin.reprompt();
+    //         return;
+    //       }
+
+    //       axios.post('/api/users/naver-login', {
+    //         accessToken: naverLogin.accessToken.accessToken,
+    //         email
+    //       }).then(result => {
+    //         this.$store.commit('user', result.data);
+    //         this.$router.push('/user/home');
+    //       }).catch(err => {
+    //         console.log('Login error:', err);
+    //         alert('네이버 로그인 실패');
+    //       });
+    //     }
+    //   });
+    // });
   },
   methods: {
     loginHandler() {
       axios.post("/api/users/login", this.form)
         .then(result => {
           this.$store.commit('setUser', result.data);
-          if(result.data.user_id === 'admin'){
+          if (result.data.user_id === 'admin') {
             this.$router.push('../../admin')
-          }else{
+          } else {
             this.$router.push('/user/home');
           }
         })
@@ -170,10 +169,11 @@ export default {
   background: #fff;
   border: 1px solid #ddd;
   border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.login-left, .login-right {
+.login-left,
+.login-right {
   padding: 40px;
   width: 400px;
   display: flex;
@@ -197,7 +197,8 @@ export default {
 }
 
 .login-description.spaced {
-  margin-top: 40px; /* 간격 조정 */
+  margin-top: 40px;
+  /* 간격 조정 */
   margin-bottom: 20px;
 }
 
@@ -211,7 +212,7 @@ export default {
   margin-bottom: 16px;
 }
 
-#login-form > .form-group > input {
+#login-form>.form-group>input {
   width: 100%;
   height: 48px;
   padding: 0 10px;
@@ -220,11 +221,11 @@ export default {
   background-color: #f8f8f8;
 }
 
-#login-form > .form-group > input::placeholder {
+#login-form>.form-group>input::placeholder {
   color: #d2d2d2;
 }
 
-#login-form > .btn-primary {
+#login-form>.btn-primary {
   color: #fff;
   font-size: 16px;
   background-color: #6a24fe;
@@ -236,11 +237,12 @@ export default {
   border-radius: 6px;
 }
 
-#login-form > .btn-primary:hover {
+#login-form>.btn-primary:hover {
   background-color: #5b1fe3;
 }
 
-.btn-naver, .btn-kakao {
+.btn-naver,
+.btn-kakao {
   width: 100%;
   height: 48px;
   border-radius: 6px;
@@ -273,7 +275,8 @@ export default {
   width: 1px;
   background-color: #ddd;
   height: auto;
-  margin: 0 40px; /* 간격 조정 */
+  margin: 0 40px;
+  /* 간격 조정 */
 }
 
 .btn {

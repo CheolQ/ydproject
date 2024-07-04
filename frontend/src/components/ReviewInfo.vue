@@ -1,27 +1,25 @@
 <template>
     <div id="mypage">
-        <h3 id="mypage-sub">문의상세</h3>
+        <h3 id="mypage-sub">후기상세</h3>
         <div id="qna-detail">
             <div class="product-info">
-                <img :src="`/img/prodImg/${qna.main_img}`" alt="Product Image" class="product-img">
+                <img :src="`/img/prodImg/${prodInfo.main_img}`" class="product-img" alt="Product Image">
                 <div class="product-details">
-                    <p>상품명: {{ qna.prod_name }}</p>
-                    <p>상품가격: {{ numberFormat(qna.prod_price) }}원</p>
+                    <p>상품명: {{ prodInfo.prod_name }}</p>
+                    <p>상품가격: {{ numberFormat(prodInfo.prod_price) }}원</p>
                 </div>
             </div>
             <div class="question-details">
-                <h4>{{ qna.title }}</h4>
-                <p>Date: {{ new Date(qna.create_date).toLocaleDateString() }}</p>
-                <p>{{ qna.content }}</p>
-            </div>
-            <div v-if="qna.reply_create_date != null" class="question-details">
-                <h4>답변</h4>
-                <p>Date: {{ new Date(qna.reply_create_date).toLocaleDateString() }}</p>
-                <p>{{ qna.reply_content }}</p>
+                <h4>{{ reviewInfo.review_title }}</h4>
+                <p>Date: {{ new Date(reviewInfo.create_date).toLocaleDateString() }}</p>
+                <i :key = "i" v-for="i in reviewInfo.rating" class="fa fa-star text-secondary"></i>
+                <i :key = "i" v-for="i in 5- reviewInfo.rating"class="fa fa-star"></i>
+                <p>사진</p>
+                <p>{{ reviewInfo.review_content }}</p>
             </div>
             <div class="buttons">
-                <button v-if="qna.reply_create_date == null" @click="editQna">수정</button>
-                <button v-if="qna.reply_create_date == null" @click="deleteQna">삭제</button>
+                <button v-if="reviewInfo.reply_create_date == null" @click="editQna">수정</button>
+                <button v-if="reviewInfo.reply_create_date == null" @click="deleteQna">삭제</button>
                 <button @click="goBack">돌아가기</button>
             </div>
         </div>
@@ -35,18 +33,29 @@ import Swal from "sweetalert2";
 export default {
     data() {
         return {
-            no: 0,
-            qna: {}
+            no: '',
+            reviewInfo: {},
+            prodNo : '',
+            prodInfo: {},
         }
     },
     created() {
         this.no = this.$route.query.no;
-        axios.get(`/api/mypage/qnainfo/${this.no}`)
-            .then(result => {
-                this.qna = result.data[0];
-            })
+        this.prodNo = this.$route.query.prodNo;
+        this.getReviewInfo();
+        this.getProdInfo();
     },
     methods: {
+        async getReviewInfo()	{
+            console.log('aaa')
+            this.reviewInfo = 
+            (await axios.get(`/api/shop/reviewinfo/${this.no}`)).data[0];
+            console.log(this.reviewInfo,'reivewinfo')
+        },
+        async getProdInfo()	{
+            this.prodInfo = 
+            (await axios.get(`/api/shop/${this.prodNo}`)).data[0];
+        },
         numberFormat(number) {
             if (number == 0)
                 return 0;
@@ -56,39 +65,6 @@ export default {
                 nstr = nstr.replace(regex, '$1' + ',' + '$2');
             }
             return nstr;
-        },
-        editQna() {
-            this.$router.push({
-                name: 'qna',
-                query: { no: this.qna.prod_no, qna: JSON.stringify(this.qna) }
-            });
-        },
-        deleteQna() {
-            // 삭제 로직 구현
-            Swal.fire({
-                title: "Are you sure?",
-                text: "You won't be able to revert this!",
-                icon: "warning",
-                showCancelButton: true,
-                confirmButtonColor: "#3085d6",
-                cancelButtonColor: "#d33",
-                confirmButtonText: "Yes, delete it!"
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    axios.delete(`/api/mypage/deleteqna/${this.no}`)
-                        .then(result => {
-                            console.log('삭제완료');
-                            Swal.fire({
-                                title: "Deleted!",
-                                text: "Your file has been deleted.",
-                                icon: "success"
-                            });
-                            this.$router.go(-1);
-                        })
-                        .catch(err => console.log(err));
-                }
-            });
-
         },
         goBack() {
             this.$router.go(-1);

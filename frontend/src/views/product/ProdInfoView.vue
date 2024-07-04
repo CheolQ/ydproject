@@ -61,6 +61,7 @@
 import axios from "axios";
 import review from '@/components/Review.vue'
 import Swal from "sweetalert2";
+// import QnaInfo from "@/components/QnAInfo.vue";
 
 export	default {
     components:{review},
@@ -93,14 +94,11 @@ export	default {
             (await axios.get(`/api/shop/star/${this.searchNo}`)).data[0];
                 console.log(this.prodRating);
                 if(this.prodRating == undefined){
-                    console.log('별0');
                     this.prodRating = 0
                 }else{
-                    console.log('별4');
                     this.stars = Number(this.prodRating.stars)
                 }
             
-            console.log(this.prodRating,'나d나');
         },
         getDateFormat(val )	{
             let date = val == '' ? new Date() : new Date(val);
@@ -135,13 +133,12 @@ export	default {
             },
         gotoWish(no){
             axios.post(`/api/wish/insert/${no}`, this.prodInfo.prod_no)
-            //.then(()=> alert('관심상품에 등록되었습니다.'))
             .then((result => {
-                if(result.data == 'none'){
+                if(result.data == 'success'){
                     Swal.fire({
                         position: "center",
                         icon: "success",
-                        title: "이미 등록된 상품입니다.",
+                        title: "관심상품에 등록되었습니다.",
                         showConfirmButton: true,
                         timer: 1500
                     })
@@ -149,12 +146,21 @@ export	default {
                     Swal.fire({
                         position: "center",
                         icon: "success",
-                        title: "관심상품에 등록되었습니다.",
+                        title: "이미 등록된 상품입니다.",
                         showConfirmButton: false,
                         timer: 1500
                     })
                 }
             }))
+            .catch(err => {
+                Swal.fire({
+                    position: "center",
+                    icon: "error",
+                    title: "관심상품 등록에 실패했습니다.",
+                    showConfirmButton: true,
+                    timer: 1000
+                });
+            });
         },
         gotoCart(no){
             axios.post(`/api/cart/insertCart/${no}`, {no: this.prodInfo.prod_no, cnt: this.number})

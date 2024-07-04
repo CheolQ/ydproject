@@ -8,6 +8,10 @@
                     <div class="product-details">
                         <p>상품명: {{ review.prod_name }}</p>
                         <p>상품가격: {{ numberFormat(review.prod_price) }}원</p>
+                        <span v-if="review.rating != undefined">
+                            <i :key="i" v-for="(i) in review.rating" class="fa fa-star text-secondary"></i>
+                            <i :key="i" v-for="(i) in 5 - review.rating" class="fa fa-star"></i>
+                        </span>
                     </div>
                 </div>
                 <div class="question-details">
@@ -73,7 +77,15 @@ export default {
             this.$router.go(-1);
         },
         editReview() {
-            this.$router.push({ name: 'mypagereviewform' })
+            this.$router.push({ name: 'mypagereviewupdate' , query: { no: this.no } })
+        },
+        deleteReview() {
+            axios.delete(`/api/mypage/reviewdelete/${this.no}`)
+                .then((result) => {
+                    console.log(result)
+                    alert('삭제완')
+                    this.goBack();
+                })
         }
     }
 }

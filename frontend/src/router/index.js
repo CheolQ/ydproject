@@ -25,6 +25,7 @@ import MyWishList from '@/components/mypage/MyWishList.vue';
 import MyPageReview from '@/components/mypage/MypageReview.vue';
 import MyPageReviewInfo from '@/components/mypage/MypageReviewInfo.vue';
 import MyPageReviewForm from '@/components/mypage/MypageReviewForm.vue';
+import MyPageReviewUpdate from '@/components/mypage/MypageReviewUpdate.vue';
 
 //관리자
 import AdminLayout from '../layouts/AdminLayout.vue';
@@ -51,6 +52,7 @@ import ProdInfoView from '@/views/product/ProdInfoView.vue';
 import ProdCategoryView from '@/views/product/ProdCategoryView.vue';
 import ProdBigCategoryView from '@/views/product/ProdBigCategoryView.vue';
 import ProdQnaInfo from '@/components/QnAInfo.vue';
+import ReviewInfo from '@/components/ReviewInfo.vue'
 
 
 //공지
@@ -111,14 +113,19 @@ const routes = [
                 component: NoticeInfoView,
             },
             {
+                path: 'reviewinfo',
+                name: 'reviewinfo',
+                component: ReviewInfo,
+            },
+            {
                 path: 'qna',
                 name: 'qna',
                 component: QnaForm,
                 props: (route) => ({ qnadata: route.query.qna ? JSON.parse(route.query.qna) : {} }),
             },
             {
-                path: 'prodqnainfo',
-                name: 'prodqnainfo',
+                path: 'qnainfo',
+                name: 'qnainfo',
                 component: ProdQnaInfo,
             },
             {
@@ -162,6 +169,11 @@ const routes = [
                         path: 'mypagereviewform',
                         name: 'mypagereviewform',
                         component: MyPageReviewForm,
+                    },
+                    {
+                        path: 'mypagereviewupdate',
+                        name: 'mypagereviewupdate',
+                        component: MyPageReviewUpdate,
                     },
                     {
                         path: 'mywishlist',

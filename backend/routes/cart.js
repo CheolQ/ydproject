@@ -42,9 +42,10 @@ router.post('/insertCart/:no', (req, res) => {
         if (result.length != 0) {
             cnt = Number(result[0].cnt) + cnt;
             query('cartUpdate', [cnt, req.session.user_no, req.params.no]);//메인일떄와 상세일때의 수량값에 따라 update됨
-            //res.send('ok')
+            //res.send('update')
         } else {
             query('cartInsert', [cnt, req.params.no, req.session.user_no]);
+            //res.send('insert')
         }
     });
 });

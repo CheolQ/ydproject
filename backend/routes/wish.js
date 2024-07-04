@@ -50,6 +50,7 @@ router.post("/insert/:no", (req, res) => {
     .then((result) => {
         if(result.length == 0){
             query('wishInsert', [req.params.no, req.session.user_no]);
+            res.send('success');
         }else{
             res.send('none');
         }

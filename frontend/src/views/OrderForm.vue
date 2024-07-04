@@ -85,7 +85,10 @@
                             <div class="text-end">
                                 <ul>
                                     <li>주문 금액 <span>{{ formatPrice(totalPrice) }}원</span></li>
-                                    <p style="font-size: smaller;">기본 배송비는 2,500원입니다.<br>50,000원 이상 구매 시 무료배송입니다.</p>
+                                    <p style="font-size: smaller;">기본 배송비는 2,500원입니다.
+                                        <br>50,000원 이상 구매 시 무료배송입니다.
+                                        <br>고객님의 배송비는 <b>{{ formatPrice(deliveryCharge) }}원</b>입니다.
+                                    </p>
                                 </ul>
                             </div>
                             <div>
@@ -98,7 +101,6 @@
                                     <ul>
                                         <li>총 결제 금액 <span>{{ formatPrice(resultPrice) }}원</span></li>
                                     </ul>
-                                    <!-- <input readonly v-model="totalPrice"> -->
                                 </div>
                             </div>
                         </div>
@@ -113,8 +115,10 @@
                         </div> -->
                         <div class="row g-4 text-center align-items-center justify-content-center pt-4">
                             <button type="button" @click="payments"
-                                class="btn border-secondary py-3 px-4 text-uppercase w-100 text-primary">Place
-                                Order</button>
+                                class="btn btn-primary border-0 py-3 px-4 w-100 text-white">KAKAOPAY</button>
+                            <!-- <button type="button" @click="payments" 
+                                class="btn border-0 py-3 px-4 w-100" 
+                                style="background-color: #007bff; color: white;">TOSSPAY</button> -->
                         </div>
                     </div>
                 </div>
@@ -143,7 +147,8 @@ export default {
             pCode: '',
             detailAddr: '',
             pointStatus: false, //포인트 안썼을때
-            newUserInfo: false //주문자의 정보가 다를때
+            newUserInfo: false, //주문자의 정보가 다를때
+            deliveryCharge: 0 //배송비
         };
     },
     computed: {
@@ -163,8 +168,12 @@ export default {
     },
     mounted() {
         this.discount();
-        //
-        this.resultPrice = this.totalPrice;
+        if(this.totalPrice >= 50000){
+            this.deliveryCharge = 0
+        }else{
+            this.deliveryCharge = 2500
+        }
+        this.resultPrice = this.totalPrice + this.deliveryCharge;
     },
     methods: {
         getUser(){
@@ -260,7 +269,7 @@ export default {
                 prodname += a.prod_name;
                 prodno += a.prod_no;
             });
-
+            
             // 결제 요청 데이터 설정
             const data = {
                 pg: 'kakaopay.TC0ONETIME',
@@ -310,7 +319,7 @@ export default {
                             cnt: cnt[index]
                         }))
                     };
-                    console.log('프론트에서 확인', orderData)
+                    //console.log('프론트에서 확인', orderData)
                     //console.log(orderData, '주소값가져오는지 체크')
                     axios.post("/api/order", orderData)
                         .then(result => {
@@ -358,7 +367,7 @@ export default {
     },
 }
 </script>
-<style>
+<style scope>
 .aside-tit {
     padding: 65px 0 30px;
     font-size: 24px;
