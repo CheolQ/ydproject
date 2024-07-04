@@ -48,10 +48,11 @@ router.post("/insert/:no", (req, res) => {
     // .catch(err => res.status(500).send(err));
     query('wishSearch', [req.params.no, req.session.user_no])
     .then((result) => {
-        if (result.length == 0) {
+        if(result.length == 0){
             query('wishInsert', [req.params.no, req.session.user_no]);
-        } else {
-            console.log('이미 들어있는 제품입니다.');
+            res.send('success');
+        }else{
+            res.send('none');
         }
     });
 })

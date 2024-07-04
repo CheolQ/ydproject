@@ -2,8 +2,16 @@ module.exports = {
     AdminOrderDate: `select DATE_FORMAT(MAX(order_date), '%Y.%m.%d') as date
                      FROM orders`,
     AdminOrderCount: `select count(*) as cnt
-                      from orders
-                      where order_status = 'D1' or order_status = 'D4'`,
+                      from (select od.order_no, od.order_status, od.order_date, group_concat(
+		                                                                                    (select prod_name
+					                                                                        from prod
+                                                                                            where prod_no = ods.prod_no)) as prod_name
+                            from orders od left join order_detail ods
+					                            on od.order_no = ods.order_no
+                            Group by od.order_no
+                            having prod_name like ?) as orders
+                      where (DATE_FORMAT(orders.order_date, '%Y-%m-%d') >= ? and DATE_FORMAT(orders.order_date, '%Y-%m-%d') <= ?)                    
+                      and orders.order_status = ? or orders.order_status = ?`, 
     AdminOrderList: `select DISTINCT od.order_no, od.order_date, od.user_no, od.pay_price, od.order_status,
 		             substring_index(group_concat(
 		                                    (select prod_name
@@ -15,8 +23,10 @@ module.exports = {
 									        where order_no = od.order_no) as cnt
                     from orders od left join order_detail ods
 					                    on od.order_no = ods.order_no
-                    where od.order_status = 'D1' or od.order_status = 'D4'                                      
+                    where (DATE_FORMAT(order_date, '%Y-%m-%d') >= ? and DATE_FORMAT(order_date, '%Y-%m-%d') <= ?)                    
+                    and od.order_status = ? or od.order_status = ?                                      
                     group by od.order_no, od.order_date, od.user_no, od.pay_price, od.order_status
+                    HAVING prod_name like ?
                     limit ?, ? `,
     AdminOrderPrepare: `update orders set
                         order_status = 'D4'

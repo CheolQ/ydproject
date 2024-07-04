@@ -1,10 +1,12 @@
 <template>
     <div>
-        <div class="card mb-4">
-            <div class="card-body shadow">
-                <h3>배송조회</h3>
-            </div>
+        <ContentHeader title="배송조회"></ContentHeader>
+        <SearchForm title1="검색어" title2="주문기한" title3="주문상태" :Categorys="Categorys" @obj="searchfrom" ref="reset_com"></SearchForm>
+        <div class="d-grid gap-2 d-md-flex justify-content-md-center">
+            <button @click="prodSearchBtn" class="btn btn-primary">검색</button>        
+            <button @click="resetBtn" class="btn btn-secondary">초기화</button>
         </div>
+        <br>
         <div class="card mb-4">
             <div class="card-body shadow">
                 <table class="table">
@@ -43,16 +45,27 @@
 import Paging from "../../mixin";
 import axios from 'axios';
 import PagingComponent from '@/components/Paging.vue'
+import ContentHeader from '@/components/admin/ContentHeader.vue'
+import SearchForm from '@/components/admin/SearchForm.vue'
 export default {
     mixins : [Paging],
     components: {
-        PagingComponent
+        PagingComponent, ContentHeader, SearchForm
     },
     data() {
         return {
             orderList: [],
             page: {},
             pageUnit: 5,
+
+            Categorys: [
+                {category_code: 'D5', category_name: '배송중', seqs: 1},
+                {category_code: 'D6', category_name: '배송완료', seqs: 2}
+            ],
+            name: '',
+            date1: '',
+            date2: '',
+            category: '',
         }
     },
     created() {
@@ -61,7 +74,7 @@ export default {
     },
     methods: {
         goPage(page){
-            axios.get(`/api/adminOrder/delivery?pageUnit=${this.pageUnit}&page=${page}&orderStatus=${this.order_status}`)
+            axios.get(`/api/adminOrder?from=delivery&pageUnit=${this.pageUnit}&page=${page}&name=${this.name}&date1=${this.date1}&date2=${this.date2}&category=${this.category}`)
             .then(result => {
                 console.log(result.data)
                 this.orderList = result.data.list;
@@ -70,12 +83,25 @@ export default {
             })
             .catch(err => console.log(err))
         },
+        prodSearchBtn(){
+            this.goPage(1);
+        },
+        resetBtn(){
+            this.$refs.reset_com.test2();
+            this.goPage(1);
+        },
         statusBtn(no){
             axios.post(`/api/adminOrder/delivery/${no}`)
             .then(() =>{
                 this.goPage(1);
             })
             .catch(err => console.log(err))
+        },
+        searchfrom(name, date1, date2, category){
+            this.name = name;
+            this.date1 = date1;
+            this.date2 = date2;
+            this.category = category;
         },
         orderInfo(orderNo, state){
             console.log(orderNo);

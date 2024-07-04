@@ -45,7 +45,6 @@ import axios from 'axios'
 export default {
     data() {
         return {
-            userid: 'user1',
             user: {}
         }
     },

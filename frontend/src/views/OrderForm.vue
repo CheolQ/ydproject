@@ -6,9 +6,12 @@
             <form action="#">
                 <div class="row g-5">
                     <div class="col-md-12 col-lg-6 col-xl-6">
+                        <div>
+                            <label style="font-size: large;">주문자 정보</label>
+                        </div>
                         <div class="form-item d-flex justify-content-end align-items-center">
                             <input type="checkbox" class="me-2" @change="resetHandler">
-                            <label class="form-label my-3">새로운 배송지로 설정</label>
+                            <label class="form-label my-3" style="font-size: smaller; margin-top: auto;">새로운 배송지로 설정</label>
                         </div>
                         <div class="form-item">
                             <label class="form-label my-3">이름<sup style="color: red;">*</sup></label>
@@ -39,6 +42,9 @@
                         </div>
                     </div>
                     <div class="col-md-12 col-lg-6 col-xl-5">
+                        <div>
+                            <label style="font-size: large;">상품 정보</label>
+                        </div>
                         <div class="table-responsive">
                             <div>
                                 <table class="table">
@@ -79,7 +85,10 @@
                             <div class="text-end">
                                 <ul>
                                     <li>주문 금액 <span>{{ formatPrice(totalPrice) }}원</span></li>
-                                    <p style="font-size: smaller;">기본 배송비는 2,500원입니다.<br>50,000원 이상 구매 시 무료배송입니다.</p>
+                                    <p style="font-size: smaller;">기본 배송비는 2,500원입니다.
+                                        <br>50,000원 이상 구매 시 무료배송입니다.
+                                        <br>고객님의 배송비는 <b>{{ formatPrice(deliveryCharge) }}원</b>입니다.
+                                    </p>
                                 </ul>
                             </div>
                             <div>
@@ -96,7 +105,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="row g-4 text-center align-items-center justify-content-center border-bottom py-3">
+                        <!-- <div class="row g-4 text-center align-items-center justify-content-center border-bottom py-3">
                             <div class="col-12">
                                 <div class="form-check text-start my-3">
                                     <input type="checkbox" class="form-check-input bg-primary border-0" id="Payments-1"
@@ -104,7 +113,7 @@
                                     <label class="form-check-label" for="Payments-1">Check Payments</label>
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
                         <div class="row g-4 text-center align-items-center justify-content-center pt-4">
                             <button type="button" @click="payments"
                                 class="btn border-secondary py-3 px-4 text-uppercase w-100 text-primary">Place
@@ -137,7 +146,8 @@ export default {
             pCode: '',
             detailAddr: '',
             pointStatus: false, //포인트 안썼을때
-            newUserInfo: false //주문자의 정보가 다를때
+            newUserInfo: false, //주문자의 정보가 다를때
+            deliveryCharge: 0 //배송비
         };
     },
     computed: {
@@ -157,8 +167,12 @@ export default {
     },
     mounted() {
         this.discount();
-        //
-        this.resultPrice = this.totalPrice;
+        if(this.totalPrice >= 50000){
+            this.deliveryCharge = 0
+        }else{
+            this.deliveryCharge = 2500
+        }
+        this.resultPrice = this.totalPrice + this.deliveryCharge;
     },
     methods: {
         getUser(){
