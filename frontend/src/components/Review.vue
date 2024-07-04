@@ -33,8 +33,8 @@
 						<th>Rating</th>
 					   </tr>
 					  </thead>
-					  <tbody :key ="i" v-for ="(review, i) in reviewList">
-					<tr  @click= "goToReview(review.review_no)">
+					  <tbody >
+					<tr  @click= "goToReview(review.review_no)" :key ="i" v-for ="(review, i) in reviewList">
 					 <td>{{review.review_title }}</td>
 					 <td>{{review.user_id }}</td>
 					 <td>{{getDateFormat(review.create_date) }}</td>
@@ -59,16 +59,18 @@
 						<th>NAME</th>
 						<th>DATE</th>
 						<th>UPDATE DATE</th>
+						<th>REPLY</th>
 					   </tr>
 					  </thead>
-					  <tbody :key ="i" v-for ="(qna, i) in qnaList">
-					<tr @click= "goToQna(qna.board_no)"  >
+					  <tbody>
+					<tr @click= "goToQna(qna.board_no)"  :key ="i" v-for ="(qna, i) in qnaList" >
 					 <td>{{qna.title }}</td>
 					 <td>{{qna.user_id }}</td>
 					 <td>{{getDateFormat(qna.create_date) }}</td>
 
 					 <td v-if="qna.create_date != qna.update_date">{{getDateFormat(qna.update_date) }}</td>
 					 <td v-else> - </td>
+					 <td>O</td>
 					</tr>
 				</tbody>
 				  </table>
