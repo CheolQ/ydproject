@@ -173,4 +173,29 @@ router.post('/review/uploadfiles', upload.array('files'), async (req, res) => {
     res.send(files);
 });
 
+router.delete('/reviewdelete/:no', async (req, res) => {
+    console.log('삭제확인');
+    let result1 = await query('mypageReviewDelete', req.params.no);
+    let result2 = await query('mypageReviewFileDelete', req.params.no);
+
+    res.send({result1, result2});
+});
+
+
+router.get('/getreviewinfo/:no', async (req, res) => {
+    let result = await query('mypageGetReviewInfo', [req.params.no]);
+    res.send(result);
+});
+
+
+router.post(`/updatereview`, async (req, res) => {
+    let review = {...req.body}
+    console.log(review)
+    let result = await query('mypageUpdateReview', [review.review_title, review.review_content, review.rating, review.review_no])
+    
+    let result2 = await query('mypageReviewDeleteFile', review.review_no)
+    res.send({result, result2});
+
+})
+
 module.exports = router;

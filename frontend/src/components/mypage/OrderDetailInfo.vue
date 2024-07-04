@@ -49,6 +49,20 @@
                                     </div>
                                 </div>
                             </td>
+                            <td v-if="delInfo.order_status === 'D6'">
+                                <div class="delivery_item no_line">
+                                    <div class="delivery_info_box" data-delivery-point-main="">
+                                        <div class="delivery_detail">
+                                            <span class="label">운송장 번호: </span>
+                                            <span class="value">{{ delInfo.deli_code }}</span>
+                                        </div>
+                                        <div class="delivery_date">
+                                            <span class="label">배송일자: </span>
+                                            <span class="value">{{ formatDate(delInfo.deli_date) }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
                         </tr>
                     </tbody>
                 </table>
@@ -199,7 +213,18 @@ export default {
             this.$router.push({
                 name: 'orderForm',
             });
-        }
+        },
+        formatDate(dateString) {
+            const date = new Date(dateString);
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0'); // 월은 0부터 시작하므로 1을 더해줌
+            const day = String(date.getDate()).padStart(2, '0');
+            const hours = String(date.getHours()).padStart(2, '0');
+            const minutes = String(date.getMinutes()).padStart(2, '0');
+            const seconds = String(date.getSeconds()).padStart(2, '0');
+
+            return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+        },
     }
 }
 </script>

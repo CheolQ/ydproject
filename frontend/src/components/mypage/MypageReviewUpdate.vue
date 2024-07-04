@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="review-container">
-            <h5 id="mypage-sub">후기작성</h5>
+            <h5 id="mypage-sub">후기수정</h5>
             <form>
                 <div class="form-group">
                     <label for="title">제목</label>
@@ -31,7 +31,7 @@
                     <input type="file" id="files" @change="handleFileUpload">
                 </div>
                 <div class="form-actions">
-                    <button type="button" @click="insertReviewHandler">등록</button>
+                    <button type="button" @click="updateReviewHandler">수정</button>
                     <button type="button" @click="goBack">취소</button>
                 </div>
             </form>
@@ -45,9 +45,7 @@ export default {
     data() {
         return {
             // isEdit: false // 나중에 입력 수정 같이 쓸때 이용
-            review: {
-                rating: 0
-            },
+            review: {},
             files: [],
             no: 0
 
@@ -55,23 +53,27 @@ export default {
     },
     created() {
         // order_no
-        console.log(this.$route.query.orderno);
         // order_detail_no
-        console.log(this.$route.query.orderdetailno);
-        this.review.order_no = Number(this.$route.query.orderno);
-        this.review.order_detail_no = Number(this.$route.query.orderdetailno);
-        this.review.prod_no = Number(this.$route.query.prodno);
-        this.review.user_id = this.$route.query.id;
+        this.no = this.$route.query.no;
+        console.log(this.no)
+        axios.get(`/api/mypage/getreviewinfo/${this.no}`)
+            .then(result => {
+                console.log('asdfdf',result)
+                this.review = result.data[0]
+
+            })
     },
     methods: {
-        insertReviewHandler: function () {
+        updateReviewHandler: function () {
             if (!this.review.review_title || !this.review.rating || !this.review.review_content) {
                 alert('제목, 평점, 내용은 필수 입력 항목입니다.');
                 return;
             }
             this.review.rating = Number(this.review.rating);
             let temp = { ...this.review }
-            axios.post(`/api/mypage/insertreview`, temp)
+            temp.review_no =  this.$route.query.no;
+            console.log(temp)
+            axios.post(`/api/mypage/updatereview`, temp)
                 .then(result => {
                     console.log(result);
                     console.log('나오나?', result.data.id);
@@ -86,11 +88,8 @@ export default {
                         });
 
                         console.log(formData)
-                        axios.get(`/api/mypage/getreviewno/${this.review.order_detail_no}`)
-                            .then(result => {
-                                console.log('ddda', result.data[0].review_no)
                                 axios.post('/api/mypage/review/uploadfiles', formData, {
-                                    params: { table_no: result.data[0].review_no, division: 'E2' }
+                                    params: { table_no: this.$route.query.no, division: 'E2' }
                                 })
                                     .then(result => {
                                         alert('파일 업로드 성공');
@@ -101,7 +100,6 @@ export default {
                                         console.log(err);
                                         alert('파일 업로드 실패')
                                     });
-                            })
 
                     } else {
                         this.resetForm();
@@ -129,7 +127,7 @@ export default {
             console.log(this.review)
         },
         goBack() {
-            this.$router.go(-1);
+            this.$router.go(-2);
         }
 
 
