@@ -19,7 +19,8 @@
  	     		</thead>
  	     		<tbody>
  	   				<tr :key ="i" v-for ="(notice, i) in noticeList" @click ="goToDetail(notice.notice_no)">
- 	    				<td>{{notice.notice_no}}</td>
+ 	    				<td v-if="notice.category_code === 'F1'">공지</td>
+						<td v-else>{{notice.notice_no}}</td>
  	   		 			<td>{{notice.title }}</td>
  	   		 			<td>{{notice.user_id }}</td>
  	   		 			<td>{{getDateFormat(notice.create_date) }}</td>
@@ -47,7 +48,6 @@ export default {
         }
     },
     created() {
-		this.getNoticeList();
 		this.goPage(1)    
     },
     methods: {
@@ -57,12 +57,7 @@ export default {
                 this.noticeList = result.data.list;
                 console.log(this.page)
                 this.page = this.pageCalc(page, result.data.count,5,pageUnit)
-        
             },
-		async getNoticeList()	{
- 	  		let result =	await axios.get(`/api/notice`);
- 	  		this.noticeList =	result.data ;
- 	 	},
 	 	goToDetail(no)	{
 			console.log('번호',no);
  	  		this.$router.push({	path:"noticeinfo",	query: {no:no }	});
