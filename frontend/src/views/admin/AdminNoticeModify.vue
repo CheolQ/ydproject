@@ -26,11 +26,14 @@
                         </tr>
                     </tbody>               
                 </table>
+                <div class="mb-3">
+                    <input multiple @change="upload" ref="imageFile" class="form-control" type="file" id="formFile"  accept="image/*">
+                </div>
             </div>
         </div>
         <div class="d-grid gap-2 d-md-flex justify-content-md-end">
             <button @click="noticeModify" class="btn btn-primary">수정</button>        
-            <button @click="cancelBtn" class="btn btn-secondary">취소</button>
+            <button @click="$router.go(-1)" class="btn btn-secondary">취소</button>
         </div>
     </div>
 </template>
@@ -47,6 +50,7 @@ export default {
     data() {
         return {
             noticeInfo: {},
+            imgFile: [],
             bno: 1,
         }
     },
@@ -57,16 +61,27 @@ export default {
         .catch(err=> console.log(err))
     },
     methods:{
-        noticeModify(){
-            axios.put(`/api/adminNotice/${this.bno}`, {title: this.noticeInfo.title, content: this.noticeInfo.content})
+        upload() {
+            this.imgFile = [];
+            const files = Array.from(this.$refs.imageFile.files);
+            this.imgFile = [...this.imgFile, ...files];
+            console.log(this.imgFile);
+        },
+        async noticeModify(){
+            let data = new FormData();
+            for (let i = 0; i< this.imgFile.length; i++) {
+                data.append("files", this.imgFile[i]);
+            }
+            data.append("title", this.noticeInfo.title);
+            data.append("content", this.noticeInfo.content);
+            await axios.post(`/api/adminNotice/${this.bno}`, data,
+                { headers:{'Content-Type':'multipart/form-data'}}
+            )
             .then(() => {
                 alert("수정완료");
                 this.$router.push({path: 'noticeInfo', query: {bno : this.bno}})
             })
             .catch(err=> console.log(err))
-        },
-        cancelBtn(){
-
         },
         getDateFormat (date ){
             return this .$dateFormat (date );

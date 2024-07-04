@@ -17,6 +17,28 @@ router.get("/", async (req, res) => {
     res.send({list, count})
 })
 
+router.get("/info/:no", async(req, res) => {
+    let list = await query("AdminNoticeInfo", req.params.no);
+    let file = await query("AdminNoticeFileInfo", req.params.no);
+    
+    let img = [];
+    let files = [];
+
+    file.forEach(ele => {
+        if(ele.file_ext.indexOf('image/') != -1){
+            img.push(ele);
+        }else{
+            files.push(ele);
+        }
+    })
+
+    res.send({list, img, files});
+})
+
+
+
+
+
 const storage = multer.diskStorage({
     destination: function (req, file, cb) { //파일이 저장 될 위치 지정
         cb(null, './uploads/notice'); 
@@ -45,9 +67,36 @@ router.post("/",upload.array("files"), async (req, res) => {
     }
 })
 
-router.put("/:id", async (req,res) => {
-    let result = await query("AdminNoticeUpdate", [req.body, req.params.id])
-    res.send(result);
+router.post("/:id", upload.array("files"), async (req,res) => {
+    console.log(req.body);
+    console.log(req.files);
+    if(req.files == ""){
+        console.log("check")
+    }else{
+        let result = await query("AdminNoticeFileCount", req.params.id)
+        console.log(result.length);
+        for(let i=0; i<result.length; i++){
+            if (fs.statSync(`./uploads/notice/${result[i].file_name}`)){
+                try{
+                    fs.unlinkSync(`./uploads/notice/${result[i].file_name}`)
+                } catch(err){
+                    console.log(err)
+                }
+            }
+        }
+        query('AdminNoticeFileDelete', req.params.id)
+        .then(result => console.log(result))
+        .catch(err=> console.log(err))
+    }
+
+    let data = { ...req.body };
+    await query("AdminNoticeUpdate", [data.title, data.content, req.params.id])
+    for(let i=1; i<req.files.length+1; i++){
+        query("AdminNoticeFile",[req.files[i-1].filename, req.files[i-1].path, req.files[i-1].mimetype, req.params.id, i])
+        .then(result=>{console.log(result)})
+        .catch(err=>{console.log(err)})
+    }
+    res.send('ok');
 })
 
 router.delete("/:id", async (req, res) => {
@@ -55,9 +104,9 @@ router.delete("/:id", async (req, res) => {
     let result = await query("AdminNoticeFileCount", req.params.id)
     console.log(result.length);
     for(let i=0; i<result.length; i++){
-        if (fs.statSync(`d:/uploads/${result[i].file_name}`)){
+        if (fs.statSync(`./uploads/notice/${result[i].file_name}`)){
             try{
-                fs.unlinkSync(`d:/uploads/${result[i].file_name}`)
+                fs.unlinkSync(`./uploads/notice/${result[i].file_name}`)
             } catch(err){
                 console.log(err)
             }

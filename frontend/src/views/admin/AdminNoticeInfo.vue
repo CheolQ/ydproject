@@ -17,38 +17,26 @@
                         </tr>
                         <tr>
                             <th>첨부파일</th>
-                            <td><a href="/api/upload/notice/1719975784160-dsfsdfer.webp" download="가나.webp">다운로드</a></td>
+                            <td>
+                                <a v-for="(file, index) in files" :key="index" :href="`/api/upload/notice/${file.file_name}`" download>다운로드</a>
+                            </td>
                         </tr>        
                     </thead>
                     <tbody>
                         <tr>
                             <td scope ="col" class="text-center"  colspan="7">
                                 <span>{{noticeInfo.content }}</span>
+                                <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
+                                    <div class="carousel-inner">
+                                        <div class="carousel-item active" v-for="(image, index) in images" :key="index">
+                                            <img :src="`/api/upload/notice/${image.file_name}`" class="d-block w-100" alt="...">
+                                        </div>
+                                    </div>
+                                </div>
                             </td>
                         </tr>
                     </tbody>               
                 </table>
-                <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
-                    <div class="carousel-inner">
-                        <div class="carousel-item active">
-                            <img src="../../../public/img/prodImg/가나.jpg" class="d-block w-100" alt="...">
-                        </div>
-                        <div class="carousel-item">
-                            <img src="../../../public/img/prodImg/시리얼.jpg" class="d-block w-100" alt="...">
-                        </div>
-                        <div class="carousel-item">
-                            <img src="../../../public/img/prodImg/오예스.jpg" class="d-block w-100" alt="...">
-                        </div>
-                    </div>
-                    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
-                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                        <span class="visually-hidden">Previous</span>
-                    </button>
-                    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
-                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                        <span class="visually-hidden">Next</span>
-                    </button>
-                </div>
             </div>
         </div> 
         <div class="d-grid gap-2 d-md-flex justify-content-md-end">
@@ -70,13 +58,19 @@ export default {
     data() {
         return{
             noticeInfo: {},
+            images: [],
+            files: [],
             bno: 1,
         }
     },
     created(){
         this.bno = this.$route.query.bno;
-        axios.get(`/api/notice/${this.bno}`)
-        .then( result=> this.noticeInfo = result.data[0])
+        axios.get(`/api/adminNotice/info/${this.bno}`)
+        .then(result=>{
+            this.noticeInfo = result.data.list[0];
+            this.images = result.data.img;
+            this.files = result.data.files;
+        })
         .catch(err=> console.log(err))
         console.log(this.noticeInfo);
     },
@@ -94,12 +88,12 @@ export default {
                 .catch(err=> console.log(err))
             }
         },
-        // getImagePath(image) {
-        //     return `/api/upload/${image.path}/${image.file_name}`;
-        // },
-        // getFilePath(file) {
-        //     return `/api/upload/${file.path}/${file.file_name}`;
-        // },
+        getImagePath(image) {
+            return `/api/upload/notice/${image.file_name}`;
+        },
+        getFilePath(file) {
+            return `/api/upload/notice/${file.file_name}`;
+        },
         getDateFormat (date ){
             return this .$dateFormat (date );
         },
