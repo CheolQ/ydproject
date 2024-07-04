@@ -33,8 +33,8 @@
 						<th>Rating</th>
 					   </tr>
 					  </thead>
-					  <tbody>
-					<tr :key ="i" v-for ="(review, i) in reviewList">
+					  <tbody :key ="i" v-for ="(review, i) in reviewList">
+					<tr  @click= "goToReview(review.review_no)">
 					 <td>{{review.review_title }}</td>
 					 <td>{{review.user_id }}</td>
 					 <td>{{getDateFormat(review.create_date) }}</td>
@@ -74,6 +74,7 @@
 				  </table>
 				  <button @click="goToInsert" class="btnq border border-secondary rounded-pill px-4 py-2 mb-4 text-primary">
 					Write</button>
+					<!-- <QnaInfo /> -->
 				 </div>
             </div>
 		</div>
@@ -84,8 +85,10 @@
 
 <script>
 import axios from "axios";
+// import QnaInfo from "@/components/QnAInfo.vue"
 
 export default { 
+	// components:{QnaInfo},
     data() { 
         return {
             searchNo:"",
@@ -122,7 +125,10 @@ export default {
     	    return `${year}-${month}-${day}`;
  		 },
 		async goToQna(no)	{
- 	  		await this.$router.push({	name:"qnainfo",	query: { no : no }	});
+ 	  		await this.$router.push({	name:"qnainfo",	query: { no : no, prodNo : this.searchNo }	});
+ 		},
+		 async goToReview(no)	{
+ 	  		await this.$router.push({	name:"reviewinfo",	query: { no : no, prodNo : this.searchNo }	});
  		},
 	}
 }	

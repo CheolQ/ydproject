@@ -51,6 +51,7 @@ import ProdInfoView from '@/views/product/ProdInfoView.vue';
 import ProdCategoryView from '@/views/product/ProdCategoryView.vue';
 import ProdBigCategoryView from '@/views/product/ProdBigCategoryView.vue';
 import ProdQnaInfo from '@/components/QnAInfo.vue';
+import ReviewInfo from '@/components/ReviewInfo.vue'
 
 
 //공지
@@ -111,14 +112,19 @@ const routes = [
                 component: NoticeInfoView,
             },
             {
+                path: 'reviewinfo',
+                name: 'reviewinfo',
+                component: ReviewInfo,
+            },
+            {
                 path: 'qna',
                 name: 'qna',
                 component: QnaForm,
                 props: (route) => ({ qnadata: route.query.qna ? JSON.parse(route.query.qna) : {} }),
             },
             {
-                path: 'prodinfo',
-                name: 'prodinfo',
+                path: 'qnainfo',
+                name: 'qnainfo',
                 component: ProdQnaInfo,
             },
             {

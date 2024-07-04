@@ -113,6 +113,11 @@ export default {
         this.getProdCategoryCnt();
         this.goPage(1);
     },
+    computed: {
+        loggedInUserId() {
+            return this.$store.getters.loggedInUserId;
+        }
+    },
     methods: {
         async goPage(page) {
             let pageUnit = this.pageUnit;
