@@ -136,24 +136,25 @@ export	default {
         gotoWish(no){
             axios.post(`/api/wish/insert/${no}`, this.prodInfo.prod_no)
             //.then(()=> alert('관심상품에 등록되었습니다.'))
-            .then(
-                Swal.fire({
-                    position: "center",
-                    icon: "success",
-                    title: "관심상품에 등록되었습니다.",
-                    showConfirmButton: false,
-                    timer: 1500
-                })
-            )
-            .catch(err => {
-                Swal.fire({
-                    position: "center",
-                    icon: "error",
-                    title: "관심상품 등록에 실패했습니다.",
-                    showConfirmButton: true,
-                    timer: 1000
-                });
-            });
+            .then((result => {
+                if(result.data == 'none'){
+                    Swal.fire({
+                        position: "center",
+                        icon: "success",
+                        title: "이미 등록된 상품입니다.",
+                        showConfirmButton: true,
+                        timer: 1500
+                    })
+                }else{
+                    Swal.fire({
+                        position: "center",
+                        icon: "success",
+                        title: "관심상품에 등록되었습니다.",
+                        showConfirmButton: false,
+                        timer: 1500
+                    })
+                }
+            }))
         },
         gotoCart(no){
             axios.post(`/api/cart/insertCart/${no}`, {no: this.prodInfo.prod_no, cnt: this.number})

@@ -6,9 +6,12 @@
             <form action="#">
                 <div class="row g-5">
                     <div class="col-md-12 col-lg-6 col-xl-6">
+                        <div>
+                            <label style="font-size: large;">주문자 정보</label>
+                        </div>
                         <div class="form-item d-flex justify-content-end align-items-center">
                             <input type="checkbox" class="me-2" @change="resetHandler">
-                            <label class="form-label my-3">새로운 배송지로 설정</label>
+                            <label class="form-label my-3" style="font-size: smaller; margin-top: auto;">새로운 배송지로 설정</label>
                         </div>
                         <div class="form-item">
                             <label class="form-label my-3">이름<sup style="color: red;">*</sup></label>
@@ -39,6 +42,9 @@
                         </div>
                     </div>
                     <div class="col-md-12 col-lg-6 col-xl-5">
+                        <div>
+                            <label style="font-size: large;">상품 정보</label>
+                        </div>
                         <div class="table-responsive">
                             <div>
                                 <table class="table">
@@ -96,7 +102,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="row g-4 text-center align-items-center justify-content-center border-bottom py-3">
+                        <!-- <div class="row g-4 text-center align-items-center justify-content-center border-bottom py-3">
                             <div class="col-12">
                                 <div class="form-check text-start my-3">
                                     <input type="checkbox" class="form-check-input bg-primary border-0" id="Payments-1"
@@ -104,7 +110,7 @@
                                     <label class="form-check-label" for="Payments-1">Check Payments</label>
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
                         <div class="row g-4 text-center align-items-center justify-content-center pt-4">
                             <button type="button" @click="payments"
                                 class="btn border-secondary py-3 px-4 text-uppercase w-100 text-primary">Place
