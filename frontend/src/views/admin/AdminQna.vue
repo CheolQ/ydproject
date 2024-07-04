@@ -22,7 +22,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="q in qnaList" v-bind:key="q" @click="">
+                        <tr v-for="q in qnaList" v-bind:key="q">
                             <th scope="row">{{ q.board_no }}</th>
                             <td>{{ q.prod_no }}</td>
                             <td>{{ q.title }}</td>

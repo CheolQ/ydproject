@@ -3,7 +3,7 @@
         <h3 id="mypage-sub">문의상세</h3>
         <div id="qna-detail">
             <div class="product-info">
-                <img :src="qna.main_img" alt="Product Image" class="product-img">
+                <img :src="`/img/prodImg/${qna.main_img}`" alt="Product Image" class="product-img">
                 <div class="product-details">
                     <p>상품명: {{ qna.prod_name }}</p>
                     <p>상품가격: {{ numberFormat(qna.prod_price) }}원</p>

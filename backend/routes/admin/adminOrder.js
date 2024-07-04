@@ -11,23 +11,47 @@ router.get("/", async (req, res) => {
     let name = '%'+req.query.name+'%';
     let date1 = req.query.date1;
     let date2 = req.query.date2;
-    let category = '%'+req.query.category+'%';
+    let category = req.query.category;
 
     if(!date2) {
         date2 = await query("AdminOrderDate");
         date2 = date2[0].date;
     }
 
-    if(!category){ 'D1'+','+'D4' }
-    
-    
     if(!page){ page = 1; }
     if(!pageUnit){ pageUnit = 10;}
     let offset = (page-1) * pageUnit;
 
-    let list = await query("AdminOrderList", [offset, pageUnit]);
-    let count = await query('AdminOrderCount');
-    console.log(count);
+    let list = null;
+    let count = null;
+    
+    console.log(name);
+    console.log(req.query.from);
+    if(req.query.from === 'order'){
+        if(!category){
+            list = await query("AdminOrderList", [date1, date2, 'D1', 'D4', name, offset, pageUnit]);
+            count = await query('AdminOrderCount', [name, date1, date2, 'D1', 'D4']);
+        }else{
+            list = await query("AdminOrderList", [date1, date2, category, category, name, offset, pageUnit]);
+            count = await query('AdminOrderCount', [name, date1, date2, category, category]);
+        }
+    }else if(req.query.from === 'delivery'){
+        if(!category){
+            list = await query("AdminOrderList", [date1, date2, 'D5', 'D6', name, offset, pageUnit]);
+            count = await query('AdminOrderCount', [name, date1, date2, 'D5', 'D6']);
+        }else{
+            list = await query("AdminOrderList", [date1, date2, category, category, name, offset, pageUnit]);
+            count = await query('AdminOrderCount', [name, date1, date2, category, category]);
+        }
+    }else if(req.query.from === 'cancel'){
+        if(!category){
+            list = await query("AdminOrderList", [date1, date2, 'D2', 'D3', name, offset, pageUnit]);
+            count = await query('AdminOrderCount', [name, date1, date2, 'D2', 'D3']);
+        }else{
+            list = await query("AdminOrderList", [date1, date2, category, category, name, offset, pageUnit]);
+            count = await query('AdminOrderCount', [name, date1, date2, category, category]);
+        }
+    }
     res.send({list,count}); 
 })
 

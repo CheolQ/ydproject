@@ -51,7 +51,6 @@ export default {
     },
     data() {
         return {
-            userid: 'user15',
             orderList: [],
             codes: {},
             page: {},

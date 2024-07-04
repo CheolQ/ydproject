@@ -4,7 +4,17 @@ module.exports = {
     AdminNoticeList: `select notice_no, user_id, title, create_date
                       from notice
                       limit ?, ?`,
-    AdminNoticeUpdate: `update notice set ? where notice_no = ?`,
+    AdminNoticeInfo: `select user_id, title, content, create_date
+                      from notice
+                      where notice_no = ?`,                  
+    AdminNoticeFileInfo: `select file_name, file_path, file_ext, seqs
+                          from file
+                          where division = 'E1'
+                          and table_no = ?`,                  
+    AdminNoticeUpdate: `update notice set 
+                        title = ?,
+                        content = ?
+                        where notice_no = ?`,
     
     AdminNoticeFileCount: `select file_name
                            from file

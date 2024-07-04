@@ -47,6 +47,7 @@ module.exports = {
                     where user_id = ?
                 )
                 group by od.order_no, od.order_date, od.user_no, od.pay_price, od.order_status 
+                order by order_no desc
                 limit ? , ?`,
 
     countUserOrderList: `select count(*) as cnt
@@ -63,7 +64,10 @@ module.exports = {
                                 cnt, 
                                 p.prod_price, 
                                 o.order_date, 
-                                p.main_img
+                                p.main_img,
+                                o.deli_code,
+                                o.deli_date,
+                                o.order_status
                             from order_detail od
                             join prod p
                             on od.prod_no = p.prod_no
@@ -146,6 +150,7 @@ module.exports = {
                             od.order_detail_no,
                             p.prod_no,
                             u.user_id,
+                            o.order_status,
                             COUNT(r.review_no) AS cnt,
                             GROUP_CONCAT(r.review_no) AS review_no
                         FROM 
@@ -159,11 +164,11 @@ module.exports = {
                         join
                             user u on u.user_no = o.user_no
                         WHERE 
-                            o.user_no = ?
+                            o.user_no = ? and order_status = 'D6'
                         GROUP BY 
                             p.main_img, p.prod_name, p.prod_price, o.order_date, u.user_id, o.order_no, od.order_detail_no, p.prod_no
                         ORDER BY 
-                            o.order_date DESC
+                            cnt, o.order_date DESC
                         limit ? , ?`,
 
     mypageReviewCount: `select count(*) as cnt from review where user_id = ?`,
