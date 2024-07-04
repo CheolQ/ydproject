@@ -3,10 +3,6 @@
         <div class="signup-wrapper">
             <h2 class="aside-tit">회원정보변경 페이지</h2>
             <form id="signup-form">
-                <!-- <div class="form-group">
-                    <label for="username">아이디 *</label>
-                    <input type="text" id="username" v-model="form.user_id" placeholder="ID" readonly />
-                </div> -->
                 <div class="form-group">
                     <label for="password">비밀번호 *</label>
                     <input type="password" id="password" v-model="form.user_pw" placeholder="Password" required />
@@ -30,8 +26,7 @@
                 <div class="form-group">
                     <label for="postcode">우편번호 *</label>
                     <div class="postcode-wrapper">
-                        <input type="text" id="postcode" v-model="form.postcode" ref="postcode" 
-                        placeholder="우편번호를 입력하세요" required />
+                        <input type="text" id="postcode" v-model="form.postcode" ref="postcode" placeholder="우편번호를 입력하세요" required />
                         <button type="button" @click="showApi">검색</button>
                     </div>
                 </div>

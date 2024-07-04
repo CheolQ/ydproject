@@ -156,7 +156,15 @@ export	default {
                     })
                 }
             }))
-            .catch(err => console.log(err))
+            .catch(err => {
+                Swal.fire({
+                    position: "center",
+                    icon: "error",
+                    title: "관심상품 등록에 실패했습니다.",
+                    showConfirmButton: true,
+                    timer: 1000
+                });
+            });
         },
         gotoCart(no){
             axios.post(`/api/cart/insertCart/${no}`, {no: this.prodInfo.prod_no, cnt: this.number})

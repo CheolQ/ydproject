@@ -101,7 +101,6 @@
                                     <ul>
                                         <li>총 결제 금액 <span>{{ formatPrice(resultPrice) }}원</span></li>
                                     </ul>
-                                    <!-- <input readonly v-model="totalPrice"> -->
                                 </div>
                             </div>
                         </div>
@@ -116,8 +115,10 @@
                         </div> -->
                         <div class="row g-4 text-center align-items-center justify-content-center pt-4">
                             <button type="button" @click="payments"
-                                class="btn border-secondary py-3 px-4 text-uppercase w-100 text-primary">Place
-                                Order</button>
+                                class="btn btn-primary border-0 py-3 px-4 w-100 text-white">KAKAOPAY</button>
+                            <!-- <button type="button" @click="payments" 
+                                class="btn border-0 py-3 px-4 w-100" 
+                                style="background-color: #007bff; color: white;">TOSSPAY</button> -->
                         </div>
                     </div>
                 </div>
@@ -268,7 +269,7 @@ export default {
                 prodname += a.prod_name;
                 prodno += a.prod_no;
             });
-
+            
             // 결제 요청 데이터 설정
             const data = {
                 pg: 'kakaopay.TC0ONETIME',
@@ -318,7 +319,7 @@ export default {
                             cnt: cnt[index]
                         }))
                     };
-                    console.log('프론트에서 확인', orderData)
+                    //console.log('프론트에서 확인', orderData)
                     //console.log(orderData, '주소값가져오는지 체크')
                     axios.post("/api/order", orderData)
                         .then(result => {
@@ -366,7 +367,7 @@ export default {
     },
 }
 </script>
-<style>
+<style scope>
 .aside-tit {
     padding: 65px 0 30px;
     font-size: 24px;
