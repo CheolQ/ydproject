@@ -137,8 +137,8 @@
                 //console.log('페이지 이동한 뒤 현재 페이지는', this.nowPage)
                 this.goPage(this.nowPage); 
             },  
-            delAll(){
-                axios.delete('/api/wish');
+            async delAll(){
+                await axios.delete('/api/wish');
                 this.goPage(this.nowPage);
             },
             checkedAll(checked){

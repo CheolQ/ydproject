@@ -135,13 +135,12 @@ export	default {
             },
         gotoWish(no){
             axios.post(`/api/wish/insert/${no}`, this.prodInfo.prod_no)
-            //.then(()=> alert('관심상품에 등록되었습니다.'))
             .then((result => {
-                if(result.data == 'none'){
+                if(result.data == 'success'){
                     Swal.fire({
                         position: "center",
                         icon: "success",
-                        title: "이미 등록된 상품입니다.",
+                        title: "관심상품에 등록되었습니다.",
                         showConfirmButton: true,
                         timer: 1500
                     })
@@ -149,12 +148,13 @@ export	default {
                     Swal.fire({
                         position: "center",
                         icon: "success",
-                        title: "관심상품에 등록되었습니다.",
+                        title: "이미 등록된 상품입니다.",
                         showConfirmButton: false,
                         timer: 1500
                     })
                 }
             }))
+            .catch(err => console.log(err))
         },
         gotoCart(no){
             axios.post(`/api/cart/insertCart/${no}`, {no: this.prodInfo.prod_no, cnt: this.number})

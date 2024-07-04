@@ -85,7 +85,10 @@
                             <div class="text-end">
                                 <ul>
                                     <li>주문 금액 <span>{{ formatPrice(totalPrice) }}원</span></li>
-                                    <p style="font-size: smaller;">기본 배송비는 2,500원입니다.<br>50,000원 이상 구매 시 무료배송입니다.</p>
+                                    <p style="font-size: smaller;">기본 배송비는 2,500원입니다.
+                                        <br>50,000원 이상 구매 시 무료배송입니다.
+                                        <br>고객님의 배송비는 <b>{{ formatPrice(deliveryCharge) }}원</b>입니다.
+                                    </p>
                                 </ul>
                             </div>
                             <div>
@@ -143,7 +146,8 @@ export default {
             pCode: '',
             detailAddr: '',
             pointStatus: false, //포인트 안썼을때
-            newUserInfo: false //주문자의 정보가 다를때
+            newUserInfo: false, //주문자의 정보가 다를때
+            deliveryCharge: 0 //배송비
         };
     },
     computed: {
@@ -163,8 +167,12 @@ export default {
     },
     mounted() {
         this.discount();
-        //
-        this.resultPrice = this.totalPrice;
+        if(this.totalPrice >= 50000){
+            this.deliveryCharge = 0
+        }else{
+            this.deliveryCharge = 2500
+        }
+        this.resultPrice = this.totalPrice + this.deliveryCharge;
     },
     methods: {
         getUser(){
