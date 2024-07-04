@@ -20,11 +20,10 @@
                                 <p class="mb-3">원산지   {{prodInfo.origin }}</p>
                                 <p class="mb-3">제조사   {{prodInfo.maker }}</p>
                                 <p class="mb-3">유통기한   {{getDateFormat(prodInfo.exp_date) }}</p>
-                               
                                 <div class="d-flex mb-4" v-if="prodRating == 0" >
                                     <i :key = "i" v-for="(i) in 5" class="fa fa-star"></i>
                                 </div>
-                                <div class="d-flex mb-4" v-else>
+                                <div class="d-flex mb-4" v-else >
                                     <i :key = "i" v-for="(i) in this.stars" class="fa fa-star text-secondary"></i>
                                     <i :key = "i" v-for="(i) in 5- this.stars"class="fa fa-star"></i>
                                     </div>
@@ -115,8 +114,13 @@ export	default {
         },
         minusBtn(number){
             if(number < 2){
-                alert('1개 이상 담을 수 있습니다.');
-                return;
+                Swal.fire({
+                        position: "center",
+                        icon: "success",
+                        title: "1개 이상 담을 수 있습니다.",
+                        showConfirmButton: true,
+                        timer: 1500
+                    })
             }else{
                 this.number--;
             }

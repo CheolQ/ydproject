@@ -19,13 +19,10 @@
                             <div class="bg-light ps-3 py-3 rounded d-flex justify-content-between mb-4">
                                 <label for="fruits">Default Sorting:</label>
                                 <select id="fruits" name="fruitlist" class="border-0 form-select-sm bg-light me-3"
-                                    form="fruitform">
-                                    <option value="sin">신상품</option>
-                                    <option value="sang">상품명</option>
-                                    <option value="be">베스트</option>
-                                    <option value="hprice">높은가격</option>
-                                    <option value="rprice">낮은가격</option>
-
+                                    form="fruitform" v-model="prodSort" @change="setSelect()">
+                                    <option v-for="option in sort" :value="option.value">
+                                     {{ option.text }}
+                                    </option>
                                 </select>
                             </div>
                         </div>
@@ -103,7 +100,13 @@ export default {
             page: {},
             pageUnit: 9,
             search: '',
-
+            sort : [
+                { text: '신상품', value: '1' },       
+                { text: '상품명', value: '2' },
+                { text: '높은가격', value: '3' },   
+                { text: '낮은가격', value: '4' }     
+            ],
+            prodSort:''
         }
     },
 
@@ -121,11 +124,14 @@ export default {
     methods: {
         async goPage(page) {
             let pageUnit = this.pageUnit;
-            let result = await axios.get(`/api/shop?pageUnit=${pageUnit}&page=${page}&search=${this.search}`)
+            let result = await axios.get(`/api/shop?pageUnit=${pageUnit}&page=${page}&search=${this.search}&sort=${this.prodSort}`)
             this.prodList = result.data.list;
             console.log(this.page)
             this.page = this.pageCalc(page, result.data.count, 5, pageUnit)
-
+            
+        },
+        setSelect(){
+            console.log('check',this.prodSort)
         },
         async getProdList() {
             let result = await axios.get(`/api/shop`);
@@ -168,6 +174,11 @@ export default {
             this.goPage(1);
         }
 
+    },
+    watch : {
+        prodSort(){
+            this.goPage(1);
+        }
     }
 
 }

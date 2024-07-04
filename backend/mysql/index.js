@@ -15,13 +15,23 @@ const conn = {
 const pool = mysql.createPool(conn);
 function query(alias, values) {
     return new Promise((resolve, reject) =>
-        pool.query(sql[alias], values, function (err, results) {
+        pool.query(getOrderBy(alias, values), values, function (err, results) {
             if (err) {
                 console.log(err);
                 reject({ err });
             } else resolve(results);
         })
     );
+}
+
+function getOrderBy(alias, values){
+    let query = sql[alias];
+    if(alias == 'prodList'){
+        query = sql[alias].replace('sort', values[1]);
+        values.splice(1,1); // 배열 내부 어느 위치든 상관없이 삭제 
+        console.log(query, values);
+    }
+    return query;
 }
 
 module.exports = query;

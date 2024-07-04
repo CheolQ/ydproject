@@ -12,8 +12,10 @@
             <div class="question-details">
                 <h4>{{ reviewInfo.review_title }}</h4>
                 <p>Date: {{ new Date(reviewInfo.create_date).toLocaleDateString() }}</p>
+                <span v-if="reviewInfo.rating != undefined">
                 <i :key = "i" v-for="i in reviewInfo.rating" class="fa fa-star text-secondary"></i>
                 <i :key = "i" v-for="i in 5- reviewInfo.rating"class="fa fa-star"></i>
+            </span>
                 <p>사진</p>
                 <p>{{ reviewInfo.review_content }}</p>
             </div>
