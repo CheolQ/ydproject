@@ -1,31 +1,30 @@
 <template>
     <div>
         <div class="review-container">
-            <h2>상품후기</h2>
-            <p>상품후기 게시판입니다.</p>
+            <h5 id="mypage-sub">후기작성</h5>
             <form>
                 <div class="form-group">
                     <label for="title">제목</label>
-                    <input type="text" id="title" name="title" v-model="review.review_title">
+                    <input type="text" id="title" name="title" v-model="review.review_title" required>
                 </div>
                 <div class="form-group">
                     <label for="rating">평점</label>
                     <div class="rating">
-                        <input type="radio" id="star5" name="rating" value="5" v-model.number="review.rating"><label
-                            for="star5">★</label>
-                        <input type="radio" id="star4" name="rating" value="4" v-model.number="review.rating"><label
-                            for="star4">★</label>
-                        <input type="radio" id="star3" name="rating" value="3" v-model.number="review.rating"><label
-                            for="star3">★</label>
-                        <input type="radio" id="star2" name="rating" value="2" v-model.number="review.rating"><label
-                            for="star2">★</label>
-                        <input type="radio" id="star1" name="rating" value="1" v-model.number="review.rating"><label
-                            for="star1">★</label>
+                        <input type="radio" id="star5" name="rating" value="5" v-model.number="review.rating"
+                            required><label for="star5">★</label>
+                        <input type="radio" id="star4" name="rating" value="4" v-model.number="review.rating"
+                            required><label for="star4">★</label>
+                        <input type="radio" id="star3" name="rating" value="3" v-model.number="review.rating"
+                            required><label for="star3">★</label>
+                        <input type="radio" id="star2" name="rating" value="2" v-model.number="review.rating"
+                            required><label for="star2">★</label>
+                        <input type="radio" id="star1" name="rating" value="1" v-model.number="review.rating"
+                            required><label for="star1">★</label>
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="content">문단</label>
-                    <textarea id="content" name="content" rows="5" v-model="review.review_content"></textarea>
+                    <textarea id="content" name="content" rows="5" v-model="review.review_content" required></textarea>
                 </div>
                 <div class="form-group">
                     <label for="files">첨부파일</label>
@@ -33,7 +32,7 @@
                 </div>
                 <div class="form-actions">
                     <button type="button" @click="insertReviewHandler">등록</button>
-                    <button type="reset">취소</button>
+                    <button type="button" @click="goBack">취소</button>
                 </div>
             </form>
         </div>
@@ -66,6 +65,10 @@ export default {
     },
     methods: {
         insertReviewHandler: function () {
+            if (!this.review.review_title || !this.review.rating || !this.review.review_content) {
+                alert('제목, 평점, 내용은 필수 입력 항목입니다.');
+                return;
+            }
             this.review.rating = Number(this.review.rating);
             let temp = { ...this.review }
             axios.post(`/api/mypage/insertreview`, temp)
@@ -92,7 +95,7 @@ export default {
                                     .then(result => {
                                         alert('파일 업로드 성공');
                                         this.resetForm();
-                                        this.$router.go(-1);
+
                                     })
                                     .catch(err => {
                                         console.log(err);
@@ -103,7 +106,7 @@ export default {
                     } else {
                         this.resetForm();
                     }
-                    // this.$router.go(-1);
+                    goBack();
                 })
                 .catch(err => { console.log(err) })
         },
@@ -124,7 +127,11 @@ export default {
         confirm: function () {
             this.review.rating = Number(this.review.rating);
             console.log(this.review)
+        },
+        goBack() {
+            this.$router.go(-1);
         }
+
 
     }
 }
@@ -136,11 +143,24 @@ body {
 }
 
 .review-container {
+    position: relative;
     margin: 0 auto;
+    margin-bottom: 100px;
+    max-width: 1200px;
     padding: 20px;
-    border: 1px solid #ccc;
-    border-radius: 10px;
-    background-color: #f9f9f9;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+#mypage-sub {
+    width: 100%;
+    text-align: left;
+    margin-left: 15px;
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 24px;
+    color: #555;
+    padding: 20px 0;
+    border-bottom: 2px solid #ddd;
 }
 
 h2 {
@@ -175,7 +195,8 @@ textarea {
 .rating {
     display: flex;
     flex-direction: row-reverse;
-    justify-content: flex-start;
+    justify-content: center;
+    gap: 5px;
 }
 
 .rating input[type="radio"] {
