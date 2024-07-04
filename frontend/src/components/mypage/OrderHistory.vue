@@ -124,6 +124,7 @@ export default {
                     axios.post(`/api/mypage/ordercancel/` + Number(no))
                         .then((result) => {
                             console.log(result.data)
+                            this.goPage(1);
                         })
                 })
                 .catch(err => console.log(err))
