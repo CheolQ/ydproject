@@ -74,7 +74,7 @@ export default {
     },
     methods: {
         goPage(page){
-            axios.get(`/api/adminOrder?pageUnit=${this.pageUnit}&page=${page}&name=${this.name}&date1=${this.date1}&date2=${this.date2}&category=${this.category}`)
+            axios.get(`/api/adminOrder?from=order&pageUnit=${this.pageUnit}&page=${page}&name=${this.name}&date1=${this.date1}&date2=${this.date2}&category=${this.category}`)
             .then(result => {
                 console.log(result.data)
                 this.orderList = result.data.list;

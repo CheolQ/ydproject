@@ -25,7 +25,7 @@ router.get("/info/:no", async(req, res) => {
     let files = [];
 
     file.forEach(ele => {
-        if(ele.file_ext === 'image/jpeg'){
+        if(ele.file_ext.indexOf('image/') != -1){
             img.push(ele);
         }else{
             files.push(ele);
