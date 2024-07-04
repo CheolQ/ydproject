@@ -3,7 +3,10 @@
     <div class="container-fluid fruite py-5">
     <div class="container py-5" >
         <!-- <h1 class="mb-4">{{ Object.keys(prodCategory)[0].codename }}</h1> -->
-        <h1 class="mb-4">{{ catename }}</h1>
+        <h1 v-if="searchBigCode == 'A1'"class="mb-4">과자,스낵,쿠키</h1>
+        <h1 v-if="searchBigCode == 'A2'"class="mb-4">초콜릿,젤리,캔디,껌</h1>
+        <h1 v-if="searchBigCode == 'A3'"class="mb-4">라면,간식</h1>
+        <h1 v-if="searchBigCode == 'A4'"class="mb-4">음료,커피</h1>
         <div class="row g-4">
             <div class="col-lg-12">
                 <div class="row g-4">
@@ -97,7 +100,7 @@ export	default {
  	},
  	created(){
         this.searchBigCode = this.$route.query.code ;
-        this.getBigCategory();
+        // this.getBigCategory();
         this.getProdCategoryCnt();
         this.goPage(1);
  	},
@@ -114,26 +117,20 @@ export	default {
         console.log(this.page)
         this.page = this.pageCalc(page, result.data.count,5,pageUnit)
     },
-        async getBigCategory()	{
-            console.log('searchCode',this.searchBigCode)
-            this.bigCategory = 
-                (await axios.get(`/api/shop/bigcode/${this.searchBigCode}`)).data
-            // .then(result=>console.log('sadas',result.list)))
-            console.log('dd',this.bigCategory);
-        },
+
         async getProdCategoryCnt()   {
         let result = await axios.get(`/api/shop/cnt`);
         console.log('갯수',result.data);
         this.prodCategoryCnt = result.data ;
-        this.catename=result.data[0].category_name;
-        console.log(this.catename,'catename')
         // console.log(result.data.catename,'1111111',result.data.list)
 
         },
         async goToDetail(no)	{
  	  	await this.$router.push({	name:"shopinfo",	query: { no:no }	});
  	 	},
-          gotoProd(code){
+        gotoProd(code){
+            this.codename = code;
+            console.log(this.codename,'ddddd')
             this.$router.push({   name:"prodBigcategory" , query: {code : code}});
         },
         getDateFormat(val )	{

@@ -38,13 +38,14 @@
 					 <td>{{review.review_title }}</td>
 					 <td>{{review.user_id }}</td>
 					 <td>{{getDateFormat(review.create_date) }}</td>
-					 <td>
+					 <td v-if="review.rating != undefined">
 						<i :key = "i" v-for="(i) in Number(review.rating)" class="fa fa-star text-secondary"></i>
                         <i :key = "i" v-for="(i) in 5- Number(review.rating)"class="fa fa-star"></i>
 					 </td>
 					</tr>
 				   </tbody>
 				  </table>
+				  <paging v-bind="rpage" @go-page="rgoPage" />
 				 </div>
             </div>
 			<div class="tab-pane" id="nav-qna" role="tabpanel" aria-labelledby="nav-qna-tab">
@@ -70,13 +71,15 @@
 
 					 <td v-if="qna.create_date != qna.update_date">{{getDateFormat(qna.update_date) }}</td>
 					 <td v-else> - </td>
-					 <td>O</td>
+					 <td v-if="qna.reply_no == null">X</td>
+					 <td v-else>O</td>
 					</tr>
 				</tbody>
 				  </table>
 				  <button @click="goToInsert" class="btnq border border-secondary rounded-pill px-4 py-2 mb-4 text-primary">
 					Write</button>
 					<!-- <QnaInfo /> -->
+					<paging v-bind="qpage" @go-page="qgoPage" />
 				 </div>
             </div>
 		</div>
@@ -86,36 +89,59 @@
 </template>
 
 <script>
+import PageMixin from '@/mixin';
 import axios from "axios";
+import paging from "@/components/Paging.vue"
 // import QnaInfo from "@/components/QnAInfo.vue"
 
 export default { 
+	mixins: [PageMixin],
+    components: { paging },
 	// components:{QnaInfo},
     data() { 
         return {
             searchNo:"",
 			reviewList: [],
 			qnaList:[],
+			qnaInfo: {},
 			prodList: [],
+			rpage: {},
+			qpage: {},
+            pageUnit: 5,
         }
     },
     created() {
         this.searchNo = this.$route.query.no ;
-        this.getReviewList();
-        this.getQnaList();
 		this.getProdList();
+		this.rgoPage(1);
+		this.qgoPage(1);
+
     },
     methods: {
+		async rgoPage(rpage) {
+            let pageUnit = this.pageUnit;
+            let result =(await axios.get(`/api/shop/review/${this.searchNo}?pageUnit=${pageUnit}&page=${rpage}`));
+            this.reviewList = result.data.list;
+            console.log(this.rpage)
+            this.rpage = this.pageCalc(rpage, result.data.count, 5, pageUnit)
+        },
+		async qgoPage(qpage) {
+            let pageUnit = this.pageUnit;
+            let result =(await axios.get(`/api/shop/qna/${this.searchNo}?pageUnit=${pageUnit}&page=${qpage}`));
+            this.qnaList = result.data.list;
+            console.log(this.qpage)
+            this.qpage = this.pageCalc(qpage, result.data.count, 5, pageUnit)
+        },
 		async getProdList()	{
  	  	let result =	await axios.get(`/api/shop/${this.searchNo}`);
  	  	this.prodList =	result.data[0] ;
  	 	},
-        async getReviewList()	{
- 	  	this.reviewList = (await axios.get(`/api/shop/review/${this.searchNo}`)).data ;	 	
-  		},
-		async getQnaList()	{
- 	  		this.qnaList = (await axios.get(`/api/shop/qna/${this.searchNo}`)).data ;	
-    	},
+        // async getReviewList()	{
+ 	  	// this.reviewList = (await axios.get(`/api/shop/review/${this.searchNo}`)).data ;	 	
+  		// },
+		// async getQnaList()	{
+ 	  	// 	this.qnaList = (await axios.get(`/api/shop/qna/${this.searchNo}`)).data ;	
+    	// },
 		goToInsert( ){
  		  this.$router.push({ name:"qna", query:{no : this.searchNo}});
  		 },
