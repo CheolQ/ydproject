@@ -33,7 +33,8 @@
         <div class="form-group">
           <label for="postcode">우편번호 <span class="required">*</span></label>
           <div class="postcode-wrapper">
-            <input type="text" id="postcode" v-model="form.postcode" ref="postcode" placeholder="우편번호를 입력하세요" required />
+            <input type="text" id="postcode" v-model="form.postcode" ref="postcode" placeholder="우편번호를 입력하세요"
+              required />
             <button type="button" @click="showApi">검색</button>
           </div>
         </div>
@@ -53,7 +54,6 @@
     </div>
   </div>
 </template>
-
 
 <script>
 import axios from 'axios';
