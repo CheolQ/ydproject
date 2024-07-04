@@ -24,7 +24,8 @@
 					<div class="col-lg-6">
 					<h4 class="fw-bold mb-3">Review</h4>
 					</div>
-					 <table class ="table table-hover">
+					<div v-if="this.reviewList[0] == undefined"><h6>리뷰없음</h6> </div>
+					 <table class ="table table-hover" v-else>
 						<thead>
 					   <tr>
 						<th style="width:60%">TITLE</th>
@@ -53,7 +54,8 @@
 					<div class="col-lg-6">
 					<h4 class="fw-bold mb-3">QnA</h4>
 					</div>
-					 <table class ="table table-hover">
+					<div v-if="this.qnaList[0] == undefined"><h6>문의없음</h6> </div>
+					 <table class ="table table-hover" v-else>
 						<thead>
 					   <tr>
 						<th style="width:60%">TITLE</th>
@@ -92,6 +94,7 @@
 import PageMixin from '@/mixin';
 import axios from "axios";
 import paging from "@/components/Paging.vue"
+import Swal from "sweetalert2";
 // import QnaInfo from "@/components/QnAInfo.vue"
 
 export default { 
@@ -117,6 +120,11 @@ export default {
 		this.qgoPage(1);
 
     },
+	computed: {
+        loggedInUserId() {
+            return this.$store.getters.loggedInUserId;
+        }
+	},
     methods: {
 		async rgoPage(rpage) {
             let pageUnit = this.pageUnit;
@@ -143,7 +151,16 @@ export default {
  	  	// 	this.qnaList = (await axios.get(`/api/shop/qna/${this.searchNo}`)).data ;	
     	// },
 		goToInsert( ){
+			if(this.loggedInUserId){
  		  this.$router.push({ name:"qna", query:{no : this.searchNo}});
+		}
+            else{
+                Swal.fire({
+                    title: '로그인이 필요합니다.',
+                    icon: 'warning',
+                    confirmButtonText: '확인'
+                })
+            }
  		 },
 		getDateFormat(val )	{
     	    let date = val == '' ? new Date() : new Date(val);
@@ -153,7 +170,16 @@ export default {
     	    return `${year}-${month}-${day}`;
  		 },
 		async goToQna(no)	{
+			if(this.loggedInUserId == this.qnaList[0].user_id){
  	  		await this.$router.push({	name:"qnainfo",	query: { no : no, prodNo : this.searchNo }	});
+		}
+            else{
+                Swal.fire({
+                    title: '비밀글 입니다.',
+                    icon: 'warning',
+                    confirmButtonText: '확인'
+                })
+            }
  		},
 		 async goToReview(no)	{
  	  		await this.$router.push({	name:"reviewinfo",	query: { no : no, prodNo : this.searchNo }	});

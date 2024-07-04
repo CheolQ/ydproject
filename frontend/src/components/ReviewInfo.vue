@@ -17,12 +17,12 @@
                 <i :key = "i" v-for="i in 5- reviewInfo.rating"class="fa fa-star"></i>
             </span>
                 <p>사진</p>
+                <img :src="`/img/prodImg/${reviewInfo.main_img}`" class="product-img" alt="Product Image">
+
                 <p>{{ reviewInfo.review_content }}</p>
             </div>
             <div class="buttons">
-                <button v-if="reviewInfo.reply_create_date == null" @click="editQna">수정</button>
-                <button v-if="reviewInfo.reply_create_date == null" @click="deleteQna">삭제</button>
-                <button @click="goBack">돌아가기</button>
+                <button @click="goBack">목록</button>
             </div>
         </div>
     </div>

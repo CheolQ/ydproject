@@ -26,11 +26,20 @@ function query(alias, values) {
 
 function getOrderBy(alias, values){
     let query = sql[alias];
-    if(alias == 'prodList'){
+    if(alias == 'prodList' ){
         query = sql[alias].replace('sort', values[1]);
         values.splice(1,1); // 배열 내부 어느 위치든 상관없이 삭제 
         console.log(query, values);
+    } else if(alias == 'bigCategory' ){
+        query = sql[alias].replace('sort', values[2]);
+        values.splice(2,1); // 배열 내부 어느 위치든 상관없이 삭제 
+        console.log(query, values);
+    }else if(alias == 'smallCategory' ){
+        query = sql[alias].replace('sort', values[2]);
+        values.splice(2,1); // 배열 내부 어느 위치든 상관없이 삭제 
+        console.log(query, values);
     }
+
     return query;
 }
 
