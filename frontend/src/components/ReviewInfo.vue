@@ -1,6 +1,6 @@
 <template>
     <div id="mypage">
-        <h3 id="mypage-sub">문의상세</h3>
+        <h3 id="mypage-sub">후기상세</h3>
         <div id="qna-detail">
             <div class="product-info">
                 <img :src="`/img/prodImg/${prodInfo.main_img}`" class="product-img" alt="Product Image">
@@ -10,18 +10,14 @@
                 </div>
             </div>
             <div class="question-details">
-                <h4>{{ qnaInfo.title }}</h4>
-                <p>Date: {{ new Date(qnaInfo.create_date).toLocaleDateString() }}</p>
-                <p>{{ qnaInfo.content }}</p>
-            </div>
-            <div v-if="qnaInfo.reply_create_date != null" class="question-details">
-                <h4>답변</h4>
-                <p>Date: {{ new Date(qnaInfo.reply_create_date).toLocaleDateString() }}</p>
-                <p>{{ qnaInfo.reply_content }}</p>
+                <h4>{{ reviewInfo.review_title }}</h4>
+                <p>Date: {{ new Date(reviewInfo.create_date).toLocaleDateString() }}</p>
+                <p>사진</p>
+                <p>{{ reviewInfo.review_content }}</p>
             </div>
             <div class="buttons">
-                <button v-if="qnaInfo.reply_create_date == null" @click="editQna">수정</button>
-                <button v-if="qnaInfo.reply_create_date == null" @click="deleteQna">삭제</button>
+                <button v-if="reviewInfo.reply_create_date == null" @click="editQna">수정</button>
+                <button v-if="reviewInfo.reply_create_date == null" @click="deleteQna">삭제</button>
                 <button @click="goBack">돌아가기</button>
             </div>
         </div>
@@ -36,7 +32,7 @@ export default {
     data() {
         return {
             no: '',
-            qnaInfo: {},
+            reviewInfo: {},
             prodNo : '',
             prodInfo: {},
         }
@@ -44,15 +40,15 @@ export default {
     created() {
         this.no = this.$route.query.no;
         this.prodNo = this.$route.query.prodNo;
-        this.getQnaInfo();
+        this.getReviewInfo();
         this.getProdInfo();
     },
     methods: {
-        async getQnaInfo()	{
+        async getReviewInfo()	{
             console.log('aaa')
-            this.qnaInfo = 
-            (await axios.get(`/api/shop/qnainfo/${this.no}`)).data[0];
-            console.log(this.qnaInfo,'qnainfo')
+            this.reviewInfo = 
+            (await axios.get(`/api/shop/reviewinfo/${this.no}`)).data[0];
+            console.log(this.reviewInfo,'reivewinfo')
         },
         async getProdInfo()	{
             this.prodInfo = 

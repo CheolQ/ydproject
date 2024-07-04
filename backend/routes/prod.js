@@ -91,6 +91,13 @@ router.get('/review/:no', async (req, res) => {
     res.send(result);
 });
 
+//review 단건조회
+router.get('/reviewinfo/:no', async (req, res) => {
+    let result = await query('reviewInfo', req.params.no);
+    console.log('상세',result);
+    res.send(result);
+});
+
 //qna조회
 router.get('/qna/:no', async (req, res) => {
     let result = await query('qnaList', req.params.no);
@@ -99,15 +106,9 @@ router.get('/qna/:no', async (req, res) => {
 });
 
 //qna 단건조회
-router.post('/qnalist/:no', async (req, res) => {
-    // console.log(req.body);
-    let prodno = req.params.prodno;
-    console.log(prodno,'제품번호')
-    let boardno = req.params.no;
-    console.log(boardno,'보드번호')
-
-    let result = await query('qnaInfo', [prodno, boardno]);
-    console.log(result);
+router.get('/qnainfo/:no', async (req, res) => {
+    let result = await query('qnaInfo', Number(req.params.no));
+    console.log('상세',result);
     res.send(result);
 });
 

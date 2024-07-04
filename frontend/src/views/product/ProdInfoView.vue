@@ -61,6 +61,7 @@
 import axios from "axios";
 import review from '@/components/Review.vue'
 import Swal from "sweetalert2";
+// import QnaInfo from "@/components/QnAInfo.vue";
 
 export	default {
     components:{review},
@@ -93,14 +94,11 @@ export	default {
             (await axios.get(`/api/shop/star/${this.searchNo}`)).data[0];
                 console.log(this.prodRating);
                 if(this.prodRating == undefined){
-                    console.log('별0');
                     this.prodRating = 0
                 }else{
-                    console.log('별4');
                     this.stars = Number(this.prodRating.stars)
                 }
             
-            console.log(this.prodRating,'나d나');
         },
         getDateFormat(val )	{
             let date = val == '' ? new Date() : new Date(val);

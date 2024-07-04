@@ -16,13 +16,17 @@ module.exports = {
                      FROM review 
                      where prod_no = ?`,
 
+        reviewInfo: `SELECT review_no, user_id, review_content, create_date, rating, review_title, prod_no, order_detail_no, order_no
+                     FROM review 
+                     where review_no = ?`,
+
         qnaList: `SELECT board_no, user_id, title, content, create_date, board_pw, update_date, user_no, prod_no   
                   FROM qna 
                   where prod_no = ?`,
 
         qnaInfo: `SELECT board_no, user_id, title, content, create_date, board_pw, update_date, user_no, prod_no   
                  FROM qna 
-                 where prod_no = ? and board_no = ?`,
+                 where board_no = ?`,
 
         qnaInsert: `insert into qna set ?`,
 
