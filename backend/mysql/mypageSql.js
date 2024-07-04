@@ -83,7 +83,10 @@ module.exports = {
                                 order_total_price, 
                                 pay_price, 
                                 use_point, 
-                                point
+                                point,
+                                deli_code,
+                                deli_date,
+                                order_status
                             from orders
                             where order_no = ?`,
 
@@ -180,7 +183,8 @@ module.exports = {
                                 r.review_no,
                                 r.review_title,  
                                 r.review_content, 
-                                r.create_date
+                                r.create_date,
+                                r.rating
                         from review r
                         join prod p
                         on r.prod_no = p.prod_no
@@ -193,4 +197,10 @@ module.exports = {
     mypageselectReviewNo: `select review_no from review where order_detail_no = ?`,
 
     mypageReviewFileUpload: `INSERT INTO file (file_name, file_path, file_ext, table_no, division, seqs) VALUES ?`,
+
+    mypageReviewDelete: `delete from review where review_no = ?`,
+    mypageReviewFileDelete: `delete from file where table_no = ? and division = 'E2'`,
+    mypageGetReviewInfo: `select review_title, review_content, rating from review where review_no = ?`,
+    mypageUpdateReview: `update review set review_title = ?, review_content = ?, rating = ? where review_no = ?`,
+    mypageReviewDeleteFile: `delete from file where table_no = ? and division = 'E2'`
 };

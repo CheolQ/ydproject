@@ -25,6 +25,7 @@ import MyWishList from '@/components/mypage/MyWishList.vue';
 import MyPageReview from '@/components/mypage/MypageReview.vue';
 import MyPageReviewInfo from '@/components/mypage/MypageReviewInfo.vue';
 import MyPageReviewForm from '@/components/mypage/MypageReviewForm.vue';
+import MyPageReviewUpdate from '@/components/mypage/MypageReviewUpdate.vue';
 
 //관리자
 import AdminLayout from '../layouts/AdminLayout.vue';
@@ -168,6 +169,11 @@ const routes = [
                         path: 'mypagereviewform',
                         name: 'mypagereviewform',
                         component: MyPageReviewForm,
+                    },
+                    {
+                        path: 'mypagereviewupdate',
+                        name: 'mypagereviewupdate',
+                        component: MyPageReviewUpdate,
                     },
                     {
                         path: 'mywishlist',
