@@ -12,17 +12,28 @@
                     </tr>
                     <tr>
                         <th>작성자</th>
-                        <td scope ="col" class ="dd" colspan="6">{{noticeInfo.user_id }}</td>
-                      
+                        <td scope ="col" class ="dd" colspan="6">{{noticeInfo.user_id }}</td>                 
+                    </tr>
+                    <tr>
+                        <th>첨부파일</th>
+                        <td colspan="6">
+                            <a v-for="(file, index) in files" :key="index" :href="`/api/upload/notice/${file.file_name}`" download>다운로드</a>
+                        </td>
                     </tr>        
                 </thead>
                 <tbody>
                     <tr>
-                        <td scope ="col"class ="text-center"  colspan="7">{{noticeInfo.content }} <br>
-                        <img :src="`/img/prodImg/${noticeInfo.file_name}.jpg`" class="img-fluid rounded" alt="Image">
-                    </td>
+                        <td scope ="col" class="text-center"  colspan="7">
+                            <span>{{noticeInfo.content }}</span>
+                            <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
+                                <div class="carousel-inner">
+                                    <div class="carousel-item active" v-for="(image, index) in images" :key="index">
+                                        <img :src="`/api/upload/notice/${image.file_name}`" class="d-block w-100" alt="...">
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
                     </tr>
-                    
                 </tbody>               
             </table>
         </div>
@@ -37,18 +48,23 @@ import axios from "axios";
 export	default {
  	data ()	{
  	 return {
- 	  searchNo:"",
- 	  noticeInfo: {},
+ 	    searchNo:"",
+ 	    noticeInfo: {},
+        images: [],
+        files: [],
  	 };
  	},
  	created()	{
- 	 this.searchNo = this.$route.query.no ;
- 	 this.getNoticeInfo();
+ 	    this.searchNo = this.$route.query.no ;
+ 	    axios.get(`/api/adminNotice/info/${this.searchNo}`)
+        .then(result=>{
+            this.noticeInfo = result.data.list[0];
+            this.images = result.data.img;
+            this.files = result.data.files;
+        })
+        .catch(err=> console.log(err))
  	},
  	methods: {
- 	 async getNoticeInfo()	{
- 	  this.noticeInfo = (await axios.get(`/api/notice/${this.searchNo}`)).data[0];
- 	 },
      getDateFormat(val )	{
         let date = val == '' ? new Date() : new Date(val);
         let year = date.getFullYear();
