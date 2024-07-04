@@ -5,57 +5,62 @@
         <div class="container-fluid py-5">
             <div class="container py-5">
                 <div class="table-responsive">
-                    <table class="table">
-                        <thead>
-                          <tr>
-                            <th scope="col">번호</th>
-                            <th scope="col"><input type="checkbox" v-model="allChecked" @click="checkedAll($event.target.checked)"></th>
-                            <!-- <th scope="col">상품번호</th> -->
-                            <th scope="col">이미지</th>
-                            <th scope="col">상품명</th>
-                            <th scope="col">금액</th>
-                            <th scope="col">삭제</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                            <tr v-for="w in wish">
-                                <td>
-                                    <p class="mb-0 mt-4">{{ w.like_no }}</p>
-                                </td>
-                                <td>
-                                    <p class="mb-0 mt-4"><input type="checkbox" v-model="w.selected" @change="AllChecked"></p>
-                                </td>
-                                <!-- <td>
-                                    <p class="mb-0 mt-4">{{ w.prod_no }}</p>
-                                </td> -->
-                                <td scope="row">
-                                    <div class="align-items-center">
-                                        <img :src="`/api/upload/${w.main_img}`" @click="gotoProdInfo(w.prod_no)" class="img-fluid rounded-circle" style="width: 80px; height: 80px;">
-                                    </div>
-                                </td>
-                                <td>
-                                    <p class="mb-0 mt-4">{{ w.prod_name }}</p>
-                                </td>
-                                <td>
-                                    <p class="mb-0 mt-4">{{ formatPrice(w.prod_price) }}원</p>
-                                </td>
-                                <td>
-                                    <button class="btn btn-md rounded-circle bg-light border mt-4"  @click="delSel(w.like_no)" >
-                                        <i class="fa fa-times text-danger"></i>
-                                    </button>
-                                </td>
+                    <div v-if="wish.length > 0">
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th scope="col">번호</th>
+                                <th scope="col"><input type="checkbox" v-model="allChecked" @click="checkedAll($event.target.checked)"></th>
+                                <!-- <th scope="col">상품번호</th> -->
+                                <th scope="col">이미지</th>
+                                <th scope="col">상품명</th>
+                                <th scope="col">금액</th>
+                                <th scope="col">삭제</th>
                             </tr>
-                        </tbody>
-                    </table>
-                    <div class="button-container">
-                        <button @click="gotoCart" class="btn btn-warning">장바구니에 담기</button>
-                        <button @click="delAll" class="btn btn-danger">전체삭제</button>
+                            </thead>
+                            <tbody>
+                                <tr v-for="w in wish">
+                                    <td>
+                                        <p class="mb-0 mt-4">{{ w.like_no }}</p>
+                                    </td>
+                                    <td>
+                                        <p class="mb-0 mt-4"><input type="checkbox" v-model="w.selected" @change="AllChecked"></p>
+                                    </td>
+                                    <!-- <td>
+                                        <p class="mb-0 mt-4">{{ w.prod_no }}</p>
+                                    </td> -->
+                                    <td scope="row">
+                                        <div class="align-items-center">
+                                            <img :src="`/api/upload/${w.main_img}`" @click="gotoProdInfo(w.prod_no)" class="img-fluid rounded-circle" style="width: 80px; height: 80px;">
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <p class="mb-0 mt-4">{{ w.prod_name }}</p>
+                                    </td>
+                                    <td>
+                                        <p class="mb-0 mt-4">{{ formatPrice(w.prod_price) }}원</p>
+                                    </td>
+                                    <td>
+                                        <button class="btn btn-md rounded-circle bg-light border mt-4"  @click="delSel(w.like_no)" >
+                                            <i class="fa fa-times text-danger"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="button-container">
+                            <button @click="gotoCart" class="btn btn-warning">장바구니에 담기</button>
+                            <button @click="delAll" class="btn btn-danger">전체삭제</button>
+                        </div>
+                    </div>
+                    <div v-else>
+                        <p>관심상품 내역이 없습니다.</p>
                     </div>
                 </div>
             </div>
         </div>
         <!-- Wish Page End -->
-        <Paging v-bind="page" @go-page="goPage" />
+        <Paging v-if="wish.length > 0" v-bind="page" @go-page="goPage" />
     </div>
 </template>
 <script>

@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const query = require("../mysql/index");
+const { updatePoint } = require('../mysql/orderSql');
 
 router.get('/', async (req, res) => {
     query("getUsers", req.session.user_no)
@@ -12,13 +13,14 @@ router.post('/', async (req, res) => {
     let orderData = [ //쿼리 물음표 순서대로 물음표 여러개니까 배열안에 순서대로 넣음
         req.body.buyerName,
         req.body.paidAmount,
-        'P', //주문 상태인데 default로 박아뒀음
+        'D1', //주문 상태인데 default로 박아뒀음
         req.body.buyerTel,
         req.body.buyerAdd,
         req.body.buyerPost,
         req.body.detail_addr,
         req.session.user_no,
-        Math.round(req.body.paidAmount * 0.01), //생성되는 포인트 반올림
+        Math.round(req.body.beforeAmount * 0.01), //생성되는 포인트 반올림
+        req.body.usePoint,
         req.body.merchantUid, //결제번호(코드)int였는데 varchar로 타입바꿈 ,
         req.body.beforeAmount
     ];
@@ -44,6 +46,12 @@ router.post('/', async (req, res) => {
         //promise배열 끝날때까지 기다려
         let dtCount = await Promise.all(promises);
         //console.log(dtCount); //dtCount배열 출력(오더디테일에 있는 오더넘버 하나하나가 오더디테일넘버..)
+        if(req.body.pointStatus){ //포인트 사용했을때
+            query("updatePoint", [(req.body.beforeAmount * 0.01), req.session.user_no])
+        }else{ //포인트를 사용하지않았을때
+            query("remainPoint", [(req.body.beforeAmount * 0.01), req.session.user_no])
+        }
+        
         res.send({
             dtCount: dtCount
         });

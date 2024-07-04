@@ -6,6 +6,10 @@
             <form action="#">
                 <div class="row g-5">
                     <div class="col-md-12 col-lg-6 col-xl-6">
+                        <div class="form-item d-flex justify-content-end align-items-center">
+                            <input type="checkbox" class="me-2" @change="resetHandler">
+                            <label class="form-label my-3">새로운 배송지로 설정</label>
+                        </div>
                         <div class="form-item">
                             <label class="form-label my-3">이름<sup style="color: red;">*</sup></label>
                             <input type="text" class="form-control" id="name" v-model="name">
@@ -75,6 +79,7 @@
                             <div class="text-end">
                                 <ul>
                                     <li>주문 금액 <span>{{ formatPrice(totalPrice) }}원</span></li>
+                                    <p style="font-size: smaller;">기본 배송비는 2,500원입니다.<br>50,000원 이상 구매 시 무료배송입니다.</p>
                                 </ul>
                             </div>
                             <div>
@@ -116,25 +121,23 @@
 import PortOne from '@portone/browser-sdk/v2';
 import axios from 'axios';
 import { mapGetters } from 'vuex';
-//import Address from '@/components/Address.vue';
 
 export default {
-    // components: {
-    //         Address,
-    //     },
     data() {
         return {
             selectedCart: [],
             totalPrice: 0,
             resultPrice: 0,
-            point : '',
-            //usePoint : '',
+            point: 0,
+            usePoint : 0,
             name: '',
             phone: '',
             email: '',
             address: '',
             pCode: '',
             detailAddr: '',
+            pointStatus: false, //포인트 안썼을때
+            newUserInfo: false //주문자의 정보가 다를때
         };
     },
     computed: {
@@ -154,6 +157,8 @@ export default {
     },
     mounted() {
         this.discount();
+        //
+        this.resultPrice = this.totalPrice;
     },
     methods: {
         getUser(){
@@ -169,6 +174,48 @@ export default {
             })
             .catch(err => console.log(err));
         },
+        resetHandler(e){ 
+            //console.log(e.target.checked,'체인지')
+            if(e.target.checked){
+                this.newUserInfo = true; //새로운 배송지 체크했을때
+                this.name = '';
+                this.phone = '';
+                this.email = '';
+                this.pCode = '';
+                this.address = '';
+                this.detailAddr = '';
+            }else{
+                this.newUserInfo = false;
+                this.getUser();
+            }
+        },
+        inputCheck(){
+            if (!this.name) {
+                alert('이름을 입력하세요.');
+                return false;
+            }
+            if (!this.phone) {
+                alert('연락처를 입력하세요.');
+                return false;
+            }
+            if (!this.email) {
+                alert('이메일을 입력하세요.');
+                return false;
+            }
+            if (!this.pCode) {
+                alert('우편번호를 입력하세요.');
+                return false;
+            }
+            if (!this.address) {
+                alert('주소를 입력하세요.');
+                return false;
+            }
+            if (!this.detailAddr) {
+                alert('상세주소를 입력하세요.');
+                return false;
+            }
+            return true;
+        },
         execDaumPostcode(){
             new window.daum.Postcode({
                 oncomplete: (data) => {
@@ -180,6 +227,10 @@ export default {
             }).open();
         },
         payments() {
+            if (!this.inputCheck()){ //위의 input을 다 입력해야 결제로 넘어감
+                return; 
+            }
+
             const IMP = window.IMP;
             IMP.init('imp81886801'); // 'your-imp-key'를 실제 포트원 키로 변경
 
@@ -190,7 +241,7 @@ export default {
             const seconds = today.getSeconds();
             const milliseconds = today.getMilliseconds();
             const makeMerchantUid = `${hours}${minutes}${seconds}${milliseconds}`;
-            console.log(this.selectedCart, '확인!');
+            //console.log(this.selectedCart, '확인!');
             let prodname = '';
             let prodno = '';
             let count = [];
@@ -244,6 +295,8 @@ export default {
                         buyerPost: data.buyer_postcode,
                         detail_addr: this.detailAddr, //
                         beforeAmount: this.totalPrice,
+                        usePoint: this.usePoint,
+                        pointStatus: this.pointStatus,
                         paidAmount: paidAmount,
                         merchantUid: merchantUid,
                         products: prodNo.map((no, index) => ({
@@ -276,9 +329,22 @@ export default {
             });
         },
         points() {
-            let point = this.point;
-            //this.totalPrice -= point;
-            this.resultPrice = this.totalPrice - point;
+            if (this.point === 0) {
+                this.pointStatus = false;
+                //현재 포인트가 0일때 원래 포인트로 복구
+                this.point = this.usePoint;
+                //사용한 포인트를 초기화
+                this.usePoint = 0;
+                //결제 후 총 금액 업데이트
+                this.resultPrice = this.totalPrice - this.usePoint;
+            } else {
+                //전액 사용 버튼을 다시 클릭했을때 포인트 전액 사용하는거
+                this.pointStatus = true;
+                this.usePoint = this.point;
+                this.point = 0;
+                this.resultPrice = this.totalPrice - this.usePoint;
+            }
+            
         },
         formatPrice(price) {
             return price.numberFormat();
