@@ -47,7 +47,7 @@
                         </div>
                     </div>
                     <div class="col-lg-9">
-                        <div class="row g-4 justify-content-center">
+                        <div class="row g-4 justify-content-center" v-if="smallCategory == []">
                             <div class="col-md-6 col-lg-6 col-xl-4" 
                             :key ="i" v-for ="(cate, i) in smallCategory" @click ="goToDetail(cate.prod_no)">
                                 <div class="rounded position-relative fruite-item" >
@@ -64,11 +64,17 @@
                                   </div>
                              </div>           
                         </div>
+                        <div class="row g-4 justify-content-center" v-else>
+                            <div class="col-md-6 col-lg-6 col-xl-4">
+                                <h1>상품없음</h1>
+                             </div>           
+                        </div>
+                        
                     </div>
                 </div>
-            </div>
+            </div>   
         </div>
-        <paging v-bind="page" @go-page="goPage"/>
+        <paging v-if="smallCategory == []" v-bind="page" @go-page="goPage"/>
     </div>
 </div>
 <!-- Fruits Shop End-->
@@ -97,28 +103,33 @@ export	default {
  	},
  	created(){
         this.searchCode = this.$route.query.code ;
-        this.getSmallCategory();
-        this.getProdCategoryCnt();
-        this.goPage(1);
+        //this.getSmallCategory();    //소분류 검색
+        this.getProdCategoryCnt();  //대분류 상품 갯수
+        this.goPage(1);             // 페이징
  	},
  	methods: {
         async goPage(page){
         let pageUnit = this.pageUnit;
         let result = await axios.get(`/api/shop/code/${this.searchCode}?pageUnit=${pageUnit}&page=${page}&search=${this.search}`)
-        this.smallCategory = result.data.list;
-    
-        console.log(this.smallCategory[0],'daas');
-        console.log(this.smallCategory[0],'daas');
+        if(result.data.list.length==0) {
+            // 검색결과가 없는 경우
 
-        this.codename=result.data.list[0].codename;
-        console.log(this.codename,'codename')
-        console.log(result.data.list[0].codename,'1111111',result.data.list)
-        console.log(this.page)
+            return;
+        }
+        this.smallCategory = result.data.list;
+        console.log(this.smallCategory,'ddddaas');
+        console.log(this.smallCategory[0],'daas');
+        console.log(result.data)
+        // this.codename=result.data.list[0].codename;
+        
+        // console.log(this.codename,'codename')
+        // console.log(result.data.list[0].codename,'1111111',result.data.list)
+        // console.log(this.page)
         this.page = this.pageCalc(page, result.data.count,5,pageUnit)
     },
         async getSmallCategory()	{
             console.log('searchCode',this.searchCode)
-            this.smallCategory = 
+            this.smallCategory =  
                 (await axios.get(`/api/shop/code/${this.searchCode}`))
             // .then(result=>console.log('sadas',result.list)))
         },
