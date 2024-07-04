@@ -20,11 +20,10 @@
                                 <p class="mb-3">원산지   {{prodInfo.origin }}</p>
                                 <p class="mb-3">제조사   {{prodInfo.maker }}</p>
                                 <p class="mb-3">유통기한   {{getDateFormat(prodInfo.exp_date) }}</p>
-                               
                                 <div class="d-flex mb-4" v-if="prodRating == 0" >
                                     <i :key = "i" v-for="(i) in 5" class="fa fa-star"></i>
                                 </div>
-                                <div class="d-flex mb-4" v-else>
+                                <div class="d-flex mb-4" v-else >
                                     <i :key = "i" v-for="(i) in this.stars" class="fa fa-star text-secondary"></i>
                                     <i :key = "i" v-for="(i) in 5- this.stars"class="fa fa-star"></i>
                                     </div>
@@ -76,6 +75,11 @@ export	default {
 
         };
  	},
+     computed: {
+        loggedInUserId() {
+            return this.$store.getters.loggedInUserId;
+        }
+    },
  	created(){
         this.searchNo = this.$route.query.no ;
         this.getProdInfo();
@@ -115,8 +119,13 @@ export	default {
         },
         minusBtn(number){
             if(number < 2){
-                alert('1개 이상 담을 수 있습니다.');
-                return;
+                Swal.fire({
+                        position: "center",
+                        icon: "success",
+                        title: "1개 이상 담을 수 있습니다.",
+                        showConfirmButton: true,
+                        timer: 1500
+                    })
             }else{
                 this.number--;
             }
@@ -132,6 +141,7 @@ export	default {
             return nstr;
             },
         gotoWish(no){
+            if(this.loggedInUserId){
             axios.post(`/api/wish/insert/${no}`, this.prodInfo.prod_no)
             .then((result => {
                 if(result.data == 'success'){
@@ -152,9 +162,28 @@ export	default {
                     })
                 }
             }))
-            .catch(err => console.log(err))
+            .catch(err => {
+                Swal.fire({
+                    position: "center",
+                    icon: "error",
+                    title: "관심상품 등록에 실패했습니다.",
+                    showConfirmButton: true,
+                    timer: 1000
+                });
+            });}else {
+                Swal.fire({
+                    title: '로그인이 필요합니다.',
+                    text: "로그인 페이지로 이동합니다.",
+                    icon: 'warning',
+                    confirmButtonText: '확인'
+                }).then(() => {
+                    this.$router.push('/user/login');
+                });
+            }
+
         },
         gotoCart(no){
+            if(this.loggedInUserId){
             axios.post(`/api/cart/insertCart/${no}`, {no: this.prodInfo.prod_no, cnt: this.number})
             .then(
                 Swal.fire({
@@ -176,8 +205,19 @@ export	default {
             //     }
             // })
             .catch(err => console.log(err))
+            }     else {
+                Swal.fire({
+                    title: '로그인이 필요합니다.',
+                    text: "로그인 페이지로 이동합니다.",
+                    icon: 'warning',
+                    confirmButtonText: '확인'
+                }).then(() => {
+                    this.$router.push('/user/login');
+                });
+            }
         },
         gotoPayments(no){
+            if (this.loggedInUserId) {
             Swal.fire({
                 title: "바로 주문하시겠습니까?",
                 showDenyButton: true,
@@ -197,6 +237,16 @@ export	default {
                     Swal.fire("취소되었습니다.", "", "확인");
                 }
             })
+        }else {
+                Swal.fire({
+                    title: '로그인이 필요합니다.',
+                    text: "로그인 페이지로 이동합니다.",
+                    icon: 'warning',
+                    confirmButtonText: '확인'
+                }).then(() => {
+                    this.$router.push('/user/login');
+                });
+            }
         },
         // getProductInfo(){
         //     let prodNo = this.$route.query.prodNo;

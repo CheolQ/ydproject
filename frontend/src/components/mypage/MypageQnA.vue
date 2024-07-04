@@ -2,26 +2,31 @@
     <div id="mypage">
         <h5 id="mypage-sub">문의내역</h5>
         <div class="user-message">{{ loggedInUserId }}님께서 작성하신 게시글 내역입니다.</div>
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>번호</th>
-                    <th>제목</th>
-                    <th>작성일</th>
-                    <th>답변상태</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr v-for="v in qnaList" @click="qnaInfoHandler(v.board_no)">
-                    <td>{{ v.board_no }}</td>
-                    <td>{{ v.title }}</td>
-                    <td>{{ formatDate(v.create_date) }}</td>
-                    <td v-if="v.reply_no != null">답변 완료</td>
-                    <td v-else>답변 대기중</td>
-                </tr>
-            </tbody>
-        </table>
-        <paging-component v-bind="page" @go-page="goPage" />
+        <div v-if="qnaList.length > 0">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>번호</th>
+                        <th>제목</th>
+                        <th>작성일</th>
+                        <th>답변상태</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="v in qnaList" @click="qnaInfoHandler(v.board_no)">
+                        <td>{{ v.board_no }}</td>
+                        <td>{{ v.title }}</td>
+                        <td>{{ formatDate(v.create_date) }}</td>
+                        <td v-if="v.reply_no != null">답변 완료</td>
+                        <td v-else>답변 대기중</td>
+                    </tr>
+                </tbody>
+            </table>
+            <paging-component v-bind="page" @go-page="goPage" />
+        </div>
+        <div v-else>
+            <p>문의 내역이 없습니다.</p>
+        </div>
     </div>
 </template>
 

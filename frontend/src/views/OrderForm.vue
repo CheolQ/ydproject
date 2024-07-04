@@ -20,10 +20,12 @@
                         <div class="form-item">
                             <label class="form-label my-3">연락처<sup style="color: red;">*</sup></label>
                             <input type="tel" class="form-control" id="phone" v-model="phone">
+
                         </div>
                         <div class="form-item">
                             <label class="form-label my-3">이메일<sup style="color: red;">*</sup></label>
                             <input type="email" class="form-control" id="email" v-model="email">
+                            <p v-show="valid.email" class="input-error">이메일 주소를 정확히 입력해주세요.</p>
                         </div>
                         <div class="form-item">
                             <label class="form-label my-3">우편번호<sup style="color: red;">*</sup></label>
@@ -41,7 +43,7 @@
                             <input type="text" id="detailAddress" v-model="detailAddr" class="form-control" placeholder="상세주소">
                         </div>
                     </div>
-                    <div class="col-md-12 col-lg-6 col-xl-5">
+                    <div class="col-md-12 col-lg-6 col-xl-6">
                         <div>
                             <label style="font-size: large;">상품 정보</label>
                         </div>
@@ -101,7 +103,6 @@
                                     <ul>
                                         <li>총 결제 금액 <span>{{ formatPrice(resultPrice) }}원</span></li>
                                     </ul>
-                                    <!-- <input readonly v-model="totalPrice"> -->
                                 </div>
                             </div>
                         </div>
@@ -116,8 +117,10 @@
                         </div> -->
                         <div class="row g-4 text-center align-items-center justify-content-center pt-4">
                             <button type="button" @click="payments"
-                                class="btn border-secondary py-3 px-4 text-uppercase w-100 text-primary">Place
-                                Order</button>
+                                class="btn btn-primary border-0 py-3 px-4 w-100 text-white">KAKAOPAY</button>
+                            <!-- <button type="button" @click="payments" 
+                                class="btn border-0 py-3 px-4 w-100" 
+                                style="background-color: #007bff; color: white;">TOSSPAY</button> -->
                         </div>
                     </div>
                 </div>
@@ -147,11 +150,19 @@ export default {
             detailAddr: '',
             pointStatus: false, //포인트 안썼을때
             newUserInfo: false, //주문자의 정보가 다를때
-            deliveryCharge: 0 //배송비
+            deliveryCharge: 0, //배송비
+            valid: {
+                        email: false
+                    }
         };
     },
     computed: {
         ...mapGetters(['getCartInfo']), // Vuex 게터를 컴포넌트에 매핑
+    },
+    watch: {
+        'email': function() {
+            this.checkEmail()
+        }
     },
     created() {
         // const queryCart = this.$route.query.Cart;
@@ -202,6 +213,15 @@ export default {
                 this.newUserInfo = false;
                 this.getUser();
             }
+        },
+        checkEmail() {
+            //이메일 형식 검사
+            const validateEmail = /^[A-Za-z0-9_\\.\\-]+@[A-Za-z0-9\\-]+\.[A-Za-z0-9\\-]+/;
+
+            if(!validateEmail.test(this.email) || !this.email){
+                this.valid.email = true
+                return
+            }this.valid.email = false
         },
         inputCheck(){
             if (!this.name) {
@@ -268,7 +288,7 @@ export default {
                 prodname += a.prod_name;
                 prodno += a.prod_no;
             });
-
+            
             // 결제 요청 데이터 설정
             const data = {
                 pg: 'kakaopay.TC0ONETIME',
@@ -318,7 +338,7 @@ export default {
                             cnt: cnt[index]
                         }))
                     };
-                    console.log('프론트에서 확인', orderData)
+                    //console.log('프론트에서 확인', orderData)
                     //console.log(orderData, '주소값가져오는지 체크')
                     axios.post("/api/order", orderData)
                         .then(result => {
@@ -366,7 +386,7 @@ export default {
     },
 }
 </script>
-<style>
+<style scope>
 .aside-tit {
     padding: 65px 0 30px;
     font-size: 24px;

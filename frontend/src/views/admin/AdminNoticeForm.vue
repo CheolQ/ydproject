@@ -3,6 +3,14 @@
         <ContentHeader title="공지사항"></ContentHeader>
         <div class="card mb-4">
             <div class="card-body shadow">
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" v-model="category" :id="0" value="F1">
+                    <label class="form-check-label" :for="0">공지</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" v-model="category" :id="1" value="F2">
+                    <label class="form-check-label" :for="1">일반</label>
+                </div>
                 <div class="mb-3">
                     <label for="exampleFormControlInput1" class="form-label">제목</label>
                     <input v-model="Notice.title" type="email" class="form-control" id="exampleFormControlInput1">
@@ -35,6 +43,7 @@ export default {
         return{
             Notice: {},
             imgFile: [],
+            category: 'F1',
         }
     },
     methods:{
@@ -49,6 +58,7 @@ export default {
             for (let i = 0; i< this.imgFile.length; i++) {
                 data.append("files", this.imgFile[i]);
             }
+            data.append("category_code", this.category)
             data.append("title",this.Notice.title);
             data.append("content",this.Notice.content);
             await axios.post(`/api/adminNotice`,data,

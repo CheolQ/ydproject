@@ -17,7 +17,7 @@
                         </tr>
                         <tr>
                             <th>첨부파일</th>
-                            <td>
+                            <td colspan="6">
                                 <a v-for="(file, index) in files" :key="index" :href="`/api/upload/notice/${file.file_name}`" download>다운로드</a>
                             </td>
                         </tr>        

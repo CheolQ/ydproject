@@ -19,11 +19,11 @@
                 <p>Date: {{ new Date(qnaInfo.reply_create_date).toLocaleDateString() }}</p>
                 <p>{{ qnaInfo.reply_content }}</p>
             </div>
-            <div class="buttons">
-                <button v-if="qnaInfo.reply_create_date == null" @click="editQna">수정</button>
-                <button v-if="qnaInfo.reply_create_date == null" @click="deleteQna">삭제</button>
-                <button @click="goBack">돌아가기</button>
-            </div>
+        </div>
+        <div class="buttons">
+            <button v-if="qnaInfo.reply_create_date == null" @click="editQna">수정</button>
+            <button v-if="qnaInfo.reply_create_date == null" @click="deleteQna">삭제</button>
+            <button @click="goBack">돌아가기</button>
         </div>
     </div>
 </template>

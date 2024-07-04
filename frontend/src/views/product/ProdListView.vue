@@ -6,26 +6,16 @@
             <div class="row g-4">
                 <div class="col-lg-12">
                     <div class="row g-4">
-                        <div class="col-xl-3">
-                            <div class="input-group w-100 mx-auto d-flex">
-                                <input type="search" v-model="search" class="form-control p-3" placeholder="keywords"
-                                    aria-describedby="search-icon-1">
-                                <span id="search-icon-1" class="input-group-text p-3" @click="searchBtn"><i
-                                        class="fa fa-search"></i></span>
-                            </div>
-                        </div>
+                        <div class="col-xl-3"></div>
                         <div class="col-6"></div>
                         <div class="col-xl-3">
                             <div class="bg-light ps-3 py-3 rounded d-flex justify-content-between mb-4">
                                 <label for="fruits">Default Sorting:</label>
                                 <select id="fruits" name="fruitlist" class="border-0 form-select-sm bg-light me-3"
-                                    form="fruitform">
-                                    <option value="sin">신상품</option>
-                                    <option value="sang">상품명</option>
-                                    <option value="be">베스트</option>
-                                    <option value="hprice">높은가격</option>
-                                    <option value="rprice">낮은가격</option>
-
+                                    form="fruitform" v-model="prodSort" @change="setSelect()">
+                                    <option v-for="option in sort" :value="option.value">
+                                     {{ option.text }}
+                                    </option>
                                 </select>
                             </div>
                         </div>
@@ -51,6 +41,12 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="input-group w-100 mx-auto d-flex">
+                                <input type="search" v-model="search" class="form-control p-3" placeholder="keywords"
+                                    aria-describedby="search-icon-1">
+                                <span id="search-icon-1" class="input-group-text p-3" @click="searchBtn"><i
+                                        class="fa fa-search"></i></span>
+                        </div>
                         </div>
                         <div class="col-lg-9">
                             <div class="row g-4 justify-content-center">
@@ -103,7 +99,13 @@ export default {
             page: {},
             pageUnit: 9,
             search: '',
-
+            sort : [
+                { text: '신상품', value: '1' },       
+                { text: '상품명', value: '2' },
+                { text: '높은가격', value: '3' },   
+                { text: '낮은가격', value: '4' }     
+            ],
+            prodSort:''
         }
     },
 
@@ -121,11 +123,14 @@ export default {
     methods: {
         async goPage(page) {
             let pageUnit = this.pageUnit;
-            let result = await axios.get(`/api/shop?pageUnit=${pageUnit}&page=${page}&search=${this.search}`)
+            let result = await axios.get(`/api/shop?pageUnit=${pageUnit}&page=${page}&search=${this.search}&sort=${this.prodSort}`)
             this.prodList = result.data.list;
             console.log(this.page)
             this.page = this.pageCalc(page, result.data.count, 5, pageUnit)
-
+            
+        },
+        setSelect(){
+            console.log('check',this.prodSort)
         },
         async getProdList() {
             let result = await axios.get(`/api/shop`);
@@ -153,6 +158,7 @@ export default {
             return nstr;
         },
         gotoCart(no, e) {
+        if(this.loggedInUserId){
             console.log(no);
             e.stopPropagation();
             axios.post(`/api/cart/insertCart/${no}`, this.prodList.prod_no)
@@ -162,12 +168,25 @@ export default {
                 title: "장바구니에 등록되었습니다.",
                 showConfirmButton: false,
                 timer: 1500
-            })
+            })}
+            else{
+                Swal.fire({
+                    title: '로그인이 필요합니다.',
+                    icon: 'warning',
+                    confirmButtonText: '확인'
+                })
+                
+            }
         },
         searchBtn() {
             this.goPage(1);
         }
 
+    },
+    watch : {
+        prodSort(){
+            this.goPage(1);
+        }
     }
 
 }

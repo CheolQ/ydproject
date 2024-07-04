@@ -3,22 +3,35 @@ const router = express.Router();
 const query = require('../mysql/index.js');
 //상품목록
 router.get('/', async (req, res) => {
-    // let order = req.query.order;
-    // console.log('ff',order);
-    // let result = await query('prodList',order);
-    // let result = await query('prodList');
-    // res.send(result);
-    
     let page = Number(req.query.page);
     let pageUnit = Number(req.query.pageUnit);
     let search = '%'+req.query.search+'%'
+    let sort = req.query.sort;
+    if(req.query.search == undefined || req.query.search == '') {
+        search = '%%';
+    }
+    if(req.query.sort == undefined || req.query.sort == '') {
+        sort = 1;
+    }
     console.log('검색어',search)
     if(!page){  page = 1;   }
     if(!pageUnit){  pageUnit = 10;  }
     let offset = (page -1)*pageUnit ;
-
-    let list = await query("prodList",[search, offset,pageUnit]);
-    let count = await query("prodCount", search)
+  
+    //신상품 1, 베스트 2, 가격 3 
+    console.log('asdfsadfsdf',sort);
+    if( sort == 1 ){
+        sort = 'prod_no desc'
+    } else if ( sort == 2 ) {
+        sort = 'prod_name'
+    } else if ( sort == 3 ) {
+        sort = 'prod_price desc'
+    } else if ( sort == 4 ) {
+        sort = 'prod_price'
+    }
+    list = await query("prodList",[search, sort, offset,pageUnit]);
+    count = await query("prodCount", search)
+    
     count = count[0].cnt;
     res.send({list,count})
 });
@@ -32,13 +45,31 @@ router.get('/code/:code', async (req, res) => {
     let page = Number(req.query.page);
     let pageUnit = Number(req.query.pageUnit);
     let search = '%'+req.query.search+'%'
+    let sort = req.query.sort;
+    if(req.query.search == undefined || req.query.search == '') {
+        search = '%%';
+    }
+    if(req.query.sort == undefined || req.query.sort == '') {
+        sort = 1;
+    }
     
     console.log('r검색어',search)
     if(!page){  page = 1;   }
     if(!pageUnit){  pageUnit = 10;  }
     let offset = (page -1)*pageUnit ;
 
-    let list = await query("smallCategory",[req.params.code,search, offset,pageUnit]);
+    console.log('asdfsadfsdf',sort);
+    if( sort == 1 ){
+        sort = 'prod_no desc'
+    } else if ( sort == 2 ) {
+        sort = 'prod_name'
+    } else if ( sort == 3 ) {
+        sort = 'prod_price desc'
+    } else if ( sort == 4 ) {
+        sort = 'prod_price'
+    }
+
+    let list = await query("smallCategory",[req.params.code,search, sort,offset,pageUnit]);
     let count = await query("prodCnt",[req.params.code, search])
     console.log(list,'lkist',count,'sdsa')
     count = count[0].cnt;
@@ -55,13 +86,30 @@ router.get('/bigcode/:code', async (req, res) => {
     let page = Number(req.query.page);
     let pageUnit = Number(req.query.pageUnit);
     let search = '%'+req.query.search+'%'
-    
+    let sort = req.query.sort;
+    if(req.query.search == undefined || req.query.search == '') {
+        search = '%%';
+    }
+    if(req.query.sort == undefined || req.query.sort == '') {
+        sort = 1;
+    }
     console.log('b검색어',search)
     if(!page){  page = 1;   }
     if(!pageUnit){  pageUnit = 10;  }
     let offset = (page -1)*pageUnit ;
 
-    let list = await query("bigCategory",[req.params.code,search, offset,pageUnit]);
+    console.log('asdfsadfsdf',sort);
+    if( sort == 1 ){
+        sort = 'prod_no desc'
+    } else if ( sort == 2 ) {
+        sort = 'prod_name'
+    } else if ( sort == 3 ) {
+        sort = 'prod_price desc'
+    } else if ( sort == 4 ) {
+        sort = 'prod_price'
+    }
+    
+    let list = await query("bigCategory",[req.params.code,search, sort,offset,pageUnit]);
     let count = await query("bigCateCnt",[req.params.code, search])
     console.log(list,'lkist',count,'sdsa')
     count = count[0].cnt;
@@ -86,9 +134,22 @@ router.get('/star/:no', async (req, res) => {
 
 //리뷰조회
 router.get('/review/:no', async (req, res) => {
-    let result = await query('reviewList', req.params.no);
-    // console.log('aaaa'+ result[0].review_no);
-    res.send(result);
+    // let result = await query('reviewList', req.params.no);
+    // res.send(result);
+
+    console.log('req.params.no',req.params.no)
+    let page = Number(req.query.page);
+    let pageUnit = Number(req.query.pageUnit);
+    
+    if(!page){  page = 1;   }
+    if(!pageUnit){  pageUnit = 10;  }
+    let offset = (page -1)*pageUnit ;
+
+    let list = await query("reviewList",[req.params.no,offset,pageUnit]);
+    let count = await query("reviewCnt",req.params.no)
+    console.log(list,'lkist',count,'sdsa')
+    count = count[0].cnt;
+    res.send({list,count})
 });
 
 //review 단건조회
@@ -100,9 +161,21 @@ router.get('/reviewinfo/:no', async (req, res) => {
 
 //qna조회
 router.get('/qna/:no', async (req, res) => {
-    let result = await query('qnaList', req.params.no);
-    // console.log('aaaa'+ result[0].review_no);
-    res.send(result);
+    // let result = await query('qnaList', req.params.no);
+    // res.send(result);
+    console.log('req.params.no',req.params.no)
+    let page = Number(req.query.page);
+    let pageUnit = Number(req.query.pageUnit);
+    
+    if(!page){  page = 1;   }
+    if(!pageUnit){  pageUnit = 10;  }
+    let offset = (page -1)*pageUnit ;
+
+    let list = await query("qnaList",[req.params.no,offset,pageUnit]);
+    let count = await query("qnaCnt",req.params.no)
+    console.log(list,'lkist',count,'sdsa')
+    count = count[0].cnt;
+    res.send({list,count})
 });
 
 //qna 단건조회

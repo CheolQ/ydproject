@@ -40,10 +40,6 @@
                                       <textarea name="text" class="form-control" id="content" spellcheck="false" cols="30"
                                       rows="11" v-model="qna.content"></textarea>
                                   </div>
-                                  <div class="form-item">
-                                      <label class="form-label my-3" for="board_pw">PW</label>
-                                      <input type="text" class="form-control" id="board_pw" v-model="qna.board_pw">
-                                  </div>
                                   <hr>
                                   <div class="qnbtn">
                                   <button class="btn border-secondary px-4 py-3 text-uppercase text-primary marinleftjh" type="submit"> {{ isEdit ? '수정' : '등록' }}</button>

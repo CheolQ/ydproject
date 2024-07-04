@@ -2,37 +2,43 @@
     <div id="mypage">
         <div class="page-body" v-if="orderList.length > 0 && codes.OrderStatus">
             <h5 id="mypage-sub">주문내역</h5>
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>번호</th>
-                        <th>주문일</th>
-                        <th>상품명</th>
-                        <th>결제금액</th>
-                        <th>주문처리상태</th>
-                        <th>주문상세</th>
-                        <th>주문취소</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr v-for="(v, i) in orderList">
-                        <td>{{ v.order_no }}</td>
-                        <td>{{ formatDate(v.order_date) }}</td>
-                        <td v-if="v.cnt > 0">{{ v.prod_name }} 외 {{ v.cnt - 1 }}</td>
-                        <td v-else>{{ v.prod_name }}</td>
-                        <td>{{ numberFormat(v.pay_price) }}원</td>
-                        <td>{{ getCodeMeaning(v.order_status) }}</td>
-                        <td>
-                            <button class="btn btn-primary btn-sm" @click="orderInfoHandler(v.order_no)">주문상세</button>
-                        </td>
-                        <td>
-                            <button v-if="v.order_status == 'D1'" class="btn btn-primary btn-sm"
-                                @click="applyOrderCancel(v.order_no)">주문취소</button>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-            <paging-component v-bind="page" @go-page="goPage" />
+            <div v-if="orderList.length > 0">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>번호</th>
+                            <th>주문일</th>
+                            <th>상품명</th>
+                            <th>결제금액</th>
+                            <th>주문처리상태</th>
+                            <th>주문상세</th>
+                            <th>주문취소</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="(v, i) in orderList">
+                            <td>{{ v.order_no }}</td>
+                            <td>{{ formatDate(v.order_date) }}</td>
+                            <td v-if="v.cnt > 0">{{ v.prod_name }} 외 {{ v.cnt - 1 }}</td>
+                            <td v-else>{{ v.prod_name }}</td>
+                            <td>{{ numberFormat(v.pay_price) }}원</td>
+                            <td>{{ getCodeMeaning(v.order_status) }}</td>
+                            <td>
+                                <button class="btn btn-primary btn-sm"
+                                    @click="orderInfoHandler(v.order_no)">주문상세</button>
+                            </td>
+                            <td>
+                                <button v-if="v.order_status == 'D1'" class="btn btn-primary btn-sm"
+                                    @click="applyOrderCancel(v.order_no)">주문취소</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <paging-component v-bind="page" @go-page="goPage" />
+            </div>
+            <div v-else>
+                <p>주문 내역이 없습니다.</p>
+            </div>
         </div>
         <form action="/api/mypage/orderinfo/" method="post">
             <input type="hidden" name="userid" id="userid">
