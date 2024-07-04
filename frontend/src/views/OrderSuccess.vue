@@ -1,30 +1,45 @@
 <template>
-    <h2 class="aside-tit">ORDER COMPLETE!</h2>
-    <p>주문이 완료되었습니다. 주문 내역은 My Page에서 확인 가능합니다.</p>
-    <router-link to="/user/mypage/orderhistory/">My Page로 이동</router-link><!--이거 수정수정해야함-->
+    <h2 class="aside-tit">ORDER COMPLETE</h2>
+    <div id="mypage">
+        <div class="page-body">
+            <p style="margin-bottom: 60px;">주문이 완료되었습니다.<br>
+                주문 내역은 <a href="/user/mypage/orderhistory/" style="font-weight: bold">My Page</a>에서 확인 가능합니다.<br>
+                주문 후 배송은 2-3일 소요 됩니다.<br><br>
+                <span style="">Thank you! Your order is completed.</span>
+            </p>
+        </div>
+        <div>
+            <button><router-link to="/user/mypage/orderhistory/" class="link">주문 내역으로 이동</router-link></button>
+        </div>
+    </div>
 </template>
 <script>
-    import axios from 'axios';
-
     export default {
         data(){
             return{};
         },
         created(){
-            //let dtCount = JSON.parse(this.$route.query.dtCount);
-            //getProd(dtCount);
         },
         methods : {
-            //상품이름가져오려고 상품넘버 이용
-            // async getProd(dtCount){
-            //     await for(let dt of dtCount){
-
-            //         let prodNo = await axios.get(`/api/order/getProd?orderDtNo=${dt}`);
-            //         console.log(prodNo);
-            //     }
-            // }
         }
     }
 </script>
-<style>
+<style scoped>
+.link{
+    color: black;
+    font-weight: bold;
+}
+/* div {
+  background-color: #f5d682;
+  border: 1px solid red;
+} */
+#mypage {
+    position: relative;
+    margin: 0 auto;
+    margin-bottom: 100px;
+}
+
+#mypage .page-body {
+    padding-top: 60px
+}
 </style>
