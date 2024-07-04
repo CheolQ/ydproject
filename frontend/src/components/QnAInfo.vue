@@ -35,18 +35,13 @@ import Swal from "sweetalert2";
 export default {
     data() {
         return {
-            searchCode:"",
             no: 0,
             qna: {}
         }
     },
     created() {
-        this.searchCode = this.$route.query.no;
-        console.log(this.no,'제품번ㅊㅊ호')
-
-        this.no = this.$route.query.bordno;
-        console.log(this.no,'보드ㅊㅊ번호')
-        axios.get(`/api/shop/qna/${this.searchNo}?bordno=${this.no}`)
+        this.no = this.$route.query.no;
+        axios.get(`/api/shop/qnainfo/${this.no}`)
             .then(result => {
                 this.qna = result.data[0];
             })

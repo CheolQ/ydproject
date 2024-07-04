@@ -117,8 +117,8 @@ const routes = [
                 props: (route) => ({ qnadata: route.query.qna ? JSON.parse(route.query.qna) : {} }),
             },
             {
-                path: 'prodqnainfo',
-                name: 'prodqnainfo',
+                path: 'prodinfo',
+                name: 'prodinfo',
                 component: ProdQnaInfo,
             },
             {

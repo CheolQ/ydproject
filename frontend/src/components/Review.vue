@@ -122,7 +122,7 @@ export default {
     	    return `${year}-${month}-${day}`;
  		 },
 		async goToQna(no)	{
- 	  		await this.$router.push({	name:"prodqnainfo",	query: { no : this.searchNo }	});
+ 	  		await this.$router.push({	name:"qnainfo",	query: { no : no }	});
  		},
 	}
 }	

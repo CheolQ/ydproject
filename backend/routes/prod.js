@@ -99,14 +99,11 @@ router.get('/qna/:no', async (req, res) => {
 });
 
 //qna 단건조회
-router.post('/qnalist/:no', async (req, res) => {
-    // console.log(req.body);
-    let prodno = req.params.prodno;
-    console.log(prodno,'제품번호')
-    let boardno = req.params.no;
-    console.log(boardno,'보드번호')
+router.post('/qnainfo/:no', async (req, res) => {
+    let no = req.params.no;
+    console.log(no,'보드번호')
 
-    let result = await query('qnaInfo', [prodno, boardno]);
+    let result = await query('qnaInfo', no);
     console.log(result);
     res.send(result);
 });
