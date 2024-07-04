@@ -6,14 +6,7 @@
             <div class="row g-4">
                 <div class="col-lg-12">
                     <div class="row g-4">
-                        <div class="col-xl-3">
-                            <div class="input-group w-100 mx-auto d-flex">
-                                <input type="search" v-model="search" class="form-control p-3" placeholder="keywords"
-                                    aria-describedby="search-icon-1">
-                                <span id="search-icon-1" class="input-group-text p-3" @click="searchBtn"><i
-                                        class="fa fa-search"></i></span>
-                            </div>
-                        </div>
+                        <div class="col-xl-3"></div>
                         <div class="col-6"></div>
                         <div class="col-xl-3">
                             <div class="bg-light ps-3 py-3 rounded d-flex justify-content-between mb-4">
@@ -48,6 +41,12 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="input-group w-100 mx-auto d-flex">
+                                <input type="search" v-model="search" class="form-control p-3" placeholder="keywords"
+                                    aria-describedby="search-icon-1">
+                                <span id="search-icon-1" class="input-group-text p-3" @click="searchBtn"><i
+                                        class="fa fa-search"></i></span>
+                        </div>
                         </div>
                         <div class="col-lg-9">
                             <div class="row g-4 justify-content-center">
@@ -159,6 +158,7 @@ export default {
             return nstr;
         },
         gotoCart(no, e) {
+        if(this.loggedInUserId){
             console.log(no);
             e.stopPropagation();
             axios.post(`/api/cart/insertCart/${no}`, this.prodList.prod_no)
@@ -168,7 +168,15 @@ export default {
                 title: "장바구니에 등록되었습니다.",
                 showConfirmButton: false,
                 timer: 1500
-            })
+            })}
+            else{
+                Swal.fire({
+                    title: '로그인이 필요합니다.',
+                    icon: 'warning',
+                    confirmButtonText: '확인'
+                })
+                
+            }
         },
         searchBtn() {
             this.goPage(1);

@@ -69,6 +69,7 @@ module.exports = {
                                 left join category c
                                 on p.category_code = c.category_code
                         WHERE p.category_code = ? and prod_name like ?
+                        order by sort
                         limit ?,?`,
 
         prodCnt : ` SELECT count(*) cnt
@@ -95,6 +96,7 @@ module.exports = {
                         left join category c
                         on p.category_code = c.category_code
                         where pre_category = ? and prod_name like ?
+                        order by sort
                         limit ?,?`,
                 
         bigCateCnt : ` SELECT count(*) cnt

@@ -45,13 +45,31 @@ router.get('/code/:code', async (req, res) => {
     let page = Number(req.query.page);
     let pageUnit = Number(req.query.pageUnit);
     let search = '%'+req.query.search+'%'
+    let sort = req.query.sort;
+    if(req.query.search == undefined || req.query.search == '') {
+        search = '%%';
+    }
+    if(req.query.sort == undefined || req.query.sort == '') {
+        sort = 1;
+    }
     
     console.log('r검색어',search)
     if(!page){  page = 1;   }
     if(!pageUnit){  pageUnit = 10;  }
     let offset = (page -1)*pageUnit ;
 
-    let list = await query("smallCategory",[req.params.code,search, offset,pageUnit]);
+    console.log('asdfsadfsdf',sort);
+    if( sort == 1 ){
+        sort = 'prod_no desc'
+    } else if ( sort == 2 ) {
+        sort = 'prod_name'
+    } else if ( sort == 3 ) {
+        sort = 'prod_price desc'
+    } else if ( sort == 4 ) {
+        sort = 'prod_price'
+    }
+
+    let list = await query("smallCategory",[req.params.code,search, sort,offset,pageUnit]);
     let count = await query("prodCnt",[req.params.code, search])
     console.log(list,'lkist',count,'sdsa')
     count = count[0].cnt;
@@ -68,13 +86,30 @@ router.get('/bigcode/:code', async (req, res) => {
     let page = Number(req.query.page);
     let pageUnit = Number(req.query.pageUnit);
     let search = '%'+req.query.search+'%'
-    
+    let sort = req.query.sort;
+    if(req.query.search == undefined || req.query.search == '') {
+        search = '%%';
+    }
+    if(req.query.sort == undefined || req.query.sort == '') {
+        sort = 1;
+    }
     console.log('b검색어',search)
     if(!page){  page = 1;   }
     if(!pageUnit){  pageUnit = 10;  }
     let offset = (page -1)*pageUnit ;
 
-    let list = await query("bigCategory",[req.params.code,search, offset,pageUnit]);
+    console.log('asdfsadfsdf',sort);
+    if( sort == 1 ){
+        sort = 'prod_no desc'
+    } else if ( sort == 2 ) {
+        sort = 'prod_name'
+    } else if ( sort == 3 ) {
+        sort = 'prod_price desc'
+    } else if ( sort == 4 ) {
+        sort = 'prod_price'
+    }
+    
+    let list = await query("bigCategory",[req.params.code,search, sort,offset,pageUnit]);
     let count = await query("bigCateCnt",[req.params.code, search])
     console.log(list,'lkist',count,'sdsa')
     count = count[0].cnt;
