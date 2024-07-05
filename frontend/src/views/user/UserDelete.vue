@@ -12,25 +12,31 @@
       <input type="password" id="password2" v-model="form.user_pw2" class="form-control" required />
     </div>
     <div v-if="error" class="alert alert-danger">{{ error }}</div>
-    <button type="button" class="btn btn-danger" @click="deleteuser">회원 탈퇴</button>
+    <button type="button" class="btn border border-secondary rounded-pill px-3 text-primary" @click="deleteuser">회원 탈퇴</button>
   </div>
 </template>
 
 <script>
 import axios from 'axios';
+import Swal from 'sweetalert2';
 
 export default {
   data() {
     return {
       form: {
         user_pw: '',
+        user_pw2: ''
       }
     };
   },
   methods: {
     confirmPassword() {
       if (this.form.user_pw !== this.form.user_pw2) {
-        alert('비밀번호가 일치하지 않습니다.');
+        Swal.fire({
+          icon: 'error',
+          title: '비밀번호 불일치',
+          text: '비밀번호가 일치하지 않습니다.',
+        });
         return false;
       }
       return true;
@@ -46,11 +52,20 @@ export default {
       try {
         const result = await axios.post(url, param);
         console.log(result);
-        alert('회원탈퇴 완료');
-        this.$router.push('/user/home');
+        Swal.fire({
+          icon: 'success',
+          title: '회원탈퇴 완료',
+          text: '회원탈퇴가 성공적으로 처리되었습니다.',
+        }).then(() => {
+          this.$router.push('/user/home');
+        });
       } catch (error) {
         console.error(error);
-        alert('회원탈퇴 실패');
+        Swal.fire({
+          icon: 'error',
+          title: '회원탈퇴 실패',
+          text: '회원탈퇴를 실패하였습니다. 다시 시도해 주세요.',
+        });
       }
     }
   }

@@ -5,7 +5,7 @@
         <div class="container-fluid py-5">
             <div class="container py-5">
                 <div class="table-responsive">
-                    <div v-if="wish.length > 0">
+                    <div v-if="wishList.length > 0">
                         <table class="table">
                             <thead>
                             <tr>
@@ -19,29 +19,29 @@
                             </tr>
                             </thead>
                             <tbody>
-                                <tr v-for="w in wish">
+                                <tr v-for="wish in wishList">
                                     <td>
-                                        <p class="mb-0 mt-4">{{ w.like_no }}</p>
+                                        <p class="mb-0 mt-4">{{ wish.like_no }}</p>
                                     </td>
                                     <td>
-                                        <p class="mb-0 mt-4"><input type="checkbox" v-model="w.selected" @change="AllChecked"></p>
+                                        <p class="mb-0 mt-4"><input type="checkbox" v-model="wish.selected" @change="AllChecked"></p>
                                     </td>
                                     <!-- <td>
                                         <p class="mb-0 mt-4">{{ w.prod_no }}</p>
                                     </td> -->
                                     <td scope="row">
                                         <div class="align-items-center">
-                                            <img :src="`/img/prodImg/${w.main_img}`" @click="gotoProdInfo(w.prod_no)" class="img-fluid rounded-circle" style="width: 80px; height: 80px;">
+                                            <img :src="`/img/prodImg/${wish.main_img}`" @click="gotoProdInfo(wish.prod_no)" class="img-fluid rounded-circle" style="width: 80px; height: 80px;">
                                         </div>
                                     </td>
                                     <td>
-                                        <p class="mb-0 mt-4">{{ w.prod_name }}</p>
+                                        <p class="mb-0 mt-4">{{ wish.prod_name }}</p>
                                     </td>
                                     <td>
-                                        <p class="mb-0 mt-4">{{ formatPrice(w.prod_price) }}원</p>
+                                        <p class="mb-0 mt-4">{{ formatPrice(wish.prod_price) }}원</p>
                                     </td>
                                     <td>
-                                        <button class="btn btn-md rounded-circle bg-light border mt-4"  @click="delSel(w.like_no)" >
+                                        <button class="btn btn-md rounded-circle bg-light border mt-4"  @click="delSel(wish.like_no)" >
                                             <i class="fa fa-times text-danger"></i>
                                         </button>
                                     </td>
@@ -49,8 +49,8 @@
                             </tbody>
                         </table>
                         <div class="button-container">
-                            <button @click="gotoCart" class="btn btn-warning" :disabled="!selectedProducts">장바구니에 담기</button>
-                            <button @click="delAll" class="btn btn-danger">전체삭제</button>
+                            <button @click="gotoCart" class="btn btn-warning rounded-pill">장바구니에 담기</button>
+                            <button @click="delAll" class="btn border border-secondary rounded-pill px-3 text-primary">전체삭제</button>
                         </div>
                     </div>
                     <div v-else>
@@ -60,13 +60,14 @@
             </div>
         </div>
         <!-- Wish Page End -->
-        <Paging v-if="wish.length > 0" v-bind="page" @go-page="goPage" />
+        <Paging v-if="wishList.length > 0" v-bind="page" @go-page="goPage" />
     </div>
 </template>
 <script>
     import PageMixins from '@/mixin';
     import axios from 'axios';
     import Paging from '../Paging.vue';
+    import Swal from "sweetalert2";
 
     export default {
         mixins : [PageMixins],
@@ -75,17 +76,12 @@
         },
         data(){
             return{
-                wish : [], page : {}, pageUnit : 5, nowPage : 1, allChecked : false
+                wishList : [], page : {}, pageUnit : 5, nowPage : 1, allChecked : false
             };
         },
         created(){
             this.goPage(1);
             //this.getWish();
-        },
-        computed: {
-            selectedProducts() {
-                return this.wish.some(a => a.selected);
-            }
         },
         methods : {
             async goPage(page){
@@ -97,7 +93,7 @@
                         this.nowPage = this.nowPage - 1;
                         this.goPage(this.nowPage);
                     }
-                    this.wish = result.data.list;
+                    this.wishList = result.data.list;
                     this.page = this.pageCalc(page, result.data.count, 5, pageUnit)
                     //console.log(this.page,'현재 페이지를 배열로 가져옴');
                     this.nowPage = page;
@@ -117,21 +113,34 @@
             //     .catch(err => console.log(err))
             // },
             async gotoCart(no){
-                let selectedWish = [];
-                this.wish.forEach(a => {
-                    if(a.selected){
-                        selectedWish.push({
-                            prod_no : a.prod_no,
-                            price : a.prod_price
-                        })
+                //console.log(this.wish.length, '담겼나')
+                let check = 0;
+                for(let i=0; i<this.wishList.length; i++){
+                    if(this.wishList[i].selected){
+                        check = 1;
                     }
-                });
-                await axios.post(`/api/cart`, selectedWish)
-                .then(result => result.data.count); //result.data.count는 몇개가 장바구니 insert되었는지
-                //this.$router.push('../../cart');
-                this.$router.push({
-                    path : '../../cart'
-                })
+                }
+                if(check === 1){
+                    let selectedWish = [];
+                    this.wishList.forEach(a => {
+                        if(a.selected){
+                            selectedWish.push({
+                                prod_no : a.prod_no,
+                                price : a.prod_price
+                            })
+                        }
+                    });
+                    await axios.post(`/api/cart`, selectedWish)
+                    .then(result => result.data.count); //result.data.count는 몇개가 장바구니 insert되었는지
+                    //this.$router.push('../../cart');
+                    this.$router.push({
+                        path : '../../cart'
+                    })
+                }else{
+                    Swal.fire({
+                        html: "<b>상품 선택 후<br> 장바구니에 담아주세요.</b>",
+                    })
+                }
             },
             formatPrice(price){
                     return price.numberFormat();
@@ -147,7 +156,7 @@
                 this.goPage(this.nowPage);
             },
             checkedAll(checked){
-                this.wish.forEach(a => a.selected = checked);
+                this.wishList.forEach(a => a.selected = checked);
             },
             gotoProdInfo(prodNo){
                 this.$router.push({ name : 'shopinfo', query : { no : prodNo } })
@@ -177,7 +186,7 @@
 .button-container {
   display: flex;
   justify-content: space-between;
-  margin-top: 10px; /* 필요에 따라 간격 조정 */
-  align-items: center; /* 버튼을 수직으로 중앙에 정렬 */
+  margin-top: 10px; 
+  align-items: center; 
 }
 </style>

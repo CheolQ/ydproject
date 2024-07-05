@@ -31,7 +31,7 @@
                             <label class="form-label my-3">우편번호<sup style="color: red;">*</sup></label>
                             <div class="pCode-container">
                                 <input type="text" id="pCode" v-model="pCode" class="form-control" placeholder="우편번호" readonly>
-                                <input type="button" @click="execDaumPostcode()" value="우편번호 찾기" class="pCode-button">
+                                <input type="button" @click="execDaumPostcode()" value="우편번호 찾기" class="btn border border-secondary rounded-pill px-4 py-2 text-primary">
                             </div>
                         </div>
                         <div class="form-item">
@@ -117,7 +117,7 @@
                         </div> -->
                         <div class="row g-4 text-center align-items-center justify-content-center pt-4">
                             <button type="button" @click="payments"
-                                class="btn btn-primary border-0 py-3 px-4 w-100 text-white">KAKAOPAY</button>
+                                class="btn btn-primary border-0 py-3 px-4 w-100 rounded-pill text-white">KAKAOPAY</button>
                             <!-- <button type="button" @click="payments" 
                                 class="btn border-0 py-3 px-4 w-100" 
                                 style="background-color: #007bff; color: white;">TOSSPAY</button> -->
@@ -133,6 +133,7 @@
 import PortOne from '@portone/browser-sdk/v2';
 import axios from 'axios';
 import { mapGetters } from 'vuex';
+import Swal from "sweetalert2";
 
 export default {
     data() {
@@ -225,27 +226,39 @@ export default {
         },
         inputCheck(){
             if (!this.name) {
-                alert('이름을 입력하세요.');
+                Swal.fire({
+                    html: "<b>이름을 입력하세요.</b>",
+                })
                 return false;
             }
             if (!this.phone) {
-                alert('연락처를 입력하세요.');
+                Swal.fire({
+                    html: "<b>연락처를 입력하세요.</b>",
+                })
                 return false;
             }
             if (!this.email) {
-                alert('이메일을 입력하세요.');
+                Swal.fire({
+                    html: "<b>이메일을 입력하세요.</b>",
+                })
                 return false;
             }
             if (!this.pCode) {
-                alert('우편번호를 입력하세요.');
+                Swal.fire({
+                    html: "<b>우편번호를 입력하세요.</b>",
+                })
                 return false;
             }
             if (!this.address) {
-                alert('주소를 입력하세요.');
+                Swal.fire({
+                    html: "<b>주소를 입력하세요.</b>",
+                })
                 return false;
             }
             if (!this.detailAddr) {
-                alert('상세주소를 입력하세요.');
+                Swal.fire({
+                    html: "<b>상세주소를 입력하세요.</b>",
+                })
                 return false;
             }
             return true;
@@ -303,14 +316,16 @@ export default {
                 buyer_addr: this.address,
                 buyer_postcode: this.pCode
             };
-            console.log(data,'데이터에 뭐가있는지 확인')
+            //console.log(data,'데이터에 뭐가있는지 확인')
 
             // 결제 요청
             IMP.request_pay(data, rsp => {
                 if (rsp.success) {
                     // 결제 성공 시 로직
-                    alert('결제가 완료되었습니다.');
-                    console.log(rsp,'rsp가 뭐가있는지')
+                    Swal.fire({
+                        html: "<b>결제가 완료되었습니다.</b>",
+                    })
+                    //console.log(rsp,'rsp가 뭐가있는지')
                     //order table
                     let buyerName = rsp.buyer_name;
                     let buyerTel = rsp.buyer_tel;
@@ -353,7 +368,9 @@ export default {
                         .catch(err => console.log(err))
                 } else {
                     // 결제 실패 시 로직
-                    alert(`결제에 실패하였습니다. 에러 내용: ${rsp.error_msg}`);
+                    Swal.fire({
+                        html: `<b>결제에 실패하였습니다.<br> 에러 내용: ${rsp.error_msg}</b>`
+                    });
                 }
             });
         },

@@ -12,39 +12,38 @@
             <div class="question-details">
                 <h4>{{ reviewInfo.review_title }}</h4>
                 <p>Date: {{ new Date(reviewInfo.create_date).toLocaleDateString() }}</p>
-                <span v-if="reviewInfo.rating != undefined">
+                <span style="float: left" v-if="reviewInfo.rating != undefined">
                 <i :key = "i" v-for="i in reviewInfo.rating" class="fa fa-star text-secondary"></i>
                 <i :key = "i" v-for="i in 5- reviewInfo.rating"class="fa fa-star"></i>
             </span>
-                <p>사진</p>
                 <img :src="`/img/prodImg/${reviewImg.file_name}`" class="product-img" alt="Product Image">
 
                 <p>{{ reviewInfo.review_content }}</p>
             </div>
-            <div class="buttons">
-                <button @click="goBack">목록</button>
-            </div>
+        </div>
+        <div class="buttons">
+            <button @click="goBack">목록</button>
         </div>
     </div>
 </template>
 
 <script>
 import axios from 'axios';
-import Swal from "sweetalert2";
 
 export default {
+    props : ['no', 'prodNo'],
     data() {
         return {
-            no: '',
+            //no: '',
             reviewInfo: {},
-            prodNo : '',
+            //prodNo : '',
             prodInfo: {},
             reviewImg:{}
         }
     },
     created() {
-        this.no = this.$route.query.no;
-        this.prodNo = this.$route.query.prodNo;
+        //this.no = this.$route.query.no;
+        //this.prodNo = this.$route.query.prodNo;
         this.getReviewInfo();
         this.getProdInfo();
         this.getReviewImg();
@@ -78,7 +77,8 @@ export default {
             return nstr;
         },
         goBack() {
-            this.$router.go(-1);
+            //this.$router.go(-1);
+            this.$emit('goToList');
         }
     }
 }

@@ -235,7 +235,7 @@ button {
 }
 
 button[type="submit"] {
-    background-color: #007bff;
+    /* background-color: #007bff; */
     color: white;
 }
 

@@ -147,7 +147,7 @@ body {
 }
 
 .btn-primary {
-    background-color: #007bff;
+    /* background-color: #007bff; */
     color: #fff;
 }
 
