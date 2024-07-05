@@ -143,6 +143,13 @@ router.get('/reviewinfo/:no', async (req, res) => {
     res.send(result);
 });
 
+//review 단건이미지조회
+router.get('/reviewinfoimg/:no', async (req, res) => {
+    let result = await query('reviewImg', req.params.no);
+    console.log('상세',result);
+    res.send(result);
+});
+
 //qna조회
 router.get('/qna/:no', async (req, res) => {
     // let result = await query('qnaList', req.params.no);

@@ -9,7 +9,7 @@
                 <p>{{ product.prod_explain }}</p>
                 <div class="d-flex justify-content-between flex-lg-wrap">
                     <p class="text-dark fs-5 fw-bold mb-0">{{ numberFormat(product.prod_price) }} 원</p>
-                    <button @click="gotoCart(product.prod_no, $event)"
+                    <button v-if="loggedInUserId != null" @click="gotoCart(product.prod_no, $event)"
                         class="btn border border-secondary rounded-pill px-3 text-primary">
                         <i class="fa fa-shopping-bag me-2 text-primary"></i> Add to cart
                     </button>

@@ -166,7 +166,7 @@
                                         </div>
                                     </div>
                                     <h4 class="mb-3">{{ numberFormat(v.prod_price) }} 원</h4>
-                                    <button @click="gotoCart(v.prod_no, $event)"
+                                    <button v-if="loggedInUserId != null" @click="gotoCart(v.prod_no, $event)"
                                         class="btn border border-secondary rounded-pill px-3 text-primary"><i
                                             class="fa fa-shopping-bag me-2 text-primary"></i> Add to
                                         cart</button>

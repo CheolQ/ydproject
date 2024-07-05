@@ -19,11 +19,13 @@
                 <p>Date: {{ new Date(qna.reply_create_date).toLocaleDateString() }}</p>
                 <p>{{ qna.reply_content }}</p>
             </div>
-            <div class="buttons">
-                <button v-if="qna.reply_create_date == null" @click="editQna">수정</button>
-                <button v-if="qna.reply_create_date == null" @click="deleteQna">삭제</button>
-                <button @click="goBack">돌아가기</button>
-            </div>
+        </div>
+        <div class="buttons">
+            <button class="btn border border-secondary rounded-pill px-3 text-primary"
+                v-if="qna.reply_create_date == null" @click="editQna">수정</button>
+            <button class="btn border border-secondary rounded-pill px-3 text-primary"
+                v-if="qna.reply_create_date == null" @click="deleteQna">삭제</button>
+            <button class="btn border border-secondary rounded-pill px-3 text-primary" @click="goBack">돌아가기</button>
         </div>
     </div>
 </template>
@@ -179,17 +181,16 @@ export default {
 }
 
 .buttons {
-    display: flex;
     justify-content: space-around;
     margin-top: 20px;
 }
 
 .buttons button {
-    padding: 10px 20px;
     border: none;
     border-radius: 4px;
     cursor: pointer;
     font-size: 14px;
+    margin: 0px 10px 0px 10px;
 }
 
 .buttons button:hover {
