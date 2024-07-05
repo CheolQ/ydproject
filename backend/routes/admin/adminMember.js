@@ -28,4 +28,12 @@ router.get("/", async (req, res) => {
     res.send({list,count})
 })
 
+router.get("/:id", async (req, res) => {
+    console.log(req.params.id);
+    let qna = await query('userModalQna', req.params.id).then().catch(err=>console.log(err))
+    let review = await query('userModalReview', req.params.id).then().catch(err=>console.log(err))
+
+    res.send({qna, review})
+})
+
 module.exports = router;

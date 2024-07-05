@@ -28,8 +28,8 @@
                             <td>{{user.user_id}}</td>
                             <td>{{user.name}}</td>
                             <td>{{user.resp}}</td>
-                            <td>{{user.point}}</td>
-                            <td>{{ user.price }}</td>
+                            <td>{{getNumberFormat(user.point)}}p</td>
+                            <td>{{ getNumberFormat(user.price) }}</td>
                             <td>{{getDateFormat(user.hiredate)}}</td>
                             <td><button @click="modalOpen(user.user_id)" class="btn btn-primary">조회</button></td>
                         </tr>
@@ -37,52 +37,61 @@
                 </table>
             </div>
         </div>
-    </div>
-    <paging-component v-bind="page" @go-page="goPage"/>
-    <div class="modal-wrap" v-show="modalCheck">
+        <paging-component v-bind="page" @go-page="goPage"/>
+        <div class="modal-wrap" v-show="modalCheck">
         <div class="modal-container">
             <div class="row">
                 <div class="col-md-12 col-lg-6">
                     <h3>QnA</h3>
                     <table class="table">
-  <thead>
-    <tr>
-      <th scope="col">#</th>
-      <th scope="col">First</th>
-      <th scope="col">Last</th>
-      <th scope="col">Handle</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th scope="row">1</th>
-      <td>Mark</td>
-      <td>Otto</td>
-      <td>@mdo</td>
-    </tr>
-    <tr>
-      <th scope="row">2</th>
-      <td>Jacob</td>
-      <td>Thornton</td>
-      <td>@fat</td>
-    </tr>
-    <tr>
-      <th scope="row">3</th>
-      <td colspan="2">Larry the Bird</td>
-      <td>@twitter</td>
-    </tr>
-  </tbody>
-</table>
+                        <thead>
+                            <tr>
+                                <th scope="col">번호</th>
+                                <th scope="col">상품명</th>
+                                <th scope="col">제목</th>
+                                <th scope="col">작성일</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="qna in qnas" :key="qna">
+                                <th scope="row">{{ qna.board_no }}</th>
+                                <td>{{ qna.prod_name }}</td>
+                                <td>{{ qna.title }}</td>
+                                <td>{{ getDateFormat(qna.create_date) }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
                 <div class="col-md-12 col-lg-6">
                     <h3>리뷰</h3>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col">번호</th>
+                                <th scope="col">상품명</th>
+                                <th scope="col">제목</th>
+                                <th scope="col">작성일</th>
+                                <th scope="col">점수</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="review in reviews" :key="review">
+                                <th scope="row">{{ review.review_no }}</th>
+                                <td>{{ review.prod_name}}</td>
+                                <td>{{ review.review_title }}</td>
+                                <td>{{ review.create_date }}</td>
+                                <td>{{ getDateFormat(review.rating) }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
             <div class="modal-btn">
                 <button type="button" class="btn btn-secondary" @click="modalOpen">닫기</button>
             </div>
         </div>
-    </div>      
+    </div>
+</div>
 </template>
 <script>
 import Paging from "../../mixin";
@@ -110,6 +119,9 @@ export default {
             date1: '',
             date2: '',
             category: '',
+
+            qnas: [],
+            reviews: [],
         }
     },
     created() {
@@ -141,9 +153,19 @@ export default {
         getDateFormat (date ){
  	        return this .$dateFormat (date );
  	    },
+        getNumberFormat (number ){
+            return this .$numberFormat (number );
+        },
         modalOpen(id) {
             this.modalCheck = !this.modalCheck;
-            
+            axios.get(`/api/adminMember/${id}`)
+            .then(result => {
+                console.log(result.data.qna)
+                this.qnas = result.data.qna;
+                console.log(result.data.review)
+                this.reviews = result.data.review;
+            })
+            .catch(err => console.log(err))
         }
     }
 }
