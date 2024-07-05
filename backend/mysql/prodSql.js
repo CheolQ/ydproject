@@ -1,5 +1,5 @@
 module.exports = {
-        prodList: `SELECT prod_no, prod_name, category_code, prod_price, prod_explain, main_img, detail_img, maker, origin, exp_date
+        prodList: `SELECT prod_no, prod_name, category_code, prod_price, main_img, detail_img, maker, origin, exp_date
                     FROM prod
                     where prod_name like ?
                     order by sort
@@ -9,7 +9,7 @@ module.exports = {
                      from prod
                      where prod_name like ?`,
 
-        prodInfo: `SELECT prod_no, prod_name, category_code, prod_price, prod_explain, main_img, detail_img, maker, origin, exp_date
+        prodInfo: `SELECT prod_no, prod_name, category_code, prod_price, main_img, detail_img, maker, origin, exp_date
                    FROM prod
                    WHERE prod_no = ?`,
 
