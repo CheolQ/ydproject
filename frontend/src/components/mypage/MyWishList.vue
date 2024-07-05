@@ -31,7 +31,7 @@
                                     </td> -->
                                     <td scope="row">
                                         <div class="align-items-center">
-                                            <img :src="`/api/upload/${w.main_img}`" @click="gotoProdInfo(w.prod_no)" class="img-fluid rounded-circle" style="width: 80px; height: 80px;">
+                                            <img :src="`/img/prodImg/${w.main_img}`" @click="gotoProdInfo(w.prod_no)" class="img-fluid rounded-circle" style="width: 80px; height: 80px;">
                                         </div>
                                     </td>
                                     <td>
