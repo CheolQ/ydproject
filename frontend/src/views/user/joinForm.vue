@@ -5,18 +5,20 @@
       <form id="signup-form">
         <div class="form-group">
           <label for="username">아이디 <span class="required">*</span></label>
-          <input type="text" id="username" v-model="form.user_id" @input="resetUserIdState" placeholder="ID" required />
-          <button type="button" class="btn btn-secondary" @click="checkUserId">중복 체크</button>
+          <div class="username-wrapper">
+            <input type="text" id="username" v-model="form.user_id" @input="resetUserIdState" placeholder="ID" required />
+            <button type="button" class="btn border border-secondary rounded-pill px-3 text-primary" @click="checkUserId">중복 체크</button>
+          </div>
           <span v-if="userIdError" class="error">{{ userIdError }}</span>
           <span v-if="userIdSuccess" class="success">{{ userIdSuccess }}</span>
         </div>
         <div class="form-group">
           <label for="password">비밀번호 <span class="required">*</span></label>
-          <input type="password" id="password" v-model="form.user_pw" placeholder="PassWord" required />
+          <input type="password" id="password" v-model="form.user_pw" placeholder="6~20자 이내로 영문,숫자 혼합해서 입력하세요" @change="validatePw" />
         </div>
         <div class="form-group">
-          <label for="password2">비밀번호 확인 <span class="required">*</span></label>
-          <input type="password" id="password2" v-model="form.user_pw2" placeholder="비밀번호를 다시 입력하세요" required />
+          <label for="checkedPassword">비밀번호 확인 <span class="required">*</span></label>
+          <input type="password" id="checkedPassword" v-model="form.user_pw2" placeholder="비밀번호를 다시 입력하세요" @change="validateCheckedPw" />
         </div>
         <div class="form-group">
           <label for="name">이름 <span class="required">*</span></label>
@@ -24,18 +26,20 @@
         </div>
         <div class="form-group">
           <label for="email">이메일 <span class="required">*</span></label>
-          <input type="email" id="email" v-model="form.email" placeholder="이메일을 입력하세요" required />
+          <input type="email" id="email" v-model="form.email" placeholder="이메일을 입력하세요" @change="validateEmail" />
         </div>
         <div class="form-group">
           <label for="tel">전화번호 <span class="required">*</span></label>
-          <input type="tel" id="tel" v-model="form.tel" placeholder="ex) 010-1111-1234" required />
+          <div class="tel-wrapper">
+            <input type="tel" id="tel" v-model="form.tel" placeholder="ex) 010-1111-1234" required />
+            <!-- <button type="button" class="btn border border-secondary rounded-pill px-3 text-primary" @click="requestCertification">본인인증</button> -->
+          </div>
         </div>
         <div class="form-group">
           <label for="postcode">우편번호 <span class="required">*</span></label>
           <div class="postcode-wrapper">
-            <input type="text" id="postcode" v-model="form.postcode" ref="postcode" placeholder="우편번호를 입력하세요"
-              required />
-            <button type="button" @click="showApi">검색</button>
+            <input type="text" id="postcode" v-model="form.postcode" ref="postcode" placeholder="우편번호를 입력하세요" required />
+            <button type="button" class="btn border border-secondary rounded-pill px-3 text-primary" @click="showApi">검색</button>
           </div>
         </div>
         <div class="form-group">
@@ -44,19 +48,22 @@
         </div>
         <div class="form-group">
           <label for="detailAddress">상세주소 <span class="required">*</span></label>
-          <input type="text" id="detailAddress" v-model="form.detail_address" placeholder="상세주소" required />
+          <input type="text" id="detailAddress" v-model="form.detail_address" placeholder="상세주소" />
         </div>
-        <button type="button" class="btn btn-primary" @click="joinUser">회원가입</button>
+        <button type="button" class="btn border border-secondary rounded-pill px-3 text-primary" @click="joinUser">회원가입</button>
         <router-link to="/user/home">
-          <button type="button" class="btn btn-wanning">취소</button>
+          <button type="button" class="btn border border-secondary rounded-pill px-3 text-primary">취소</button>
         </router-link>
       </form>
     </div>
   </div>
 </template>
 
+
+
 <script>
 import axios from 'axios';
+import Swal from 'sweetalert2';
 
 export default {
   data() {
@@ -102,12 +109,145 @@ export default {
         this.userIdSuccess = null;
       }
     },
+    validatePw() {
+      let pw = document.getElementById("password").value
+
+      let number = pw.search(/[0-9]/g);
+      let english = pw.search(/[a-z]/ig);
+      // let specialCharacter = pw.search(/[`~!@@#$%^&*|₩₩₩'₩";:₩/?]/gi); //특수문자 혼합
+
+      if (pw.length < 6 || pw.length > 20) {
+        Swal.fire({
+          icon: 'error',
+          title: '비밀번호 오류',
+          text: '6자리 ~ 20자리 이내로 입력해주세요.'
+        });
+        return false;
+      } else if (pw.search(/\s/) !== -1) {
+        Swal.fire({
+          icon: 'error',
+          title: '비밀번호 오류',
+          text: '비밀번호는 공백 없이 입력해주세요.'
+        });
+        return false;
+      } else if (number < 0 || english < 0) {
+        Swal.fire({
+          icon: 'error',
+          title: '비밀번호 오류',
+          text: '영문, 숫자를 혼합하여 입력해주세요.'
+        });
+        return false;
+      } else {
+        console.log("비밀번호 사용가능");
+        return true;
+      }
+    },
+    validateCheckedPw() {
+      let pw = document.getElementById("password").value
+      let checkedPw = document.getElementById("checkedPassword").value
+      
+      let number = checkedPw.search(/[0-9]/g);
+      let english = checkedPw.search(/[a-z]/ig);
+      let specialCharacter = checkedPw.search(/[`~!@@#$%^&*|₩₩₩'₩";:₩/?]/gi);
+
+      if (checkedPw.length < 6 || checkedPw.length > 20) {
+        Swal.fire({
+          icon: 'error',
+          title: '비밀번호 오류',
+          text: '6자리 ~ 20자리 이내로 입력해주세요.'
+        });
+        return false;
+      } else if (checkedPw.search(/\s/) !== -1) {
+        Swal.fire({
+          icon: 'error',
+          title: '비밀번호 오류',
+          text: '비밀번호는 공백 없이 입력해주세요.'
+        });
+        return false;
+      } else if (number < 0 || english < 0 || specialCharacter < 0) {
+        Swal.fire({
+          icon: 'error',
+          title: '비밀번호 오류',
+          text: '영문, 숫자, 특수문자를 혼합하여 입력해주세요.'
+        });
+        return false;
+      } else if (pw !== checkedPw) {
+        Swal.fire({
+          icon: 'error',
+          title: '비밀번호 오류',
+          text: '비밀번호가 일치하지 않습니다.'
+        });
+        return false;
+      } else {
+        console.log("비밀번호 체크 사용가능");
+        return true;
+      }
+    },
     confirmPassword() {
       if (this.form.user_pw !== this.form.user_pw2) {
-        alert('비밀번호가 일치하지 않습니다.');
+        Swal.fire({
+          icon: 'error',
+          title: '비밀번호 오류',
+          text: '비밀번호가 일치하지 않습니다.'
+        });
         return false;
       }
       return true;
+    },
+    validateEmail() {
+      let email = document.getElementById("email").value
+
+      const regExp = /^[a-z0-9_+.-]+@([a-z0-9-]+\.)+[a-z0-9]{2,4}$/
+
+      if (email.search(/\s/) !== -1) {
+        Swal.fire({
+          icon: 'error',
+          title: '이메일 오류',
+          text: '이메일은 공백 없이 입력해주세요.'
+        });
+        return false;
+      } else if (email.match(regExp) === null) {
+        Swal.fire({
+          icon: 'error',
+          title: '이메일 오류',
+          text: '이메일 형식이 맞지 않습니다.'
+        });
+        return false;
+      } else {
+        console.log("성공");
+        return true;
+      }
+    },
+    async requestCertification() {
+      const { IMP } = window;
+      IMP.init('imp57875627'); // PortOne 관리자 페이지에서 확인한 "가맹점 식별코드"를 사용
+
+      IMP.certification({
+        merchant_uid: `mid_${new Date().getTime()}`, // 주문 번호
+        company: '까까무라', // 회사명 또는 서비스 명
+        carrier: '', // 통신사 (SKT, KT, LGT 중 하나)
+        name: this.form.name, // 이름
+        phone: this.form.tel // 전화번호
+      }, this.certificationCallback);
+    },
+    certificationCallback(response) {
+      if (response.success) {
+        // 인증 성공
+        console.log('본인인증 성공:', response);
+        Swal.fire({
+          icon: 'success',
+          title: '본인인증 성공',
+          text: '본인인증에 성공했습니다.'
+        });
+      } else {
+        // 인증 실패
+        console.error('본인인증 실패:', response);
+        Swal.fire({
+          icon: 'error',
+          title: '본인인증 실패',
+          text: '본인인증에 실패했습니다. 다시 시도해주세요.'
+        });
+      }
     },
     async joinUser() {
       if (!this.confirmPassword()) {
@@ -127,11 +267,20 @@ export default {
 
       try {
         const result = await axios.post(url, param);
-        alert('회원가입에 성공하셨습니다');
-        this.$router.push('/user/login');
+        Swal.fire({
+          icon: 'success',
+          title: '회원가입 성공',
+          text: '회원가입에 성공하셨습니다.'
+        }).then(() => {
+          this.$router.push('/user/login');
+        });
       } catch (error) {
         console.error(error);
-        alert('회원가입에 실패하였습니다. 다시 시도해 주세요.');
+        Swal.fire({
+          icon: 'error',
+          title: '회원가입 실패',
+          text: '회원가입에 실패하였습니다. 다시 시도해 주세요.'
+        });
       }
     },
     showApi() {
@@ -190,7 +339,6 @@ export default {
   width: 500px;
   box-sizing: border-box;
   margin-top: 50px;
-
 }
 
 .aside-tit {
@@ -223,27 +371,57 @@ export default {
   box-sizing: border-box;
 }
 
-.form-group .postcode-wrapper {
+.tel-wrapper, .username-wrapper, .postcode-wrapper {
   display: flex;
   align-items: center;
 }
 
-.form-group .postcode-wrapper input {
+.tel-wrapper input, .username-wrapper input, .postcode-wrapper input {
   flex: 1;
   margin-right: 10px;
 }
 
 .form-group button {
-  background-color: #6a24fe;
   color: white;
   border: none;
   cursor: pointer;
-  transition: background-color 0.3s;
+  transition: background-color 0.3s;  
   padding: 10px 20px;
   border-radius: 5px;
+  font-weight: bold;
 }
 
 .form-group button:hover {
-  background-color: #5b1fe3;
+  background-color: rgb(255, 178, 130);
+}
+
+.join {
+  background-color: rgb(88, 127, 255);
+  color: rgb(255, 255, 255);
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s;  
+  padding: 10px 20px;
+  border-radius: 5px;
+  font-weight: bold;
+}
+
+.join:hover {
+  background-color: rgb(142, 129, 255);
+}
+
+.cancel {
+  background-color: rgb(131, 127, 126);
+  color: rgb(255, 255, 255);
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s;  
+  padding: 10px 20px;
+  border-radius: 5px;
+  font-weight: bold;
+}
+
+.cancel:hover {
+  background-color: rgb(163, 163, 163);
 }
 </style>

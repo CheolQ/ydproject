@@ -11,8 +11,9 @@
                 </div>
                 <div class="review-buttons">
                     <button v-if="v.cnt == 0" @click="reviewInsertHandler(v)"
-                        class="btn btn-primary btn-sm">후기작성</button>
-                    <button v-else @click="reviewInfoHandler(v.review_no)" class="btn btn-primary btn-sm">후기조회</button>
+                        class="btn border border-secondary rounded-pill px-3 text-primary">후기작성</button>
+                    <button v-else @click="reviewInfoHandler(v.review_no)"
+                        class="btn border border-secondary rounded-pill px-3 text-primary">후기조회</button>
                 </div>
             </div>
             <paging-component v-bind="page" @go-page="goPage" />
@@ -111,10 +112,6 @@ body {
     margin-bottom: 20px;
     padding: 10px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.review-card:nth-child(1) {
-    border: 1px solid #00f;
 }
 
 .product-image {

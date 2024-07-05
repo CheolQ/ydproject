@@ -30,18 +30,18 @@ router.post("/login", async (req, res) => {
   }
 });
 
-//카카오 로그인
-router.post("/kakao-login", (req, res) => {
-  const { accessToken, kakaoAccount } = req.body;
-  console.log("Received accessToken:", accessToken);
-  console.log("Received kakaoAccount:", kakaoAccount);
-  // 사용자 정보를 처리하고 로그인 로직을 구현합니다.
-  // 예: 데이터베이스에 사용자 정보를 저장하거나 확인합니다.
-  res.status(200).json({
-    message: "카카오 로그인 성공",
-    user: kakaoAccount,
-  });
-});
+// //카카오 로그인
+// router.post("/kakao-login", (req, res) => {
+//   const { accessToken, kakaoAccount } = req.body;
+//   console.log("Received accessToken:", accessToken);
+//   console.log("Received kakaoAccount:", kakaoAccount);
+//   // 사용자 정보를 처리하고 로그인 로직을 구현합니다.
+//   // 예: 데이터베이스에 사용자 정보를 저장하거나 확인합니다.
+//   res.status(200).json({
+//     message: "카카오 로그인 성공",
+//     user: kakaoAccount,
+//   });
+// });
 
 //네이버 로그인
 // router.post('/naverlogin', (req, res) => {

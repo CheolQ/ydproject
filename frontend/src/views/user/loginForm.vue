@@ -13,8 +13,6 @@
           </div>
           <input type="button" @click="loginHandler" value="로그인" class="btn-primary" />
         </form>
-        <button id="naverIdLogin" class="btn-naver"> 네이버로 로그인</button>
-        <button @click="kakaoLogin" class="btn-kakao">카카오로 로그인</button>
       </div>
       <div class="divider"></div>
       <div class="login-right">
@@ -34,12 +32,14 @@
 
 <script>
 import axios from 'axios';
+import Swal from 'sweetalert2';
 
 export default {
   data() {
     return {
       form: {
-        user_id: '', user_pw: ''
+        user_id: '',
+        user_pw: ''
       }
     };
   },
@@ -49,49 +49,7 @@ export default {
     }
   },
   created() {
-    // 카카오 SDK 초기화
-    if (!window.Kakao.isInitialized()) {
-      window.Kakao.init('8f90883ee7aceafe1ce44fb81519b379'); // YOUR_APP_KEY를 실제 앱 키로 교체
-    }
-    axios.get("/api/user/account")
-      .then(result => {
-        this.$store.commit('setUser', result.data);
-      })
-      .catch(err => {
-        console.log(err);
-      });
-    // 네이버 SDK 초기화
-    // const naverLogin = new window.naver.LoginWithNaverId({
-    //   clientId: "YOUR_NAVER_CLIENT_ID",
-    //   callbackUrl: "http://localhost:8080/user/naver-callback", // 실제 콜백 URL로 교체
-    //   isPopup: false,
-    //   loginButton: { color: "green", type: 3, height: 48 }
-    // });
-    // naverLogin.init();
 
-    // window.addEventListener('load', () => {
-    //   naverLogin.getLoginStatus(status => {
-    //     if (status) {
-    //       const email = naverLogin.user.getEmail();
-    //       if (!email) {
-    //         alert("이메일은 필수 정보입니다. 정보제공을 동의해주세요.");
-    //         naverLogin.reprompt();
-    //         return;
-    //       }
-
-    //       axios.post('/api/users/naver-login', {
-    //         accessToken: naverLogin.accessToken.accessToken,
-    //         email
-    //       }).then(result => {
-    //         this.$store.commit('user', result.data);
-    //         this.$router.push('/user/home');
-    //       }).catch(err => {
-    //         console.log('Login error:', err);
-    //         alert('네이버 로그인 실패');
-    //       });
-    //     }
-    //   });
-    // });
   },
   methods: {
     loginHandler() {
@@ -99,56 +57,54 @@ export default {
         .then(result => {
           this.$store.commit('setUser', result.data);
           if (result.data.user_id === 'admin') {
-            this.$router.push('../../admin')
+            Swal.fire({
+              icon: 'success',
+              title: '로그인 성공',
+              text: '관리자로 로그인 되었습니다.',
+            }).then(() => {
+              this.$router.push('../../admin');
+            });
           } else {
-            this.$router.push('/user/home');
+            Swal.fire({
+              icon: 'success',
+              title: '로그인 성공',
+              text: '사용자로 로그인 되었습니다.',
+            }).then(() => {
+              this.$router.push('/user/home');
+            });
           }
         })
         .catch(err => {
           console.log(err);
-          alert('로그인 실패');
-          this.$router.push('/user/login');
+          Swal.fire({
+            icon: 'error',
+            title: '로그인 실패',
+            text: '아이디 또는 비밀번호가 올바르지 않습니다.',
+          }).then(() => {
+            this.$router.push('/user/login');
+          });
         });
     },
-    kakaoLogin() {
-      window.Kakao.Auth.login({
-        success: (authObj) => {
-          window.Kakao.API.request({
-            url: '/v2/user/me',
-            success: (res) => {
-              const kakaoAccount = res.kakao_account;
-              // 백엔드와 연동하여 사용자 정보 확인 및 저장
-              axios.post('/api/users/kakao-login', {
-                accessToken: authObj.access_token,
-                kakaoAccount
-              }).then(result => {
-                this.$store.commit('setUser', result.data);
-                this.$router.push('/user/home');
-              }).catch(err => {
-                console.log(err);
-                alert('카카오 로그인 실패');
-              });
-            },
-            fail: (error) => {
-              console.log(error);
-              alert('사용자 정보를 가져오는 데 실패했습니다.');
-            }
-          });
-        },
-        fail: (err) => {
-          console.log(err);
-          alert('카카오 로그인 실패');
-        }
-      });
-    },
+    
     logoutHandler() {
       axios.post("/api/users/logout")
         .then(() => {
           this.$store.commit('setUser', {});
-          alert('로그아웃');
+          Swal.fire({
+            icon: 'success',
+            title: '로그아웃',
+            text: '로그아웃 되었습니다.',
+          }).then(() => {
+            this.$router.push('/user/login');
+          });
         })
         .catch(err => {
           console.log(err);
+          Swal.fire({
+            icon: 'error',
+            title: '오류',
+            text: '로그아웃을 실패하였습니다.',
+          });
         });
     }
   }
@@ -228,20 +184,23 @@ export default {
 #login-form>.btn-primary {
   color: #fff;
   font-size: 16px;
-  background-color: #6a24fe;
+  background-color: rgb(255, 181, 36);
   cursor: pointer;
   transition: background-color 0.3s;
   margin-top: 20px;
   width: 100%;
   height: 48px;
-  border-radius: 6px;
+  border-radius: 6px;  
+  border: none;
+  font-size: 16px;
+  font-weight: bold;
 }
 
 #login-form>.btn-primary:hover {
-  background-color: #5b1fe3;
+  background-color: #ffd16f;
 }
 
-.btn-naver,
+/* .btn-naver,
 .btn-kakao {
   width: 100%;
   height: 48px;
@@ -259,7 +218,7 @@ export default {
 }
 
 .btn-naver:hover {
-  background-color: #18b200;
+  background-color: #ff0000;
 }
 
 .btn-kakao {
@@ -269,7 +228,7 @@ export default {
 
 .btn-kakao:hover {
   background-color: #e8d600;
-}
+} */
 
 .divider {
   width: 1px;
@@ -296,17 +255,17 @@ export default {
 }
 
 .btn-success {
-  background-color: #6a24fe;
+  background-color: rgb(255, 181, 36);
   color: #fff;
   border: none;
 }
 
 
 .btn-success:hover {
-  background-color: #5b1fe3;
+  background-color: rgb(255, 181, 36);
 }
 
 .btn:hover {
-  background-color: #f0f0f0;
+  background-color: #ffd16f;
 }
 </style>

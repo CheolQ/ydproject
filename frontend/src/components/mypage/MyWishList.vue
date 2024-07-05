@@ -49,8 +49,8 @@
                             </tbody>
                         </table>
                         <div class="button-container">
-                            <button @click="gotoCart" class="btn btn-warning" :disabled="!selectedProducts">장바구니에 담기</button>
-                            <button @click="delAll" class="btn btn-danger">전체삭제</button>
+                            <button @click="gotoCart" class="btn btn-warning rounded-pill">장바구니에 담기</button>
+                            <button @click="delAll" class="btn border border-secondary rounded-pill px-3 text-primary">전체삭제</button>
                         </div>
                     </div>
                     <div v-else>
@@ -67,6 +67,7 @@
     import PageMixins from '@/mixin';
     import axios from 'axios';
     import Paging from '../Paging.vue';
+    import Swal from "sweetalert2";
 
     export default {
         mixins : [PageMixins],
@@ -81,11 +82,6 @@
         created(){
             this.goPage(1);
             //this.getWish();
-        },
-        computed: {
-            selectedProducts() {
-                return this.wish.some(a => a.selected);
-            }
         },
         methods : {
             async goPage(page){
@@ -117,21 +113,34 @@
             //     .catch(err => console.log(err))
             // },
             async gotoCart(no){
-                let selectedWish = [];
-                this.wish.forEach(a => {
-                    if(a.selected){
-                        selectedWish.push({
-                            prod_no : a.prod_no,
-                            price : a.prod_price
-                        })
+                //console.log(this.wish.length, '담겼나')
+                let check = 0;
+                for(let i=0; i<this.wish.length; i++){
+                    if(this.wish[i].selected){
+                        check = 1;
                     }
-                });
-                await axios.post(`/api/cart`, selectedWish)
-                .then(result => result.data.count); //result.data.count는 몇개가 장바구니 insert되었는지
-                //this.$router.push('../../cart');
-                this.$router.push({
-                    path : '../../cart'
-                })
+                }
+                if(check === 1){
+                    let selectedWish = [];
+                    this.wish.forEach(a => {
+                        if(a.selected){
+                            selectedWish.push({
+                                prod_no : a.prod_no,
+                                price : a.prod_price
+                            })
+                        }
+                    });
+                    await axios.post(`/api/cart`, selectedWish)
+                    .then(result => result.data.count); //result.data.count는 몇개가 장바구니 insert되었는지
+                    //this.$router.push('../../cart');
+                    this.$router.push({
+                        path : '../../cart'
+                    })
+                }else{
+                    Swal.fire({
+                        html: "<b>상품 선택 후<br> 장바구니에 담아주세요.</b>",
+                    })
+                }
             },
             formatPrice(price){
                     return price.numberFormat();
