@@ -17,7 +17,10 @@
                                         <h6 class="text-dark"> 상품 번호 : {{ qna.prod_no }}</h6>
                                         <h6 class="text-dark">상품 명 : {{ prodInfo.prod_name }}</h6>
                                         <h6 class="text-dark">금액 :  {{ numberFormat(prodInfo.prod_price) }}원</h6>
-                                        <div class="d-flex pe-5">
+                                        <div class="d-flex pe-5" v-if="prodRating == 0" >
+                                            <i :key = "i" v-for="(i) in 5" class="fa fa-star"></i>
+                                        </div>
+                                        <div class="d-flex pe-5" v-else >
                                             <i :key = "i" v-for="(i) in Number(prodRating)" class="fa fa-star text-secondary"></i>
                                             <i :key = "i" v-for="(i) in 5- Number(prodRating)"class="fa fa-star"></i>
                                         </div>
@@ -69,7 +72,8 @@ export default {
             },
             prodInfo: {},
             isEdit: false,
-            prodRating: 0
+            prodRating: [],
+            stars: 0,
         };
     },
     created() {
@@ -98,8 +102,15 @@ export default {
         },
         async getProdRating()	{
             this.prodRating = 
-            (await axios.get(`/api/shop/star/${this.searchNo}`)).data[0].stars;
+            (await axios.get(`/api/shop/star/${this.searchNo}`)).data[0];
+                console.log(this.prodRating);
+                if(this.prodRating == undefined){
+                    this.prodRating = 0
+                }else{
+                    this.stars = Number(this.prodRating.stars)
+                }
         },
+
         async saveQna() {
             this.qna.user_id = this.loggedInUserId;
             let userNo = await axios.get(`/api/shop/getuserno/${this.loggedInUserId}`);
