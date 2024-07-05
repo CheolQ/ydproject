@@ -14,7 +14,7 @@
                                 <select id="fruits" name="fruitlist" class="border-0 form-select-sm bg-light me-3"
                                     form="fruitform" v-model="prodSort" @change="setSelect()">
                                     <option v-for="option in sort" :value="option.value">
-                                     {{ option.text }}
+                                        {{ option.text }}
                                     </option>
                                 </select>
                             </div>
@@ -46,7 +46,7 @@
                                     aria-describedby="search-icon-1">
                                 <span id="search-icon-1" class="input-group-text p-3" @click="searchBtn"><i
                                         class="fa fa-search"></i></span>
-                        </div>
+                            </div>
                         </div>
                         <div class="col-lg-9">
                             <div class="row g-4 justify-content-center">
@@ -99,13 +99,13 @@ export default {
             page: {},
             pageUnit: 9,
             search: '',
-            sort : [
-                { text: '신상품', value: '1' },       
+            sort: [
+                { text: '신상품', value: '1' },
                 { text: '상품명', value: '2' },
-                { text: '높은가격', value: '3' },   
-                { text: '낮은가격', value: '4' }     
+                { text: '높은가격', value: '3' },
+                { text: '낮은가격', value: '4' }
             ],
-            prodSort:''
+            prodSort: '1'
         }
     },
 
@@ -127,10 +127,10 @@ export default {
             this.prodList = result.data.list;
             console.log(this.page)
             this.page = this.pageCalc(page, result.data.count, 5, pageUnit)
-            
+
         },
-        setSelect(){
-            console.log('check',this.prodSort)
+        setSelect() {
+            console.log('check', this.prodSort)
         },
         async getProdList() {
             let result = await axios.get(`/api/shop`);
@@ -158,24 +158,29 @@ export default {
             return nstr;
         },
         gotoCart(no, e) {
-        if(this.loggedInUserId){
-            console.log(no);
-            e.stopPropagation();
-            axios.post(`/api/cart/insertCart/${no}`, this.prodList.prod_no)
-            Swal.fire({
-                position: "center",
-                icon: "success",
-                title: "장바구니에 등록되었습니다.",
-                showConfirmButton: false,
-                timer: 1500
-            })}
-            else{
+            e.stopPropagation()
+            if (this.loggedInUserId) {
+                console.log(no);
+                e.stopPropagation();
+                axios.post(`/api/cart/insertCart/${no}`, this.prodList.prod_no)
+                Swal.fire({
+                    position: "center",
+                    icon: "success",
+                    title: "장바구니에 등록되었습니다.",
+                    showConfirmButton: false,
+                    timer: 1500
+                })
+            }
+            else {
                 Swal.fire({
                     title: '로그인이 필요합니다.',
+                    text: "로그인 페이지로 이동합니다.",
                     icon: 'warning',
                     confirmButtonText: '확인'
-                })
-                
+                }).then(() => {
+                    this.$router.push('/user/login');
+                });
+
             }
         },
         searchBtn() {
@@ -183,8 +188,8 @@ export default {
         }
 
     },
-    watch : {
-        prodSort(){
+    watch: {
+        prodSort() {
             this.goPage(1);
         }
     }

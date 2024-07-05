@@ -8,25 +8,27 @@
                     <div class="product-details">
                         <p>상품명: {{ review.prod_name }}</p>
                         <p>상품가격: {{ numberFormat(review.prod_price) }}원</p>
-                        <span v-if="review.rating != undefined">
-                            <i :key="i" v-for="(i) in review.rating" class="fa fa-star text-secondary"></i>
-                            <i :key="i" v-for="(i) in 5 - review.rating" class="fa fa-star"></i>
-                        </span>
                     </div>
                 </div>
                 <div class="question-details">
                     <h4>{{ review.review_title }}</h4>
                     <p>Date: {{ getDateFormat(review.create_date) }}</p>
+                    <span style="float: left;" v-if="review.rating != undefined">
+                        <i :key="i" v-for="(i) in review.rating" class="fa fa-star text-secondary"></i>
+                        <i :key="i" v-for="(i) in 5 - review.rating" class="fa fa-star"></i>
+                    </span>
                     <div v-for="v in files">
                         <img :src="`/api/upload/review/${v.file_name}`" alt="">
                     </div>
                     <p>{{ review.review_content }}</p>
                 </div>
-                <div class="buttons">
-                    <button @click="editReview">수정</button>
-                    <button @click="deleteReview">삭제</button>
-                    <button @click="goBack">돌아가기</button>
-                </div>
+            </div>
+            <div class="buttons">
+                <button class="btn border border-secondary rounded-pill px-3 text-primary"
+                    @click="editReview">수정</button>
+                <button class="btn border border-secondary rounded-pill px-3 text-primary"
+                    @click="deleteReview">삭제</button>
+                <button class="btn border border-secondary rounded-pill px-3 text-primary" @click="goBack">돌아가기</button>
             </div>
         </div>
     </div>
@@ -77,7 +79,7 @@ export default {
             this.$router.go(-1);
         },
         editReview() {
-            this.$router.push({ name: 'mypagereviewupdate' , query: { no: this.no } })
+            this.$router.push({ name: 'mypagereviewupdate', query: { no: this.no } })
         },
         deleteReview() {
             axios.delete(`/api/mypage/reviewdelete/${this.no}`)
@@ -173,7 +175,6 @@ export default {
 }
 
 .buttons {
-    display: flex;
     justify-content: space-around;
     margin-top: 20px;
 }
@@ -184,6 +185,8 @@ export default {
     border-radius: 4px;
     cursor: pointer;
     font-size: 14px;
+    margin-left: 10px;
+    margin-right: 10px
 }
 
 .buttons button:hover {

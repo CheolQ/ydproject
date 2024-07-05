@@ -24,6 +24,11 @@ module.exports = {
         reviewInfo: `SELECT review_no, user_id, review_content, create_date, rating, review_title, prod_no, order_detail_no, order_no
                      FROM review 
                      where review_no = ?`,
+                     
+        reviewImg: `SELECT file_name, table_no, division
+                        FROm file
+                        where table_no = ? and division = 'E2'
+                        order by seqs`,
 
         qnaList: `select q.board_no,
                         title, 

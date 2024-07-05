@@ -5,7 +5,7 @@
         <div class="container py-5">
             <div class="button-container mb-3" v-if="cartList.length > 0">
                 <div class="delete-button">
-                    <button @click="delAll" class="btn btn-danger">전체삭제</button>
+                    <button @click="delAll" class="btn border border-secondary rounded-pill px-3 text-primary">전체삭제</button>
                 </div>
             </div>
             <div class="table-responsive">
@@ -49,7 +49,7 @@
                                     </td> -->
                                 <td scope="row">
                                     <div class="align-items-center">
-                                        <img :src="`/api/upload/${cart.main_img}`" @click="gotoProdInfo(cart.prod_no)" class="img-fluid rounded-circle"
+                                        <img :src="`/img/prodImg/${cart.main_img}`" @click="gotoProdInfo(cart.prod_no)" class="img-fluid rounded-circle"
                                             style="width: 90px; height: 90px;">
                                     </div>
                                 </td>
@@ -97,8 +97,8 @@
                     </div>
                     <div class="button-container">
                         <div class="order-button">
-                            <button @click="orderSel" class="btn btn-warning">선택주문</button>
-                            <button @click="orderAll" class="btn btn-warning">전체주문</button>
+                            <button @click="orderSel" class="btn btn-warning rounded-pill">선택주문</button>
+                            <button @click="orderAll" class="btn btn-warning rounded-pill">전체주문</button>
                         </div>
                     </div>
                 </div>
@@ -112,6 +112,7 @@
 </template>
 <script>
 import axios from 'axios';
+import Swal from "sweetalert2";
 
 export default {
     data() {
@@ -130,7 +131,7 @@ export default {
             return this.cartList.reduce((sum, item) => {
                 return sum + (item.prod_price * item.cnt);
             }, 0); 
-        }
+        },
     },
     methods: {
         getCart() {
@@ -138,7 +139,7 @@ export default {
                 headers: { 'Cache-Control': 'no-cache' }
             })
                 .then(result => {
-                    console.log(result);
+                    //console.log(result);
                     this.cartList = result.data;
                 })
                 .catch(err => console.log(err));
@@ -152,19 +153,31 @@ export default {
             this.getCart();
         },
         orderSel() {
-            let selectedCart = [];
-            this.cartList.forEach(a => {
-                if (a.selected) {
-                    selectedCart.push(a);
+            let check = 0;
+            for(let i=0; i<this.cartList.length; i++){
+                if(this.cartList[i].selected){
+                    check = 1;
                 }
-            });
-            console.log(selectedCart,'장바구니')
-            // this.$store.state.cart = selectedCart;
-            // console.log(this.$store.state.cart)
-            this.$store.commit('setCart', selectedCart);
-            this.$router.push({
-                name: 'orderForm',
-            });
+            }
+            if(check === 1){
+                let selectedCart = [];
+                this.cartList.forEach(a => {
+                    if (a.selected) {
+                        selectedCart.push(a);
+                    }
+                });
+                //console.log(selectedCart,'장바구니')
+                // this.$store.state.cart = selectedCart;
+                // console.log(this.$store.state.cart)
+                this.$store.commit('setCart', selectedCart)
+                this.$router.push({
+                    name: 'orderForm',
+                });
+            }else{
+                Swal.fire({
+                    html: "<b>1개 이상 선택 후<br> 주문가능합니다.</b>",
+                })
+            }
         },
         orderAll() {
             // 전체 주문 처리 로직
@@ -210,7 +223,9 @@ export default {
         },
         minusBtn(cart) {
             if (cart.cnt < 2) {
-                alert('1개 이상 담을 수 있습니다.')
+                Swal.fire({
+                    html: "<b>1개 이상 담을 수 있습니다.</b>",
+                })
                 return;
             } else {
                 cart.cnt--;
@@ -253,5 +268,11 @@ ul {
 }
 .delete-button {
     margin-left: auto; 
+}
+.Swal-button 
+{
+	background-color: #FFB2D9;
+	font-size: 12px;
+	text-shadow: 0px -1px 0px rgba(0, 0, 0, 0.3);
 }
 </style>

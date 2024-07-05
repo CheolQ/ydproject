@@ -31,8 +31,10 @@
                     <input type="file" id="files" @change="handleFileUpload">
                 </div>
                 <div class="form-actions">
-                    <button type="button" @click="updateReviewHandler">수정</button>
-                    <button type="button" @click="goBack">취소</button>
+                    <button type="button" class="btn border border-secondary rounded-pill px-3 text-primary"
+                        @click="updateReviewHandler">수정</button>
+                    <button type="button" class="btn border border-secondary rounded-pill px-3 text-primary"
+                        @click="goBack">취소</button>
                 </div>
             </form>
         </div>
@@ -58,7 +60,7 @@ export default {
         console.log(this.no)
         axios.get(`/api/mypage/getreviewinfo/${this.no}`)
             .then(result => {
-                console.log('asdfdf',result)
+                console.log('asdfdf', result)
                 this.review = result.data[0]
 
             })
@@ -71,7 +73,7 @@ export default {
             }
             this.review.rating = Number(this.review.rating);
             let temp = { ...this.review }
-            temp.review_no =  this.$route.query.no;
+            temp.review_no = this.$route.query.no;
             console.log(temp)
             axios.post(`/api/mypage/updatereview`, temp)
                 .then(result => {
@@ -88,18 +90,18 @@ export default {
                         });
 
                         console.log(formData)
-                                axios.post('/api/mypage/review/uploadfiles', formData, {
-                                    params: { table_no: this.$route.query.no, division: 'E2' }
-                                })
-                                    .then(result => {
-                                        alert('파일 업로드 성공');
-                                        this.resetForm();
+                        axios.post('/api/mypage/review/uploadfiles', formData, {
+                            params: { table_no: this.$route.query.no, division: 'E2' }
+                        })
+                            .then(result => {
+                                alert('파일 업로드 성공');
+                                this.resetForm();
 
-                                    })
-                                    .catch(err => {
-                                        console.log(err);
-                                        alert('파일 업로드 실패')
-                                    });
+                            })
+                            .catch(err => {
+                                console.log(err);
+                                alert('파일 업로드 실패')
+                            });
 
                     } else {
                         this.resetForm();
