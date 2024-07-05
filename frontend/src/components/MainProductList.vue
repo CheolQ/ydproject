@@ -2,7 +2,8 @@
     <div class="col-md-6 col-lg-4 col-xl-3">
         <div class="rounded position-relative product-item">
             <div class="product-img">
-                <img :src="`/img/prodImg/${product.main_img}`" class="img-fluid w-100 rounded-top" alt="">
+                <img :src="`/img/prodImg/${product.main_img}`" class="img-fluid w-100 rounded-top" alt=""
+                    @click="goToDetail(product.prod_no)">
             </div>
             <div class="p-4 border border-secondary border-top-0 rounded-bottom">
                 <h4>{{ product.prod_name }}</h4>
@@ -50,6 +51,9 @@ export default {
                 nstr = nstr.replace(regex, '$1' + ',' + '$2');
             }
             return nstr;
+        },
+        async goToDetail(no) {
+            await this.$router.push({ name: "shopinfo", query: { no: no } });
         }
     }
 }
