@@ -1,19 +1,25 @@
 <template>
     <div id="mypage">
         <h5 id="mypage-sub">후기 작성 상품</h5>
-        <div v-for="v in reviews" class="review-card">
-            <img :src="`/img/prodImg/${v.main_img}`" alt="Product Image" class="product-image">
-            <div class="product-info">
-                <p>상품명: {{ v.prod_name }}</p>
-                <p>상품가: {{ numberFormat(v.prod_price) }}원</p>
-                <p>구매일: {{ getDateFormat(v.order_date) }}</p>
+        <div v-if="reviews.length > 0">
+            <div v-for="v in reviews" class="review-card">
+                <img :src="`/img/prodImg/${v.main_img}`" alt="Product Image" class="product-image">
+                <div class="product-info">
+                    <p>상품명: {{ v.prod_name }}</p>
+                    <p>상품가: {{ numberFormat(v.prod_price) }}원</p>
+                    <p>구매일: {{ getDateFormat(v.order_date) }}</p>
+                </div>
+                <div class="review-buttons">
+                    <button v-if="v.cnt == 0" @click="reviewInsertHandler(v)"
+                        class="btn btn-primary btn-sm">후기작성</button>
+                    <button v-else @click="reviewInfoHandler(v.review_no)" class="btn btn-primary btn-sm">후기조회</button>
+                </div>
             </div>
-            <div class="review-buttons">
-                <button v-if="v.cnt == 0" @click="reviewInsertHandler(v)" class="btn btn-primary btn-sm">후기작성</button>
-                <button v-else @click="reviewInfoHandler(v.review_no)" class="btn btn-primary btn-sm">후기조회</button>
-            </div>
+            <paging-component v-bind="page" @go-page="goPage" />
         </div>
-        <paging-component v-bind="page" @go-page="goPage" />
+        <div v-else>
+            <p>후기 내역이 없습니다.</p>
+        </div>
     </div>
 </template>
 

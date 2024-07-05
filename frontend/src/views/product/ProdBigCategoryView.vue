@@ -3,28 +3,26 @@
     <div class="container-fluid fruite py-5">
     <div class="container py-5" >
         <!-- <h1 class="mb-4">{{ Object.keys(prodCategory)[0].codename }}</h1> -->
-        <h1 class="mb-4">{{ catename }}</h1>
+        <h1 v-if="searchBigCode == 'A1'"class="mb-4">과자,스낵,쿠키</h1>
+        <h1 v-if="searchBigCode == 'A2'"class="mb-4">초콜릿,젤리,캔디,껌</h1>
+        <h1 v-if="searchBigCode == 'A3'"class="mb-4">라면,간식</h1>
+        <h1 v-if="searchBigCode == 'A4'"class="mb-4">음료,커피</h1>
         <div class="row g-4">
             <div class="col-lg-12">
                 <div class="row g-4">
                     <div class="col-xl-3">
-                        <div class="input-group w-100 mx-auto d-flex">
-                            <input type="search"  v-model="search" class="form-control p-3" placeholder="keywords" aria-describedby="search-icon-1">
-                            <span id="search-icon-1" class="input-group-text p-3"  @click="searchBtn"><i class="fa fa-search"></i></span>
-                        </div>
+               
                     </div>
                     <div class="col-6"></div>
                     <div class="col-xl-3">
                         <div class="bg-light ps-3 py-3 rounded d-flex justify-content-between mb-4">
                             <label for="fruits">Default Sorting:</label>
-                            <select id="fruits" name="fruitlist" class="border-0 form-select-sm bg-light me-3" form="fruitform">
-                                <option value="volvo">신상품</option>
-                                <option value="saab">상품명</option>
-                                <option value="opel">베스트</option>
-                                <option value="audi">높은가격</option>
-                                <option value="audi">낮은가격</option>
-
-                            </select>
+                            <select id="fruits" name="fruitlist" class="border-0 form-select-sm bg-light me-3"
+                                    form="fruitform" v-model="prodSort" @change="setSelect()">
+                                    <option v-for="option in sort" :value="option.value">
+                                     {{ option.text }}
+                                    </option>
+                                </select>
                         </div>
                     </div>
                 </div>
@@ -44,6 +42,10 @@
                                     </ul>
                                 </div>
                             </div>
+                        </div>
+                        <div class="input-group w-100 mx-auto d-flex">
+                            <input type="search"  v-model="search" class="form-control p-3" placeholder="keywords" aria-describedby="search-icon-1">
+                            <span id="search-icon-1" class="input-group-text p-3"  @click="searchBtn"><i class="fa fa-search"></i></span>
                         </div>
                     </div>
                     <div class="col-lg-9">
@@ -93,47 +95,51 @@ export	default {
                 page:{},
 	            pageUnit:9,
 	            search: '',
+                sort : [
+                    { text: '신상품', value: '1' },       
+                    { text: '상품명', value: '2' },
+                    { text: '높은가격', value: '3' },   
+                    { text: '낮은가격', value: '4' }     
+                ],
+                prodSort:''
         };
  	},
+     computed: {
+        loggedInUserId() {
+            return this.$store.getters.loggedInUserId;
+        }
+    },
  	created(){
         this.searchBigCode = this.$route.query.code ;
-        this.getBigCategory();
+        // this.getBigCategory();
         this.getProdCategoryCnt();
         this.goPage(1);
  	},
  	methods: {
         async goPage(page){
         let pageUnit = this.pageUnit;
-        let result = await axios.get(`/api/shop/bigcode/${this.searchBigCode}?pageUnit=${pageUnit}&page=${page}&search=${this.search}`)
+        let result = await axios.get(`/api/shop/bigcode/${this.searchBigCode}?pageUnit=${pageUnit}&page=${page}&search=${this.search}&sort=${this.prodSort}`)
         this.bigCategory = result.data.list;
-    
-        console.log(this.bigCategory[0],'daas');
-        console.log(this.bigCategory[0],'daas');
-
        
         console.log(this.page)
         this.page = this.pageCalc(page, result.data.count,5,pageUnit)
-    },
-        async getBigCategory()	{
-            console.log('searchCode',this.searchBigCode)
-            this.bigCategory = 
-                (await axios.get(`/api/shop/bigcode/${this.searchBigCode}`)).data
-            // .then(result=>console.log('sadas',result.list)))
-            console.log('dd',this.bigCategory);
+        },
+        setSelect(){
+            console.log('check',this.prodSort)
         },
         async getProdCategoryCnt()   {
         let result = await axios.get(`/api/shop/cnt`);
         console.log('갯수',result.data);
         this.prodCategoryCnt = result.data ;
-        this.catename=result.data[0].category_name;
-        console.log(this.catename,'catename')
         // console.log(result.data.catename,'1111111',result.data.list)
 
         },
         async goToDetail(no)	{
  	  	await this.$router.push({	name:"shopinfo",	query: { no:no }	});
  	 	},
-          gotoProd(code){
+        gotoProd(code){
+            this.codename = code;
+            console.log(this.codename,'ddddd')
             this.$router.push({   name:"prodBigcategory" , query: {code : code}});
         },
         getDateFormat(val )	{
@@ -154,7 +160,8 @@ export	default {
             }
             return nstr;
             },
-        gotoCart(no){
+        gotoCart(no,e){
+            if(this.loggedInUserId){
             axios.post(`/api/cart/cartInsert/${no}`, this.prodInfo.prod_no)
             .then(
                 Swal.fire({
@@ -168,12 +175,25 @@ export	default {
                     } else if (result.isDenied) {
                     }
                 })
-            )
+            )}
+            else{
+                Swal.fire({
+                    title: '로그인이 필요합니다.',
+                    icon: 'warning',
+                    confirmButtonText: '확인'
+                })
+               
+            }
         },
         searchBtn(){
 			this.goPage(1);
 		}
- 	},
+ 	}, 
+    watch : {
+        prodSort(){
+            this.goPage(1);
+        }
+    }
  	
 };
 </script>

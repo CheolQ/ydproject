@@ -49,7 +49,7 @@
                             </tbody>
                         </table>
                         <div class="button-container">
-                            <button @click="gotoCart" class="btn btn-warning">장바구니에 담기</button>
+                            <button @click="gotoCart" class="btn btn-warning" :disabled="!selectedProducts">장바구니에 담기</button>
                             <button @click="delAll" class="btn btn-danger">전체삭제</button>
                         </div>
                     </div>
@@ -81,6 +81,11 @@
         created(){
             this.goPage(1);
             //this.getWish();
+        },
+        computed: {
+            selectedProducts() {
+                return this.wish.some(a => a.selected);
+            }
         },
         methods : {
             async goPage(page){

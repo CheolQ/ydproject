@@ -1,7 +1,8 @@
 module.exports = {
         prodList: `SELECT prod_no, prod_name, category_code, prod_price, prod_explain, main_img, detail_img, maker, origin, exp_date
                     FROM prod
-                    where prod_name like ? 
+                    where prod_name like ?
+                    order by sort
                     limit ?,?`,
                 //     order by ??`,
         prodCount : `select count(*) cnt 
@@ -14,19 +15,48 @@ module.exports = {
 
         reviewList: `SELECT review_no, user_id, review_content, create_date, rating, review_title, prod_no, order_detail_no, order_no
                      FROM review 
+                     where prod_no = ? limit ? , ?`,
+
+        reviewCnt: `SELECT count(*) cnt
+                     FROM review 
                      where prod_no = ?`,
 
         reviewInfo: `SELECT review_no, user_id, review_content, create_date, rating, review_title, prod_no, order_detail_no, order_no
                      FROM review 
                      where review_no = ?`,
 
-        qnaList: `SELECT board_no, user_id, title, content, create_date, board_pw, update_date, user_no, prod_no   
-                  FROM qna 
-                  where prod_no = ?`,
+        qnaList: `select q.board_no,
+                        title, 
+                        create_date, 
+                        update_date,
+		        q.user_id,
+                        r.reply_no, 
+                        q.prod_no
+                from qna q
+	        left join reply r
+                on q.board_no = r.board_no
+                where prod_no = ? limit ? , ?`,
 
-        qnaInfo: `SELECT board_no, user_id, title, content, create_date, board_pw, update_date, user_no, prod_no   
-                 FROM qna 
-                 where board_no = ?`,
+        qnaCnt: `SELECT count(*) cnt
+                FROM qna 
+                where prod_no = ?`,
+
+        qnaInfo: `select p.prod_name,
+                     q.prod_no,
+                     p.prod_price, 
+                     p.main_img,
+                     q.board_no,
+                     q.title,  
+                     q.content, 
+                     q.create_date,
+                     r.reply_content,
+                     r.reply_create_date
+                 from qna q
+                 join prod p
+                 on q.prod_no = p.prod_no
+                 left join reply r
+                 on q.board_no = r.board_no
+                 where q.board_no = ?`,
 
         qnaInsert: `insert into qna set ?`,
 
@@ -39,6 +69,7 @@ module.exports = {
                                 left join category c
                                 on p.category_code = c.category_code
                         WHERE p.category_code = ? and prod_name like ?
+                        order by sort
                         limit ?,?`,
 
         prodCnt : ` SELECT count(*) cnt
@@ -65,6 +96,7 @@ module.exports = {
                         left join category c
                         on p.category_code = c.category_code
                         where pre_category = ? and prod_name like ?
+                        order by sort
                         limit ?,?`,
                 
         bigCateCnt : ` SELECT count(*) cnt

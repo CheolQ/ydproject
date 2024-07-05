@@ -7,24 +7,18 @@
         <div class="row g-4">
             <div class="col-lg-12">
                 <div class="row g-4">
-                    <div class="col-xl-3">
-                        <div class="input-group w-100 mx-auto d-flex">
-                            <input type="search"  v-model="search" class="form-control p-3" placeholder="keywords" aria-describedby="search-icon-1">
-                            <span id="search-icon-1" class="input-group-text p-3"  @click="searchBtn"><i class="fa fa-search"></i></span>
-                        </div>
+                    <div class="col-xl-3">           
                     </div>
                     <div class="col-6"></div>
                     <div class="col-xl-3">
                         <div class="bg-light ps-3 py-3 rounded d-flex justify-content-between mb-4">
                             <label for="fruits">Default Sorting:</label>
-                            <select id="fruits" name="fruitlist" class="border-0 form-select-sm bg-light me-3" form="fruitform">
-                                <option value="volvo">신상품</option>
-                                <option value="saab">상품명</option>
-                                <option value="opel">베스트</option>
-                                <option value="audi">높은가격</option>
-                                <option value="audi">낮은가격</option>
-
-                            </select>
+                            <select id="fruits" name="fruitlist" class="border-0 form-select-sm bg-light me-3"
+                                    form="fruitform" v-model="prodSort" @change="setSelect()">
+                                    <option v-for="option in sort" :value="option.value">
+                                     {{ option.text }}
+                                    </option>
+                                </select>
                         </div>
                     </div>
                 </div>
@@ -44,10 +38,15 @@
                                     </ul>
                                 </div>
                             </div>
+                            
+                        </div>
+                        <div class="input-group w-100 mx-auto d-flex">
+                            <input type="search"  v-model="search" class="form-control p-3" placeholder="keywords" aria-describedby="search-icon-1">
+                            <span id="search-icon-1" class="input-group-text p-3"  @click="searchBtn"><i class="fa fa-search"></i></span>
                         </div>
                     </div>
                     <div class="col-lg-9">
-                        <div class="row g-4 justify-content-center" v-if="smallCategory == []">
+                        <div class="row g-4 justify-content-center" v-if="smallCategory != null">
                             <div class="col-md-6 col-lg-6 col-xl-4" 
                             :key ="i" v-for ="(cate, i) in smallCategory" @click ="goToDetail(cate.prod_no)">
                                 <div class="rounded position-relative fruite-item" >
@@ -66,7 +65,8 @@
                         </div>
                         <div class="row g-4 justify-content-center" v-else>
                             <div class="col-md-6 col-lg-6 col-xl-4">
-                                <h1>상품없음</h1>
+                                <br>   <br>   <br>   <br>
+                                <h4>상품 준비 중입니다.</h4>
                              </div>           
                         </div>
                         
@@ -74,7 +74,7 @@
                 </div>
             </div>   
         </div>
-        <paging v-if="smallCategory == []" v-bind="page" @go-page="goPage"/>
+        <paging v-if="smallCategory != null" v-bind="page" @go-page="goPage"/>
     </div>
 </div>
 <!-- Fruits Shop End-->
@@ -99,44 +99,47 @@ export	default {
                 page:{},
 	            pageUnit:9,
 	            search: '',
+                sort : [
+                    { text: '신상품', value: '1' },       
+                    { text: '상품명', value: '2' },
+                    { text: '높은가격', value: '3' },   
+                    { text: '낮은가격', value: '4' }     
+                ],
+                prodSort:''
         };
- 	},
+ 	},     
+    computed: {
+        loggedInUserId() {
+            return this.$store.getters.loggedInUserId;
+        }
+    },
+    
  	created(){
         this.searchCode = this.$route.query.code ;
-        //this.getSmallCategory();    //소분류 검색
+        // this.getSmallCategory();    //소분류 검색
         this.getProdCategoryCnt();  //대분류 상품 갯수
         this.goPage(1);             // 페이징
  	},
  	methods: {
         async goPage(page){
         let pageUnit = this.pageUnit;
-        let result = await axios.get(`/api/shop/code/${this.searchCode}?pageUnit=${pageUnit}&page=${page}&search=${this.search}`)
+        let result = await axios.get(`/api/shop/code/${this.searchCode}?pageUnit=${pageUnit}&page=${page}&search=${this.search}&sort=${this.prodSort}`)
         if(result.data.list.length==0) {
             // 검색결과가 없는 경우
-
+            this.smallCategory = null;
             return;
         }
         this.smallCategory = result.data.list;
-        console.log(this.smallCategory,'ddddaas');
-        console.log(this.smallCategory[0],'daas');
-        console.log(result.data)
-        // this.codename=result.data.list[0].codename;
-        
-        // console.log(this.codename,'codename')
-        // console.log(result.data.list[0].codename,'1111111',result.data.list)
-        // console.log(this.page)
+        this.codename=result.data.list[0].codename;
         this.page = this.pageCalc(page, result.data.count,5,pageUnit)
-    },
-        async getSmallCategory()	{
-            console.log('searchCode',this.searchCode)
-            this.smallCategory =  
-                (await axios.get(`/api/shop/code/${this.searchCode}`))
-            // .then(result=>console.log('sadas',result.list)))
+        },
+        setSelect(){
+            console.log('check',this.prodSort)
         },
         async getProdCategoryCnt()   {
-        let result = await axios.get(`/api/shop/cnt`);
-        console.log('갯수',result.data[0]);
-        this.prodCategoryCnt = result.data ;
+            let result = await axios.get(`/api/shop/cnt`);
+            console.log('체크', result.data[0]);
+            this.prodCategoryCnt = result.data ;
         },
         async goToDetail(no)	{
  	  	await this.$router.push({	name:"shopinfo",	query: { no:no }	});
@@ -162,7 +165,8 @@ export	default {
             }
             return nstr;
             },
-        gotoCart(no){
+        gotoCart(no,e){
+            if(this.loggedInUserId){
             axios.post(`/api/cart/cartInsert/${no}`, this.prodInfo.prod_no)
             .then(
                 Swal.fire({
@@ -176,13 +180,24 @@ export	default {
                     } else if (result.isDenied) {
                     }
                 })
-            )
+            )}
+            else{
+                Swal.fire({
+                    title: '로그인이 필요합니다.',
+                    icon: 'warning',
+                    confirmButtonText: '확인'
+                })
+            }
         },
         searchBtn(){
 			this.goPage(1);
 		}
  	},
- 	
+     watch : {
+        prodSort(){
+            this.goPage(1);
+        }
+    }
 };
 </script>
 

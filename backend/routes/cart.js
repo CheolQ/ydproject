@@ -54,7 +54,7 @@ router.post('/', async (req, res) => {
     let result = req.body;
     let userNo = req.session.user_no;
     let cartList = await query('cartList', userNo);
-    console.log(cartList, '장바구니');
+    //console.log(cartList, '장바구니');
     let count = 0;
     result.forEach(function (a) {
         //장바구니에 넣어어야할 개수만큼 반복

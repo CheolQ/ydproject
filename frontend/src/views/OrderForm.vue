@@ -20,10 +20,12 @@
                         <div class="form-item">
                             <label class="form-label my-3">연락처<sup style="color: red;">*</sup></label>
                             <input type="tel" class="form-control" id="phone" v-model="phone">
+
                         </div>
                         <div class="form-item">
                             <label class="form-label my-3">이메일<sup style="color: red;">*</sup></label>
                             <input type="email" class="form-control" id="email" v-model="email">
+                            <p v-show="valid.email" class="input-error">이메일 주소를 정확히 입력해주세요.</p>
                         </div>
                         <div class="form-item">
                             <label class="form-label my-3">우편번호<sup style="color: red;">*</sup></label>
@@ -41,7 +43,7 @@
                             <input type="text" id="detailAddress" v-model="detailAddr" class="form-control" placeholder="상세주소">
                         </div>
                     </div>
-                    <div class="col-md-12 col-lg-6 col-xl-5">
+                    <div class="col-md-12 col-lg-6 col-xl-6">
                         <div>
                             <label style="font-size: large;">상품 정보</label>
                         </div>
@@ -148,11 +150,19 @@ export default {
             detailAddr: '',
             pointStatus: false, //포인트 안썼을때
             newUserInfo: false, //주문자의 정보가 다를때
-            deliveryCharge: 0 //배송비
+            deliveryCharge: 0, //배송비
+            valid: {
+                        email: false
+                    }
         };
     },
     computed: {
         ...mapGetters(['getCartInfo']), // Vuex 게터를 컴포넌트에 매핑
+    },
+    watch: {
+        'email': function() {
+            this.checkEmail()
+        }
     },
     created() {
         // const queryCart = this.$route.query.Cart;
@@ -203,6 +213,15 @@ export default {
                 this.newUserInfo = false;
                 this.getUser();
             }
+        },
+        checkEmail() {
+            //이메일 형식 검사
+            const validateEmail = /^[A-Za-z0-9_\\.\\-]+@[A-Za-z0-9\\-]+\.[A-Za-z0-9\\-]+/;
+
+            if(!validateEmail.test(this.email) || !this.email){
+                this.valid.email = true
+                return
+            }this.valid.email = false
         },
         inputCheck(){
             if (!this.name) {
