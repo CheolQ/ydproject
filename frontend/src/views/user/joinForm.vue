@@ -7,7 +7,7 @@
           <label for="username">아이디 <span class="required">*</span></label>
           <div class="username-wrapper">
             <input type="text" id="username" v-model="form.user_id" @input="resetUserIdState" placeholder="ID" required />
-            <button type="button" class="btn btn-secondary" @click="checkUserId">중복 체크</button>
+            <button type="button" class="btn border border-secondary rounded-pill px-3 text-primary" @click="checkUserId">중복 체크</button>
           </div>
           <span v-if="userIdError" class="error">{{ userIdError }}</span>
           <span v-if="userIdSuccess" class="success">{{ userIdSuccess }}</span>
@@ -32,14 +32,14 @@
           <label for="tel">전화번호 <span class="required">*</span></label>
           <div class="tel-wrapper">
             <input type="tel" id="tel" v-model="form.tel" placeholder="ex) 010-1111-1234" required />
-            <button type="button" @click="requestCertification">본인인증</button>
+            <!-- <button type="button" class="btn border border-secondary rounded-pill px-3 text-primary" @click="requestCertification">본인인증</button> -->
           </div>
         </div>
         <div class="form-group">
           <label for="postcode">우편번호 <span class="required">*</span></label>
           <div class="postcode-wrapper">
             <input type="text" id="postcode" v-model="form.postcode" ref="postcode" placeholder="우편번호를 입력하세요" required />
-            <button type="button" @click="showApi">검색</button>
+            <button type="button" class="btn border border-secondary rounded-pill px-3 text-primary" @click="showApi">검색</button>
           </div>
         </div>
         <div class="form-group">
@@ -50,9 +50,9 @@
           <label for="detailAddress">상세주소 <span class="required">*</span></label>
           <input type="text" id="detailAddress" v-model="form.detail_address" placeholder="상세주소" />
         </div>
-        <button type="button" class="join" @click="joinUser">회원가입</button>
+        <button type="button" class="btn border border-secondary rounded-pill px-3 text-primary" @click="joinUser">회원가입</button>
         <router-link to="/user/home">
-          <button type="button" class="cancel">취소</button>
+          <button type="button" class="btn border border-secondary rounded-pill px-3 text-primary">취소</button>
         </router-link>
       </form>
     </div>
@@ -60,8 +60,10 @@
 </template>
 
 
+
 <script>
 import axios from 'axios';
+import Swal from 'sweetalert2';
 
 export default {
   data() {
@@ -115,13 +117,25 @@ export default {
       // let specialCharacter = pw.search(/[`~!@@#$%^&*|₩₩₩'₩";:₩/?]/gi); //특수문자 혼합
 
       if (pw.length < 6 || pw.length > 20) {
-        alert("6자리 ~ 20자리 이내로 입력해주세요.");
+        Swal.fire({
+          icon: 'error',
+          title: '비밀번호 오류',
+          text: '6자리 ~ 20자리 이내로 입력해주세요.'
+        });
         return false;
       } else if (pw.search(/\s/) !== -1) {
-        alert("비밀번호는 공백 없이 입력해주세요.");
+        Swal.fire({
+          icon: 'error',
+          title: '비밀번호 오류',
+          text: '비밀번호는 공백 없이 입력해주세요.'
+        });
         return false;
       } else if (number < 0 || english < 0) {
-        alert("영문,숫자를 혼합하여 입력해주세요.");
+        Swal.fire({
+          icon: 'error',
+          title: '비밀번호 오류',
+          text: '영문, 숫자를 혼합하여 입력해주세요.'
+        });
         return false;
       } else {
         console.log("비밀번호 사용가능");
@@ -137,16 +151,33 @@ export default {
       let specialCharacter = checkedPw.search(/[`~!@@#$%^&*|₩₩₩'₩";:₩/?]/gi);
 
       if (checkedPw.length < 6 || checkedPw.length > 20) {
-        alert("6자리 ~ 20자리 이내로 입력해주세요.");
+        Swal.fire({
+          icon: 'error',
+          title: '비밀번호 오류',
+          text: '6자리 ~ 20자리 이내로 입력해주세요.'
+        });
         return false;
       } else if (checkedPw.search(/\s/) !== -1) {
-        alert("비밀번호는 공백 없이 입력해주세요.");
+        Swal.fire({
+          icon: 'error',
+          title: '비밀번호 오류',
+          text: '비밀번호는 공백 없이 입력해주세요.'
+        });
         return false;
       } else if (number < 0 || english < 0 || specialCharacter < 0) {
-        alert("영문,숫자, 특수문자를 혼합하여 입력해주세요.");
+        Swal.fire({
+          icon: 'error',
+          title: '비밀번호 오류',
+          text: '영문, 숫자, 특수문자를 혼합하여 입력해주세요.'
+        });
         return false;
       } else if (pw !== checkedPw) {
-        alert("비밀번호가 맞지 않습니다.")
+        Swal.fire({
+          icon: 'error',
+          title: '비밀번호 오류',
+          text: '비밀번호가 일치하지 않습니다.'
+        });
+        return false;
       } else {
         console.log("비밀번호 체크 사용가능");
         return true;
@@ -154,7 +185,11 @@ export default {
     },
     confirmPassword() {
       if (this.form.user_pw !== this.form.user_pw2) {
-        alert('비밀번호가 일치하지 않습니다.');
+        Swal.fire({
+          icon: 'error',
+          title: '비밀번호 오류',
+          text: '비밀번호가 일치하지 않습니다.'
+        });
         return false;
       }
       return true;
@@ -165,14 +200,22 @@ export default {
       const regExp = /^[a-z0-9_+.-]+@([a-z0-9-]+\.)+[a-z0-9]{2,4}$/
 
       if (email.search(/\s/) !== -1) {
-        alert("이메일은 공백 없이 입력해주세요.")
-        return false
+        Swal.fire({
+          icon: 'error',
+          title: '이메일 오류',
+          text: '이메일은 공백 없이 입력해주세요.'
+        });
+        return false;
       } else if (email.match(regExp) === null) {
-        alert("이메일 형식이 맞지 않습니다.")
-        return false
+        Swal.fire({
+          icon: 'error',
+          title: '이메일 오류',
+          text: '이메일 형식이 맞지 않습니다.'
+        });
+        return false;
       } else {
-        console.log("성공")
-        return true
+        console.log("성공");
+        return true;
       }
     },
     async requestCertification() {
@@ -191,10 +234,19 @@ export default {
       if (response.success) {
         // 인증 성공
         console.log('본인인증 성공:', response);
+        Swal.fire({
+          icon: 'success',
+          title: '본인인증 성공',
+          text: '본인인증에 성공했습니다.'
+        });
       } else {
         // 인증 실패
         console.error('본인인증 실패:', response);
-        alert('본인인증에 실패했습니다. 다시 시도해주세요.');
+        Swal.fire({
+          icon: 'error',
+          title: '본인인증 실패',
+          text: '본인인증에 실패했습니다. 다시 시도해주세요.'
+        });
       }
     },
     async joinUser() {
@@ -215,11 +267,20 @@ export default {
 
       try {
         const result = await axios.post(url, param);
-        alert('회원가입에 성공하셨습니다');
-        this.$router.push('/user/login');
+        Swal.fire({
+          icon: 'success',
+          title: '회원가입 성공',
+          text: '회원가입에 성공하셨습니다.'
+        }).then(() => {
+          this.$router.push('/user/login');
+        });
       } catch (error) {
         console.error(error);
-        alert('회원가입에 실패하였습니다. 다시 시도해 주세요.');
+        Swal.fire({
+          icon: 'error',
+          title: '회원가입 실패',
+          text: '회원가입에 실패하였습니다. 다시 시도해 주세요.'
+        });
       }
     },
     showApi() {
@@ -321,7 +382,6 @@ export default {
 }
 
 .form-group button {
-  background-color: rgb(226, 133, 76);
   color: white;
   border: none;
   cursor: pointer;

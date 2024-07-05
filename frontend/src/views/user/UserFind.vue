@@ -25,6 +25,7 @@
 
 <script>
 import axios from 'axios';
+import Swal from 'sweetalert2';
 
 export default {
   data() {
@@ -42,13 +43,25 @@ export default {
         const userId = result.data.user_id;
         if (userId) {
           this.user_id = userId;
-          alert(`아이디는 ${userId}입니다.`);
+          Swal.fire({
+            icon: 'success',
+            title: '아이디 찾기 성공',
+            text: `아이디는 ${userId}입니다.`,
+          });
         } else {
-          alert('아이디를 찾을 수 없습니다. 다시 시도해 주세요.');
+          Swal.fire({
+            icon: 'error',
+            title: '아이디 찾기 실패',
+            text: '아이디를 찾을 수 없습니다. 다시 시도해 주세요.',
+          });
         }
       } catch (error) {
         console.error(error);
-        alert('아이디 찾기에 실패하였습니다. 다시 시도해 주세요.');
+        Swal.fire({
+          icon: 'error',
+          title: '오류',
+          text: '아이디 찾기에 실패하였습니다. 다시 시도해 주세요.',
+        });
       }
     },
     async findPassword() {
@@ -57,11 +70,19 @@ export default {
         if (result.data.success) {
           this.$router.push({ name: 'NewPwInsert', query: { user_id: this.user_id, tel: this.telPw } });
         } else {
-          alert('비밀번호를 초기화할 수 없습니다. 다시 시도해 주세요.');
+          Swal.fire({
+            icon: 'error',
+            title: '비밀번호 초기화 실패',
+            text: '비밀번호를 초기화할 수 없습니다. 다시 시도해 주세요.',
+          });
         }
       } catch (error) {
         console.error(error);
-        alert('비밀번호 찾기에 실패하였습니다. 다시 시도해 주세요.');
+        Swal.fire({
+          icon: 'error',
+          title: '오류',
+          text: '비밀번호 찾기에 실패하였습니다. 다시 시도해 주세요.',
+        });
       }
     }
   }
