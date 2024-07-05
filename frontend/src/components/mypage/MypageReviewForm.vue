@@ -31,8 +31,10 @@
                     <input type="file" id="files" @change="handleFileUpload">
                 </div>
                 <div class="form-actions">
-                    <button type="button" @click="insertReviewHandler">등록</button>
-                    <button type="button" @click="goBack">취소</button>
+                    <button type="button" class="btn border border-secondary rounded-pill px-3 text-primary"
+                        @click="insertReviewHandler">등록</button>
+                    <button type="button" class="btn border border-secondary rounded-pill px-3 text-primary"
+                        @click="goBack">취소</button>
                 </div>
             </form>
         </div>

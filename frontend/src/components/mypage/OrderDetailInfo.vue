@@ -141,8 +141,11 @@
                 <li class="bul_item_dot font_size_xxs fc_light_gray">적립금은 결제이후 예상적립금이 안내됩니다.</li>
             </ul>
         </div>
-        <button class="btn btn-primary" @click="repurchaseHandler"> 재구매</button>
-        <button class="btn btn-primary" @click="moveToOrderHistory"> 주문목록</button>
+        <button class="btn border border-secondary rounded-pill px-3 text-primary" style="margin-right: 10px;"
+            @click="repurchaseHandler">
+            재구매</button>
+        <button class="btn border border-secondary rounded-pill px-3 text-primary" @click="moveToOrderHistory">
+            주문목록</button>
     </div>
 </template>
 
