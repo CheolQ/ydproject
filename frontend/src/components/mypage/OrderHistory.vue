@@ -8,7 +8,7 @@
                         <tr>
                             <th>번호</th>
                             <th>주문일</th>
-                            <th>상품명</th>
+                            <th style="width: 250px;">상품명</th>
                             <th>결제금액</th>
                             <th>주문처리상태</th>
                             <th>주문상세</th>
