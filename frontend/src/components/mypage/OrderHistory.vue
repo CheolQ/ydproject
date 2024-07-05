@@ -251,7 +251,7 @@ table tbody tr:hover {
 }
 
 .btn-primary {
-    background-color: #007bff;
+    /* background-color: #007bff; */
     color: #fff;
 }
 
