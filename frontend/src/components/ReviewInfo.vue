@@ -17,7 +17,7 @@
                 <i :key = "i" v-for="i in 5- reviewInfo.rating"class="fa fa-star"></i>
             </span>
                 <p>사진</p>
-                <img :src="`/img/prodImg/${reviewInfo.main_img}`" class="product-img" alt="Product Image">
+                <img :src="`/img/prodImg/${reviewImg.file_name}`" class="product-img" alt="Product Image">
 
                 <p>{{ reviewInfo.review_content }}</p>
             </div>
@@ -39,6 +39,7 @@ export default {
             reviewInfo: {},
             prodNo : '',
             prodInfo: {},
+            reviewImg:{}
         }
     },
     created() {
@@ -46,12 +47,20 @@ export default {
         this.prodNo = this.$route.query.prodNo;
         this.getReviewInfo();
         this.getProdInfo();
+        this.getReviewImg();
+
     },
     methods: {
         async getReviewInfo()	{
             console.log('aaa')
             this.reviewInfo = 
             (await axios.get(`/api/shop/reviewinfo/${this.no}`)).data[0];
+            console.log(this.reviewInfo,'reivewinfo')
+        },
+        async getReviewImg()	{
+            console.log('aaa')
+            this.reviewImg = 
+            (await axios.get(`/api/shop/reviewinfoimg/${this.no}`)).data[0];
             console.log(this.reviewInfo,'reivewinfo')
         },
         async getProdInfo()	{

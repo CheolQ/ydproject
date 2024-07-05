@@ -101,7 +101,7 @@ export	default {
                     { text: '높은가격', value: '3' },   
                     { text: '낮은가격', value: '4' }     
                 ],
-                prodSort:''
+                prodSort:'1'
         };
  	},
      computed: {
