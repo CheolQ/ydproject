@@ -42,7 +42,7 @@
                                   </div>
                                   <hr>
                                   <div class="qnbtn">
-                                  <button class="btn border-secondary px-4 py-3 text-uppercase text-primary marinleftjh" type="submit"> {{ isEdit ? '수정' : '등록' }}</button>
+                                    <button class="btn border-secondary px-4 py-3 text-uppercase btn-custom marinleftjh" type="submit">{{ isEdit ? '수정' : '등록' }} </button>
                                   <button class="btn border-secondary px-4 py-3 text-uppercase text-primary marinleftjh" type="button"  @click="goToList">목록</button>
                                 </div>
                             </div>
@@ -169,5 +169,10 @@ export default {
 }
 .qnbtn{
     text-align: center;
+}
+
+.btn-custom {
+    color: black !important; /* !important를 사용하여 우선 순위 부여 */
+    border-color: #6c757d; /* 기존 스타일 유지 */
 }
 </style>
