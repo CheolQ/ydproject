@@ -49,7 +49,7 @@
                                     </td> -->
                                 <td scope="row">
                                     <div class="align-items-center">
-                                        <img :src="`/api/upload/${cart.main_img}`" @click="gotoProdInfo(cart.prod_no)" class="img-fluid rounded-circle"
+                                        <img :src="`/img/prodImg/${cart.main_img}`" @click="gotoProdInfo(cart.prod_no)" class="img-fluid rounded-circle"
                                             style="width: 90px; height: 90px;">
                                     </div>
                                 </td>

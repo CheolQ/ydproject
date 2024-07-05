@@ -63,7 +63,7 @@
                                         <tr v-for="c in selectedCart">
                                             <td scope="row">
                                                 <div class="align-items-center">
-                                                    <img :src="`/api/upload/${c.main_img}`"
+                                                    <img :src="`/img/prodImg/${c.main_img}`"
                                                         class="img-fluid me-5 rounded-circle"
                                                         style="width: 90px; height: 90px;">
                                                 </div>
