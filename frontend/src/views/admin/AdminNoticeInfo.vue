@@ -26,13 +26,11 @@
                         <tr>
                             <td scope ="col" class="text-center"  colspan="7">
                                 <span>{{noticeInfo.content }}</span>
-                                <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
-                                    <div class="carousel-inner">
-                                        <div class="carousel-item active" v-for="(image, index) in images" :key="index">
-                                            <img :src="`/api/upload/notice/${image.file_name}`" class="d-block w-100" alt="...">
-                                        </div>
-                                    </div>
-                                </div>
+                                <Carousel :autoplay="3000" :wrap-around="true">
+                                    <Slide v-for="(image, index) in images" :key="index">
+                                        <img :src="`/api/upload/notice/${image.file_name}`" class="d-block w-100" alt="...">
+                                    </Slide>
+                                </Carousel>
                             </td>
                         </tr>
                     </tbody>               
@@ -48,12 +46,16 @@
 <script>
 import Paging from "../../mixin";
 import axios from 'axios';
-
+import { Carousel,Slide } from 'vue3-carousel'
+import 'vue3-carousel/dist/carousel.css'
 import ContentHeader from '@/components/admin/ContentHeader.vue'
 export default {
     mixins : [Paging],
+    name: 'Autoplay',
     components: {
-        ContentHeader
+        ContentHeader,
+        Carousel,
+        Slide,
     },
     data() {
         return{
