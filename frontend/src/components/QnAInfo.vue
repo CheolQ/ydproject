@@ -21,8 +21,6 @@
             </div>
         </div>
         <div class="buttons">
-            <button v-if="qnaInfo.reply_create_date == null" @click="editQna">수정</button>
-            <button v-if="qnaInfo.reply_create_date == null" @click="deleteQna">삭제</button>
             <button @click="goBack">돌아가기</button>
         </div>
     </div>
@@ -30,26 +28,21 @@
 
 <script>
 import axios from 'axios';
-import Swal from "sweetalert2";
 
 export default {
+    props : ['no', 'prodNo'],
     data() {
         return {
-            no: '',
             qnaInfo: {},
-            prodNo : '',
             prodInfo: {},
         }
     },
     created() {
-        this.no = this.$route.query.no;
-        this.prodNo = this.$route.query.prodNo;
         this.getQnaInfo();
         this.getProdInfo();
     },
     methods: {
         async getQnaInfo()	{
-            console.log('aaa')
             this.qnaInfo = 
             (await axios.get(`/api/shop/qnainfo/${this.no}`)).data[0];
             console.log(this.qnaInfo,'qnainfo')
@@ -69,7 +62,7 @@ export default {
             return nstr;
         },
         goBack() {
-            this.$router.go(-1);
+            this.$emit('goToList');
         }
     }
 }
