@@ -17,10 +17,27 @@
                         <i :key="i" v-for="(i) in review.rating" class="fa fa-star text-secondary"></i>
                         <i :key="i" v-for="(i) in 5 - review.rating" class="fa fa-star"></i>
                     </span>
-                    <div v-for="v in files">
-                        <img :src="`/api/upload/review/${v.file_name}`" alt="">
+                    <div class="Wrapper">
+                        <span v-on:click="pre" v-bind:class="{ hidden: selected == 1 }">
+                            <i class="fas fa-chevron-circle-left fa-2x left"></i>
+                        </span>
+                        <!-- <div v-for="(v, idx) in files" class="image"
+                            v-bind:style="{ 'transform': 'translate(-' + (selected - 1) * 300 + 'px, 0px)' }">
+                            <img :src="`/api/upload/review/${v.file_name}`" alt="">
+                        </div> -->
+                        <div class="imageContainer"
+                            v-bind:style="{ transform: 'translate(-' + (selected - 1) * 200 + 'px, 0px)' }">
+                            <div v-for="v in files">
+                                <div class="image"
+                                    v-bind:style="{ 'background-image': 'url(' + `/api/upload/review/${v.file_name}` + ')' }">
+                                </div>
+                            </div>
+                        </div>
+                        <span v-on:click="next" v-bind:class="{ hidden: selected == length }">
+                            <i class="fas fa-chevron-circle-right fa-2x right"></i>
+                        </span>
+                        <p>{{ review.review_content }}</p>
                     </div>
-                    <p>{{ review.review_content }}</p>
                 </div>
             </div>
             <div class="buttons">
@@ -42,6 +59,8 @@ export default {
             review: {},
             no: 0,
             files: [],
+            selected: 1,
+            length: 0,
         }
     },
     created() {
@@ -54,8 +73,10 @@ export default {
         axios.get(`/api/mypage/getreviewimg/${this.no}`)
             .then(result => {
                 this.files = result.data
+                this.length = this.files.length;
                 console.log(this.files)
             })
+
     },
     methods: {
         numberFormat: function (number) {
@@ -88,6 +109,24 @@ export default {
                     alert('삭제완')
                     this.goBack();
                 })
+        },
+        next() {
+            if (this.selected == this.files.length) {
+                this.selected = 1;
+            } else {
+                this.selected = this.selected + 1;
+            }
+            //console.log(this.selected);
+        },
+        pre() {
+            if (this.selected == 1) {
+                //console.log(this.selected)
+                this.selected = this.files.length;
+            } else {
+                //console.log(this.selected)
+                this.selected = this.selected - 1;
+            }
+            //console.log(this.selected);
         }
     }
 }
@@ -191,5 +230,49 @@ export default {
 
 .buttons button:hover {
     background-color: #f0f0f0;
+}
+
+.Wrapper {
+    position: relative;
+    width: 200px;
+    height: 200px;
+    overflow: hidden;
+
+}
+
+.imageContainer {
+    display: flex;
+    transition: 0.6s;
+}
+
+.image {
+    height: 200px;
+    width: 200px;
+    background-size: cover;
+    background-position: center center;
+}
+
+.left {
+    position: absolute;
+    left: 5px;
+    top: 50%;
+    cursor: pointer;
+    z-index: 99;
+}
+
+.right {
+    position: absolute;
+    right: 5px;
+    top: 50%;
+    cursor: pointer;
+}
+
+svg {
+    z-index: 2;
+    color: rgba(0, 0, 0, 0.2);
+}
+
+.hidden {
+    display: none;
 }
 </style>

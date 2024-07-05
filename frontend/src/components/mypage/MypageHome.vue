@@ -31,7 +31,7 @@
                         <dt class="tot">총 주문금액</dt>
                         <dd class="tot"><strong>{{ user.total_order_price }}</strong>원</dd>
                         <dt>포 인 트</dt>
-                        <dd><a href="/shop/mypage.html?mypage_type=myreserve"><strong>{{ user.point }}</strong>원</a>
+                        <dd><strong>{{ user.point }}</strong>원
                         </dd>
                     </dl>
                 </div>
