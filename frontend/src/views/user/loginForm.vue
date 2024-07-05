@@ -13,8 +13,8 @@
           </div>
           <input type="button" @click="loginHandler" value="로그인" class="btn-primary" />
         </form>
-        <button id="naverIdLogin" class="btn-naver"> 네이버로 로그인</button>
-        <button @click="kakaoLogin" class="btn-kakao">카카오로 로그인</button>
+        <!-- <button id="naverIdLogin" class="btn-naver"> 네이버로 로그인</button> -->
+        <!-- <button @click="kakaoLogin" class="btn-kakao">카카오로 로그인</button> -->
       </div>
       <div class="divider"></div>
       <div class="login-right">
@@ -49,17 +49,17 @@ export default {
     }
   },
   created() {
-    // 카카오 SDK 초기화
-    if (!window.Kakao.isInitialized()) {
-      window.Kakao.init('8f90883ee7aceafe1ce44fb81519b379'); // YOUR_APP_KEY를 실제 앱 키로 교체
-    }
-    axios.get("/api/user/account")
-      .then(result => {
-        this.$store.commit('setUser', result.data);
-      })
-      .catch(err => {
-        console.log(err);
-      });
+    // // 카카오 SDK 초기화
+    // if (!window.Kakao.isInitialized()) {
+    //   window.Kakao.init('8f90883ee7aceafe1ce44fb81519b379'); // YOUR_APP_KEY를 실제 앱 키로 교체
+    // }
+    // axios.get("/api/user/account")
+    //   .then(result => {
+    //     this.$store.commit('setUser', result.data);
+    //   })
+    //   .catch(err => {
+    //     console.log(err);
+    //   });
     // 네이버 SDK 초기화
     // const naverLogin = new window.naver.LoginWithNaverId({
     //   clientId: "YOUR_NAVER_CLIENT_ID",
@@ -110,37 +110,37 @@ export default {
           this.$router.push('/user/login');
         });
     },
-    kakaoLogin() {
-      window.Kakao.Auth.login({
-        success: (authObj) => {
-          window.Kakao.API.request({
-            url: '/v2/user/me',
-            success: (res) => {
-              const kakaoAccount = res.kakao_account;
-              // 백엔드와 연동하여 사용자 정보 확인 및 저장
-              axios.post('/api/users/kakao-login', {
-                accessToken: authObj.access_token,
-                kakaoAccount
-              }).then(result => {
-                this.$store.commit('setUser', result.data);
-                this.$router.push('/user/home');
-              }).catch(err => {
-                console.log(err);
-                alert('카카오 로그인 실패');
-              });
-            },
-            fail: (error) => {
-              console.log(error);
-              alert('사용자 정보를 가져오는 데 실패했습니다.');
-            }
-          });
-        },
-        fail: (err) => {
-          console.log(err);
-          alert('카카오 로그인 실패');
-        }
-      });
-    },
+    // kakaoLogin() {
+    //   window.Kakao.Auth.login({
+    //     success: (authObj) => {
+    //       window.Kakao.API.request({
+    //         url: '/v2/user/me',
+    //         success: (res) => {
+    //           const kakaoAccount = res.kakao_account;
+    //           // 백엔드와 연동하여 사용자 정보 확인 및 저장
+    //           axios.post('/api/users/kakao-login', {
+    //             accessToken: authObj.access_token,
+    //             kakaoAccount
+    //           }).then(result => {
+    //             this.$store.commit('setUser', result.data);
+    //             this.$router.push('/user/home');
+    //           }).catch(err => {
+    //             console.log(err);
+    //             alert('카카오 로그인 실패');
+    //           });
+    //         },
+    //         fail: (error) => {
+    //           console.log(error);
+    //           alert('사용자 정보를 가져오는 데 실패했습니다.');
+    //         }
+    //       });
+    //     },
+    //     fail: (err) => {
+    //       console.log(err);
+    //       alert('카카오 로그인 실패');
+    //     }
+    //   });
+    // },
     logoutHandler() {
       axios.post("/api/users/logout")
         .then(() => {
@@ -228,20 +228,23 @@ export default {
 #login-form>.btn-primary {
   color: #fff;
   font-size: 16px;
-  background-color: #6a24fe;
+  background-color: rgb(255, 181, 36);
   cursor: pointer;
   transition: background-color 0.3s;
   margin-top: 20px;
   width: 100%;
   height: 48px;
-  border-radius: 6px;
+  border-radius: 6px;  
+  border: none;
+  font-size: 16px;
+  font-weight: bold;
 }
 
 #login-form>.btn-primary:hover {
-  background-color: #5b1fe3;
+  background-color: #ffd16f;
 }
 
-.btn-naver,
+/* .btn-naver,
 .btn-kakao {
   width: 100%;
   height: 48px;
@@ -259,7 +262,7 @@ export default {
 }
 
 .btn-naver:hover {
-  background-color: #18b200;
+  background-color: #ff0000;
 }
 
 .btn-kakao {
@@ -269,7 +272,7 @@ export default {
 
 .btn-kakao:hover {
   background-color: #e8d600;
-}
+} */
 
 .divider {
   width: 1px;
@@ -296,17 +299,17 @@ export default {
 }
 
 .btn-success {
-  background-color: #6a24fe;
+  background-color: rgb(255, 181, 36);
   color: #fff;
   border: none;
 }
 
 
 .btn-success:hover {
-  background-color: #5b1fe3;
+  background-color: rgb(255, 181, 36);
 }
 
 .btn:hover {
-  background-color: #f0f0f0;
+  background-color: #ffd16f;
 }
 </style>
