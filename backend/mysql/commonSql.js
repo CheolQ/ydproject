@@ -24,7 +24,7 @@ module.exports = {
                                 FROM
                                   category
                                 WHERE
-                                  category_code = ?
+                                  category_code like ?
                                 UNION ALL
                                 SELECT
                                   c.category_code
