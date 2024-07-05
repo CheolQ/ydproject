@@ -28,7 +28,7 @@
                 </div>
                 <div class="form-group">
                     <label for="files">첨부파일</label>
-                    <input type="file" id="files" @change="handleFileUpload">
+                    <input type="file" id="files" @change="handleFileUpload" multiple>
                 </div>
                 <div class="form-actions">
                     <button type="button" class="btn border border-secondary rounded-pill px-3 text-primary"
@@ -235,7 +235,7 @@ button {
 }
 
 button[type="submit"] {
-    background-color: #007bff;
+    /* background-color: #007bff; */
     color: white;
 }
 
