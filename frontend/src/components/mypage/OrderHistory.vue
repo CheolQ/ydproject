@@ -24,11 +24,12 @@
                             <td>{{ numberFormat(v.pay_price) }}원</td>
                             <td>{{ getCodeMeaning(v.order_status) }}</td>
                             <td>
-                                <button class="btn btn-primary btn-sm"
+                                <button class="btn border border-secondary rounded-pill px-3 text-primary"
                                     @click="orderInfoHandler(v.order_no)">주문상세</button>
                             </td>
                             <td>
-                                <button v-if="v.order_status == 'D1'" class="btn btn-primary btn-sm"
+                                <button v-if="v.order_status == 'D1'"
+                                    class="btn border border-secondary rounded-pill px-3 text-primary"
                                     @click="applyOrderCancel(v.order_no)">주문취소</button>
                             </td>
                         </tr>
