@@ -15,8 +15,10 @@
                 <span style="float: left" v-if="reviewInfo.rating != undefined">
                 <i :key = "i" v-for="i in reviewInfo.rating" class="fa fa-star text-secondary"></i>
                 <i :key = "i" v-for="i in 5- reviewInfo.rating"class="fa fa-star"></i>
-            </span>
+                </span>
+                <div v-if="reviewImg != undefined">  
                 <img :src="`/img/prodImg/${reviewImg.file_name}`" class="product-img" alt="Product Image">
+            </div>
 
                 <p>{{ reviewInfo.review_content }}</p>
             </div>
@@ -60,7 +62,9 @@ export default {
             console.log('aaa')
             this.reviewImg = 
             (await axios.get(`/api/shop/reviewinfoimg/${this.no}`)).data[0];
-            console.log(this.reviewInfo,'reivewinfo')
+            console.log(this.reviewInfo,'imgreivewinfo')
+            console.log(this.reviewImg,'i사진있니mgreivewinfo')
+
         },
         async getProdInfo()	{
             this.prodInfo = 
