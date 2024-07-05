@@ -16,12 +16,19 @@ module.exports = {
                 and (DATE_FORMAT(hiredate, '%Y-%m-%d') > ? and DATE_FORMAT(hiredate, '%Y-%m-%d') < ?)
                 and resp like ?
                 limit ?, ?`,
-    userModalQna: `select (select prod_name
+    userModalQna: `select board_no, (select prod_name
                            from prod
                            where prod_no = qna.prod_no) as prod_name,
                            title, create_date
                    from qna
                    where user_id = ?
                    limit 10`,
-    userModalReview: ``                           
+    userModalReview: `select review_no, review_title, rating,
+                            (select prod_name
+                            from prod
+                            where prod_no = review.prod_no) as prod_name, 
+                            create_date
+                      from review
+                      where user_id
+                      limit 10`                           
 }

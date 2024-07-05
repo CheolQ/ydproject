@@ -8,11 +8,11 @@
                         <th class="thwidth">제목</th>
                         <td scope ="col"  colspan="4">{{noticeInfo.title }}</td>
                         <th class ="thwidth">작성일</th>
-                        <td scope ="col"class ="thwidth">{{getDateFormat(noticeInfo.create_date) }}</td>
+                        <td scope ="col" class="thwidth">{{getDateFormat(noticeInfo.create_date) }}</td>
                     </tr>
                     <tr>
                         <th>작성자</th>
-                        <td scope ="col" class ="dd" colspan="6">{{noticeInfo.user_id }}</td>                 
+                        <td scope ="col" class="dd" colspan="6">{{noticeInfo.user_id }}</td>                 
                     </tr>
                     <tr>
                         <th>첨부파일</th>
@@ -25,13 +25,11 @@
                     <tr>
                         <td scope ="col" class="text-center"  colspan="7">
                             <span>{{noticeInfo.content }}</span>
-                            <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
-                                <div class="carousel-inner">
-                                    <div class="carousel-item active" v-for="(image, index) in images" :key="index">
-                                        <img :src="`/api/upload/notice/${image.file_name}`" class="d-block w-100" alt="...">
-                                    </div>
-                                </div>
-                            </div>
+                            <Carousel :autoplay="3000" :wrap-around="true">
+                                <Slide v-for="(image, index) in images" :key="index">
+                                    <img :src="`/api/upload/notice/${image.file_name}`" class="d-block w-100" alt="...">
+                                </Slide>
+                            </Carousel>
                         </td>
                     </tr>
                 </tbody>               
@@ -44,8 +42,15 @@
 </template>
 
 <script	>
+import { Carousel,Slide } from 'vue3-carousel'
+import 'vue3-carousel/dist/carousel.css'
 import axios from "axios";
 export	default {
+    name: 'Autoplay',
+    components: {
+        Carousel,
+        Slide
+    },
  	data ()	{
  	 return {
  	    searchNo:"",
