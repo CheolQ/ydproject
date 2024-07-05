@@ -60,7 +60,6 @@
 import axios from "axios";
 import review from '@/components/Review.vue'
 import Swal from "sweetalert2";
-// import QnaInfo from "@/components/QnAInfo.vue";
 
 export	default {
     components:{review},
