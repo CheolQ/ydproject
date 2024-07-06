@@ -12,7 +12,7 @@ module.exports = {
                             having prod_name like ?) as orders
                       where (DATE_FORMAT(orders.order_date, '%Y-%m-%d') >= ? and DATE_FORMAT(orders.order_date, '%Y-%m-%d') <= ?)                    
                       and orders.order_status = ? or orders.order_status = ?`, 
-    AdminOrderList: `select DISTINCT od.order_no, od.order_date, od.user_no, od.pay_price, od.order_status,
+    AdminOrderList: `select DISTINCT od.order_no, od.order_date, od.user_no, od.pay_price, od.order_status, od.pay_no,
 		             substring_index(group_concat(
 		                                    (select prod_name
 									         from prod
@@ -91,11 +91,17 @@ module.exports = {
                             group by od.order_no, od.order_date, od.user_no, od.pay_price, od.order_status
                             limit ?, ? `,
     AdminOrderCancel1: `update orders set
-                       order_status = 'D3'
-                       where order_no = ?`,
+                        order_status = 'D3'
+                        where order_no = ?`,
     AdminOrderCancel2: `update order_cancel set
                         cal_up = now()
                         where order_no = ?`,
+    AdminOrderCancel3: `select point, use_point, user_no
+                        from orders
+                        where order_no = ?`,                    
+    AdminOrderCancel4: `update user set
+                        point = point + ? - ?
+                        where user_no = ?`,                    
     AdminOrderCancelDate: `select  cal_up, cal_at
                            from order_cancel
                            where order_no = ?;`                                                       

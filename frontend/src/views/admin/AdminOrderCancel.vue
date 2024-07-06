@@ -29,7 +29,7 @@
                             <td v-if="od.cnt > 1">{{ od.prod_name }} 외 {{ od.cnt -1}} 건</td>
                             <td v-else>{{ od.prod_name}}</td>
                             <td>{{ getNumberFormat(od.pay_price) }}</td>
-                            <td v-if="od.order_status === 'D2'" @click="statusBtn(od.order_no)"><button class="btn btn-primary btn-sm">주문취소 요청</button></td>
+                            <td v-if="od.order_status === 'D2'" @click="statusBtn(od.order_no, od.pay_no)"><button class="btn btn-primary btn-sm">주문취소 요청</button></td>
                             <td v-else-if="od.order_status === 'D3'">주문취소</td>
                             <td><button type="button" class="btn btn-primary btn-sm" @click="orderInfo(od.order_no, od.order_status)">조회</button></td>
                         </tr>
@@ -90,7 +90,7 @@ export default {
             this.$refs.reset_com.test2();
             this.goPage(1);
         },
-        async statusBtn(no){
+        async statusBtn(no, pay){
             const getToken = {
                 method: 'post',
                 url: '/v1/users/getToken',
@@ -111,7 +111,7 @@ export default {
                         'Content-Type': 'application/json', 
                         Authorization: data.response.access_token,
                     },    
-                    data: { merchant_uid: 'merchant_16340867' }
+                    data: { merchant_uid: pay }
                 };
 
                 try{

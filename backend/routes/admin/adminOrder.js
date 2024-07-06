@@ -97,8 +97,14 @@ router.get("/cancel", async (req, res) => {
 })
 
 router.post("/cancel/:no", async (req, res)=>{
+
     await query("AdminOrderCancel1", req.params.no);
     await query("AdminOrderCancel2", req.params.no);
+    let result = await query("AdminOrderCancel3", req.params.no);
+    let point = result[0].point;
+    let use_point = result[0].use_point;
+    let user_no = result[0].user_no
+    await query("AdminOrderCancel4", [use_point, point, user_no]);
     res.send("ok");
 })
 
