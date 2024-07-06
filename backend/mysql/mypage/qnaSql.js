@@ -16,6 +16,16 @@ module.exports = {
                         where user_id = ? limit ? , ?
                     );`,
 
+    countUserOrderList2: `
+                    select count(*) as cnt
+                    from orders 
+                    where user_no = 
+                        (
+                            select user_no
+                            from user
+                            where user_id = ?
+                        )`,
+
     countUserQna: `
                     select count(*) as cnt 
                     from qna
