@@ -1,27 +1,36 @@
-//카테고리
-const categorysql = require('./commonSql');
 //유저
+// 메인페이지
+const mainSql = require('./main/mainSql');
+const headerSql = require('./main/headerSql');
+// 주문
 const cartsql = require('./cartSql');
 const wishsql = require('./wishSql');
 const ordersql = require('./orderSql');
 
-
+// 상품
 const prodSql = require('./prodSql');
+// 공지사항
 const noticeSql = require('./noticeSql');
-const mypageSql = require('./mypageSql');
+
+// 마이페이지
+const mypageOrderSql = require('./mypage/orderSql');
+const mypageQnASql = require('./mypage/qnaSql');
+const mypageReviewSql = require('./mypage/reviewSql');
 
 //로그인 회원가입
 const userSql = require('./loginSql');
 
 //관리자
-const adminNotice = require('./admin/noticeSql')
-const adminQna = require('./admin/qnaSql')
-const adminOrder = require('./admin/orderSql')
-const adminMember = require('./admin/memberSql')
-const adminProd = require('./admin/prodSql')
+const adminNotice = require('./admin/noticeSql');
+const adminQna = require('./admin/qnaSql');
+const adminOrder = require('./admin/orderSql');
+const adminMember = require('./admin/memberSql');
+const adminProd = require('./admin/prodSql');
 
 module.exports = {
-    ...categorysql,
+    // 메인페이지
+    ...mainSql,
+    ...headerSql,
 
     ...cartsql,
     ...wishsql,
@@ -29,7 +38,11 @@ module.exports = {
 
     ...prodSql,
     ...noticeSql,
-    ...mypageSql,
+
+    // 마이페이지
+    ...mypageOrderSql,
+    ...mypageQnASql,
+    ...mypageReviewSql,
 
     //로그인,회원가입
     ...userSql,
@@ -40,10 +53,4 @@ module.exports = {
     ...adminMember,
     ...adminProd,
     ...adminNotice,
-
-    ...prodSql,
-    ...noticeSql,
-    ...mypageSql
-
-
 };
