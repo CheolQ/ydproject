@@ -278,7 +278,7 @@ export default {
             const IMP = window.IMP;
             IMP.init('imp81886801'); // 'your-imp-key'를 실제 포트원 키로 변경
 
-            // 주문번호 생성
+            // 주문번호 생성(주문한 시간)
             const today = new Date();
             const hours = today.getHours();
             const minutes = today.getMinutes();
@@ -380,7 +380,7 @@ export default {
         },
         points() {
             if (this.point === 0) {
-                //포인트 전액 시용할때 전액사용 버튼 다시 누르면 포인트 복구
+                //포인트 전액 사용할때 전액사용 버튼 다시 누르면 포인트 복구
                 this.pointStatus = false;
                 //현재 포인트가 0일때 원래 포인트로 복구
                 this.point = this.usePoint;

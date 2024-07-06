@@ -153,22 +153,18 @@ export default {
             this.getCart();
         },
         orderSel() {
-            let check = 0;
-            for(let i=0; i<this.cartList.length; i++){
-                if(this.cartList[i].selected){
-                    check = 1;
+            let count = 0;
+            let selectedCart = [];
+            this.cartList.forEach(a => {
+                if (a.selected) {
+                    selectedCart.push(a);
+                    count++;
                 }
-            }
-            if(check === 1){
-                let selectedCart = [];
-                this.cartList.forEach(a => {
-                    if (a.selected) {
-                        selectedCart.push(a);
-                    }
-                });
-                //console.log(selectedCart,'장바구니')
-                // this.$store.state.cart = selectedCart;
-                // console.log(this.$store.state.cart)
+            });
+            //console.log(selectedCart,'장바구니')
+            // this.$store.state.cart = selectedCart;
+            // console.log(this.$store.state.cart)
+            if(count > 0){
                 this.$store.commit('setCart', selectedCart)
                 this.$router.push({
                     name: 'orderForm',
