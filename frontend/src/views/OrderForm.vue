@@ -19,12 +19,12 @@
                         </div>
                         <div class="form-item">
                             <label class="form-label my-3">연락처<sup style="color: red;">*</sup></label>
-                            <input type="tel" class="form-control" id="phone" v-model="phone">
+                            <input type="tel" class="form-control" id="phone" v-model="phone" placeholder="ex) 010-0000-0000">
 
                         </div>
                         <div class="form-item">
                             <label class="form-label my-3">이메일<sup style="color: red;">*</sup></label>
-                            <input type="email" class="form-control" id="email" v-model="email">
+                            <input type="email" class="form-control" id="email" v-model="email" placeholder="ex) 영문자@email.com">
                             <p v-show="valid.email" class="input-error">이메일 주소를 정확히 입력해주세요.</p>
                         </div>
                         <div class="form-item">
@@ -169,22 +169,16 @@ export default {
         // const queryCart = this.$route.query.Cart;
         this.getUser(); //유저정보 오더폼에 뿌려주기
         const queryCart = JSON.stringify(this.getCartInfo);
-        console.log(queryCart)
-        console.log(this.getCartInfo);
+        //console.log(queryCart)
+        //console.log(this.getCartInfo);
         // console.log(this.$store.state.cart);
-        console.log(queryCart);
+        //console.log(queryCart);
         if (queryCart) {
             this.selectedCart = JSON.parse(queryCart);
         }
     },
     mounted() {
         this.discount();
-        if(this.totalPrice >= 50000){
-            this.deliveryCharge = 0
-        }else{
-            this.deliveryCharge = 2500
-        }
-        this.resultPrice = this.totalPrice + this.deliveryCharge;
     },
     methods: {
         getUser(){
@@ -219,46 +213,49 @@ export default {
             //이메일 형식 검사
             const validateEmail = /^[A-Za-z0-9_\\.\\-]+@[A-Za-z0-9\\-]+\.[A-Za-z0-9\\-]+/;
 
-            if(!validateEmail.test(this.email) || !this.email){
-                this.valid.email = true
-                return
-            }this.valid.email = false
+            this.valid.email = !validateEmail.test(this.email) || !this.email;
         },
         inputCheck(){
             if (!this.name) {
                 Swal.fire({
-                    html: "<b>이름을 입력하세요.</b>",
+                    html: "<b>이름을 입력하세요.</b>"
                 })
                 return false;
             }
             if (!this.phone) {
                 Swal.fire({
-                    html: "<b>연락처를 입력하세요.</b>",
-                })
+                    html: "<b>연락처를 입력하세요.</b>"
+                });
                 return false;
             }
             if (!this.email) {
                 Swal.fire({
-                    html: "<b>이메일을 입력하세요.</b>",
-                })
+                    html: "<b>이메일을 입력하세요.</b>"
+                });
+                return false;
+            }
+            if (this.valid.email) {
+                Swal.fire({ 
+                    html: "<b>이메일 형식을 지켜주세요.</b>" 
+                });
                 return false;
             }
             if (!this.pCode) {
                 Swal.fire({
-                    html: "<b>우편번호를 입력하세요.</b>",
-                })
+                    html: "<b>우편번호를 입력하세요.</b>"
+                });
                 return false;
             }
             if (!this.address) {
                 Swal.fire({
-                    html: "<b>주소를 입력하세요.</b>",
-                })
+                    html: "<b>주소를 입력하세요.</b>"
+                });
                 return false;
             }
             if (!this.detailAddr) {
                 Swal.fire({
-                    html: "<b>상세주소를 입력하세요.</b>",
-                })
+                    html: "<b>상세주소를 입력하세요.</b>"
+                });
                 return false;
             }
             return true;
@@ -378,24 +375,40 @@ export default {
             this.selectedCart.forEach(a => {
                 this.totalPrice += Number(a.prod_price * a.cnt);
             });
+            //배송비랑 결제금액 계산해서
+            this.finalPrice();
         },
         points() {
             if (this.point === 0) {
+                //포인트 전액 시용할때 전액사용 버튼 다시 누르면 포인트 복구
                 this.pointStatus = false;
                 //현재 포인트가 0일때 원래 포인트로 복구
                 this.point = this.usePoint;
                 //사용한 포인트를 초기화
                 this.usePoint = 0;
                 //결제 후 총 금액 업데이트
-                this.resultPrice = this.totalPrice - this.usePoint;
+                //this.resultPrice = this.totalPrice - this.usePoint;
             } else {
                 //전액 사용 버튼을 다시 클릭했을때 포인트 전액 사용하는거
                 this.pointStatus = true;
-                this.usePoint = this.point;
+                this.usePoint = this.point; //포인트 전액 사용
                 this.point = 0;
-                this.resultPrice = this.totalPrice - this.usePoint;
+                //this.resultPrice = this.totalPrice - this.usePoint;
             }
-            
+            //포인트 적용하고 결제 금액
+            this.finalPrice();
+        },
+        finalPrice(){
+            //포인트 사용하고 결제 금액
+            let PointafterPrice = this.totalPrice -  this.usePoint;
+            //배송비 계산(원래 mounted에 있었는데 배송비가 계속 빠져있어서 함수 새로 만듦)
+            if(this.totalPrice >= 50000){
+                this.deliveryCharge = 0
+            }else{
+                this.deliveryCharge = 2500
+            }
+            //포인트 적용 후에 배송비 더한 금액이 resultPrice
+            this.resultPrice = PointafterPrice + this.deliveryCharge;
         },
         formatPrice(price) {
             return price.numberFormat();
