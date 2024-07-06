@@ -90,13 +90,47 @@ export default {
             this.$refs.reset_com.test2();
             this.goPage(1);
         },
-        statusBtn(no){
-            axios.post(`/api/adminOrder/cancel/${no}`)
-            .then(() =>{
-                this.goPage(1);
-            })
-            .catch(err => console.log(err))
+        async statusBtn(no){
+            const getToken = {
+                method: 'post',
+                url: '/v1/users/getToken',
+                headers: {'Content-Type': 'application/json'},
+                data: {
+                    imp_key: process.env.VUE_APP_IMP_KEY,
+                    imp_secret: process.env.VUE_APP_IMP_SECRET
+                }
+            };
+
+            try {
+                const { data } = await axios.request(getToken)
+
+                const prodCancel = {
+                    method: 'post',
+                    url: '/v1/payments/cancel',
+                    headers: {
+                        'Content-Type': 'application/json', 
+                        Authorization: data.response.access_token,
+                    },    
+                    data: { merchant_uid: 'merchant_16340867' }
+                };
+
+                try{
+                    const { data } = axios.request(prodCancel);
+                    console.log(data);
+                } catch(error){
+                    console.log(error)
+                }
+
+                axios.post(`/api/adminOrder/cancel/${no}`)
+                .then(() =>{
+                    this.goPage(1);
+                })
+                .catch(err => console.log(err))
+            } catch (error) {
+                console.error(error);
+            }
         },
+
         searchfrom(name, date1, date2, category){
             this.name = name;
             this.date1 = date1;
