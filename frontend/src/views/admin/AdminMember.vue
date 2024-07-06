@@ -31,7 +31,7 @@
                             <td>{{getNumberFormat(user.point)}}p</td>
                             <td>{{ getNumberFormat(user.price) }}</td>
                             <td>{{getDateFormat(user.hiredate)}}</td>
-                            <td><button @click="modalOpen(user.user_id)" class="btn btn-primary">조회</button></td>
+                            <td><button @click="modalOpen(user.user_id)" class="btn btn-primary btn-sm">조회</button></td>
                         </tr>
                     </tbody>
                 </table>
