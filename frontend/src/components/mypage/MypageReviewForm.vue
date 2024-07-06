@@ -2,6 +2,14 @@
     <div>
         <div class="review-container">
             <h5 id="mypage-sub">후기작성</h5>
+            <div class="product-info" @click="goToDetail(prod.prod_no)">
+                <img :src="`/img/prodImg/${prod.main_img}`" alt="Product Image" class="product-img">
+                <div class="product-details">
+                    <p>상품명: {{ prod.prod_name }}</p>
+                    <p>상품가격: {{ numberFormat(prod.prod_price) }}원</p>
+                </div>
+            </div>
+            <hr>
             <form>
                 <div class="form-group">
                     <label for="title">제목</label>
@@ -51,19 +59,25 @@ export default {
                 rating: 0
             },
             files: [],
-            no: 0
+            no: 0,
+            prod: {}
 
         }
     },
     created() {
         // order_no
-        console.log(this.$route.query.orderno);
+        // console.log(this.$route.query.orderno);
         // order_detail_no
-        console.log(this.$route.query.orderdetailno);
+        // console.log(this.$route.query.orderdetailno);
         this.review.order_no = Number(this.$route.query.orderno);
         this.review.order_detail_no = Number(this.$route.query.orderdetailno);
         this.review.prod_no = Number(this.$route.query.prodno);
         this.review.user_id = this.$route.query.id;
+
+        axios.get(`/api/shop/${this.review.prod_no}`)
+            .then(result => {
+                this.prod = result.data[0];
+            })
     },
     methods: {
         insertReviewHandler: function () {
@@ -112,6 +126,16 @@ export default {
                 })
                 .catch(err => { console.log(err) })
         },
+        numberFormat: function (number) {
+            if (number == 0)
+                return 0;
+            let regex = /(^[+-]?\d+)(\d{3})/;
+            let nstr = (number + '');
+            while (regex.test(nstr)) {
+                nstr = nstr.replace(regex, '$1' + ',' + '$2');
+            }
+            return nstr;
+        },
 
         handleFileUpload(e) {
             Array.from(e.target.files).forEach(file => {
@@ -132,6 +156,9 @@ export default {
         },
         goBack() {
             this.$router.go(-1);
+        },
+        async goToDetail(no) {
+            await this.$router.push({ name: "shopinfo", query: { no: no } });
         }
 
 
@@ -139,7 +166,7 @@ export default {
 }
 </script>
 
-<style scope>
+<style scoped>
 body {
     font-family: Arial, sans-serif;
 }
@@ -226,21 +253,34 @@ textarea {
     gap: 10px;
 }
 
-button {
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
+.product-info {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    /* 간격 줄이기 */
+}
+
+.product-img {
+    width: 100px;
+    /* 크기 조정 */
+    height: 100px;
+    /* 크기 조정 */
+    object-fit: cover;
+    border-radius: 8px;
+    margin-right: 15px;
+    /* 간격 줄이기 */
+}
+
+.product-details {
+    flex-grow: 1;
+    text-align: right;
+    /* 오른쪽 정렬 */
+}
+
+.product-details p {
+    margin: 0 0 5px 0;
+    /* 간격 줄이기 */
     font-size: 16px;
-}
-
-button[type="submit"] {
-    /* background-color: #007bff; */
-    color: white;
-}
-
-button[type="reset"] {
-    background-color: #6c757d;
-    color: white;
+    color: #333;
 }
 </style>

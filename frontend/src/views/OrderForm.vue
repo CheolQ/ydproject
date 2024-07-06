@@ -11,7 +11,8 @@
                         </div>
                         <div class="form-item d-flex justify-content-end align-items-center">
                             <input type="checkbox" class="me-2" @change="resetHandler">
-                            <label class="form-label my-3" style="font-size: smaller; margin-top: auto;">새로운 배송지로 설정</label>
+                            <label class="form-label my-3" style="font-size: smaller; margin-top: auto;">새로운 배송지로
+                                설정</label>
                         </div>
                         <div class="form-item">
                             <label class="form-label my-3">이름<sup style="color: red;">*</sup></label>
@@ -19,28 +20,34 @@
                         </div>
                         <div class="form-item">
                             <label class="form-label my-3">연락처<sup style="color: red;">*</sup></label>
-                            <input type="tel" class="form-control" id="phone" v-model="phone" placeholder="ex) 010-0000-0000">
+                            <input type="tel" class="form-control" id="phone" v-model="phone"
+                                placeholder="ex) 010-0000-0000">
 
                         </div>
                         <div class="form-item">
                             <label class="form-label my-3">이메일<sup style="color: red;">*</sup></label>
-                            <input type="email" class="form-control" id="email" v-model="email" placeholder="ex) 영문자@email.com">
+                            <input type="email" class="form-control" id="email" v-model="email"
+                                placeholder="ex) 영문자@email.com">
                             <p v-show="valid.email" class="input-error">이메일 주소를 정확히 입력해주세요.</p>
                         </div>
                         <div class="form-item">
                             <label class="form-label my-3">우편번호<sup style="color: red;">*</sup></label>
                             <div class="pCode-container">
-                                <input type="text" id="pCode" v-model="pCode" class="form-control" placeholder="우편번호" readonly>
-                                <input type="button" @click="execDaumPostcode()" value="우편번호 찾기" class="btn border border-secondary rounded-pill px-4 py-2 text-primary">
+                                <input type="text" id="pCode" v-model="pCode" class="form-control" placeholder="우편번호"
+                                    readonly>
+                                <input type="button" @click="execDaumPostcode()" value="우편번호 찾기"
+                                    class="btn border border-secondary rounded-pill px-4 py-2 text-primary">
                             </div>
                         </div>
                         <div class="form-item">
                             <label class="form-label my-3">주소<sup style="color: red;">*</sup></label>
-                            <input type="text" id="address" v-model="address" class="form-control" placeholder="주소" readonly><br>
+                            <input type="text" id="address" v-model="address" class="form-control" placeholder="주소"
+                                readonly><br>
                         </div>
                         <div class="form-item">
                             <label class="form-label my-3">상세주소<sup style="color: red;">*</sup></label>
-                            <input type="text" id="detailAddress" v-model="detailAddr" class="form-control" placeholder="상세주소">
+                            <input type="text" id="detailAddress" v-model="detailAddr" class="form-control"
+                                placeholder="상세주소">
                         </div>
                     </div>
                     <div class="col-md-12 col-lg-6 col-xl-6">
@@ -95,8 +102,10 @@
                             </div>
                             <div>
                                 <div class="text-end mt-5">잔여 포인트
-                                    <input type="text-end" readonly v-model="point" class="border-0 border-bottom rounded me-5 py-3 mb-4 text-end">
-                                    <button @click="points" class="btn border-secondary rounded-pill px-4 py-3 text-primary"
+                                    <input type="text-end" readonly v-model="point"
+                                        class="border-0 border-bottom rounded me-5 py-3 mb-4 text-end">
+                                    <button @click="points"
+                                        class="btn border-secondary rounded-pill px-4 py-3 text-primary"
                                         type="button">전액 사용</button>
                                 </div>
                                 <div id="discount" class="text-end">
@@ -142,7 +151,7 @@ export default {
             totalPrice: 0,
             resultPrice: 0,
             point: 0,
-            usePoint : 0,
+            usePoint: 0,
             name: '',
             phone: '',
             email: '',
@@ -153,15 +162,15 @@ export default {
             newUserInfo: false, //주문자의 정보가 다를때
             deliveryCharge: 0, //배송비
             valid: {
-                        email: false
-                    }
+                email: false
+            }
         };
     },
     computed: {
         ...mapGetters(['getCartInfo']), // Vuex 게터를 컴포넌트에 매핑
     },
     watch: {
-        'email': function() {
+        'email': function () {
             this.checkEmail()
         }
     },
@@ -181,22 +190,22 @@ export default {
         this.discount();
     },
     methods: {
-        getUser(){
+        getUser() {
             axios.get(`/api/order`) //유저정보 알려줘 이름,연락처,이메일,포인트 등 가져왔어 axios.get().then()//this.result.name
-            .then(result => {
-                this.name = result.data[0].name;
-                this.phone = result.data[0].tel;
-                this.email = result.data[0].email;
-                this.pCode = result.data[0].postcode;
-                this.address = result.data[0].addr;
-                this.detailAddr = result.data[0].detail_addr;
-                this.point = result.data[0].point;
-            })
-            .catch(err => console.log(err));
+                .then(result => {
+                    this.name = result.data[0].name;
+                    this.phone = result.data[0].tel;
+                    this.email = result.data[0].email;
+                    this.pCode = result.data[0].postcode;
+                    this.address = result.data[0].addr;
+                    this.detailAddr = result.data[0].detail_addr;
+                    this.point = result.data[0].point;
+                })
+                .catch(err => console.log(err));
         },
-        resetHandler(e){ 
+        resetHandler(e) {
             //console.log(e.target.checked,'체인지')
-            if(e.target.checked){
+            if (e.target.checked) {
                 this.newUserInfo = true; //새로운 배송지 체크했을때
                 this.name = '';
                 this.phone = '';
@@ -204,7 +213,7 @@ export default {
                 this.pCode = '';
                 this.address = '';
                 this.detailAddr = '';
-            }else{
+            } else {
                 this.newUserInfo = false;
                 this.getUser();
             }
@@ -215,7 +224,7 @@ export default {
 
             this.valid.email = !validateEmail.test(this.email) || !this.email;
         },
-        inputCheck(){
+        inputCheck() {
             if (!this.name) {
                 Swal.fire({
                     html: "<b>이름을 입력하세요.</b>"
@@ -235,8 +244,8 @@ export default {
                 return false;
             }
             if (this.valid.email) {
-                Swal.fire({ 
-                    html: "<b>이메일 형식을 지켜주세요.</b>" 
+                Swal.fire({
+                    html: "<b>이메일 형식을 지켜주세요.</b>"
                 });
                 return false;
             }
@@ -260,7 +269,7 @@ export default {
             }
             return true;
         },
-        execDaumPostcode(){
+        execDaumPostcode() {
             new window.daum.Postcode({
                 oncomplete: (data) => {
                     //console.log(data,'data는 뭐야')
@@ -271,8 +280,8 @@ export default {
             }).open();
         },
         payments() {
-            if (!this.inputCheck()){ //위의 input을 다 입력해야 결제로 넘어감
-                return; 
+            if (!this.inputCheck()) { //위의 input을 다 입력해야 결제로 넘어감
+                return;
             }
 
             const IMP = window.IMP;
@@ -298,7 +307,7 @@ export default {
                 prodname += a.prod_name;
                 prodno += a.prod_no;
             });
-            
+
             // 결제 요청 데이터 설정
             const data = {
                 pg: 'kakaopay.TC0ONETIME',
@@ -351,7 +360,7 @@ export default {
                         }))
                     };
                     //console.log('프론트에서 확인', orderData)
-                    //console.log(orderData, '주소값가져오는지 체크')
+                    console.log(orderData, '주소값가져오는지 체크')
                     axios.post("/api/order", orderData)
                         .then(result => {
                             console.log(result);
@@ -398,13 +407,13 @@ export default {
             //포인트 적용하고 결제 금액
             this.finalPrice();
         },
-        finalPrice(){
+        finalPrice() {
             //포인트 사용하고 결제 금액
-            let PointafterPrice = this.totalPrice -  this.usePoint;
+            let PointafterPrice = this.totalPrice - this.usePoint;
             //배송비 계산(원래 mounted에 있었는데 배송비가 계속 빠져있어서 함수 새로 만듦)
-            if(this.totalPrice >= 50000){
+            if (this.totalPrice >= 50000) {
                 this.deliveryCharge = 0
-            }else{
+            } else {
                 this.deliveryCharge = 2500
             }
             //포인트 적용 후에 배송비 더한 금액이 resultPrice
@@ -425,23 +434,28 @@ export default {
     text-align: center;
     line-height: 24px
 }
+
 ul {
-  list-style: none;
+    list-style: none;
 }
+
 .text-end ul li {
-  font-weight: bold;
-  margin: 10px 0;
+    font-weight: bold;
+    margin: 10px 0;
 }
+
 .pCode-container {
     display: flex;
     align-items: center;
 }
+
 .pCode-container .form-control {
     flex: 1;
-    margin-right: 10px; 
+    margin-right: 10px;
 }
+
 .pCode-container .pCode-button {
-    padding: 8px 12px; 
+    padding: 8px 12px;
     cursor: pointer;
 }
 </style>

@@ -67,7 +67,8 @@ module.exports = {
                                 p.main_img,
                                 o.deli_code,
                                 o.deli_date,
-                                o.order_status
+                                o.order_status,
+                                p.prod_no
                             from order_detail od
                             join prod p
                             on od.prod_no = p.prod_no
@@ -202,5 +203,5 @@ module.exports = {
     mypageReviewFileDelete: `delete from file where table_no = ? and division = 'E2'`,
     mypageGetReviewInfo: `select review_title, review_content, rating from review where review_no = ?`,
     mypageUpdateReview: `update review set review_title = ?, review_content = ?, rating = ? where review_no = ?`,
-    mypageReviewDeleteFile: `delete from file where table_no = ? and division = 'E2'`
+    mypageReviewDeleteFile: `delete from file where table_no = ? and division = 'E2'`,
 };

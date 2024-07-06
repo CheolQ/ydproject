@@ -2,7 +2,7 @@
     <div id="mypage">
         <div class="page-body" v-if="orderList.length > 0 && codes.OrderStatus">
             <h5 id="mypage-sub">주문내역</h5>
-            <div v-if="orderList.length > 0">
+            <div>
                 <table class="table">
                     <thead>
                         <tr>
@@ -19,7 +19,7 @@
                         <tr v-for="(v, i) in orderList">
                             <td>{{ v.order_no }}</td>
                             <td>{{ formatDate(v.order_date) }}</td>
-                            <td v-if="v.cnt > 0">{{ v.prod_name }} 외 {{ v.cnt - 1 }}</td>
+                            <td v-if="v.cnt > 0">{{ v.prod_name }} <span v-if="v.cnt > 1">외 {{ v.cnt - 1 }}</span></td>
                             <td v-else>{{ v.prod_name }}</td>
                             <td>{{ numberFormat(v.pay_price) }}원</td>
                             <td>{{ getCodeMeaning(v.order_status) }}</td>
@@ -37,9 +37,10 @@
                 </table>
                 <paging-component v-bind="page" @go-page="goPage" />
             </div>
-            <div v-else>
-                <p>주문 내역이 없습니다.</p>
-            </div>
+        </div>
+        <div v-else>
+            <h5 id="mypage-sub">주문내역</h5>
+            <p>주문 내역이 없습니다.</p>
         </div>
         <form action="/api/mypage/orderinfo/" method="post">
             <input type="hidden" name="userid" id="userid">
