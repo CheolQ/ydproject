@@ -82,6 +82,15 @@
                                 </span>
                             </div>
                         </div>
+                        <div v-if="delInfo.order_total_price < 50000" class="payment_info_box">
+                            <p class="label" style="font-size: 1px;">배송비</p>
+                            <div class="right_box">
+                                <span class="price">
+                                    <span class="val" style="font-size: 1px;">+2,500</span>
+                                    <span class="unit" style="font-size: 1px;">원</span>
+                                </span>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <!-- //payment_info_area -->
@@ -209,7 +218,9 @@ export default {
             let selectedCart = [];
             this.orderDetailList.forEach(a => {
                 selectedCart.push(a);
+                console.log('a ', a)
             });
+            console.log('selectCart확인 ', selectedCart)
             this.$store.commit('setCart', selectedCart);
             // this.$store.state.cart = selectedCart;
             // console.log(this.$store.state.cart)

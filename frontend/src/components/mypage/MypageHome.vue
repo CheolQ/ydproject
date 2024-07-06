@@ -2,7 +2,7 @@
     <div id="mypage">
         <div class="page-body">
             <h5 id="mypage-sub">마이페이지</h5>
-            <div class="info-wrap">
+            <div class="info-wrap" v-if="user.name">
                 <div class="info">
                     <div class="user">
                         <div class="user-info">
@@ -29,12 +29,16 @@
                     </div>
                     <dl class="order">
                         <dt class="tot">총 주문금액</dt>
-                        <dd class="tot"><strong>{{ user.total_order_price }}</strong>원</dd>
+                        <dd v-if="user.total_order_price == 'null'" class="tot"><strong>0</strong>원</dd>
+                        <dd v-else class="tot"><strong>{{ user.total_order_price }}</strong>원</dd>
                         <dt>포 인 트</dt>
-                        <dd><strong>{{ user.point }}</strong>원
-                        </dd>
+                        <dd v-if="user.point == 'null'"><strong>0</strong>원</dd>
+                        <dd v-else><strong>{{ user.point }}</strong>원</dd>
                     </dl>
                 </div>
+            </div>
+            <div v-else>
+                <p>Loading...</p> <!-- 로딩 중 메시지 -->
             </div>
         </div>
     </div>
@@ -45,15 +49,23 @@ import axios from 'axios'
 export default {
     data() {
         return {
-            user: {}
+            user: {
+                name: null,
+                user_id: null,
+                tel: null,
+                email: null,
+                addr: null,
+                detail_addr: null,
+                total_order_price: null,
+                point: null
+            }
         }
     },
     created() {
-        console.log('sdfsdf' + this.userid)
         axios.get(`/api/mypage/userinfo/`)
             .then(result => {
-                console.log(result.data);
-                this.user = result.data[0]
+                // console.log(result.data);
+                this.user = result.data[0] || this.user;
                 this.user.total_order_price = this.numberFormat(this.user.total_order_price)
                 this.user.point = this.numberFormat(this.user.point)
             })
@@ -82,48 +94,6 @@ export default {
     margin-left: 15px;
     font-family: 'Noto Sans KR', sans-serif;
 }
-
-/*
-.info {
-    --swiper-theme-color: #007aff;
-    --swiper-navigation-size: 44px;
-    font-size: 12px;
-    color: #1c1c1c;
-    line-height: 1.25;
-    -webkit-font-smoothing: antialiased;
-    -webkit-text-size-adjust: none;
-    margin: 0;
-    padding: 19px 0 0 20%;
-    box-sizing: border-box;
-    font-family: 'Noto Sans KR', sans-serif;
-    border: 1px solid #e9e9e9;
-    overflow: hidden;
-}
-
-.page-body {
-    --swiper-theme-color: #007aff;
-    --swiper-navigation-size: 44px;
-    font-size: 12px;
-    color: #1c1c1c;
-    line-height: 1.25;
-    -webkit-font-smoothing: antialiased;
-    -webkit-text-size-adjust: none;
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Noto Sans KR', sans-serif;
-    padding-top: 30px;
-    text-align: left
-}
-
-.box {
-    float: left;
-    margin-right: 350px;
-}
-
-.order {
-    float: left;
-} */
 
 #mypage {
     position: relative;

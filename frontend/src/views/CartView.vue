@@ -5,7 +5,8 @@
         <div class="container py-5">
             <div class="button-container mb-3" v-if="cartList.length > 0">
                 <div class="delete-button">
-                    <button @click="delAll" class="btn border border-secondary rounded-pill px-3 text-primary">전체삭제</button>
+                    <button @click="delAll"
+                        class="btn border border-secondary rounded-pill px-3 text-primary">전체삭제</button>
                 </div>
             </div>
             <div class="table-responsive">
@@ -42,15 +43,15 @@
                                 </td>
                                 <td>
                                     <p class="mb-0 mt-4"><input type="checkbox" v-model="cart.selected"
-                                        @change="updateTotalPrice"></p>
+                                            @change="updateTotalPrice"></p>
                                 </td>
                                 <!-- <td>
                                         <p class="mb-0 mt-4">{{ c.prod_no }}</p>
                                     </td> -->
                                 <td scope="row">
                                     <div class="align-items-center">
-                                        <img :src="`/img/prodImg/${cart.main_img}`" @click="gotoProdInfo(cart.prod_no)" class="img-fluid rounded-circle"
-                                            style="width: 90px; height: 90px;">
+                                        <img :src="`/img/prodImg/${cart.main_img}`" @click="gotoProdInfo(cart.prod_no)"
+                                            class="img-fluid rounded-circle" style="width: 90px; height: 90px;">
                                     </div>
                                 </td>
                                 <td>
@@ -117,8 +118,8 @@ import Swal from "sweetalert2";
 export default {
     data() {
         return {
-            cartList: [], 
-            allChecked: false, 
+            cartList: [],
+            allChecked: false,
             cnt: 0,
             selectedTotalPrice: 0
         };
@@ -130,7 +131,7 @@ export default {
         totalPrice() { //장바구니 모든 제품 가격 계산
             return this.cartList.reduce((sum, item) => {
                 return sum + (item.prod_price * item.cnt);
-            }, 0); 
+            }, 0);
         },
     },
     methods: {
@@ -154,12 +155,12 @@ export default {
         },
         orderSel() {
             let check = 0;
-            for(let i=0; i<this.cartList.length; i++){
-                if(this.cartList[i].selected){
+            for (let i = 0; i < this.cartList.length; i++) {
+                if (this.cartList[i].selected) {
                     check = 1;
                 }
             }
-            if(check === 1){
+            if (check === 1) {
                 let selectedCart = [];
                 this.cartList.forEach(a => {
                     if (a.selected) {
@@ -173,7 +174,7 @@ export default {
                 this.$router.push({
                     name: 'orderForm',
                 });
-            }else{
+            } else {
                 Swal.fire({
                     html: "<b>1개 이상 선택 후<br> 주문가능합니다.</b>",
                 })
@@ -188,7 +189,7 @@ export default {
             this.cartList.forEach(a => a.selected = checked);
             this.updateTotalPrice();
         },
-        updateTotalPrice(){ //체크된 제품들 가격 계산
+        updateTotalPrice() { //체크된 제품들 가격 계산
             this.selectedTotalPrice = this.cartList.reduce((sum, item) => {
                 if (item.selected) { //제품이 선택됐으면 (=true)
                     return sum + (item.prod_price * item.cnt); //총 가격
@@ -233,8 +234,8 @@ export default {
             axios.put(`/api/cart/updateCnt?no=${cart.cart_no}&cnt=${cart.cnt}&price=${cart.prod_price}`);
             this.updateTotalPrice();
         },
-        gotoProdInfo(prodNo){
-            this.$router.push({ name : 'shopinfo', query : { no : prodNo } })
+        gotoProdInfo(prodNo) {
+            this.$router.push({ name: 'shopinfo', query: { no: prodNo } })
         }
     }
 }
@@ -248,31 +249,36 @@ export default {
     text-align: center;
     line-height: 24px
 }
+
 ul {
-  list-style: none;
+    list-style: none;
 }
+
 .text-end ul li {
-  font-weight: normal;
-  margin: 10px 0;
+    font-weight: normal;
+    margin: 10px 0;
 }
+
 .button-container {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 10px; 
-  align-items: center; 
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+    align-items: center;
 }
+
 .order-button {
-  display: flex;
-  gap: 10px; 
-  margin-left: auto; 
+    display: flex;
+    gap: 10px;
+    margin-left: auto;
 }
+
 .delete-button {
-    margin-left: auto; 
+    margin-left: auto;
 }
-.Swal-button 
-{
-	background-color: #FFB2D9;
-	font-size: 12px;
-	text-shadow: 0px -1px 0px rgba(0, 0, 0, 0.3);
+
+.Swal-button {
+    background-color: #FFB2D9;
+    font-size: 12px;
+    text-shadow: 0px -1px 0px rgba(0, 0, 0, 0.3);
 }
 </style>
