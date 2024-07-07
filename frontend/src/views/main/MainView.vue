@@ -101,27 +101,32 @@
                                 <li class="nav-item">
                                     <button class="d-flex m-2 py-2 bg-light rounded-pill active"
                                         @click="fetchProducts('%A%')">
-                                        <span class="text-dark textBold" style="width: 150px;">전체상품</span>
+                                        <span class="text-dark textBold"
+                                            style="width: 150px; font-size:x-small">전체상품</span>
                                     </button>
                                 </li>
                                 <li class="nav-item">
                                     <button class="d-flex py-2 m-2 bg-light rounded-pill" @click="fetchProducts('A1')">
-                                        <span class="text-dark textBold" style="width: 150px;">과자,스낵,쿠키</span>
+                                        <span class="text-dark textBold"
+                                            style="width: 150px; font-size:x-small">과자,스낵,쿠키</span>
                                     </button>
                                 </li>
                                 <li class="nav-item">
                                     <button class="d-flex m-2 py-2 bg-light rounded-pill" @click="fetchProducts('A2')">
-                                        <span class="text-dark textBold" style="width: 150px;">초콜릿,젤리,캔디,껌</span>
+                                        <span class="text-dark textBold"
+                                            style="width: 150px; font-size:x-small">초콜릿,젤리,캔디,껌</span>
                                     </button>
                                 </li>
                                 <li class="nav-item">
                                     <button class="d-flex m-2 py-2 bg-light rounded-pill" @click="fetchProducts('A3')">
-                                        <span class="text-dark textBold" style="width: 150px;">라면, 간식</span>
+                                        <span class="text-dark textBold" style="width: 150px; font-size:x-small">라면,
+                                            간식</span>
                                     </button>
                                 </li>
                                 <li class="nav-item">
                                     <button class="d-flex m-2 py-2 bg-light rounded-pill" @click="fetchProducts('A4')">
-                                        <span class="text-dark textBold" style="width: 150px;">음료,커피</span>
+                                        <span class="text-dark textBold"
+                                            style="width: 150px; font-size:x-small">음료,커피</span>
                                     </button>
                                 </li>
                             </ul>

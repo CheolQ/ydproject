@@ -32,19 +32,20 @@ router.post('/', async (req, res) => {
 
         //promise배열
         let promises = orderDetail.map(async dtorder => { //foreach 대신 map씀
-            let price = await query("getPrice", dtorder.prod_no);
+            //let price = await query("getPrice", dtorder.prod_no);
             let data = [
                 dtorder.cnt,
                 JSON.stringify(result.insertId),
-                JSON.stringify(price[0].prod_price),
+                dtorder.prod_price,
                 dtorder.prod_no
             ];
+            //console.log(result, '결과 확인')
             let val = await query("orderDtInsert", data);
             return val.insertId;
         });
-
+        //dtorder가 다 돌아야(data) dtcount가 정확히 몇개insert되었는지 알수있기때문에 promise(동기식)를 씀
         //promise배열 끝날때까지 기다려
-        let dtCount = await Promise.all(promises);
+        let dtCount = await Promise.all(promises); //promises가 다 돌아서 나온 값을 dtcount에 넣어줘
         //console.log(dtCount); //dtCount배열 출력(오더디테일에 있는 오더넘버 하나하나가 오더디테일넘버..)
         if(req.body.pointStatus){ //포인트 사용했을때
             query("updatePoint", [(req.body.beforeAmount * 0.01), req.session.user_no])

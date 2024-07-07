@@ -26,16 +26,17 @@ import MyPageReview from '@/components/mypage/MypageReview.vue';
 import MyPageReviewInfo from '@/components/mypage/MypageReviewInfo.vue';
 import MyPageReviewForm from '@/components/mypage/MypageReviewForm.vue';
 import MyPageReviewUpdate from '@/components/mypage/MypageReviewUpdate.vue';
+import MyPagePoint from '@/components/mypage/MypagePoint.vue';
 
 //관리자
 import AdminLayout from '../layouts/AdminLayout.vue';
 import AdminHome from '../views/AdminHome.vue';
 import AdminNotice from '../views/admin/AdminNotice.vue';
-import AdminNoticeForm from '../views/admin/AdminNoticeForm.vue'
+import AdminNoticeForm from '../views/admin/AdminNoticeForm.vue';
 import AdminNoticeInfo from '../views/admin/AdminNoticeInfo';
 import AdminNoticeModify from '../views/admin/AdminNoticeModify.vue';
 import Qna from '../views/admin/AdminQna.vue';
-import AdminQnaInfo from '../views/admin/AdminQnaInfo.vue'
+import AdminQnaInfo from '../views/admin/AdminQnaInfo.vue';
 import ProdList from '../views/admin/AdminProdList.vue';
 import AdminProdInfo from '../views/admin/AdminProdInfo.vue';
 import ProdForm from '../views/admin/AdminProdForm.vue';
@@ -52,8 +53,7 @@ import ProdInfoView from '@/views/product/ProdInfoView.vue';
 import ProdCategoryView from '@/views/product/ProdCategoryView.vue';
 import ProdBigCategoryView from '@/views/product/ProdBigCategoryView.vue';
 import ProdQnaInfo from '@/components/QnAInfo.vue';
-import ReviewInfo from '@/components/ReviewInfo.vue'
-
+import ReviewInfo from '@/components/ReviewInfo.vue';
 
 //공지
 
@@ -176,6 +176,11 @@ const routes = [
                         component: MyPageReviewUpdate,
                     },
                     {
+                        path: 'mypagepoint',
+                        name: 'mypagepoint',
+                        component: MyPagePoint,
+                    },
+                    {
                         path: 'mywishlist',
                         component: MyWishList,
                     },
@@ -191,7 +196,6 @@ const routes = [
                 component: Order,
             },
             {
-
                 path: 'orderSuccess',
                 name: 'orderSuccess',
                 component: OrderSuccess,

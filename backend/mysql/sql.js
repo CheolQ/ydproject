@@ -2,17 +2,20 @@
 // 메인페이지
 const mainSql = require('./main/mainSql');
 const headerSql = require('./main/headerSql');
-// 주문
+
+// 장바구니, 위시리스트, 주문
 const cartsql = require('./cartSql');
 const wishsql = require('./wishSql');
 const ordersql = require('./orderSql');
 
 // 상품
 const prodSql = require('./prodSql');
+
 // 공지사항
 const noticeSql = require('./noticeSql');
 
 // 마이페이지
+const mypageUserSql = require('./mypage/userSql');
 const mypageOrderSql = require('./mypage/orderSql');
 const mypageQnASql = require('./mypage/qnaSql');
 const mypageReviewSql = require('./mypage/reviewSql');
@@ -41,6 +44,7 @@ module.exports = {
     ...noticeSql,
 
     // 마이페이지
+    ...mypageUserSql,
     ...mypageOrderSql,
     ...mypageQnASql,
     ...mypageReviewSql,

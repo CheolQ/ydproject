@@ -49,7 +49,7 @@
                                     </div>
                                 </div>
                             </td>
-                            <td v-if="delInfo.order_status === 'D6'">
+                            <td v-if="delInfo.order_status === 'D6' || delInfo.order_status === 'D5'">
                                 <div class="delivery_item no_line">
                                     <div class="delivery_info_box" data-delivery-point-main="">
                                         <div class="delivery_detail">
