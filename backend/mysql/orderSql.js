@@ -13,9 +13,9 @@ module.exports = {
                         pay_no = ?,
                         order_total_price = ?`,
 
-    getPrice : `select prod_price 
-                from prod 
-                where prod_no = ?`,
+    // getPrice : `select prod_price 
+    //             from prod 
+    //             where prod_no = ?`,
                 
     orderDtInsert : `insert into order_detail 
                         set cnt = ?, 

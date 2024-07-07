@@ -182,7 +182,7 @@ export default {
         //console.log(this.getCartInfo);
         // console.log(this.$store.state.cart);
         //console.log(queryCart);
-        if (queryCart) {
+        if (queryCart) { //값이 있으면 selectedCart에 넣어줘
             this.selectedCart = JSON.parse(queryCart);
         }
     },
@@ -245,7 +245,7 @@ export default {
             }
             if (this.valid.email) {
                 Swal.fire({
-                    html: "<b>이메일 형식을 지켜주세요.</b>"
+                    html: "<b>이메일 형식에 맞게 입력해주세요.</b>"
                 });
                 return false;
             }
@@ -298,8 +298,10 @@ export default {
             let prodname = '';
             let prodno = '';
             let count = [];
+            let price = [];
             this.selectedCart.forEach(function (a, index) {
                 count.push(a.cnt);
+                price.push(a.prod_price);
                 if (index > 0) {
                     prodname += ','; // 첫 번째 항목이 아닌 경우에만 구분자 추가
                     prodno += ',';
@@ -308,7 +310,7 @@ export default {
                 prodno += a.prod_no;
             });
 
-            // 결제 요청 데이터 설정
+            // 포트원 결제 요청 데이터 설정
             const data = {
                 pg: 'kakaopay.TC0ONETIME',
                 pay_method: 'card',
@@ -325,7 +327,7 @@ export default {
             //console.log(data,'데이터에 뭐가있는지 확인')
 
             // 결제 요청
-            IMP.request_pay(data, rsp => {
+            IMP.request_pay(data, rsp => { //결제가 된 상황
                 if (rsp.success) {
                     // 결제 성공 시 로직
                     Swal.fire({
@@ -341,6 +343,8 @@ export default {
                     //orderDatail table
                     let prodNo = prodno.split(',');
                     let cnt = count;
+                    let prod_price = price;
+                    //console.log(prod_price,"하나당 가격")
                     //let price = [5000,6000,7000]
 
                     let orderData = {
@@ -356,18 +360,19 @@ export default {
                         merchantUid: merchantUid,
                         products: prodNo.map((no, index) => ({
                             prod_no: no,
-                            cnt: cnt[index]
+                            cnt: cnt[index],
+                            prod_price: prod_price[index]
                         }))
                     };
                     //console.log('프론트에서 확인', orderData)
-                    console.log(orderData, '주소값가져오는지 체크')
+                    //console.log(orderData, '주소값가져오는지 체크')
                     axios.post("/api/order", orderData)
                         .then(result => {
                             console.log(result);
                             if (result.data.dtCount.length > 0) {
                                 this.$router.push({
                                     name: 'orderSuccess',
-                                    query: { dtCount: JSON.stringify(result.data.dtCount) }
+                                    //query: { dtCount: JSON.stringify(result.data.dtCount) }
                                 });
                             }
                         })
@@ -388,26 +393,33 @@ export default {
             this.finalPrice();
         },
         points() {
-            if (this.point === 0) {
+            if (this.pointStatus) { //다시한번 더 전액사용 버튼 눌렀어. =true //포인트를 사용했냐 안했냐 if
+                // console.log('사용했던 포인트 다시 복구')
                 //포인트 전액 사용할때 전액사용 버튼 다시 누르면 포인트 복구
                 this.pointStatus = false;
-                //현재 포인트가 0일때 원래 포인트로 복구
-                this.point = this.usePoint;
+                //사용포인트를 다시 복구해서 잔여포인트에 +
+                this.point += this.usePoint;
                 //사용한 포인트를 초기화
                 this.usePoint = 0;
                 //결제 후 총 금액 업데이트
                 //this.resultPrice = this.totalPrice - this.usePoint;
-            } else {
-                //전액 사용 버튼을 다시 클릭했을때 포인트 전액 사용하는거
+            } else { //this.pointStatus가 false일때 여기 
+                // console.log('포인트사용')
                 this.pointStatus = true;
-                this.usePoint = this.point; //포인트 전액 사용
-                this.point = 0;
-                //this.resultPrice = this.totalPrice - this.usePoint;
+                if(this.point > this.totalPrice){ 
+                    // console.log('포인트가 주문금액보다 많음. 주문금액만큼만 사용')
+                    this.point -= this.totalPrice; //주문금액만큼만 포인트 쓸수있어 결제금액이 -가 되지않게 막아줘
+                    this.usePoint = this.totalPrice;
+                }else{ //결제금액이 포인트보다 많은거지
+                    // console.log('포인트가 결제금액보다 작음. 포인트전부사용')
+                    this.usePoint = this.point; 
+                    this.point = 0;
+                }
             }
             //포인트 적용하고 결제 금액
             this.finalPrice();
         },
-        finalPrice() {
+        finalPrice() { //총 결제금액 update
             //포인트 사용하고 결제 금액
             let PointafterPrice = this.totalPrice - this.usePoint;
             //배송비 계산(원래 mounted에 있었는데 배송비가 계속 빠져있어서 함수 새로 만듦)
