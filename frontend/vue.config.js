@@ -9,8 +9,12 @@ module.exports = defineConfig({
         changeOrigin: true,
         pathRewrite: {'^/api': ''}
       },
-
-      
+      "/v1" :{
+        target: 'https://api.iamport.kr',
+        ws: false,
+        changeOrigin: true,
+        pathRewrite: {'^/v1': ''}
+      },
     }
     
     }

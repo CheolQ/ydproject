@@ -8,7 +8,7 @@
                     <div class="lnb">
                         <ul>
                             <li class="first">
-                                <router-link to="/user/mypage/orderhistory/">주문내역</router-link>
+                                <router-link to="/user/mypage/orderhistory/" class="aHover">주문내역</router-link>
                             </li>
                             <li class="first">
                                 <router-link to="/user/mypage/mywishlist/">관심상품</router-link>
@@ -161,6 +161,6 @@ export default {
 }
 
 #aside .lnb-wrap .lnb ul li a:hover {
-    color: #81c408 !important;
+    color: #ffb524 !important;
 }
 </style>

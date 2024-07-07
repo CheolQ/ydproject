@@ -29,9 +29,9 @@
                             <td v-if="od.cnt > 1">{{ od.prod_name }} 외 {{ od.cnt -1}} 건</td>
                             <td v-else>{{ od.prod_name}}</td>
                             <td>{{ getNumberFormat(od.pay_price) }}</td>
-                            <td v-if="od.order_status === 'D1'" @click="statusBtn(od.order_no)"><button>결제완료</button></td>
+                            <td v-if="od.order_status === 'D1'" @click="statusBtn(od.order_no)"><button class="btn btn-primary btn-sm">결제완료</button></td>
                             <td v-else-if="od.order_status === 'D4'">상품준비중</td>
-                            <td><button type="button" class="btn btn-primary" @click="orderInfo(od.order_no, od.order_status)">조회</button></td>
+                            <td><button type="button" class="btn btn-primary btn-sm" @click="orderInfo(od.order_no, od.order_status)">조회</button></td>
                         </tr>
                     </tbody>
                 </table>
