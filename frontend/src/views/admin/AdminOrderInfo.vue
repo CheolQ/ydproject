@@ -36,7 +36,7 @@
             </div>
             <div class="card mb-4" v-if="Status === 'D2' || Status === 'D3'">
                 <div class="card-body shadow">
-                    <p>주문취소 등록일 : {{ formatDate(cancel.cal_up) }}</p>
+                    <p>주문취소 등록일 : <span v-if="cancel.cal_up">{{ formatDate(cancel.cal_up) }}</span></p>
                     <p>주문취소 신청일 : {{ formatDate(cancel.cal_at) }}</p>
                 </div>
             </div>          
