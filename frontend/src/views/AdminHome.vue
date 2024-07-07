@@ -8,8 +8,8 @@
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
                             <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                Earnings (Monthly)</div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">$40,000</div>
+                                수입 (일주일)</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ getNumberFormat(weekPrice) }}원</div>
                         </div>
                         <div class="col-auto">
                             <i class="fas fa-calendar fa-2x text-gray-300"></i>
@@ -26,8 +26,8 @@
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
                             <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                Earnings (Annual)</div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">$215,000</div>
+                                수입 (일일)</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{getNumberFormat(dayprice)}}원</div>
                         </div>
                         <div class="col-auto">
                             <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
@@ -43,19 +43,11 @@
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Tasks
-                            </div>
-                            <div class="row no-gutters align-items-center">
-                                <div class="col-auto">
-                                    <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">50%</div>
+                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
+                                <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                    결제완료
                                 </div>
-                                <div class="col">
-                                    <div class="progress progress-sm mr-2">
-                                        <div class="progress-bar bg-info" role="progressbar"
-                                            style="width: 50%" aria-valuenow="50" aria-valuemin="0"
-                                            aria-valuemax="100"></div>
-                                    </div>
-                                </div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">{{ orderCnt }}건</div>
                             </div>
                         </div>
                         <div class="col-auto">
@@ -73,8 +65,8 @@
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
                             <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
-                                Pending Requests</div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">18</div>
+                                답변 대기</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ replyCnt }}건</div>
                         </div>
                         <div class="col-auto">
                             <i class="fas fa-comments fa-2x text-gray-300"></i>
@@ -84,17 +76,33 @@
             </div>
         </div>
     </div>
+    
     <div class="row">
         <div class="col-xl-8 col-lg-7">
             <div class="card shadow mb-4">
                 <!-- Card Header - Dropdown -->
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                    <h6 class="m-0 font-weight-bold text-primary">Earnings Overview</h6>
+                    <h6 class="m-0 font-weight-bold text-primary">일주일 매출 현황</h6>
                 </div>
                 <!-- Card Body -->
                 <div class="card-body">
                     <div class="chart-area">
-                        <canvas ref="MyChart" />
+                        <canvas ref="myBarChart" height="100%"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-4 col-lg-5">
+            <div class="card shadow mb-4">
+                <!-- Card Header - Dropdown -->
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                    <h6 class="m-0 font-weight-bold text-primary">카테고리 별 판매량</h6>
+                </div>
+                <!-- Card Body -->
+                <div class="card-body">
+                    <div class="chart-area" style="height:100%; width:100%">
+                        <canvas ref="myPieChart" height="100%"></canvas>
                     </div>
                 </div>
             </div>
@@ -104,50 +112,136 @@
 </template>
 
 <script>
+import Paging from "@/mixin";
+import axios from 'axios';
 import {Chart, registerables} from 'chart.js';
-Chart.register(...registerables)
+Chart.register(...registerables);
 
 export default {
+    mixins : [Paging],
     data() {
         return {
-            chartData: {
-                labels: ['Q1', 'Q2', 'Q3', 'Q4'],
-                datasets: [
-                    {
-                        label: 'Sales',
-                        data: [540, 325, 702, 620],
-                        backgroundColor: ['rgba(249, 115, 22, 0.2)', 
-                                          'rgba(6, 182, 212, 0.2)', 
-                                          'rgb(107, 114, 128, 0.2)', 
-                                          'rgba(139, 92, 246, 0.2)'],
-                        borderColor: ['rgb(249, 115, 22)', 
-                                      'rgb(6, 182, 212)', 
-                                      'rgb(107, 114, 128)', 
-                                      'rgb(139, 92, 246)'],
-                        borderWidth: 1
-                    }
-                ]
-            },
-            chartOptions: {
-                scales: {
-                    y: {
-                        beginAtZero: true
-                    }
-                }
-            }
+            BarChart: null,
+            PieChart: null,
+            barData: [],
+
+            weekPrice: 1,
+            dayprice: 1,
+            orderCnt: 1,
+            replyCnt: 1,
         }
     },
+    mounted() {
+        this.createBarChart();
+        this.createPieChart();
+        
+    },
     created() {
-        this.createChart();
+        this.adminMainInfo();
     },
     methods: {
-        createChart(){
-            new Chart(this.$refs.MyChart, {
-                type: 'bar',
-                data:this.chartData,
-                options:this.chartOptions
+        createBarChart(){
+            axios.get("/api/adminMain")
+            .then(result => {
+                let OrderDate = result.data.map(ele => {
+                    return this.getDateFormat(ele.date)
+                })
+                let OrderPrice = result.data.map(ele => {
+                    return ele.price
+                })
+                const ctx = this.$refs.myBarChart;
+                this.BarChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: OrderDate,
+                        datasets: [{
+                            label: '매출',
+                            data: OrderPrice,
+                            backgroundColor: [
+                                'rgba(255, 99, 132, 0.2)',
+                                // 'rgba(255, 159, 64, 0.2)',
+                                // 'rgba(255, 205, 86, 0.2)',
+                                // 'rgba(75, 192, 192, 0.2)',
+                                // 'rgba(54, 162, 235, 0.2)',
+                                // 'rgba(153, 102, 255, 0.2)',
+                                // 'rgba(201, 203, 207, 0.2)'
+                            ],
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
+                        }
+                    }
+                })
             })
+            .catch(err => console.log(err))
         },
+        
+
+        createPieChart(){
+            axios.get('/api/adminMain/category')
+            .then(result => {
+                let categoryName = result.data.map(ele => {
+                    return ele.category_name
+                })
+                let categoryCnt = result.data.map(ele => {
+                    return ele.cnt
+                })
+                const ctx = this.$refs.myPieChart;
+                this.PieChart = new Chart(ctx, {
+                    type: 'pie',
+                    data: {
+                        labels: categoryName,
+                        datasets: [{
+                            label: 'My First Dataset',
+                            data: categoryCnt,
+                            backgroundColor: [
+                                'rgb(255, 99, 132)',
+                                'rgb(54, 162, 235)',
+                                'rgba(75, 192, 192, 0.2)',
+                                'rgba(255, 205, 86, 0.2)',
+                                'rgb(255, 205, 86)'
+                            ],
+                            hoverOffset: 4
+                        }]
+                    },
+                    options : {
+                        
+                    }
+                })
+            })
+            .catch(err => console.log(err))
+        },
+        
+        beforeDestroy() {
+            if (this.myChart) {
+                this.myChart.destroy();
+            }
+        },
+        adminMainInfo(){
+            axios.get('/api/adminMain/mainInfo')
+            .then(result => {
+                console.log(result.data.daySales[0].price)
+                console.log(result.data.orderComplete[0].orderCnt)
+                console.log(result.data.qnaReply.length)
+                this.weekPrice = result.data.weekSales[0].price
+                this.dayprice = result.data.daySales[0].price
+                this.orderCnt = result.data.orderComplete[0].orderCnt
+                this.replyCnt = result.data.qnaReply.length
+            })
+            .catch(err => console.log(err))
+        },
+
+        getDateFormat (date ){
+ 	        return this .$dateFormat (date );
+ 	    },
+        getNumberFormat (number ){
+            return this .$numberFormat (number );
+        }
     }
 }
 </script>

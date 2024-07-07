@@ -43,7 +43,7 @@ const adminNoticeRouter = require('./routes/admin/adminNotice.js')
 const adminOrderRouter = require('./routes/admin/adminOrder.js')
 const adminProdRouter = require('./routes/admin/adminProd.js')
 const adminQnaRouter = require('./routes/admin/adminQna.js')
-
+const adminMainRouter = require('./routes/admin/adminMain.js')
 
 const prodRouter = require('./routes/prod.js');
 const noticeRouter = require('./routes/notice.js');
@@ -119,7 +119,7 @@ app.use("/adminQna", adminQnaRouter)
 app.use("/adminMember", adminMemberRouter)
 app.use("/adminOrder", adminOrderRouter)
 app.use("/adminProd", adminProdRouter)
-
+app.use("/adminMain", adminMainRouter)
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

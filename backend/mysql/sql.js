@@ -29,6 +29,7 @@ const adminQna = require('./admin/qnaSql');
 const adminOrder = require('./admin/orderSql');
 const adminMember = require('./admin/memberSql');
 const adminProd = require('./admin/prodSql');
+const adminMain = require('./admin/mainSql');
 
 module.exports = {
     // 메인페이지
@@ -57,4 +58,5 @@ module.exports = {
     ...adminMember,
     ...adminProd,
     ...adminNotice,
+    ...adminMain
 };
