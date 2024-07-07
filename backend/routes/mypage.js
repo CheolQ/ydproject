@@ -207,4 +207,11 @@ router.post(`/updatereview`, async (req, res) => {
     res.send({ result, result2 });
 });
 
+// 마이페이지 포인트내역
+router.get('/point', async (req, res) => {
+    let result = await query('mypagePointList', [req.session.user_id, req.session.user_id, req.session.user_id]);
+    let result2 = await query('mypagePoint', req.session.user_id);
+    res.send({ result, result2 });
+});
+
 module.exports = router;
