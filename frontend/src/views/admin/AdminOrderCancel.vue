@@ -56,6 +56,7 @@ export default {
             orderList: [],
             page: {},
             pageUnit: 5,
+            cPage: 1,
             order_status: 'D2',
 
             Categorys: [
@@ -79,6 +80,7 @@ export default {
                 console.log(result.data)
                 this.orderList = result.data.list;
                 this.page = page;
+                this.cPage = page;
                 this.page = this.pageCalc(page, result.data.count[0].cnt, 5, this.pageUnit);
             })
             .catch(err => console.log(err))
@@ -91,43 +93,48 @@ export default {
             this.goPage(1);
         },
         async statusBtn(no, pay){
-            const getToken = {
-                method: 'post',
-                url: '/v1/users/getToken',
-                headers: {'Content-Type': 'application/json'},
-                data: {
-                    imp_key: process.env.VUE_APP_IMP_KEY,
-                    imp_secret: process.env.VUE_APP_IMP_SECRET
-                }
-            };
-
-            try {
-                const { data } = await axios.request(getToken)
-
-                const prodCancel = {
+            if(confirm("주문취소 확정 하시겠습니까?")){
+                const getToken = {
                     method: 'post',
-                    url: '/v1/payments/cancel',
-                    headers: {
-                        'Content-Type': 'application/json', 
-                        Authorization: data.response.access_token,
-                    },    
-                    data: { merchant_uid: pay }
+                    url: '/v1/users/getToken',
+                    headers: {'Content-Type': 'application/json'},
+                    data: {
+                        imp_key: process.env.VUE_APP_IMP_KEY,
+                        imp_secret: process.env.VUE_APP_IMP_SECRET
+                    }
                 };
-
-                try{
-                    const { data } = axios.request(prodCancel);
-                    console.log(data);
-                } catch(error){
-                    console.log(error)
+    
+                try {
+                    const { data } = await axios.request(getToken)
+    
+                    const prodCancel = {
+                        method: 'post',
+                        url: '/v1/payments/cancel',
+                        headers: {
+                            'Content-Type': 'application/json', 
+                            Authorization: data.response.access_token,
+                        },    
+                        data: { merchant_uid: pay }
+                    };
+    
+                    try{
+                        const { data } = axios.request(prodCancel);
+                        console.log(data);
+                    } catch(error){
+                        console.log(error)
+                    }
+    
+                    axios.post(`/api/adminOrder/cancel/${no}`)
+                    .then(() =>{
+                        alert("정상적으로 주문취소 되었습니다");
+                        this.goPage(this.cPage);
+                    })
+                    .catch(err => console.log(err))
+                } catch (error) {
+                    console.error(error);
                 }
-
-                axios.post(`/api/adminOrder/cancel/${no}`)
-                .then(() =>{
-                    this.goPage(1);
-                })
-                .catch(err => console.log(err))
-            } catch (error) {
-                console.error(error);
+            }else{
+                alert("주문취소 실패")
             }
         },
 

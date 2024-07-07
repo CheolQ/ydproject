@@ -57,6 +57,7 @@ export default {
             orderList: [],
             page: {},
             pageUnit: 5,
+            cPage: 1,
 
             Categorys: [
                 {category_code: 'D5', category_name: '배송중', seqs: 1},
@@ -79,6 +80,7 @@ export default {
                 console.log(result.data)
                 this.orderList = result.data.list;
                 this.page = page;
+                this.cPage = page;
                 this.page = this.pageCalc(page, result.data.count[0].cnt, 5, this.pageUnit);
             })
             .catch(err => console.log(err))
@@ -93,7 +95,7 @@ export default {
         statusBtn(no){
             axios.post(`/api/adminOrder/delivery/${no}`)
             .then(() =>{
-                this.goPage(1);
+                this.goPage(this.cPage);
             })
             .catch(err => console.log(err))
         },
