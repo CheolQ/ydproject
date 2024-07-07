@@ -1,45 +1,43 @@
 <template>
     <div id="mypage">
-        <div class="page-body">
-            <h5 id="mypage-sub">마이페이지</h5>
-            <div class="info-wrap" v-if="user.name">
-                <div class="info">
-                    <div class="user">
-                        <div class="user-info">
-                            <p class="user-name">{{ user.name }}[{{ user.user_id }}]님</p>
-                            <div class="box">
-                                <dl>
-                                    <dt>전 &nbsp;&nbsp;&nbsp; 화</dt>
-                                    <dd>{{ user.tel }}</dd>
-                                </dl>
-                                <dl>
-                                    <dt>이 메 일</dt>
-                                    <dd>{{ user.email }}</dd>
-                                </dl>
-                                <dl>
-                                    <dt>주 &nbsp;&nbsp;&nbsp; 소</dt>
-                                    <dd>{{ user.addr }}</dd> <br>
-                                </dl>
-                                <dl>
-                                    <dt>상 세 주 소</dt>
-                                    <dd>{{ user.detail_addr }}</dd>
-                                </dl>
-                            </div>
+        <h5 id="mypage-sub">마이페이지</h5>
+        <div class="info-wrap" v-if="user.name">
+            <div class="info">
+                <div class="user">
+                    <div class="user-info">
+                        <p class="user-name">{{ user.name }}[{{ user.user_id }}]님</p>
+                        <div class="box">
+                            <dl>
+                                <dt>전 &nbsp;&nbsp;&nbsp; 화</dt>
+                                <dd>{{ user.tel }}</dd>
+                            </dl>
+                            <dl>
+                                <dt>이 메 일</dt>
+                                <dd>{{ user.email }}</dd>
+                            </dl>
+                            <dl>
+                                <dt>주 &nbsp;&nbsp;&nbsp; 소</dt>
+                                <dd>{{ user.addr }}</dd> <br>
+                            </dl>
+                            <dl>
+                                <dt>상 세 주 소</dt>
+                                <dd>{{ user.detail_addr }}</dd>
+                            </dl>
                         </div>
                     </div>
-                    <dl class="order">
-                        <dt class="tot">총 주문금액</dt>
-                        <dd v-if="user.total_order_price == 'null'" class="tot"><strong>0</strong>원</dd>
-                        <dd v-else class="tot"><strong>{{ user.total_order_price }}</strong>원</dd>
-                        <dt>포 인 트</dt>
-                        <dd v-if="user.point == 'null'"><strong>0</strong>원</dd>
-                        <dd v-else><strong>{{ user.point }}</strong>원</dd>
-                    </dl>
                 </div>
+                <dl class="order">
+                    <dt class="tot">총 주문금액</dt>
+                    <dd v-if="user.total_order_price == 'null'" class="tot"><strong>0</strong>원</dd>
+                    <dd v-else class="tot"><strong>{{ user.total_order_price }}</strong>원</dd>
+                    <dt>포 인 트</dt>
+                    <dd v-if="user.point == 'null'"><strong>0</strong>원</dd>
+                    <dd v-else><strong>{{ user.point }}</strong>원</dd>
+                </dl>
             </div>
-            <div v-else>
-                <p>Loading...</p> <!-- 로딩 중 메시지 -->
-            </div>
+        </div>
+        <div v-else>
+            <p>Loading...</p> <!-- 로딩 중 메시지 -->
         </div>
     </div>
 </template>

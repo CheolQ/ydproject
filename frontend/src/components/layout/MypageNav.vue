@@ -10,7 +10,10 @@
                             <li class="first">
                                 <router-link to="/user/mypage/orderhistory/" class="aHover">주문내역</router-link>
                             </li>
-                            <li class="first">
+                            <li>
+                                <router-link to="/user/mypage/mypagepoint/">포인트내역</router-link>
+                            </li>
+                            <li>
                                 <router-link to="/user/mypage/mywishlist/">관심상품</router-link>
                             </li>
                         </ul>
