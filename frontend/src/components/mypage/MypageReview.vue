@@ -3,8 +3,9 @@
         <h5 id="mypage-sub">후기 작성 상품</h5>
         <div v-if="reviews.length > 0">
             <div v-for="v in reviews" class="review-card">
-                <img :src="`/img/prodImg/${v.main_img}`" alt="Product Image" class="product-image">
-                <div class="product-info">
+                <img :src="`/img/prodImg/${v.main_img}`" alt="Product Image" class="product-image"
+                    @click="goToDetail(v.prod_no)">
+                <div class="product-info" @click="goToDetail(v.prod_no)">
                     <p>상품명: {{ v.prod_name }}</p>
                     <p>상품가: {{ numberFormat(v.prod_price) }}원</p>
                     <p>구매일: {{ getDateFormat(v.order_date) }}</p>
@@ -87,6 +88,9 @@ export default {
                     id: v.user_id
                 }
             })
+        },
+        async goToDetail(no) {
+            await this.$router.push({ name: "shopinfo", query: { no: no } });
         }
     }
 }

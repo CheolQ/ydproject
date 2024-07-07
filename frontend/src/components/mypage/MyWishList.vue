@@ -114,22 +114,18 @@
             // },
             async gotoCart(no){
                 //console.log(this.wish.length, '담겼나')
-                let check = 0;
-                for(let i=0; i<this.wishList.length; i++){
-                    if(this.wishList[i].selected){
-                        check = 1;
+                let count = 0;
+                let selectedWish = [];
+                this.wishList.forEach(a => {
+                    if(a.selected){
+                        selectedWish.push({
+                            prod_no : a.prod_no,
+                            price : a.prod_price
+                        })
+                        count++;
                     }
-                }
-                if(check === 1){
-                    let selectedWish = [];
-                    this.wishList.forEach(a => {
-                        if(a.selected){
-                            selectedWish.push({
-                                prod_no : a.prod_no,
-                                price : a.prod_price
-                            })
-                        }
-                    });
+                });
+                if(count > 0){
                     await axios.post(`/api/cart`, selectedWish)
                     .then(result => result.data.count); //result.data.count는 몇개가 장바구니 insert되었는지
                     //this.$router.push('../../cart');

@@ -13,6 +13,13 @@ router.get('/userinfo', async (req, res) => {
 router.get('/orderinfo', async (req, res) => {
     let page = Number(req.query.page);
     let pageUnit = Number(req.query.pageUnit);
+    let date1 = req.query.date1;
+    let date2 = req.query.date2;
+
+    if (!date2) {
+        date2 = await query('AdminOrderDate');
+        date2 = date2[0].date;
+    }
 
     if (!page) {
         page = 1;
@@ -22,8 +29,8 @@ router.get('/orderinfo', async (req, res) => {
     }
     let offset = (page - 1) * pageUnit;
 
-    let result = await query('userOrderList', [req.session.user_id, offset, pageUnit]);
-    let count = await query('countUserOrderList', [req.session.user_id]);
+    let result = await query('userOrderList', [date1, date2, req.session.user_id, offset, pageUnit]);
+    let count = await query('countUserOrderList', [date1, date2, req.session.user_id]);
     res.send({ result, count });
 });
 
@@ -65,7 +72,7 @@ router.get('/qnalist', async (req, res) => {
     let offset = (page - 1) * pageUnit;
     let result = await query('mypageQnaList', [req.session.user_id, offset, pageUnit]);
     console.log(result);
-    let count = await query('countUserOrderList', [req.session.user_id]);
+    let count = await query('countUserOrderList2', [req.session.user_id]);
     res.send({ result, count });
 });
 
@@ -178,24 +185,26 @@ router.delete('/reviewdelete/:no', async (req, res) => {
     let result1 = await query('mypageReviewDelete', req.params.no);
     let result2 = await query('mypageReviewFileDelete', req.params.no);
 
-    res.send({result1, result2});
+    res.send({ result1, result2 });
 });
-
 
 router.get('/getreviewinfo/:no', async (req, res) => {
     let result = await query('mypageGetReviewInfo', [req.params.no]);
     res.send(result);
 });
 
-
 router.post(`/updatereview`, async (req, res) => {
-    let review = {...req.body}
-    console.log(review)
-    let result = await query('mypageUpdateReview', [review.review_title, review.review_content, review.rating, review.review_no])
-    
-    let result2 = await query('mypageReviewDeleteFile', review.review_no)
-    res.send({result, result2});
+    let review = { ...req.body };
+    console.log(review);
+    let result = await query('mypageUpdateReview', [
+        review.review_title,
+        review.review_content,
+        review.rating,
+        review.review_no,
+    ]);
 
-})
+    let result2 = await query('mypageReviewDeleteFile', review.review_no);
+    res.send({ result, result2 });
+});
 
 module.exports = router;

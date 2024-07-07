@@ -160,7 +160,7 @@ export default {
             this.$router.push({ name: "prodcategory", query: { code: code } });
         },
         getCodeMeaning: function (code) {
-            if (this.codes == undefined) {
+            if (code == undefined) {
                 console.log('this.code 지연 에러')
             } else if (this.codes) {
                 // console.log('dddd: ' , this.codes.Category.Minor);
@@ -192,10 +192,10 @@ export default {
                 });
             }
         },
-        gotoCart(){
-            if(this.loggedInUserId){
+        gotoCart() {
+            if (this.loggedInUserId) {
                 this.$router.push('/user/cart');
-            }else{
+            } else {
                 Swal.fire({
                     title: '로그인이 필요합니다.',
                     text: "로그인 페이지로 이동합니다.",

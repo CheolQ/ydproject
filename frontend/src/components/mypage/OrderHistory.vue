@@ -2,7 +2,14 @@
     <div id="mypage">
         <div class="page-body" v-if="orderList.length > 0 && codes.OrderStatus">
             <h5 id="mypage-sub">주문내역</h5>
-            <div v-if="orderList.length > 0">
+            <SearchComponent title="주문일" @obj="searchForm" ref="reset_com"></SearchComponent>
+            <div class="d-grid gap-2 d-md-flex justify-content-md-center">
+                <button @click="SearchBtn"
+                    class="btn border border-secondary rounded-pill px-3 text-primary">검색</button>
+                <button @click="resetBtn"
+                    class="btn border border-secondary rounded-pill px-3 text-primary">초기화</button>
+            </div>
+            <div>
                 <table class="table">
                     <thead>
                         <tr>
@@ -19,7 +26,7 @@
                         <tr v-for="(v, i) in orderList">
                             <td>{{ v.order_no }}</td>
                             <td>{{ formatDate(v.order_date) }}</td>
-                            <td v-if="v.cnt > 0">{{ v.prod_name }} 외 {{ v.cnt - 1 }}</td>
+                            <td v-if="v.cnt > 0">{{ v.prod_name }} <span v-if="v.cnt > 1">외 {{ v.cnt - 1 }}</span></td>
                             <td v-else>{{ v.prod_name }}</td>
                             <td>{{ numberFormat(v.pay_price) }}원</td>
                             <td>{{ getCodeMeaning(v.order_status) }}</td>
@@ -37,9 +44,17 @@
                 </table>
                 <paging-component v-bind="page" @go-page="goPage" />
             </div>
-            <div v-else>
-                <p>주문 내역이 없습니다.</p>
+        </div>
+        <div v-else>
+            <h5 id="mypage-sub">주문내역</h5>
+            <SearchComponent title="주문일" @obj="searchForm" ref="reset_com"></SearchComponent>
+            <div class="d-grid gap-2 d-md-flex justify-content-md-center">
+                <button @click="SearchBtn"
+                    class="btn border border-secondary rounded-pill px-3 text-primary">검색</button>
+                <button @click="resetBtn"
+                    class="btn border border-secondary rounded-pill px-3 text-primary">초기화</button>
             </div>
+            <p>주문 내역이 없습니다.</p>
         </div>
         <form action="/api/mypage/orderinfo/" method="post">
             <input type="hidden" name="userid" id="userid">
@@ -51,10 +66,11 @@
 import axios from 'axios';
 import PagingComponent from '@/components/Paging.vue'
 import Paging from "../../mixin";
+import SearchComponent from '@/components/mypage/OrderSearchForm.vue'
 export default {
     mixins: [Paging],
     components: {
-        PagingComponent
+        PagingComponent, SearchComponent
     },
     data() {
         return {
@@ -62,6 +78,9 @@ export default {
             codes: {},
             page: {},
             pageUnit: 10,
+
+            date1: '',
+            date2: ''
         }
     },
     created() {
@@ -82,7 +101,17 @@ export default {
     },
     methods: {
         goPage(page) {
-            axios.get(`/api/mypage/orderinfo/?pageUnit=${this.pageUnit}&page=${page}`)
+            console.log('1', this.date1)
+            console.log('2', this.date2)
+            // axios.get(`/api/mypage/orderinfo/?pageUnit=${this.pageUnit}&page=${page}&date1=${this.date1}&date2=${this.date2}`)
+            axios.get(`/api/mypage/orderinfo/`, {
+                params: {
+                    pageUnit: this.pageUnit,
+                    page: page,
+                    date1: this.date1, // URL 쿼리 파라미터로 추가
+                    date2: this.date2  // URL 쿼리 파라미터로 추가
+                }
+            })
                 .then(result => {
                     console.log(result)
                     this.orderList = result.data.result;
@@ -91,6 +120,9 @@ export default {
                 })
                 .catch(err => console.log(err));
 
+        },
+        SearchBtn() {
+            this.goPage(1);
         },
         numberFormat: function (number) {
             if (number == 0)
@@ -118,7 +150,6 @@ export default {
         },
         getCodeMeaning(code) {
             if (this.codes) {
-                console.log("OrderStatus 객체:", this.codes.OrderStatus);
                 return this.codes.OrderStatus[code] || code; // 코드에 맞는 의미 있는 문자열 반환
             }
             console.error(`Code meaning not found for code: ${code}`);
@@ -135,6 +166,16 @@ export default {
                         })
                 })
                 .catch(err => console.log(err))
+        },
+        searchForm(date1, date2) {
+            console.log('searchForm1', date1);
+            this.date1 = date1;
+            console.log('searchForm2', date2);
+            this.date2 = date2;
+        },
+        resetBtn() {
+            this.$refs.reset_com.test2();
+            this.goPage(1);
         }
 
     },

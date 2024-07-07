@@ -2,7 +2,7 @@
     <div id="mypage">
         <h3 id="mypage-sub">문의상세</h3>
         <div id="qna-detail">
-            <div class="product-info">
+            <div class="product-info" @click="goToDetail(qna.prod_no)">
                 <img :src="`/img/prodImg/${qna.main_img}`" alt="Product Image" class="product-img">
                 <div class="product-details">
                     <p>상품명: {{ qna.prod_name }}</p>
@@ -91,6 +91,9 @@ export default {
                 }
             });
 
+        },
+        async goToDetail(no) {
+            await this.$router.push({ name: "shopinfo", query: { no: no } });
         },
         goBack() {
             this.$router.go(-1);

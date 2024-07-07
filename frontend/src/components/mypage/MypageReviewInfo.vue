@@ -3,7 +3,7 @@
         <div id="mypage">
             <h3 id="mypage-sub">후기상세</h3>
             <div id="review-detail">
-                <div class="product-info">
+                <div class="product-info" @click="goToDetail(review.prod_no)">
                     <img :src="`/img/prodImg/${review.main_img}`" alt="Product Image" class="product-img">
                     <div class="product-details">
                         <p>상품명: {{ review.prod_name }}</p>
@@ -21,23 +21,17 @@
                         <span v-on:click="pre" v-bind:class="{ hidden: selected == 1 }">
                             <i class="fas fa-chevron-circle-left fa-2x left"></i>
                         </span>
-                        <!-- <div v-for="(v, idx) in files" class="image"
-                            v-bind:style="{ 'transform': 'translate(-' + (selected - 1) * 300 + 'px, 0px)' }">
-                            <img :src="`/api/upload/review/${v.file_name}`" alt="">
-                        </div> -->
                         <div class="imageContainer"
-                            v-bind:style="{ transform: 'translate(-' + (selected - 1) * 200 + 'px, 0px)' }">
-                            <div v-for="v in files">
-                                <div class="image"
-                                    v-bind:style="{ 'background-image': 'url(' + `/api/upload/review/${v.file_name}` + ')' }">
-                                </div>
+                            v-bind:style="{ transform: 'translate(-' + (selected - 1) * 400 + 'px, 0px)' }">
+                            <div v-for="(v, idx) in files" :key="idx">
+                                <img class="image" :src="`/api/upload/review/${v.file_name}`" alt="">
                             </div>
                         </div>
                         <span v-on:click="next" v-bind:class="{ hidden: selected == length }">
                             <i class="fas fa-chevron-circle-right fa-2x right"></i>
                         </span>
-                        <p>{{ review.review_content }}</p>
                     </div>
+                    <p>{{ review.review_content }}</p>
                 </div>
             </div>
             <div class="buttons">
@@ -110,23 +104,18 @@ export default {
                     this.goBack();
                 })
         },
+        async goToDetail(no) {
+            await this.$router.push({ name: "shopinfo", query: { no: no } });
+        },
         next() {
-            if (this.selected == this.files.length) {
-                this.selected = 1;
-            } else {
-                this.selected = this.selected + 1;
+            if (this.selected < this.length) {
+                this.selected++;
             }
-            //console.log(this.selected);
         },
         pre() {
-            if (this.selected == 1) {
-                //console.log(this.selected)
-                this.selected = this.files.length;
-            } else {
-                //console.log(this.selected)
-                this.selected = this.selected - 1;
+            if (this.selected > 1) {
+                this.selected--;
             }
-            //console.log(this.selected);
         }
     }
 }
@@ -234,42 +223,45 @@ export default {
 
 .Wrapper {
     position: relative;
-    width: 200px;
-    height: 200px;
+    width: 400px;
+    /* 크기 조정 */
+    height: 300px;
+    /* 크기 조정 */
     overflow: hidden;
-
+    margin: 20px auto;
+    /* 중앙 정렬 */
 }
 
 .imageContainer {
     display: flex;
-    transition: 0.6s;
+    transition: transform 0.2s ease;
 }
 
 .image {
-    height: 200px;
-    width: 200px;
+    width: 400px;
+    /* 크기 조정 */
+    height: 300px;
+    /* 크기 조정 */
     background-size: cover;
-    background-position: center center;
+    background-position: center;
 }
 
 .left {
     position: absolute;
     left: 5px;
     top: 50%;
+    transform: translateY(-50%);
     cursor: pointer;
-    z-index: 99;
+    z-index: 2;
 }
 
 .right {
     position: absolute;
     right: 5px;
     top: 50%;
+    transform: translateY(-50%);
     cursor: pointer;
-}
-
-svg {
     z-index: 2;
-    color: rgba(0, 0, 0, 0.2);
 }
 
 .hidden {

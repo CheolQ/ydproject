@@ -9,7 +9,7 @@ router.get('/', async (req, res) => {
 })
 
 router.post('/', async (req, res) => {
-    console.log(req.body, '바디에 뭐가있는지')
+    //console.log(req.body, '바디에 뭐가있는지')
     let orderData = [ //쿼리 물음표 순서대로 물음표 여러개니까 배열안에 순서대로 넣음
         req.body.buyerName,
         req.body.paidAmount,
@@ -24,7 +24,7 @@ router.post('/', async (req, res) => {
         req.body.merchantUid, //결제번호(코드)int였는데 varchar로 타입바꿈 ,
         req.body.beforeAmount
     ];
-    console.log(orderData, '오더데이터뭐있는지')
+    //console.log(orderData, '오더데이터뭐있는지')
 
     try {
         let orderDetail = req.body.products;
