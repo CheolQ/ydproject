@@ -30,7 +30,7 @@
                             <td>{{ getDateFormat(q.create_date) }}</td>
                             <td v-if="q.cnt == 0">답변대기</td>
                             <td v-else>답변완료</td>
-                            <td><button type="button" class="btn btn-primary" @click="qnaInfo(q.board_no)">조회</button></td>
+                            <td><button type="button" class="btn btn-primary btn-sm" @click="qnaInfo(q.board_no)">조회</button></td>
                         </tr>
                     </tbody>
                 </table>

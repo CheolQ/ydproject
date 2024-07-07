@@ -29,9 +29,9 @@
                             <td v-if="od.cnt > 1">{{ od.prod_name }} 외 {{ od.cnt -1}} 건</td>
                             <td v-else>{{ od.prod_name}}</td>
                             <td>{{ getNumberFormat(od.pay_price) }}</td>
-                            <td v-if="od.order_status === 'D2'" @click="statusBtn(od.order_no)"><button>주문취소 요청</button></td>
+                            <td v-if="od.order_status === 'D2'" @click="statusBtn(od.order_no, od.pay_no)"><button class="btn btn-primary btn-sm">주문취소 요청</button></td>
                             <td v-else-if="od.order_status === 'D3'">주문취소</td>
-                            <td><button type="button" class="btn btn-primary" @click="orderInfo(od.order_no, od.order_status)">조회</button></td>
+                            <td><button type="button" class="btn btn-primary btn-sm" @click="orderInfo(od.order_no, od.order_status)">조회</button></td>
                         </tr>
                     </tbody>
                 </table>
@@ -90,13 +90,47 @@ export default {
             this.$refs.reset_com.test2();
             this.goPage(1);
         },
-        statusBtn(no){
-            axios.post(`/api/adminOrder/cancel/${no}`)
-            .then(() =>{
-                this.goPage(1);
-            })
-            .catch(err => console.log(err))
+        async statusBtn(no, pay){
+            const getToken = {
+                method: 'post',
+                url: '/v1/users/getToken',
+                headers: {'Content-Type': 'application/json'},
+                data: {
+                    imp_key: process.env.VUE_APP_IMP_KEY,
+                    imp_secret: process.env.VUE_APP_IMP_SECRET
+                }
+            };
+
+            try {
+                const { data } = await axios.request(getToken)
+
+                const prodCancel = {
+                    method: 'post',
+                    url: '/v1/payments/cancel',
+                    headers: {
+                        'Content-Type': 'application/json', 
+                        Authorization: data.response.access_token,
+                    },    
+                    data: { merchant_uid: pay }
+                };
+
+                try{
+                    const { data } = axios.request(prodCancel);
+                    console.log(data);
+                } catch(error){
+                    console.log(error)
+                }
+
+                axios.post(`/api/adminOrder/cancel/${no}`)
+                .then(() =>{
+                    this.goPage(1);
+                })
+                .catch(err => console.log(err))
+            } catch (error) {
+                console.error(error);
+            }
         },
+
         searchfrom(name, date1, date2, category){
             this.name = name;
             this.date1 = date1;

@@ -27,7 +27,7 @@
                             <td>{{ p.prod_name }}</td>
                             <td>{{ getNumberFormat(p.prod_price) }}</td>
                             <td>{{ getDateFormat(p.exp_date) }}</td>
-                            <td><button type="button" class="btn btn-primary" @click="prodInfo(p.prod_no)">조회</button></td>
+                            <td><button type="button" class="btn btn-primary btn-sm" @click="prodInfo(p.prod_no)">조회</button></td>
                         </tr>
                     </tbody>
                 </table>

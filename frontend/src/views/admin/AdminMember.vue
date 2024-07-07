@@ -31,7 +31,7 @@
                             <td>{{getNumberFormat(user.point)}}p</td>
                             <td>{{ getNumberFormat(user.price) }}</td>
                             <td>{{getDateFormat(user.hiredate)}}</td>
-                            <td><button @click="modalOpen(user.user_id)" class="btn btn-primary">조회</button></td>
+                            <td><button @click="modalOpen(user.user_id)" class="btn btn-primary btn-sm">조회</button></td>
                         </tr>
                     </tbody>
                 </table>
@@ -55,7 +55,7 @@
                         <tbody>
                             <tr v-for="qna in qnas" :key="qna">
                                 <th scope="row">{{ qna.board_no }}</th>
-                                <td>{{ qna.prod_name }}</td>
+                                <td>{{ shortenWords(qna.prod_name) }}</td>
                                 <td>{{ qna.title }}</td>
                                 <td>{{ getDateFormat(qna.create_date) }}</td>
                             </tr>
@@ -166,7 +166,16 @@ export default {
                 this.reviews = result.data.review;
             })
             .catch(err => console.log(err))
-        }
+        },
+        shortenWords(str, length = 10){
+            let result = '';
+            if (str.length > length) {
+                result = str.substr(0, length - 2) + '...';
+            } else {
+                result = str;
+            }
+            return result;
+        },
     }
 }
 </script>
