@@ -96,7 +96,7 @@
                                     <li>주문 금액 <span>{{ formatPrice(totalPrice) }}원</span></li>
                                     <p style="font-size: smaller;">기본 배송비는 2,500원입니다.
                                         <br>50,000원 이상 구매 시 무료배송입니다.
-                                        <br>고객님의 배송비는 <b>{{ formatPrice(deliveryCharge) }}원</b>입니다.
+                                        <br>*고객님의 배송비는 <b>{{ formatPrice(deliveryCharge) }}원</b>입니다.
                                     </p>
                                 </ul>
                             </div>
@@ -112,6 +112,9 @@
                                     <ul>
                                         <li>총 결제 금액 <span>{{ formatPrice(resultPrice) }}원</span></li>
                                     </ul>
+                                    <p style="font-size: smaller;">
+                                        *적립 예상 포인트는 {{formatPrice(Math.round(totalPrice * 0.01))}}점입니다.
+                                    </p>
                                 </div>
                             </div>
                         </div>
