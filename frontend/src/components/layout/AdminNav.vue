@@ -6,7 +6,7 @@
         <router-link to="/admin">
             <a class="sidebar-brand d-flex align-items-center justify-content-center" href="#">
                 <div class="sidebar-brand-icon rotate-n-15">
-                    <i class="fas fa-laugh-wink"></i>
+                    <i class="bi bi-server"></i>
                 </div>
                 <div class="sidebar-brand-text mx-3">관리자페이지</div>
             </a>
@@ -18,6 +18,7 @@
         <li class="nav-item">
             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
                 aria-expanded="true" aria-controls="collapseTwo">
+                <i class="fas fa-fw fa-folder"></i>
                 <span>게시판관리</span>
             </a>
             <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
@@ -39,6 +40,7 @@
         <li class="nav-item">
             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
                 aria-expanded="true" aria-controls="collapseUtilities">
+                <i class="fas fa-fw fa-folder"></i>
                 <span>상품관리</span>
             </a>
             <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"

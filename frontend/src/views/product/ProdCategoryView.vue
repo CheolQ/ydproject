@@ -57,7 +57,7 @@
                                         <h4>{{cate.prod_name }}</h4>
                                         <div class="d-flex justify-content-between flex-lg-wrap">
                                               <p class="text-dark fs-5 fw-bold mb-0">{{numberFormat(cate.prod_price) }}원</p>
-                                            <button @click="gotoCart(cate.prod_no,$event)" class="btn border border-secondary rounded-pill px-3 text-primary"><i class="fa fa-shopping-bag me-2 text-primary"></i> Add to cart</button>
+                                            <button @click.stop="gotoCart(cate.prod_no,$event)" class="btn border border-secondary rounded-pill px-3 text-primary"><i class="fa fa-shopping-bag me-2 text-primary"></i> Add to cart</button>
                                             </div>
                                         </div>
                                   </div>
@@ -167,7 +167,7 @@ export	default {
             },
         gotoCart(no,e){
             if(this.loggedInUserId){
-            axios.post(`/api/cart/cartInsert/${no}`, this.prodInfo.prod_no)
+            axios.post(`/api/cart/insertCart/${no}`)
             .then(
                 Swal.fire({
                 title: "장바구니로 이동하겠습니까?",
@@ -180,7 +180,9 @@ export	default {
                     } else if (result.isDenied) {
                     }
                 })
-            )}
+            )
+            .catch(err=> console.log(err))
+        }
             else{
                 Swal.fire({
                     title: '로그인이 필요합니다.',

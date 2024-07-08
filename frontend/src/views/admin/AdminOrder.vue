@@ -57,6 +57,7 @@ export default {
             page: {},
             pageUnit: 5,
             order_status: 'D1',
+            cPage: 1,
 
             Categorys: [
                 {category_code: 'D1', category_name: '결제완료', seqs: 1},
@@ -79,6 +80,7 @@ export default {
                 console.log(result.data)
                 this.orderList = result.data.list;
                 this.page = page;
+                this.cPage = page;
                 this.page = this.pageCalc(page, result.data.count[0].cnt, 5, this.pageUnit);
             })
             .catch(err => console.log(err))
@@ -93,7 +95,7 @@ export default {
         statusBtn(no){
             axios.post(`/api/adminOrder/Preparing/${no}`)
             .then(() =>{
-                this.goPage(1);
+                this.goPage(this.cPage);
             })
             .catch(err => console.log(err))
         },
@@ -104,7 +106,6 @@ export default {
             this.category = category;
         },
         orderInfo(orderNo, state){
-            console.log(orderNo);
             this.$router.push({path: 'ordersInfo', query: {bno: orderNo, orderStatus: state}})
         },
         getDateFormat (date ){
