@@ -8,7 +8,7 @@
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
                             <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                수입 (일주일)</div>
+                                매출 (일주일)</div>
                             <div class="h5 mb-0 font-weight-bold text-gray-800">{{ getNumberFormat(weekPrice) }}원</div>
                         </div>
                         <div class="col-auto">
@@ -26,7 +26,7 @@
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
                             <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                수입 (일일)</div>
+                                매출 (일일)</div>
                             <div class="h5 mb-0 font-weight-bold text-gray-800">{{getNumberFormat(dayprice)}}원</div>
                         </div>
                         <div class="col-auto">

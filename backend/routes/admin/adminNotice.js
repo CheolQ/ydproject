@@ -63,9 +63,6 @@ const upload = multer({ storage: storage });
 
 router.post("/",upload.array("files"), async (req, res) => {
     let data = { ...req.body };
-    console.log(data)
-    console.log(req.files)
-    console.log(req.files.length);
     await query("AdminNoticeInsert", [data.category_code, req.session.user_id ,data.title, data.content, req.session.user_no])
     .then(result=>console.log(result))
     .catch(err => console.log(err))
@@ -78,8 +75,6 @@ router.post("/",upload.array("files"), async (req, res) => {
 })
 
 router.post("/:id", upload.array("files"), async (req,res) => {
-    console.log(req.body);
-    console.log(req.files);
     if(req.files == ""){
         console.log("check")
     }else{
@@ -110,9 +105,7 @@ router.post("/:id", upload.array("files"), async (req,res) => {
 })
 
 router.delete("/:id", async (req, res) => {
-    console.log(req.params.id);
     let result = await query("AdminNoticeFileCount", req.params.id)
-    console.log(result.length);
     for(let i=0; i<result.length; i++){
         if (fs.statSync(`./uploads/notice/${result[i].file_name}`)){
             try{
