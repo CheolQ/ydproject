@@ -11,7 +11,8 @@ module.exports = {
                 order by    like_no desc limit ?, ?`,
 
     wishListCount : `select count(*) cnt 
-                        from likes`,
+                    from likes 
+                    where user_no = ?`,
 
     wishDelete : `delete 
                     from    likes 
