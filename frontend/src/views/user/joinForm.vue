@@ -2,7 +2,7 @@
   <div class="container">
     <div class="signup-wrapper">
       <h2 class="aside-tit">회원가입</h2>
-      <form id="signup-form">
+      <form id="signup-form" @submit.prevent="joinUser">
         <div class="form-group">
           <label for="username">아이디 <span class="required">*</span></label>
           <div class="username-wrapper">
@@ -14,11 +14,11 @@
         </div>
         <div class="form-group">
           <label for="password">비밀번호 <span class="required">*</span></label>
-          <input type="password" id="password" v-model="form.user_pw" placeholder="6~20자 이내로 영문,숫자 혼합해서 입력하세요" @change="validatePw" />
+          <input type="password" id="password" v-model="form.user_pw" placeholder="6~20자 이내로 영문,숫자 혼합해서 입력하세요" @change="validatePw" required />
         </div>
         <div class="form-group">
           <label for="checkedPassword">비밀번호 확인 <span class="required">*</span></label>
-          <input type="password" id="checkedPassword" v-model="form.user_pw2" placeholder="비밀번호를 다시 입력하세요" @change="validateCheckedPw" />
+          <input type="password" id="checkedPassword" v-model="form.user_pw2" placeholder="비밀번호를 다시 입력하세요" @change="validateCheckedPw" required />
         </div>
         <div class="form-group">
           <label for="name">이름 <span class="required">*</span></label>
@@ -26,39 +26,37 @@
         </div>
         <div class="form-group">
           <label for="email">이메일 <span class="required">*</span></label>
-          <input type="email" id="email" v-model="form.email" placeholder="이메일을 입력하세요" @change="validateEmail" />
+          <input type="email" id="email" v-model="form.email" placeholder="이메일을 입력하세요" @change="validateEmail" required />
         </div>
         <div class="form-group">
           <label for="tel">전화번호 <span class="required">*</span></label>
           <div class="tel-wrapper">
             <input type="tel" id="tel" v-model="form.tel" placeholder="ex) 010-1111-1234" required />
-            <!-- <button type="button" class="btn border border-secondary rounded-pill px-3 text-primary" @click="requestCertification">본인인증</button> -->
           </div>
         </div>
         <div class="form-group">
           <label for="postcode">우편번호 <span class="required">*</span></label>
           <div class="postcode-wrapper">
-            <input type="text" id="postcode" v-model="form.postcode" ref="postcode" placeholder="우편번호를 입력하세요" required />
+            <input type="text" id="postcode" v-model="form.postcode" ref="postcode" placeholder="우편번호를 입력하세요" required readonly />
             <button type="button" class="btn border border-secondary rounded-pill px-3 text-primary" @click="showApi">검색</button>
           </div>
         </div>
         <div class="form-group">
           <label for="roadAddress">주소 <span class="required">*</span></label>
-          <input type="text" id="roadAddress" v-model="form.address" placeholder="주소" ref="roadAddress" required />
+          <input type="text" id="roadAddress" v-model="form.address" placeholder="주소" ref="roadAddress" required readonly />
         </div>
         <div class="form-group">
           <label for="detailAddress">상세주소 <span class="required">*</span></label>
           <input type="text" id="detailAddress" v-model="form.detail_address" placeholder="상세주소" />
         </div>
-        <button type="button" class="btn border border-secondary rounded-pill px-3 text-primary" @click="joinUser">회원가입</button>
+        <button type="submit" class="btn border border-secondary rounded-pill px-3 text-primary join">회원가입</button>
         <router-link to="/user/home">
-          <button type="button" class="btn border border-secondary rounded-pill px-3 text-primary">취소</button>
+          <button type="button" class="btn border border-secondary rounded-pill px-3 text-primary cancel">취소</button>
         </router-link>
       </form>
     </div>
   </div>
 </template>
-
 
 
 <script>
@@ -110,11 +108,10 @@ export default {
       }
     },
     validatePw() {
-      let pw = document.getElementById("password").value
+      let pw = this.form.user_pw;
 
       let number = pw.search(/[0-9]/g);
       let english = pw.search(/[a-z]/ig);
-      // let specialCharacter = pw.search(/[`~!@@#$%^&*|₩₩₩'₩";:₩/?]/gi); //특수문자 혼합
 
       if (pw.length < 6 || pw.length > 20) {
         Swal.fire({
@@ -143,12 +140,11 @@ export default {
       }
     },
     validateCheckedPw() {
-      let pw = document.getElementById("password").value
-      let checkedPw = document.getElementById("checkedPassword").value
+      let pw = this.form.user_pw;
+      let checkedPw = this.form.user_pw2;
       
       let number = checkedPw.search(/[0-9]/g);
       let english = checkedPw.search(/[a-z]/ig);
-      let specialCharacter = checkedPw.search(/[`~!@@#$%^&*|₩₩₩'₩";:₩/?]/gi);
 
       if (checkedPw.length < 6 || checkedPw.length > 20) {
         Swal.fire({
@@ -164,11 +160,11 @@ export default {
           text: '비밀번호는 공백 없이 입력해주세요.'
         });
         return false;
-      } else if (number < 0 || english < 0 || specialCharacter < 0) {
+      } else if (number < 0 || english < 0) {
         Swal.fire({
           icon: 'error',
           title: '비밀번호 오류',
-          text: '영문, 숫자, 특수문자를 혼합하여 입력해주세요.'
+          text: '영문, 숫자를 혼합하여 입력해주세요.'
         });
         return false;
       } else if (pw !== checkedPw) {
@@ -195,9 +191,9 @@ export default {
       return true;
     },
     validateEmail() {
-      let email = document.getElementById("email").value
+      let email = this.form.email;
 
-      const regExp = /^[a-z0-9_+.-]+@([a-z0-9-]+\.)+[a-z0-9]{2,4}$/
+      const regExp = /^[a-z0-9_+.-]+@([a-z0-9-]+\.)+[a-z0-9]{2,4}$/;
 
       if (email.search(/\s/) !== -1) {
         Swal.fire({
@@ -206,120 +202,65 @@ export default {
           text: '이메일은 공백 없이 입력해주세요.'
         });
         return false;
-      } else if (email.match(regExp) === null) {
+      } else if (!regExp.test(email)) {
         Swal.fire({
           icon: 'error',
           title: '이메일 오류',
-          text: '이메일 형식이 맞지 않습니다.'
+          text: '이메일 형식에 맞게 입력해주세요.'
         });
         return false;
       } else {
-        console.log("성공");
+        console.log("이메일 사용가능");
         return true;
       }
     },
-    async requestCertification() {
-      const { IMP } = window;
-      IMP.init('imp57875627'); // PortOne 관리자 페이지에서 확인한 "가맹점 식별코드"를 사용
-
-      IMP.certification({
-        merchant_uid: `mid_${new Date().getTime()}`, // 주문 번호
-        company: '까까무라', // 회사명 또는 서비스 명
-        carrier: '', // 통신사 (SKT, KT, LGT 중 하나)
-        name: this.form.name, // 이름
-        phone: this.form.tel // 전화번호
-      }, this.certificationCallback);
-    },
-    certificationCallback(response) {
-      if (response.success) {
-        // 인증 성공
-        console.log('본인인증 성공:', response);
-        Swal.fire({
-          icon: 'success',
-          title: '본인인증 성공',
-          text: '본인인증에 성공했습니다.'
-        });
-      } else {
-        // 인증 실패
-        console.error('본인인증 실패:', response);
-        Swal.fire({
-          icon: 'error',
-          title: '본인인증 실패',
-          text: '본인인증에 실패했습니다. 다시 시도해주세요.'
-        });
-      }
+    showApi() {
+      new daum.Postcode({
+        oncomplete: (data) => {
+          this.form.postcode = data.zonecode;
+          this.form.address = data.address;
+        }
+      }).open();
     },
     async joinUser() {
-      if (!this.confirmPassword()) {
+      const isValidPw = this.validatePw();
+      const isCheckedPw = this.validateCheckedPw();
+      const isConfirmedPw = this.confirmPassword();
+      const isValidEmail = this.validateEmail();
+      
+      if (!isValidPw || !isCheckedPw || !isConfirmedPw || !isValidEmail) {
         return;
       }
-      const url = '/api/users/join';
-      const param = {
-        user_id: this.form.user_id,
-        user_pw: this.form.user_pw,
-        name: this.form.name,
-        email: this.form.email,
-        tel: this.form.tel,
-        postcode: this.form.postcode,
-        addr: this.form.address,
-        detail_addr: this.form.detail_address
-      };
 
       try {
-        const result = await axios.post(url, param);
-        Swal.fire({
-          icon: 'success',
-          title: '회원가입 성공',
-          text: '회원가입에 성공하셨습니다.'
-        }).then(() => {
-          this.$router.push('/user/login');
-        });
+        const response = await axios.post('/api/users/join', this.form);
+        if (response.data.success) {
+          Swal.fire({
+            icon: 'success',
+            title: '회원가입 성공',
+            text: '회원가입이 성공적으로 완료되었습니다.'
+          });
+          this.$router.push('/user/home');
+        } else {
+          Swal.fire({
+            icon: 'error',
+            title: '회원가입 실패',
+            text: '회원가입 중 문제가 발생했습니다.'
+          });
+        }
       } catch (error) {
-        console.error(error);
+        console.error('회원가입 실패:', error);
         Swal.fire({
           icon: 'error',
           title: '회원가입 실패',
-          text: '회원가입에 실패하였습니다. 다시 시도해 주세요.'
+          text: '회원가입 중 문제가 발생했습니다.'
         });
       }
-    },
-    showApi() {
-      new window.daum.Postcode({
-        oncomplete: (data) => {
-          let fullRoadAddr = data.roadAddress;
-          let extraRoadAddr = '';
-
-          if (data.bname !== '' && /[동|로|가]$/g.test(data.bname)) {
-            extraRoadAddr += data.bname;
-          }
-          if (data.buildingName !== '' && data.apartment === 'Y') {
-            extraRoadAddr += extraRoadAddr !== '' ? ', ' + data.buildingName : data.buildingName;
-          }
-          if (extraRoadAddr !== '') {
-            extraRoadAddr = ' (' + extraRoadAddr + ')';
-          }
-          if (fullRoadAddr !== '') {
-            fullRoadAddr += extraRoadAddr;
-          }
-
-          this.form.postcode = data.zonecode;
-          this.form.address = fullRoadAddr;
-        }
-      }).open();
-    }
-  },
-  mounted() {
-    if (typeof window.daum === 'undefined') {
-      const script = document.createElement('script');
-      script.src = 'https://ssl.daumcdn.net/dmaps/map_js_init/postcode.v2.js';
-      script.onload = () => {
-        console.log('Daum Postcode script loaded');
-      };
-      document.head.appendChild(script);
     }
   }
 };
 </script>
+
 
 <style scoped>
 .container {

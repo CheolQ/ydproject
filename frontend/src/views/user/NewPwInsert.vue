@@ -3,11 +3,11 @@
         <h2>새로운 비밀번호</h2><br>
         <div class="form-group">
             <label for="password">새로운 비밀번호</label>
-            <input type="password" id="password" v-model="form.user_pw" class="form-control" @change="validatePw" />
+            <input type="password" id="password" v-model="form.user_pw" class="form-control" @change="validatePw" required />
         </div>
         <div class="form-group">
             <label for="password2">비밀번호 확인</label>
-            <input type="password" id="password2" v-model="confirmPassword" class="form-control" @change="validateCheckedPw" />
+            <input type="password" id="password2" v-model="confirmPassword" class="form-control" @change="validateCheckedPw" required />
         </div>
         <div v-if="error" class="alert alert-danger">{{ error }}</div>
         <button type="button" class="btn border border-secondary rounded-pill px-3 text-primary" @click="updatePassword">비밀번호 수정</button>
