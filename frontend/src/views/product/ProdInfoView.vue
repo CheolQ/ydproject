@@ -95,8 +95,8 @@ export	default {
             // (await axios.get(`/api/shop/star/${this.searchNo}`)).data[0].stars;
             this.prodRating = 
             (await axios.get(`/api/shop/star/${this.searchNo}`)).data[0];
-                console.log(this.prodRating);
-                if(this.prodRating == undefined){
+            console.log('몇점',this.prodRating);
+            if(this.prodRating == undefined){
                     this.prodRating = 0
                 }else{
                     this.stars = Number(this.prodRating.stars)

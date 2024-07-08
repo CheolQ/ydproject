@@ -19,7 +19,7 @@
                 <div v-if="reviewImg != undefined">  
                 <img :src="`/img/prodImg/${reviewImg.file_name}`" class="product-img" alt="Product Image">
             </div>
-
+            <br>
                 <p>{{ reviewInfo.review_content }}</p>
             </div>
         </div>

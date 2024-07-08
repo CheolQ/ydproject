@@ -5,11 +5,11 @@
             <form id="signup-form">
                 <div class="form-group">
                     <label for="password">비밀번호 *</label>
-                    <input type="password" id="password" v-model="form.user_pw" placeholder="6~20자 이내로 영문,숫자 혼합해서 입력하세요" @change="validatePw" />
+                    <input type="password" id="password" v-model="form.user_pw" placeholder="6~20자 이내로 영문,숫자 혼합해서 입력하세요" @change="validatePw" required />
                 </div>
                 <div class="form-group">
                     <label for="password2">비밀번호 확인 *</label>
-                    <input type="password" id="password2" v-model="form.user_pw2" placeholder="비밀번호를 다시 입력하세요" @change="validateCheckedPw" />
+                    <input type="password" id="password2" v-model="form.user_pw2" placeholder="비밀번호를 다시 입력하세요" @change="validateCheckedPw" required />
                 </div>
                 <div class="form-group">
                     <label for="name">이름 *</label>
@@ -17,11 +17,11 @@
                 </div>
                 <div class="form-group">
                     <label for="email">이메일 *</label>
-                    <input type="email" id="email" v-model="form.email" placeholder="이메일을 입력하세요" @change="validateEmail" />
+                    <input type="email" id="email" v-model="form.email" placeholder="이메일을 입력하세요" @change="validateEmail" required />
                 </div>
                 <div class="form-group">
                     <label for="tel">전화번호 *</label>
-                    <input type="tel" id="tel" v-model="form.tel" placeholder="ex) 010-1111-1234" @click="" />
+                    <input type="tel" id="tel" v-model="form.tel" placeholder="ex) 010-1111-1234" required />
                 </div>
                 <div class="form-group">
                     <label for="postcode">우편번호 *</label>
@@ -146,11 +146,11 @@ export default {
                     text: '비밀번호는 공백 없이 입력해주세요.'
                 });
                 return false;
-            } else if (number < 0 || english < 0 || specialCharacter < 0) {
+            } else if (number < 0 || english < 0) {
                 Swal.fire({
                     icon: 'error',
                     title: '비밀번호 확인 오류',
-                    text: '영문,숫자, 특수문자를 혼합하여 입력해주세요.'
+                    text: '영문,숫자를 혼합하여 입력해주세요.'
                 });
                 return false;
             } else if (pw !== checkedPw) {

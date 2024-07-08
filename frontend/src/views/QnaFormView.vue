@@ -21,8 +21,8 @@
                                             <i :key = "i" v-for="(i) in 5" class="fa fa-star"></i>
                                         </div>
                                         <div class="d-flex pe-5" v-else >
-                                            <i :key = "i" v-for="(i) in Number(prodRating)" class="fa fa-star text-secondary"></i>
-                                            <i :key = "i" v-for="(i) in 5- Number(prodRating)"class="fa fa-star"></i>
+                                            <i :key = "i" v-for="(i) in this.stars" class="fa fa-star text-secondary"></i>
+                                            <i :key = "i" v-for="(i) in 5- this.stars"class="fa fa-star"></i>
                                         </div>
                                      </div>
                                  </div>
@@ -103,7 +103,7 @@ export default {
         async getProdRating()	{
             this.prodRating = 
             (await axios.get(`/api/shop/star/${this.searchNo}`)).data[0];
-                console.log(this.prodRating);
+                console.log('별점은',this.prodRating);
                 if(this.prodRating == undefined){
                     this.prodRating = 0
                 }else{
