@@ -9,7 +9,7 @@ module.exports = {
                             select sum(cnt) cnt, 
                                     prod_no 
                             from order_detail
-                            group by prod_no, cnt
+                            group by prod_no
                         ) sc
 
                         on p.prod_no = sc.prod_no
