@@ -17,7 +17,7 @@
                 <i :key = "i" v-for="i in 5- reviewInfo.rating"class="fa fa-star"></i>
                 </span>
                 <div v-if="reviewImg != undefined">  
-                <img :src="`/img/prodImg/${reviewImg.file_name}`" class="product-img" alt="Product Image">
+                <img :src="`/api/upload/review/${reviewImg.file_name}`" class="product-img" alt="Product Image">
             </div>
             <br>
                 <p>{{ reviewInfo.review_content }}</p>
