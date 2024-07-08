@@ -68,13 +68,13 @@ export default {
         deleteQna() {
             // 삭제 로직 구현
             Swal.fire({
-                title: "Are you sure?",
+                title: "정말 삭제하시겠습니까?",
                 text: "You won't be able to revert this!",
                 icon: "warning",
                 showCancelButton: true,
                 confirmButtonColor: "#3085d6",
                 cancelButtonColor: "#d33",
-                confirmButtonText: "Yes, delete it!"
+                confirmButtonText: "삭제완료!"
             }).then((result) => {
                 if (result.isConfirmed) {
                     axios.delete(`/api/mypage/deleteqna/${this.no}`)

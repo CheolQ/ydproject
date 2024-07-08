@@ -12,6 +12,7 @@ module.exports = {
                     where title like ?
                     and (DATE_FORMAT(create_date, '%Y-%m-%d') >= ? and DATE_FORMAT(create_date, '%Y-%m-%d') <= ?)
                     and (select count(*) from reply where board_no = qna.board_no) like ?
+                    order by board_no desc
                     limit ?, ?`,
     AdminQnaInfo: `select board_no, prod_no, title, content, user_id, create_date,
                         (select count(*) 
