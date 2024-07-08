@@ -21,7 +21,7 @@ router.get("/", async (req, res) => {
     let offset = (page - 1) * pageUnit;
 
     let list = await query("wishList", [userNo, offset, pageUnit]);
-    let count = await query("wishListCount");
+    let count = await query("wishListCount", userNo);
     count = count[0].cnt; //0번째의 컬럼명
     //.then(result => res.send(result))
     res.send({list, count})
