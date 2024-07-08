@@ -47,6 +47,7 @@
 
 <script>
 import axios from 'axios';
+import Swal from "sweetalert2";
 export default {
     data() {
         return {
@@ -97,13 +98,35 @@ export default {
             this.$router.push({ name: 'mypagereviewupdate', query: { no: this.no } })
         },
         deleteReview() {
-            axios.delete(`/api/mypage/reviewdelete/${this.no}`)
-                .then((result) => {
-                    console.log(result)
-                    alert('삭제완')
-                    this.goBack();
-                })
+            Swal.fire({
+                title: "정말 삭제하시겠습니까?",
+                text: "You won't be able to revert this!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "삭제완료!"
+            }).then((result) => {
+                if (result.isConfirmed) {
+
+
+                    axios.delete(`/api/mypage/reviewdelete/${this.no}`)
+                        .then(result => {
+                            console.log('삭제완료');
+                            Swal.fire({
+                                title: "Deleted!",
+                                text: "Your file has been deleted.",
+                                icon: "success"
+                            });
+                            this.goBack();
+                        })
+                        .catch(err => console.log(err));
+                }
+            });
         },
+
+
+
         async goToDetail(no) {
             await this.$router.push({ name: "shopinfo", query: { no: no } });
         },

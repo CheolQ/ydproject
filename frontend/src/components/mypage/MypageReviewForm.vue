@@ -51,6 +51,7 @@
 
 <script>
 import axios from 'axios';
+import Swal from "sweetalert2";
 export default {
     data() {
         return {
@@ -89,29 +90,27 @@ export default {
             let temp = { ...this.review }
             axios.post(`/api/mypage/insertreview`, temp)
                 .then(result => {
-                    console.log(result);
-                    console.log('나오나?', result.data.id);
-
                     // 파일 데이터가 있는 경우 파일 데이터를 전송
                     console.log(this.files)
                     if (this.files.length > 0) {
                         let formData = new FormData();
                         this.files.forEach((file, idx) => {
                             formData.append(`files`, file);
-                            console.log(`file${idx + 1}`, file);
                         });
-
                         console.log(formData)
                         axios.get(`/api/mypage/getreviewno/${this.review.order_detail_no}`)
                             .then(result => {
-                                console.log('ddda', result.data[0].review_no)
                                 axios.post('/api/mypage/review/uploadfiles', formData, {
                                     params: { table_no: result.data[0].review_no, division: 'E2' }
                                 })
                                     .then(result => {
-                                        alert('파일 업로드 성공');
+                                        Swal.fire({
+                                            icon: "success",
+                                            title: "등록완료",
+                                            showConfirmButton: false,
+                                            timer: 1500
+                                        });
                                         this.resetForm();
-
                                     })
                                     .catch(err => {
                                         console.log(err);
@@ -122,6 +121,12 @@ export default {
                     } else {
                         this.resetForm();
                     }
+                    Swal.fire({
+                        icon: "success",
+                        title: "등록완료",
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
                     this.goBack();
                 })
                 .catch(err => { console.log(err) })
