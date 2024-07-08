@@ -225,7 +225,7 @@ export default {
     position: relative;
     width: 400px;
     /* 크기 조정 */
-    height: 300px;
+    height: 100%;
     /* 크기 조정 */
     overflow: hidden;
     margin: 20px auto;
@@ -240,7 +240,7 @@ export default {
 .image {
     width: 400px;
     /* 크기 조정 */
-    height: 300px;
+    height: 100%;
     /* 크기 조정 */
     background-size: cover;
     background-position: center;
