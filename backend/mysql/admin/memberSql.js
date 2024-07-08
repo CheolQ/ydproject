@@ -29,6 +29,6 @@ module.exports = {
                             where prod_no = review.prod_no) as prod_name, 
                             create_date
                       from review
-                      where user_id
+                      where user_id = ?
                       limit 10`                           
 }

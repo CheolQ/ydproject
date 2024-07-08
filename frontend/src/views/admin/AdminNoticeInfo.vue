@@ -18,7 +18,7 @@
                         <tr>
                             <th>첨부파일</th>
                             <td colspan="6">
-                                <a v-for="(file, index) in files" :key="index" :href="`/api/upload/notice/${file.file_name}`" download>다운로드</a>
+                                <a v-for="(file, index) in files" :key="index" :href="`/api/upload/notice/${file.file_name}`" download>{{ getFileName(file.file_name) }}</a>
                             </td>
                         </tr>        
                     </thead>
@@ -28,7 +28,7 @@
                                 <span>{{noticeInfo.content }}</span>
                                 <Carousel :autoplay="3000" :wrap-around="true">
                                     <Slide v-for="(image, index) in images" :key="index">
-                                        <img :src="`/api/upload/notice/${image.file_name}`" class="d-block w-100" alt="...">
+                                        <img :src="`/api/upload/notice/${image.file_name}`" class="d-block w-100" alt="..." style="height: 70%; width: 70%;">
                                     </Slide>
                                 </Carousel>
                             </td>
@@ -90,15 +90,12 @@ export default {
                 .catch(err=> console.log(err))
             }
         },
-        getImagePath(image) {
-            return `/api/upload/notice/${image.file_name}`;
-        },
-        getFilePath(file) {
-            return `/api/upload/notice/${file.file_name}`;
-        },
         getDateFormat (date ){
             return this .$dateFormat (date );
         },
+        getFileName (name){
+            return name.substring(name.indexOf('-')+1);
+        }
     },
 }
 </script>

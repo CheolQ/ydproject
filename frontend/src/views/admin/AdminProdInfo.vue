@@ -17,6 +17,12 @@
                 </div>
             </div>
         </div>
+        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+            <button @click="prodModify" class="btn btn-primary btn-lg">수정</button>
+            <button class="btn btn btn-danger btn-lg" @click="prodDel">삭제</button>        
+            <button class="btn btn-secondary btn-lg" @click="$router.go(-1)">목록</button>
+        </div>
+        <br>
         <div class="card mb-4">
             <div class="card-body shadow">
                 <div class="fruite-img">
@@ -24,11 +30,6 @@
                 </div>
             </div>
         </div>    
-        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-            <button @click="prodModify" class="btn btn-primary btn-lg">수정</button>
-            <button class="btn btn btn-danger btn-lg" @click="prodDel">삭제</button>        
-            <button class="btn btn-secondary btn-lg" @click="$router.go(-1)">목록</button>
-        </div>
     </div>        
 </template>
 <script>
