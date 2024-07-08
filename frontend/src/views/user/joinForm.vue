@@ -233,21 +233,15 @@ export default {
       }
 
       try {
-        const response = await axios.post('/api/users/join', this.form);
-        if (response.data.success) {
+        await axios.post('/api/users/join', this.form)
+        .then(()=>{
           Swal.fire({
             icon: 'success',
             title: '회원가입 성공',
             text: '회원가입이 성공적으로 완료되었습니다.'
           });
           this.$router.push('/user/home');
-        } else {
-          Swal.fire({
-            icon: 'error',
-            title: '회원가입 실패',
-            text: '회원가입 중 문제가 발생했습니다.'
-          });
-        }
+        });
       } catch (error) {
         console.error('회원가입 실패:', error);
         Swal.fire({
