@@ -27,6 +27,7 @@ module.exports = {
                     and od.order_status = ? or od.order_status = ?                                      
                     group by od.order_no, od.order_date, od.user_no, od.pay_price, od.order_status
                     HAVING prod_name like ?
+                    order by od.order_no desc
                     limit ?, ? `,
     AdminOrderPrepare: `update orders set
                         order_status = 'D4'

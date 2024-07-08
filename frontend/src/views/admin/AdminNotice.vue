@@ -1,7 +1,7 @@
 <template>
     <div>
         <ContentHeader title="공지사항"></ContentHeader>
-        <SearchForm title1="검색어" title2="주문기한" title3="주문상태" :Categorys="Categorys" @obj="searchfrom" ref="reset_com"></SearchForm>
+        <SearchForm title1="검색어" title2="작성일자" title3="구분" :Categorys="Categorys" @obj="searchfrom" ref="reset_com"></SearchForm>
         <div class="d-grid gap-2 d-md-flex justify-content-md-center">
             <button @click="prodSearchBtn" class="btn btn-primary">검색</button>        
             <button @click="resetBtn" class="btn btn-secondary">초기화</button>
