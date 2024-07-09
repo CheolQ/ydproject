@@ -46,7 +46,7 @@
           <input type="text" id="roadAddress" v-model="form.address" placeholder="주소" ref="roadAddress" required readonly />
         </div>
         <div class="form-group">
-          <label for="detailAddress">상세주소 <span class="required">*</span></label>
+          <label for="detailAddress">상세주소 </label>
           <input type="text" id="detailAddress" v-model="form.detail_address" placeholder="상세주소" />
         </div>
         <button type="submit" class="btn border border-secondary rounded-pill px-3 text-primary join">회원가입</button>
